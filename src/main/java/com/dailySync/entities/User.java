@@ -18,6 +18,20 @@ public class User extends BaseEntity{
     @Column(unique = true,nullable = false)
     private String userName;
 
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    private String gender;
+
+    @Column(nullable = false)
+    private String email;
+
+
+
     public void update(UserReqDto userReqDto){
         this.userName = userReqDto.getUserName();
     }
