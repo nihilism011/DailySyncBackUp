@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,55 +20,68 @@ public class UserService {
     final private UserRepository userRepository;
 
 
-
-
-
-    public List<UserResDto> getAllUser(){
+    public List<UserResDto> getAllUser() {
 //        [userResDto1,userResDto2...]
 
         List<User> list = userRepository.findAll();
-        // select *
-        // from user
 
+//        select *
+//        from user
 //        [user1,user2...]
         List<UserResDto> resList = new ArrayList<>();
 
-        for (int i = 0; i < list.size(); i++) {
-            User user = list.get(i);
-
-            UserResDto userResDto = UserResDto.of(user);
-
-            resList.add(userResDto);
+        for (User user : list) {
+            resList.add(UserResDto.of(user));
         }
 
         return resList;
-
 //        return userRepository.findAll().stream().map(UserResDto::of).toList();
     }
 
-    public UserResDto findUser(Long id){
+    //    아이디로 유저 찾기
+    public UserResDto findUser(Long id) {
+
         User user = userRepository.findById(id).orElse(null);
+//        Optional<User> userO = userRepository.findById(id);
+//        User userU = userO.orElse(null);
         return UserResDto.of(user);
     }
-    public UserResDto findUserName(String userName){
-        User user = userRepository.findByUserName(userName);
+
+    //    이름으로 유저 찾기
+    public UserResDto findUserName(String userName) {
+        User user = userRepository.findByUserName(userName).orElse(null);
         return UserResDto.of(user);
     }
 
-
-
-    public boolean putUser(Long id, UserReqDto userReqDto){
-        try{
+    //유저 추가
+    public boolean insertUser(UserReqDto userReqDto) {
+//        userReqDto.toUser();
+        User user = User.of(userReqDto);
+        User insrtedUser = userRepository.save(user);
+        return true;
+    }
+    public boolean updateUser(Long id, UserReqDto userReqDto) {
+        try {
             User user = userRepository.findById(id).orElse(null);
-            if(user == null){
+            if (user == null) {
                 return false;
             }
             user.update(userReqDto);
             userRepository.save(user);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return false;
         }
     }
+
+    public boolean deleteUser(Long id){
+
+
+        userRepository.deleteById(id);
+
+
+        return true;
+    }
+
 }

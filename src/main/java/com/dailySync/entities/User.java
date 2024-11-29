@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User extends BaseEntity{
+public class User extends BaseEntity {
 
-    @Column(unique = true,nullable = false)
+    @Column(unique = true, nullable = false)
     private String userName;
 
     @Column(nullable = false)
@@ -30,9 +30,46 @@ public class User extends BaseEntity{
     @Column(nullable = false)
     private String email;
 
-
-
-    public void update(UserReqDto userReqDto){
-        this.userName = userReqDto.getUserName();
+    public static User of(UserReqDto reqDto) {
+        return User.builder()
+                .name(reqDto.getName())
+                .email(reqDto.getEmail())
+                .userName(reqDto.getUserName())
+                .gender(reqDto.getGender())
+                .password(reqDto.getPassword())
+                .build();
     }
+
+    public User(String userName, String password, String gender) {
+        this.userName = userName;
+        this.password = password;
+        this.gender = gender;
+    }
+
+//    public void update(UserReqDto userReqDto) {
+//        this.userName = userReqDto.getUserName();
+//        this.name = userReqDto.getName();
+//        this.email = userReqDto.getEmail();
+//        this.gender = userReqDto.getGender();
+//        this.password = userReqDto.getPassword();
+//    }
+
+    public void update(UserReqDto reqDto){
+        if (reqDto.getUserName() != null) {
+            this.userName = reqDto.getUserName();
+        }
+        if (reqDto.getName() != null) {
+            this.name = reqDto.getName();
+        }
+        if (reqDto.getEmail() != null) {
+            this.email = reqDto.getEmail();
+        }
+        if (reqDto.getGender() != null) {
+            this.gender = reqDto.getGender();
+        }
+        if (reqDto.getPassword() != null) {
+            this.password = reqDto.getPassword();
+        }
+    }
+
 }
