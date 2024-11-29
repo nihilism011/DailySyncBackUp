@@ -30,9 +30,30 @@ public class User extends BaseEntity{
     @Column(nullable = false)
     private String email;
 
-
-
-    public void update(UserReqDto userReqDto){
-        this.userName = userReqDto.getUserName();
+    public static  User of(UserReqDto reqDto){
+        return User.builder()
+                .name(reqDto.getName())
+                .email(reqDto.getEmail())
+                .userName(reqDto.getUserName())
+                .gender(reqDto.getGender())
+                .password(reqDto.getPassword())
+                .build();
     }
+
+    // = public Userof()
+
+
+//    public void update(UserReqDto userReqDto){
+//
+//        this.userName = userReqDto.getUserName();
+//    }
+
+    public void update(UserReqDto reqDto){
+
+        if (reqDto.getUserName() != null){
+            this.userName = reqDto.getUserName();
+        }
+    }
+
+
 }
