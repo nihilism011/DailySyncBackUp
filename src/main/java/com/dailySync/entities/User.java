@@ -1,12 +1,16 @@
 package com.dailySync.entities;
 
 import com.dailySync.dto.UserReqDto;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,6 +33,10 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     private String email;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<TodoItem> todoItems;
+
 
     public static User of(UserReqDto reqDto) {
         return User.builder()
