@@ -9,5 +9,5 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class scheduleService {
 
-    final private ScheduleRepository scheduleRepositoryR;
+    final private ScheduleRepository scheduleRepository;
 }
