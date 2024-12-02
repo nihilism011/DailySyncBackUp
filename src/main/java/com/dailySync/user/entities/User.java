@@ -1,6 +1,7 @@
 package com.dailySync.user.entities;
 
 import com.dailySync.BaseEntity;
+import com.dailySync.meal.entities.Meal;
 import com.dailySync.todo.entities.TodoGroup;
 import com.dailySync.todo.entities.TodoItem;
 import com.dailySync.todo.entities.TodoList;
@@ -40,8 +41,12 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<TodoItem> todoItems;
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<TodoGroup> todoGroups;
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<TodoList> todoLists;
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Meal> meals;
 
 
     public static User of(UserReqDto reqDto) {
