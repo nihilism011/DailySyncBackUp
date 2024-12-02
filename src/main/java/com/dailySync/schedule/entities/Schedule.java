@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Schedule extends BaseEntity {
 
-
     @Column(nullable = false)
     private String userId;
 
