@@ -59,4 +59,6 @@ public class Meal extends BaseEntity {
 
     @Column (nullable = false)
     private boolean isFavorite;
+
+
 }
