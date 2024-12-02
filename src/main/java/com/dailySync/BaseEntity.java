@@ -1,4 +1,4 @@
-package com.dailySync.entities;
+package com.dailySync;
 
 import jakarta.persistence.*;
 import lombok.Getter;
