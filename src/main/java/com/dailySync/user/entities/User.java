@@ -1,6 +1,6 @@
 package com.dailySync.user.entities;
 
-import com.dailySync.entities.BaseEntity;
+import com.dailySync.BaseEntity;
 import com.dailySync.todo.entities.TodoGroup;
 import com.dailySync.todo.entities.TodoItem;
 import com.dailySync.todo.entities.TodoList;

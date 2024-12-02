@@ -1,5 +1,6 @@
 package com.dailySync.entities;
 
+import com.dailySync.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;

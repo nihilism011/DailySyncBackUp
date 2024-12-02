@@ -1,5 +1,6 @@
 package com.dailySync.entities;
 
+import com.dailySync.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

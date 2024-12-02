@@ -1,6 +1,6 @@
 package com.dailySync.todo.entities;
 
-import com.dailySync.entities.BaseEntity;
+import com.dailySync.BaseEntity;
 import com.dailySync.user.entities.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 @Builder
 
 public class TodoGroup extends BaseEntity {
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

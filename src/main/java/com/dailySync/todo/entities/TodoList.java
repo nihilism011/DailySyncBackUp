@@ -1,8 +1,11 @@
 package com.dailySync.todo.entities;
 
-import com.dailySync.entities.BaseEntity;
+import com.dailySync.BaseEntity;
+import com.dailySync.user.entities.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +20,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class TodoList extends BaseEntity {
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+
     @Column
     private LocalDate date;
 
