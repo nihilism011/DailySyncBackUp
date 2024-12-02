@@ -1,5 +1,6 @@
 package com.dailySync.entities;
 
+import com.dailySync.BaseEntity;
 import com.dailySync.dto.PeopleResDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
