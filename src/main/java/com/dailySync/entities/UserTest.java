@@ -36,7 +36,7 @@ public class UserTest extends BaseEntity {
     private String email;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<TodoItemTest> todoItems;
+    private List<TodoItemTest> todoItemTests;
 
 
     public static UserTest of(UserTestReqDto reqDto) {

@@ -1,7 +1,7 @@
 package com.dailySync.meal.entities;
 
-import com.dailySync.entities.BaseEntity;
-import com.dailySync.entities.User;
+import com.dailySync.BaseEntity;
+import com.dailySync.user.entities.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;

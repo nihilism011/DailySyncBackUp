@@ -17,7 +17,7 @@ public class TodoTestService {
         UserTest user = userTestRepository.findById(userId).orElse(null);
         if (user != null) {
             System.out.println(user);
-            System.out.println(user.getTodoItems());
+            System.out.println(user.getTodoItemTests());
         } else {
             System.out.println("User not found");
         }
