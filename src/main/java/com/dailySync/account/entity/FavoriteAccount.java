@@ -1,4 +1,4 @@
-package com.dailySync.todo.entities;
+package com.dailySync.account.entity;
 
 import com.dailySync.common.BaseEntity;
 import com.dailySync.user.entities.User;
@@ -16,22 +16,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TodoItem extends BaseEntity {
-
+public class FavoriteAccount extends BaseEntity {
     @ManyToOne
     @JoinColumn (name = "user_id", nullable = false)
     private User user;
-
-    @Column
-    private String day;
-
-    @Column (nullable = false)
-    private Integer itemOrder;
-
+    @Column (nullable = true)
+    private String category;
     @Column (nullable = false)
     private String title;
-
+    @Column (nullable = true)
+    private String description;
     @Column (nullable = false)
-    private String status;
-
+    private Integer amount;
 }

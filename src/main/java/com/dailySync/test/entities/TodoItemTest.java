@@ -1,11 +1,7 @@
-package com.dailySync.todo.entities;
+package com.dailySync.test.entities;
 
 import com.dailySync.common.BaseEntity;
-import com.dailySync.user.entities.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,17 +12,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TodoItem extends BaseEntity {
+public class TodoItemTest extends BaseEntity {
 
     @ManyToOne
     @JoinColumn (name = "user_id", nullable = false)
-    private User user;
+    private UserTest user;
 
     @Column
     private String day;
 
     @Column (nullable = false)
-    private Integer itemOrder;
+    private Integer sortOrder;
 
     @Column (nullable = false)
     private String title;

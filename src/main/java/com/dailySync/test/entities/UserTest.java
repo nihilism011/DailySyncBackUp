@@ -1,13 +1,7 @@
-package com.dailySync.user.entities;
+package com.dailySync.test.entities;
 
-import com.dailySync.account.entity.Account;
 import com.dailySync.common.BaseEntity;
-import com.dailySync.meal.entities.Meal;
-import com.dailySync.schedule.entities.Schedule;
-import com.dailySync.todo.entities.TodoGroup;
-import com.dailySync.todo.entities.TodoItem;
-import com.dailySync.todo.entities.TodoList;
-import com.dailySync.user.dto.UserReqDto;
+import com.dailySync.test.dto.UserTestReqDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User extends BaseEntity {
+public class UserTest extends BaseEntity {
 
     @Column(unique = true, nullable = false)
     private String userName;
@@ -42,22 +36,11 @@ public class User extends BaseEntity {
     private String email;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<Account> accounts;
-
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<TodoItem> todoItems;
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<TodoGroup> todoGroups;
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<TodoList> todoLists;
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<Meal> meals;
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<Schedule> schedules;
+    private List<TodoItemTest> todoItemTests;
 
 
-    public static User of(UserReqDto reqDto) {
-        return User.builder()
+    public static UserTest of(UserTestReqDto reqDto) {
+        return UserTest.builder()
                 .name(reqDto.getName())
                 .email(reqDto.getEmail())
                 .userName(reqDto.getUserName())
@@ -66,7 +49,7 @@ public class User extends BaseEntity {
                 .build();
     }
 
-    public User(String userName, String password, String gender) {
+    public UserTest(String userName, String password, String gender) {
         this.userName = userName;
         this.password = password;
         this.gender = gender;
@@ -80,7 +63,7 @@ public class User extends BaseEntity {
 //        this.password = userReqDto.getPassword();
 //    }
 
-    public void update(UserReqDto reqDto){
+    public void update(UserTestReqDto reqDto){
         if (reqDto.getUserName() != null) {
             this.userName = reqDto.getUserName();
         }

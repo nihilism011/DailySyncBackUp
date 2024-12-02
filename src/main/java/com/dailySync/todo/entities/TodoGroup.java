@@ -1,6 +1,6 @@
 package com.dailySync.todo.entities;
 
-import com.dailySync.BaseEntity;
+import com.dailySync.common.BaseEntity;
 import com.dailySync.user.entities.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

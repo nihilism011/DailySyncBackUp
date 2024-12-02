@@ -1,5 +1,6 @@
-package com.dailySync.meal.entities;
+package com.dailySync.account.entity;
 
+import com.dailySync.account.dto.AccountResDto;
 import com.dailySync.common.BaseEntity;
 import com.dailySync.user.entities.User;
 import jakarta.persistence.Column;
@@ -18,47 +19,31 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Meal extends BaseEntity {
-
+public class Account extends BaseEntity {
     @ManyToOne
     @JoinColumn (name = "user_id", nullable = false)
     private User user;
 
-    @Column (nullable = false)
-    private String foodName;
-
-    @Column (nullable = false)
+    @Column
     private String category;
-
+    @Column (nullable = false)
+    private LocalDate accountDate;
+    @Column (nullable = false)
+    private String title;
     @Column
     private String description;
-
     @Column (nullable = false)
-    private String icon;
-
-    @Column
-    private Integer kcalories;
-
+    private Integer amount;
     @Column (nullable = false)
-    private LocalDate date;
+    private boolean isFixed;
 
-    @Column
-    private Integer sugar;
-
-    @Column
-    private Integer sodium;
-
-    @Column
-    private Integer protein;
-
-    @Column
-    private Integer fat;
-
-    @Column
-    private Integer carbs;
-
-    @Column (nullable = false)
-    private boolean isFavorite;
-
-
+    public static AccountResDto toResDto(Account account) {
+        return AccountResDto.builder().
+                title(account.getTitle()).
+                amount(account.getAmount()).
+                accountDate(account.getAccountDate()).
+                description(account.getDescription()).
+                category(account.getCategory()).
+                build();
+    }
 }
