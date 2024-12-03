@@ -1,6 +1,8 @@
 package com.dailySync.meal.entities;
 
 import com.dailySync.common.BaseEntity;
+import com.dailySync.meal.dto.MealReqDto;
+import com.dailySync.meal.dto.MealResDto;
 import com.dailySync.user.entities.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +14,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.temporal.WeekFields;
+import java.util.Locale;
 
 @Entity
 @Getter
@@ -61,4 +65,28 @@ public class Meal extends BaseEntity {
     private boolean isFavorite;
 
 
+
+    public static MealResDto toRes(Meal meal){
+        LocalDate date = (LocalDate) meal.getDate();
+
+        // 해당 날짜가 속한 주 번호 계산 (ISO 주 번호 기준)
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        // weekFields는 주단위가 1부터 MySQL은 0부터 주세는 단위가 1차이 나는 값을 빼준다.
+        int week = date.get(weekFields.weekOfYear()) - 1;
+        return MealResDto.builder()
+                .foodName(meal.getFoodName())
+                .category(meal.getCategory())
+                .description(meal.getDescription())
+                .icon(meal.getIcon())
+                .date(meal.getDate())
+                .kcalories(meal.getKcalories())
+                .sugar(meal.getSugar())
+                .sodium(meal.getSodium())
+                .protein(meal.getProtein())
+                .fat(meal.getFat())
+                .carbs(meal.getCarbs())
+                .isFavorite(meal.isFavorite())
+                .week(String.valueOf(week))
+                .build();
+    }
 }
