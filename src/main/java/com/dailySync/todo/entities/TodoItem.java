@@ -1,4 +1,4 @@
-package com.dailySync.schedule.entities;
+package com.dailySync.todo.entities;
 
 import com.dailySync.common.BaseEntity;
 import com.dailySync.user.entities.User;
@@ -11,27 +11,27 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 @Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Schedule extends BaseEntity {
+public class TodoItem extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn (name = "user_id", nullable = false)
     private User user;
 
-    @Column(nullable = false)
-    private String startTime;
+    @Column
+    private String day;
 
-    @Column(nullable = false)
-    private String endTime;
+    @Column (nullable = false)
+    private Integer itemOrder;
 
-    @Column(nullable = false)
+    @Column (nullable = false)
     private String title;
 
-    @Column(nullable = false)
-    private String description;
+    @Column (nullable = false)
+    private String status;
+
 }

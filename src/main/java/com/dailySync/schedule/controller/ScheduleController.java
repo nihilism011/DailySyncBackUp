@@ -12,18 +12,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class ScheduleController {
-    final private ScheduleService scheduleService;
+    private final ScheduleService scheduleService;
 
-    @GetMapping("schedule")
-    public ResponseEntity<?> getSchedule(@RequestBody ScheduleReqDto scheduleReqDto){
+    @GetMapping("schedule/userId/{id}")
+    public ResponseEntity<?> getSchedule(@PathVariable("id") Long userId){
 
-        return ResponseEntity.ok(scheduleService.getSchedule(scheduleReqDto.getUserId()));
+        return ResponseEntity.ok(scheduleService.getUser(userId));
 
     }
-    
+
 
 
 
 
 
 }
+
+
+
+
+

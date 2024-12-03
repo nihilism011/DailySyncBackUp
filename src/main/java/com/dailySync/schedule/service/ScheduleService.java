@@ -13,7 +13,23 @@ public class ScheduleService {
 
     final private ScheduleRepository scheduleRepository;
 
-    public List<Schedule> getSchedule(Long id){
-        return scheduleRepository.findByUserId(id);
+    //아이디로 유저 일정 가져오기
+    public List<Schedule> getUser(Long userId){
+
+        return scheduleRepository.findByUserId(userId);
     }
+
+    //아이디로 일정정보를 월별로 가져오기
+//    public List<Schedule> getSchedule(Long userId){
+//        List<Schedule> list = scheduleRepository.
+//
+//
+//    }
+
+
+
+
+
+
+
 }
