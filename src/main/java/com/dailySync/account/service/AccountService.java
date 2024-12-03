@@ -21,11 +21,11 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final FavoriteAccountRepository favoriteRepository;
 
-    /**
-     * 예시
-     */
-    public AccountListResDto getOneDayAccount(LocalDate date) {
-        List<Account> oneDayList = accountRepository.findByUser_IdAndAccountDate(4L, date);
+    public AccountListResDto accountPageInfo(Long userId,int year,int month, int day) {
+        LocalDate date = LocalDate.of(year,month,day);
+        List<Account> oneMonthList= accountRepository.findByUserIdAndYearAndMonth(year,month,userId);
+        List<Account> oneDayList = accountRepository.findByUser_IdAndAccountDate(userId, date);
+        //todo 두 리스트 리스트 dto 로 담아서 컨트롤러로 보낼것.
         return new AccountListResDto(oneDayList.stream().map(Account::toResDto).toList());
     }
 
