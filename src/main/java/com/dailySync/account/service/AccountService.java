@@ -1,6 +1,7 @@
 package com.dailySync.account.service;
 
 import com.dailySync.account.dto.AccountListResDto;
+import com.dailySync.account.dto.AccountReqDto;
 import com.dailySync.account.dto.AccountResDto;
 import com.dailySync.account.entity.Account;
 import com.dailySync.account.repository.AccountRepository;
@@ -20,10 +21,17 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final FavoriteAccountRepository favoriteRepository;
 
-    /** 예시 */
+    /**
+     * 예시
+     */
     public AccountListResDto getOneDayAccount(LocalDate date) {
         List<Account> oneDayList = accountRepository.findByUser_IdAndAccountDate(4L, date);
-
         return new AccountListResDto(oneDayList.stream().map(Account::toResDto).toList());
+    }
+
+    public boolean addAccountItem(Long userId, AccountReqDto reqDto) throws Exception {
+        User user = userRepository.findById(userId).orElseThrow(() -> new Exception("user doesn't exist"));
+        Account account = accountRepository.save(Account.of(user,reqDto));
+        return true;
     }
 }
