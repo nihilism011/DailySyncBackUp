@@ -26,25 +26,4 @@ public class MealReqDto {
     private Integer carbs;
     private boolean isFavorite;
 
-    public MealReqDto ofSaveReq(Meal meal) {
-        if(meal == null) {
-            return new MealReqDto();
-        }
-        MealReqDto mealReqDto = new MealReqDto();
-        mealReqDto.setUserId(meal.getUser().getId());
-        mealReqDto.setFoodName(meal.getFoodName());
-        mealReqDto.setCategory(meal.getCategory());
-        mealReqDto.setDescription(meal.getDescription());
-        mealReqDto.setIcon(meal.getIcon());
-        mealReqDto.setDate(meal.getDate());
-        mealReqDto.setKcalories(mealReqDto.getKcalories());
-        mealReqDto.setSugar(mealReqDto.getSugar());
-        mealReqDto.setSodium(mealReqDto.getSodium());
-        mealReqDto.setProtein(mealReqDto.getProtein());
-        mealReqDto.setFat(mealReqDto.getFat());
-        mealReqDto.setCarbs(mealReqDto.getCarbs());
-        mealReqDto.setFavorite(mealReqDto.isFavorite());
-        return mealReqDto;
-    }
-
 }

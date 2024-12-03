@@ -89,4 +89,22 @@ public class Meal extends BaseEntity {
                 .week(String.valueOf(week))
                 .build();
     }
+
+    public static Meal ofSaveReq(User userId, Meal meal) {
+        return Meal.builder()
+                .user(userId)
+                .foodName(meal.getFoodName())
+                .category(meal.getCategory())
+                .description(meal.getDescription())
+                .icon(meal.getIcon())
+                .date(meal.getDate())
+                .kcalories(meal.getKcalories())
+                .sugar(meal.getSugar())
+                .sodium(meal.getSodium())
+                .protein(meal.getProtein())
+                .fat(meal.getFat())
+                .carbs(meal.getCarbs())
+                .isFavorite(meal.isFavorite())
+                .build();
+    }
 }
