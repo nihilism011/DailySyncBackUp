@@ -27,11 +27,15 @@ public class ScheduleController {
         return ApiResponse.success(scheduleService.getUser(6L));
     }
 
-//    @GetMapping("/schedule/")
-//    public ResponseEntity<>{
-//
-//
-//    }
+    @GetMapping("/schedule/date/{year}/{month}")
+    public ResponseEntity<ApiResponse<List<ScheduleResDto>>> searchSchedule(
+            @PathVariable("year") int year,
+            @PathVariable("month") int month
+
+    ){
+        Long userId = 6L;
+        return ApiResponse.success(scheduleService.getScheduleDate(userId, year, month));
+    }
 
 
 
