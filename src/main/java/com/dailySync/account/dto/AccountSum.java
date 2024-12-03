@@ -5,12 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountListResDto {
-    private List<AccountResDto> accounts;
+public class AccountSum {
+    private LocalDate accountDate;
+    private Long plusSumAmount;
+    private Long minusSumAmount;
 }

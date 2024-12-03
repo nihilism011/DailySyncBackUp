@@ -36,7 +36,7 @@ public class Account extends BaseEntity {
     @Column (nullable = false)
     private Integer amount;
     @Column (nullable = false)
-    private boolean isFixed;
+    private boolean fixed;
 
     public static AccountResDto toResDto(Account account) {
         return AccountResDto.builder().
@@ -55,6 +55,7 @@ public class Account extends BaseEntity {
                 category(reqDto.getCategory()).
                 description(reqDto.getDescription()).
                 title(reqDto.getTitle()).
+                fixed(reqDto.isFixed()).
                 build();
     }
 }
