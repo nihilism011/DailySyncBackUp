@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Builder
 @Data
 @NoArgsConstructor //기본 생성자 생성
@@ -16,6 +18,7 @@ public class ScheduleResDto {
     private String endTime;
     private String title;
     private String description;
+
 
     public static ScheduleResDto of(Schedule schedule) {
         ScheduleResDto scheduleResDto = new ScheduleResDto();

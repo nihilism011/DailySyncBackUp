@@ -30,5 +30,3 @@ public class ApiResponse<T> {
         return ResponseEntity.internalServerError().body(response);
     }
 }
-
-
