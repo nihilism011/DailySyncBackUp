@@ -27,6 +27,22 @@ public class SwaggerConfig {
                 .addOpenApiCustomizer(accountApiCustomizer())
                 .build();
     }
+    @Bean
+    public GroupedOpenApi groupedOpenApi2() {
+        return GroupedOpenApi.builder()
+                .group("Meal API")
+                .pathsToMatch("/api/meal/**")
+                .addOpenApiCustomizer(accountApiCustomizer())
+                .build();
+    }
+    @Bean
+    public GroupedOpenApi autoGenApi2() {
+        return GroupedOpenApi.builder()
+                .group("Auto Jpa Meal API")
+                .pathsToMatch("/meals/**")
+                .addOpenApiCustomizer(accountApiCustomizer())
+                .build();
+    }
     private OpenApiCustomizer accountApiCustomizer(){
         return openApi -> openApi.info(new Info()
                 .title("Product API")
