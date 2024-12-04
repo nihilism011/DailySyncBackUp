@@ -1,5 +1,6 @@
 package com.dailySync.account.entity;
 
+import com.dailySync.account.dto.AccountReqDto;
 import com.dailySync.account.dto.AccountResDto;
 import com.dailySync.common.BaseEntity;
 import com.dailySync.user.entities.User;
@@ -35,7 +36,7 @@ public class Account extends BaseEntity {
     @Column (nullable = false)
     private Integer amount;
     @Column (nullable = false)
-    private boolean isFixed;
+    private boolean fixed;
 
     public static AccountResDto toResDto(Account account) {
         return AccountResDto.builder().
@@ -44,6 +45,17 @@ public class Account extends BaseEntity {
                 accountDate(account.getAccountDate()).
                 description(account.getDescription()).
                 category(account.getCategory()).
+                build();
+    }
+    public static Account of(User user,AccountReqDto reqDto){
+        return Account.builder().
+                user(user).
+                accountDate(reqDto.getAccountDate()).
+                amount(reqDto.getAmount()).
+                category(reqDto.getCategory()).
+                description(reqDto.getDescription()).
+                title(reqDto.getTitle()).
+                fixed(reqDto.isFixed()).
                 build();
     }
 }
