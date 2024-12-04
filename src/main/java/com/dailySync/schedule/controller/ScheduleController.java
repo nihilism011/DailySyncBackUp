@@ -21,11 +21,30 @@ import java.util.List;
 public class ScheduleController {
     private final ScheduleService scheduleService;
 
+
+
+
     @GetMapping("/schedule/userId/{id}")
     public ResponseEntity<ApiResponse<List<ScheduleResDto>>> getSchedule(@PathVariable("id") Long userId){
-
         return ApiResponse.success(scheduleService.getUser(6L));
     }
+
+    @GetMapping("/schedule/title/{title}")
+    public ResponseEntity<ApiResponse<List<ScheduleResDto>>> searchSchedule(
+            @PathVariable("title") String title
+
+    ){
+        return ApiResponse.success(scheduleService.getScheduleTitle(6L, title));
+    }
+
+    @GetMapping("/schedule/date/{year}")
+    public ResponseEntity<ApiResponse<List<ScheduleResDto>>> searchSchedule(
+            @PathVariable("year") int year
+
+    ){
+        return ApiResponse.success(scheduleService.getScheduleYear(6L, year));
+    }
+
 
     @GetMapping("/schedule/date/{year}/{month}")
     public ResponseEntity<ApiResponse<List<ScheduleResDto>>> searchSchedule(
@@ -33,13 +52,8 @@ public class ScheduleController {
             @PathVariable("month") int month
 
     ){
-        Long userId = 6L;
-        return ApiResponse.success(scheduleService.getScheduleDate(userId, year, month));
+        return ApiResponse.success(scheduleService.getScheduleDate(6L, year, month));
     }
-
-
-
-
 
 }
 

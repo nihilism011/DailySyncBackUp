@@ -27,7 +27,7 @@ public class TodoGroup extends BaseEntity {
     private String title;
 
     @Column (nullable = false)
-    private Integer description;
+    private String description;
 
     @Column (nullable = false)
     private boolean isAuto;

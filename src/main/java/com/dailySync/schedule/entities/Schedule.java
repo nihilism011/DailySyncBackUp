@@ -13,6 +13,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 
 @Entity
 @Getter
@@ -26,10 +28,10 @@ public class Schedule extends BaseEntity {
     private User user;
 
     @Column(nullable = false)
-    private String startTime;
+    private LocalDateTime startTime;
 
     @Column(nullable = false)
-    private String endTime;
+    private LocalDateTime endTime;
 
     @Column(nullable = false)
     private String title;

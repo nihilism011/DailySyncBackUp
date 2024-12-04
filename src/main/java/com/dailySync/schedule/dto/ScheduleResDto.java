@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -14,8 +15,8 @@ import java.util.List;
 @AllArgsConstructor //모든 필드값을 매개변수로 받는 생성자를 생성
 public class ScheduleResDto {
 
-    private String startTime;
-    private String endTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private String title;
     private String description;
 
