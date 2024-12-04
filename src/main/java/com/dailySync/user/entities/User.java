@@ -8,10 +8,8 @@ import com.dailySync.todo.entities.TodoGroup;
 import com.dailySync.todo.entities.TodoItem;
 import com.dailySync.todo.entities.TodoList;
 import com.dailySync.user.dto.UserReqDto;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,6 +38,9 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     private String email;
+
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
+    private UserSetting userSetting;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Account> accounts;
