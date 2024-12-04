@@ -25,7 +25,7 @@ public class TodoController {
         return todoService.getTodoGroupsByUserId(userId);
     }
 
-    @GetMapping("/todoItem/view/{userId}/{groupId}")
+    @GetMapping("/todoItem/view/{userId}")
     public List<TodoItem> getTodoItems(@PathVariable ("userId") Long userId, @PathVariable ("groupId") Long groupId) {
         return todoService.getTodoItemsByUserIdAndGroupId(userId, groupId);
     }

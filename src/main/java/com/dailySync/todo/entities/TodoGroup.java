@@ -29,7 +29,7 @@ public class TodoGroup extends BaseEntity {
     @Column
     private String title;
 
-    @Column
+    @Column (nullable = false)
     private String description;
 
     @Column (nullable = false)
