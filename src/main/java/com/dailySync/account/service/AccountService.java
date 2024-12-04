@@ -3,6 +3,7 @@ package com.dailySync.account.service;
 import com.dailySync.account.dto.AccountReqDto;
 import com.dailySync.account.dto.AccountResDto;
 import com.dailySync.account.dto.AccountSum;
+import com.dailySync.account.dto.FavorAccountResDto;
 import com.dailySync.account.entity.Account;
 import com.dailySync.account.entity.FavoriteAccount;
 import com.dailySync.account.repository.AccountRepository;
@@ -54,11 +55,37 @@ public class AccountService {
         List<Account> list = accountRepository.findByUserIdAndFixedAndYearAndMonth(userId, true, year, month);
         return list.stream().map(Account::toResDto).toList();
     }
-    /** favorite_account 테이블 insert*/
-    public boolean insertFavoriteAccountItem(Long userId, AccountReqDto reqDto) throws Exception {
+
+    /**
+     * favorite_account 테이블 CRUD
+     */
+    public boolean insertFavorAccountItem(Long userId, AccountReqDto reqDto) throws Exception {
         User user = userRepository.findById(userId).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND_USER));
         FavoriteAccount account = FavoriteAccount.of(user, reqDto);
         favoriteRepository.save(account);
+        return true;
+    }
+
+    public List<FavorAccountResDto> selectFavorAccountItems(Long userId, String category) {
+        List<FavoriteAccount> accounts;
+        if (category.equals("all") || category.equals("All") || category.equals("ALL")) {
+            accounts = favoriteRepository.findByUserId(userId);
+        } else {
+            accounts = favoriteRepository.findByUserIdAndCategory(userId, category);
+        }
+        return accounts.stream().map(FavoriteAccount::toResDto).toList();
+
+    }
+
+    public boolean updateFavorAccountItem(Long favorAccountId, AccountReqDto reqDto) throws Exception {
+        FavoriteAccount favorAccount = favoriteRepository.findById(favorAccountId).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND));
+        favorAccount.update(reqDto);
+        favoriteRepository.save(favorAccount);
+        return true;
+    }
+
+    public boolean deleteFavorAccountItem(Long favorAccountId) {
+        favoriteRepository.deleteById(favorAccountId);
         return true;
     }
     //todo favorite_account 테이블에 대한 selectAll,update,delete 기능 구현해야함.

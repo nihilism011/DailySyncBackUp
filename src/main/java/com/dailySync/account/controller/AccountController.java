@@ -2,13 +2,13 @@ package com.dailySync.account.controller;
 
 import com.dailySync.account.dto.AccountReqDto;
 import com.dailySync.account.dto.AccountResDto;
+import com.dailySync.account.dto.FavorAccountResDto;
 import com.dailySync.account.service.AccountService;
 import com.dailySync.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -28,7 +28,6 @@ public class AccountController {
     ) {
         //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
         Long userId = 3L;
-        LocalDate date = LocalDate.of(year, month, day);
         return ApiResponse.success(accountService.selectAccountDate(userId, year, month, day));
     }
 
@@ -71,10 +70,37 @@ public class AccountController {
         return ApiResponse.success(accountService.selectFixedItems(userId, year, month));
     }
 
+    @GetMapping ("item/favor/{category}")
+    public ResponseEntity<ApiResponse<List<FavorAccountResDto>>> getFavorItems(
+            @PathVariable ("category") String category) {
+        //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
+        Long userId = 3L;
+        return ApiResponse.success(accountService.selectFavorAccountItems(userId, category));
+    }
+
     @PostMapping ("item/favor")
     public ResponseEntity<ApiResponse<Boolean>> addFavorItem(AccountReqDto reqDto) throws Exception {
         //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
         Long userId = 3L;
-        return ApiResponse.success(accountService.insertFavoriteAccountItem(userId, reqDto));
+        return ApiResponse.success(accountService.insertFavorAccountItem(userId, reqDto));
+    }
+
+    @PutMapping ("item/favor/{favorAccountId}")
+    public ResponseEntity<ApiResponse<Boolean>> putFavorAccount(
+            @PathVariable Long favorAccountId,
+            @RequestBody AccountReqDto reqDto) throws Exception {
+        return ApiResponse.success(accountService.updateFavorAccountItem(favorAccountId, reqDto));
+    }
+
+    @PatchMapping ("item/favor/{favorAccountId}")
+    public ResponseEntity<ApiResponse<Boolean>> patchFavorAccount(
+            @PathVariable Long favorAccountId,
+            @RequestBody AccountReqDto reqDto) throws Exception {
+        return ApiResponse.success(accountService.updateFavorAccountItem(favorAccountId, reqDto));
+    }
+
+    @DeleteMapping ("item/favor/{favorAccountId}")
+    public ResponseEntity<ApiResponse<Boolean>> removeFavorAccountItem(@PathVariable Long favorAccountId) {
+        return ApiResponse.success(accountService.deleteFavorAccountItem(favorAccountId));
     }
 }
