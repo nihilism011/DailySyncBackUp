@@ -1,5 +1,6 @@
 package com.dailySync.account.entity;
 
+import com.dailySync.account.dto.AccountReqDto;
 import com.dailySync.common.BaseEntity;
 import com.dailySync.user.entities.User;
 import jakarta.persistence.Column;
@@ -28,4 +29,14 @@ public class FavoriteAccount extends BaseEntity {
     private String description;
     @Column (nullable = false)
     private Integer amount;
+
+    public static FavoriteAccount of(User user, AccountReqDto reqDto){
+        return FavoriteAccount.builder().
+                user(user).
+                title(reqDto.getTitle()).
+                category(reqDto.getCategory()).
+                amount(reqDto.getAmount()).
+                description(reqDto.getDescription()).
+                build();
+    }
 }

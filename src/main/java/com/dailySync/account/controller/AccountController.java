@@ -29,7 +29,7 @@ public class AccountController {
         //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
         Long userId = 3L;
         LocalDate date = LocalDate.of(year, month, day);
-        return ApiResponse.success(accountService.getAccountDate(userId, year, month, day));
+        return ApiResponse.success(accountService.selectAccountDate(userId, year, month, day));
     }
 
     @GetMapping ("month/{year}/{month}")
@@ -39,22 +39,42 @@ public class AccountController {
     ) {
         //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
         Long userId = 3L;
-        return ApiResponse.success((accountService.getAccountMonth(userId, year, month)));
+        return ApiResponse.success((accountService.selectAccountMonth(userId, year, month)));
     }
 
     @PostMapping ("item")
     public ResponseEntity<ApiResponse<Boolean>> addAccountItem(@RequestBody AccountReqDto reqDto) throws Exception {
         //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
         Long userId = 3L;
-        return ApiResponse.success(accountService.addAccountItem(userId, reqDto));
+        return ApiResponse.success(accountService.insertAccountItem(userId, reqDto));
     }
 
-    @PutMapping ("item/{id}")
-    @PatchMapping ("item/{id}")
-    public ResponseEntity<ApiResponse<Boolean>> modifyAccountItem(@RequestBody AccountReqDto reqDto) throws Exception {
+    @PutMapping ("item/{accountId}")
+    public ResponseEntity<ApiResponse<Boolean>> putAccountItem(
+            @PathVariable ("accountId") Long accountId,
+            @RequestBody AccountReqDto reqDto) throws Exception {
+        return ApiResponse.success(accountService.updateAccountItem(accountId, reqDto));
+    }
+
+    @PatchMapping ("item/{accountId}")
+    public ResponseEntity<ApiResponse<Boolean>> patchAccountItem(
+            @PathVariable ("accountId") Long accountId,
+            @RequestBody AccountReqDto reqDto) throws Exception {
+        return ApiResponse.success(accountService.updateAccountItem(accountId, reqDto));
+    }
+
+    @GetMapping ("fixedItem/{year}/{month}")
+    public ResponseEntity<ApiResponse<List<AccountResDto>>> getFixedItem(@PathVariable ("year") int year,
+                                                                         @PathVariable ("month") int month) {
         //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
         Long userId = 3L;
-        return ApiResponse.success(true);
+        return ApiResponse.success(accountService.selectFixedItems(userId, year, month));
     }
 
+    @PostMapping ("item/favor")
+    public ResponseEntity<ApiResponse<Boolean>> addFavorItem(AccountReqDto reqDto) throws Exception {
+        //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
+        Long userId = 3L;
+        return ApiResponse.success(accountService.insertFavoriteAccountItem(userId, reqDto));
+    }
 }
