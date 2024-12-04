@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-    @Query("SELECT new com.dailySync.account.dto.AccountSum(" +
+    @Query ("SELECT new com.dailySync.account.dto.AccountSum(" +
             "a.accountDate, " +
             "SUM(CASE WHEN a.amount > 0 THEN a.amount ELSE 0 END), " +  // plusSumAmount
             "SUM(CASE WHEN a.amount < 0 THEN ABS(a.amount) ELSE 0 END)) " +  // minusSumAmount (절대값 사용)
@@ -21,9 +21,9 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "AND FUNCTION('MONTH', a.accountDate) = :month " +
             "AND a.user.id = :userId " +
             "GROUP BY a.accountDate")
-    List<AccountSum> findByUserIdAndYearAndMonth(@Param("year") int year,
-                                                 @Param("month") int month,
-                                                 @Param("userId") Long userId);
+    List<AccountSum> findByUserIdAndYearAndMonth(@Param ("year") int year,
+                                                 @Param ("month") int month,
+                                                 @Param ("userId") Long userId);
 
     List<Account> findByUser_IdAndAccountDate(Long userId, LocalDate accountDate);
 }

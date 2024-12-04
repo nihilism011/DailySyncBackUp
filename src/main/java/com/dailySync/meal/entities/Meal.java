@@ -62,9 +62,7 @@ public class Meal extends BaseEntity {
     private Integer carbs;
 
     @Column (nullable = false)
-    private boolean isFavorite;
-
-
+    private Boolean isFavorite;
 
     // 유저의 리스트 조회시 사용
     public static MealResDto toRes(Meal meal) {
@@ -75,6 +73,7 @@ public class Meal extends BaseEntity {
         // weekFields는 주단위가 1부터 MySQL은 0부터 주세는 단위가 1차이 나는 값을 빼준다.
         int week = date.get(weekFields.weekOfYear()) - 1;
         return MealResDto.builder()
+                .id(meal.getId())
                 .foodName(meal.getFoodName())
                 .category(meal.getCategory())
                 .description(meal.getDescription())
@@ -86,7 +85,7 @@ public class Meal extends BaseEntity {
                 .protein(meal.getProtein())
                 .fat(meal.getFat())
                 .carbs(meal.getCarbs())
-                .isFavorite(meal.isFavorite())
+                .isFavorite(meal.getIsFavorite())
                 .week(String.valueOf(week))
                 .build();
     }
@@ -94,6 +93,7 @@ public class Meal extends BaseEntity {
     // 추천내용 검색시 사용
     public static MealResDto toRecom(Meal meal) {
         return MealResDto.builder()
+                .id(meal.getId())
                 .foodName(meal.getFoodName())
                 .category(meal.getCategory())
                 .description(meal.getDescription())
@@ -108,7 +108,7 @@ public class Meal extends BaseEntity {
                 .build();
     }
 
-    public static Meal ofSaveReq(User userId, Meal meal) {
+    public static Meal ofSaveReq(User userId, Meal meal, boolean favorite) {
         return Meal.builder()
                 .user(userId)
                 .foodName(meal.getFoodName())
@@ -122,7 +122,46 @@ public class Meal extends BaseEntity {
                 .protein(meal.getProtein())
                 .fat(meal.getFat())
                 .carbs(meal.getCarbs())
-                .isFavorite(meal.isFavorite())
+                .isFavorite(favorite)
                 .build();
+    }
+
+    public void update(MealReqDto mealReqDto) {
+        if (mealReqDto.getFoodName() != null) {
+            this.foodName = mealReqDto.getFoodName();
+        }
+        if (mealReqDto.getCategory() != null) {
+            this.category = mealReqDto.getCategory();
+        }
+        if (mealReqDto.getDescription() != null) {
+            this.description = mealReqDto.getDescription();
+        }
+        if (mealReqDto.getIcon() != null) {
+            this.icon = mealReqDto.getIcon();
+        }
+        if (mealReqDto.getDate() != null) {
+            this.date = mealReqDto.getDate();
+        }
+        if (mealReqDto.getKcalories() != null) {
+            this.kcalories = mealReqDto.getKcalories();
+        }
+        if (mealReqDto.getSugar() != null) {
+            this.sugar = mealReqDto.getSugar();
+        }
+        if (mealReqDto.getSodium() != null) {
+            this.sodium = mealReqDto.getSodium();
+        }
+        if (mealReqDto.getProtein() != null) {
+            this.protein = mealReqDto.getProtein();
+        }
+        if (mealReqDto.getFat() != null) {
+            this.fat = mealReqDto.getFat();
+        }
+        if (mealReqDto.getCarbs() != null) {
+            this.carbs = mealReqDto.getCarbs();
+        }
+        if (mealReqDto.getIsFavorite() != null) {
+            this.isFavorite = mealReqDto.getIsFavorite();
+        }
     }
 }

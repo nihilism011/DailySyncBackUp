@@ -47,7 +47,8 @@ public class Account extends BaseEntity {
                 category(account.getCategory()).
                 build();
     }
-    public static Account of(User user,AccountReqDto reqDto){
+
+    public static Account of(User user, AccountReqDto reqDto) {
         return Account.builder().
                 user(user).
                 accountDate(reqDto.getAccountDate()).

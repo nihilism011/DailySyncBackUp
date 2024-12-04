@@ -1,7 +1,5 @@
 package com.dailySync.config;
 
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springdoc.core.models.GroupedOpenApi;
@@ -19,14 +17,34 @@ public class SwaggerConfig {
                 .addOpenApiCustomizer(accountApiCustomizer())
                 .build();
     }
+
     @Bean
     public GroupedOpenApi autoGenApi() {
         return GroupedOpenApi.builder()
-                .group("Auto Jpa Account API")
-                .pathsToMatch("/accounts/**")
+                .group("Auto Account API")
+                .pathsToMatch("/accounts/**", "/favoriteAccounts/**")
                 .addOpenApiCustomizer(accountApiCustomizer())
                 .build();
     }
+
+    @Bean
+    public GroupedOpenApi todoApi() {
+        return GroupedOpenApi.builder()
+                .group("Todo API")
+                .pathsToMatch("/api/todo/**")
+                .addOpenApiCustomizer(accountApiCustomizer())
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi autoT() {
+        return GroupedOpenApi.builder()
+                .group("Auto Todo API")
+                .pathsToMatch("/todoItems/**", "/todoLists/**")
+                .addOpenApiCustomizer(accountApiCustomizer())
+                .build();
+    }
+
     @Bean
     public GroupedOpenApi groupedOpenApi2() {
         return GroupedOpenApi.builder()
@@ -35,15 +53,53 @@ public class SwaggerConfig {
                 .addOpenApiCustomizer(accountApiCustomizer())
                 .build();
     }
+
     @Bean
     public GroupedOpenApi autoGenApi2() {
         return GroupedOpenApi.builder()
-                .group("Auto Jpa Meals API")
+                .group("Auto Meals API")
                 .pathsToMatch("/meals/**")
                 .addOpenApiCustomizer(accountApiCustomizer())
                 .build();
     }
-    private OpenApiCustomizer accountApiCustomizer(){
+
+    @Bean
+    public GroupedOpenApi alls() {
+        return GroupedOpenApi.builder()
+                .group("ALL API")
+                .pathsToMatch("/**")
+                .addOpenApiCustomizer(accountApiCustomizer())
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi sch() {
+        return GroupedOpenApi.builder()
+                .group("Schedule API")
+                .pathsToMatch("/api/schedule/**")
+                .addOpenApiCustomizer(accountApiCustomizer())
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi autoC() {
+        return GroupedOpenApi.builder()
+                .group("Auto Schedule API")
+                .pathsToMatch("/schedules/**")
+                .addOpenApiCustomizer(accountApiCustomizer())
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi userE() {
+        return GroupedOpenApi.builder()
+                .group("Auto User API")
+                .pathsToMatch("/users/**", "/userSettings/**")
+                .addOpenApiCustomizer(accountApiCustomizer())
+                .build();
+    }
+
+    private OpenApiCustomizer accountApiCustomizer() {
         return openApi -> openApi.info(new Info()
                 .title("Product API")
                 .description("API for managing products")

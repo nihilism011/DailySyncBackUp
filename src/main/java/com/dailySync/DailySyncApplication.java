@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 @EnableJpaAuditing
 public class DailySyncApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(DailySyncApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(DailySyncApplication.class, args);
+    }
 
 }

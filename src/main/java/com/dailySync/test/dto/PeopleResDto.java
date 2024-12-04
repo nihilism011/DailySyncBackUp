@@ -2,6 +2,7 @@ package com.dailySync.test.dto;
 
 import com.dailySync.test.entities.People;
 import lombok.*;
+
 import java.util.List;
 
 @Data
@@ -16,12 +17,12 @@ public class PeopleResDto {
     private String email;
     private List<String> books;
 
-    public static PeopleResDto nullPeople(){
+    public static PeopleResDto nullPeople() {
         return new PeopleResDto();
     }
 
     public static PeopleResDto of(People people) {
-        if(people==null){
+        if (people == null) {
             return new PeopleResDto();
         }
 

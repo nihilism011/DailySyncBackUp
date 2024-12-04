@@ -1,7 +1,5 @@
 package com.dailySync.meal.dto;
 
-import com.dailySync.meal.entities.Meal;
-import com.dailySync.user.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MealReqDto {
+    private Long id;
     private Long userId;
     private String foodName;
     private String category;
@@ -24,6 +23,5 @@ public class MealReqDto {
     private Integer protein;
     private Integer fat;
     private Integer carbs;
-    private boolean isFavorite;
-
+    private Boolean isFavorite;
 }

@@ -15,13 +15,13 @@ import java.util.stream.Collectors;
 public class PeopleService {
     final private PeopleRepository peopleRepository;
 
-    public List<PeopleResDto> getAllPeople(){
+    public List<PeopleResDto> getAllPeople() {
         return peopleRepository.findAll()
                 .stream().map(PeopleResDto::of)
                 .collect(Collectors.toList());
     }
 
-    public PeopleResDto getPeopleById(Long id){
+    public PeopleResDto getPeopleById(Long id) {
         People people = peopleRepository.findById(id).orElse(null);
         return PeopleResDto.of(people);
     }
@@ -34,7 +34,7 @@ public class PeopleService {
         return peopleRepository.save(people);
     }
 
-    public void deletePeople(Long id){
+    public void deletePeople(Long id) {
         peopleRepository.deleteById(id);
     }
 }

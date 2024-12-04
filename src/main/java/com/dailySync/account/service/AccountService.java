@@ -22,17 +22,18 @@ public class AccountService {
     private final FavoriteAccountRepository favoriteRepository;
 
     public List<AccountResDto> getAccountDate(Long userId, int year, int month, int day) {
-        LocalDate date = LocalDate.of(year,month,day);
+        LocalDate date = LocalDate.of(year, month, day);
         List<Account> oneDayList = accountRepository.findByUser_IdAndAccountDate(userId, date);
         return oneDayList.stream().map(Account::toResDto).toList();
     }
-    public List<AccountSum> getAccountMonth(Long userId, int year, int month){
-        return accountRepository.findByUserIdAndYearAndMonth(year,month,userId);
+
+    public List<AccountSum> getAccountMonth(Long userId, int year, int month) {
+        return accountRepository.findByUserIdAndYearAndMonth(year, month, userId);
     }
 
     public boolean addAccountItem(Long userId, AccountReqDto reqDto) throws Exception {
         User user = userRepository.findById(userId).orElseThrow(() -> new Exception("user doesn't exist"));
-        Account account = accountRepository.save(Account.of(user,reqDto));
+        Account account = accountRepository.save(Account.of(user, reqDto));
         return true;
     }
 }

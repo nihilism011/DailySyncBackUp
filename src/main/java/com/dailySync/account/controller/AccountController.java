@@ -45,9 +45,16 @@ public class AccountController {
     @PostMapping ("item")
     public ResponseEntity<ApiResponse<Boolean>> addAccountItem(@RequestBody AccountReqDto reqDto) throws Exception {
         //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
-        System.out.println(reqDto);
         Long userId = 3L;
         return ApiResponse.success(accountService.addAccountItem(userId, reqDto));
+    }
+
+    @PutMapping ("item/{id}")
+    @PatchMapping ("item/{id}")
+    public ResponseEntity<ApiResponse<Boolean>> modifyAccountItem(@RequestBody AccountReqDto reqDto) throws Exception {
+        //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
+        Long userId = 3L;
+        return ApiResponse.success(true);
     }
 
 }

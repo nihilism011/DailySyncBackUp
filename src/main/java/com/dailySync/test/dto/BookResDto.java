@@ -10,17 +10,17 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class BookResDto  {
+public class BookResDto {
     private String title;
     private String author;
     private String peopleId;
 
-    public static BookResDto nullBook(){
+    public static BookResDto nullBook() {
         return new BookResDto();
     }
 
-    public static BookResDto of(Book book){
-        if(book == null){
+    public static BookResDto of(Book book) {
+        if (book == null) {
             return new BookResDto();
         }
         return BookResDto.builder()
