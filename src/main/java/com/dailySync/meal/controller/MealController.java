@@ -17,12 +17,24 @@ public class MealController {
 
     private final MealService mealService;
 
-    /**로그인 한 유저가 연도 year 월 month 변수에 담아 넘겨주면 해당 월의 mealList 를 전달 */
-    @GetMapping("/mealList/{year}/{month}")
+    /** 로그인 한 유저가 연도 year 월 month 변수에 담아 넘겨주면 해당 월의 mealList 를 전달 */
+    @GetMapping("mealList/{year}/{month}")
     public ResponseEntity<ApiResponse<MealListResDto>> getMealList(@PathVariable int year, @PathVariable int month) {
         return ApiResponse.success(mealService.getAllUserMealList(year, month));
     }
 
+    /** 식단 추가 할 때 추천 리스트 받아오기  */
+    @GetMapping("recommand")
+    public ResponseEntity<ApiResponse<MealListResDto>> getRecommand() {
+        return ApiResponse.success(mealService.getRecommandList());
+    }
+
+    /** 식단 추가 할 때 즐겨찾기 리스트 받아오기  */
+    @GetMapping("favorite/{id}")
+    public ResponseEntity<ApiResponse<MealListResDto>> getFavorite(@PathVariable Long id) {
+        //Long id는 추후 로그인 아이디로 변경 예정
+        return ApiResponse.success(mealService.getFavoriteList(id));
+    }
 
     /** 식단 데이터 삽입시 데이터 적용 */
     @PostMapping("add")

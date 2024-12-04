@@ -23,6 +23,16 @@ public class MealService {
         return new MealListResDto(mealList.stream().map(Meal::toRes).toList());
     }
 
+    public MealListResDto getRecommandList() {
+        List<Meal> recommandList = mealRepository.findByUserId(1L);
+        return new MealListResDto(recommandList.stream().map(Meal::toRecom).toList());
+    }
+
+    public MealListResDto getFavoriteList(Long id) {
+        List<Meal> favoriteList = mealRepository.findByUserIdAndIsFavorite(id, true);
+        return new MealListResDto(favoriteList.stream().map(Meal::toRecom).toList());
+    }
+
     public String insertMealList(List<Meal> meals) {
         User userId = userRepository.findById(7L).orElseThrow();
         try {

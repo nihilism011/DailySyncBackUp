@@ -66,7 +66,8 @@ public class Meal extends BaseEntity {
 
 
 
-    public static MealResDto toRes(Meal meal){
+    // 유저의 리스트 조회시 사용
+    public static MealResDto toRes(Meal meal) {
         LocalDate date = (LocalDate) meal.getDate();
 
         // 해당 날짜가 속한 주 번호 계산 (ISO 주 번호 기준)
@@ -87,6 +88,23 @@ public class Meal extends BaseEntity {
                 .carbs(meal.getCarbs())
                 .isFavorite(meal.isFavorite())
                 .week(String.valueOf(week))
+                .build();
+    }
+
+    // 추천내용 검색시 사용
+    public static MealResDto toRecom(Meal meal) {
+        return MealResDto.builder()
+                .foodName(meal.getFoodName())
+                .category(meal.getCategory())
+                .description(meal.getDescription())
+                .icon(meal.getIcon())
+                .date(meal.getDate())
+                .kcalories(meal.getKcalories())
+                .sugar(meal.getSugar())
+                .sodium(meal.getSodium())
+                .protein(meal.getProtein())
+                .fat(meal.getFat())
+                .carbs(meal.getCarbs())
                 .build();
     }
 
