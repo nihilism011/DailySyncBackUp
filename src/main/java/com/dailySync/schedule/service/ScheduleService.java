@@ -53,21 +53,15 @@ public class ScheduleService {
 
     /**일정삭제*/
     public boolean deleteSchedule(Long id) {
-         scheduleRepository.deleteById(id);
+        scheduleRepository.deleteById(id);
         return true;
     }
 
     /**일정수정*/
-    public boolean updateSchedule(ScheduleReqDto reqDto) {
-        try {
-            Schedule schedule = scheduleRepository.findById(reqDto.getId()).orElseThrow(() -> new Exception("Schedule not found"));
-            schedule.update(reqDto);
-            scheduleRepository.save(schedule);
-            return true;
-
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-            return false;
-        }
+    public boolean updateSchedule(ScheduleReqDto reqDto) throws Exception{
+        Schedule schedule = scheduleRepository.findById(reqDto.getId()).orElseThrow(() -> new Exception("Schedule not found"));
+        schedule.update(reqDto);
+        scheduleRepository.save(schedule);
+        return true;
     }
 }

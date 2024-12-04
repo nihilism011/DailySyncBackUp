@@ -59,7 +59,7 @@ public class ScheduleController {
     }
 
     @PatchMapping ("/schedule/update")
-    public ResponseEntity<ApiResponse<Boolean>> updateSchedule(@RequestBody ScheduleReqDto reqDto) {
+    public ResponseEntity<ApiResponse<Boolean>> updateSchedule(@RequestBody ScheduleReqDto reqDto) throws Exception {
       return ApiResponse.success( scheduleService.updateSchedule(reqDto));
     }
 
