@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface MealRepository extends JpaRepository<Meal, Long> {
-    @Query("SELECT m FROM Meal m WHERE m.user.id = :userId AND MONTH(m.date) = :month")
-    List<Meal> findMealsByUserIdAndMonth(Long userId, int month);
+    @Query("SELECT m FROM Meal m WHERE m.user.id = :userId AND YEAR(m.date) = :year AND MONTH(m.date) = :month")
+    List<Meal> findMealsByUserIdADNYearAndMonth(Long userId, int year, int month);
 }

@@ -18,8 +18,8 @@ public class MealService {
     private final MealRepository mealRepository;
     private final UserRepository userRepository;
 
-    public MealListResDto getAllUserMealList(Integer month) {
-        List<Meal> mealList = mealRepository.findMealsByUserIdAndMonth(7L, month);
+    public MealListResDto getAllUserMealList(Integer year, Integer month) {
+        List<Meal> mealList = mealRepository.findMealsByUserIdADNYearAndMonth(7L, year, month);
         return new MealListResDto(mealList.stream().map(Meal::toRes).toList());
     }
 
