@@ -13,7 +13,7 @@ public class TodoTestService {
     final private TodoTestRepository todoTestRepository;
     final private UserTestRepository userTestRepository;
 
-    public boolean addTodoItem(Long userId, TodoItemReqDto reqDto){
+    public boolean addTodoItem(Long userId, TodoItemReqDto reqDto) {
         UserTest user = userTestRepository.findById(userId).orElse(null);
         if (user != null) {
             System.out.println(user);

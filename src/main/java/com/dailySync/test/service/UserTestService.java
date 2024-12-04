@@ -1,6 +1,5 @@
 package com.dailySync.test.service;
 
-
 import com.dailySync.test.dto.UserTestReqDto;
 import com.dailySync.test.dto.UserTestResDto;
 import com.dailySync.test.entities.UserTest;
@@ -18,15 +17,14 @@ public class UserTestService {
     //@Autowired 와 같음
     final private UserTestRepository userTestRepository;
 
-
     public List<UserTestResDto> getAllUser() {
-//        [userResDto1,userResDto2...]
+        //        [userResDto1,userResDto2...]
 
         List<UserTest> list = userTestRepository.findAll();
 
-//        select *
-//        from user
-//        [user1,user2...]
+        //        select *
+        //        from user
+        //        [user1,user2...]
         List<UserTestResDto> resList = new ArrayList<>();
 
         for (UserTest user : list) {
@@ -34,15 +32,15 @@ public class UserTestService {
         }
 
         return resList;
-//        return userRepository.findAll().stream().map(UserResDto::of).toList();
+        //        return userRepository.findAll().stream().map(UserResDto::of).toList();
     }
 
     //    아이디로 유저 찾기
     public UserTestResDto findUser(Long id) {
 
         UserTest user = userTestRepository.findById(id).orElse(null);
-//        Optional<User> userO = userRepository.findById(id);
-//        User userU = userO.orElse(null);
+        //        Optional<User> userO = userRepository.findById(id);
+        //        User userU = userO.orElse(null);
         return UserTestResDto.of(user);
     }
 
@@ -54,11 +52,12 @@ public class UserTestService {
 
     //유저 추가
     public boolean insertUser(UserTestReqDto userReqDto) {
-//        userReqDto.toUser();
+        //        userReqDto.toUser();
         UserTest user = UserTest.of(userReqDto);
         UserTest insrtedUser = userTestRepository.save(user);
         return true;
     }
+
     public boolean updateUser(Long id, UserTestReqDto userReqDto) {
         try {
             UserTest user = userTestRepository.findById(id).orElse(null);
@@ -74,11 +73,9 @@ public class UserTestService {
         }
     }
 
-    public boolean deleteUser(Long id){
-
+    public boolean deleteUser(Long id) {
 
         userTestRepository.deleteById(id);
-
 
         return true;
     }

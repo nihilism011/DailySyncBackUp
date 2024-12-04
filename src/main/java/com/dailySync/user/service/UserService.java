@@ -17,15 +17,14 @@ public class UserService {
     //@Autowired 와 같음
     final private UserRepository userRepository;
 
-
     public List<UserResDto> getAllUser() {
-//        [userResDto1,userResDto2...]
+        //        [userResDto1,userResDto2...]
 
         List<User> list = userRepository.findAll();
 
-//        select *
-//        from user
-//        [user1,user2...]
+        //        select *
+        //        from user
+        //        [user1,user2...]
         List<UserResDto> resList = new ArrayList<>();
 
         for (User user : list) {
@@ -33,15 +32,15 @@ public class UserService {
         }
 
         return resList;
-//        return userRepository.findAll().stream().map(UserResDto::of).toList();
+        //        return userRepository.findAll().stream().map(UserResDto::of).toList();
     }
 
     //    아이디로 유저 찾기
     public UserResDto findUser(Long id) {
 
         User user = userRepository.findById(id).orElse(null);
-//        Optional<User> userO = userRepository.findById(id);
-//        User userU = userO.orElse(null);
+        //        Optional<User> userO = userRepository.findById(id);
+        //        User userU = userO.orElse(null);
         return UserResDto.of(user);
     }
 
@@ -53,11 +52,12 @@ public class UserService {
 
     //유저 추가
     public boolean insertUser(UserReqDto userReqDto) {
-//        userReqDto.toUser();
+        //        userReqDto.toUser();
         User user = User.of(userReqDto);
         User insrtedUser = userRepository.save(user);
         return true;
     }
+
     public boolean updateUser(Long id, UserReqDto userReqDto) {
         try {
             User user = userRepository.findById(id).orElse(null);
@@ -73,11 +73,9 @@ public class UserService {
         }
     }
 
-    public boolean deleteUser(Long id){
-
+    public boolean deleteUser(Long id) {
 
         userRepository.deleteById(id);
-
 
         return true;
     }

@@ -7,13 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TodoItemReqDto {
-
+public class TodoGroupReqDto {
     private Long userId;
-    private Long groupId;
-    private String day;
-    private Integer itemOrder;
     private String title;
-    private String status;
-
+    private String description;
+    private boolean isAuto;
 }

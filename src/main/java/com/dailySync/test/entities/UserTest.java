@@ -20,24 +20,29 @@ import java.util.List;
 @Builder
 public class UserTest extends BaseEntity {
 
-    @Column(unique = true, nullable = false)
+    @Column (unique = true, nullable = false)
     private String userName;
 
-    @Column(nullable = false)
+    @Column (nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column (nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column (nullable = false)
     private String gender;
 
-    @Column(nullable = false)
+    @Column (nullable = false)
     private String email;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)
     private List<TodoItemTest> todoItemTests;
 
+    public UserTest(String userName, String password, String gender) {
+        this.userName = userName;
+        this.password = password;
+        this.gender = gender;
+    }
 
     public static UserTest of(UserTestReqDto reqDto) {
         return UserTest.builder()
@@ -49,21 +54,15 @@ public class UserTest extends BaseEntity {
                 .build();
     }
 
-    public UserTest(String userName, String password, String gender) {
-        this.userName = userName;
-        this.password = password;
-        this.gender = gender;
-    }
+    //    public void update(UserReqDto userReqDto) {
+    //        this.userName = userReqDto.getUserName();
+    //        this.name = userReqDto.getName();
+    //        this.email = userReqDto.getEmail();
+    //        this.gender = userReqDto.getGender();
+    //        this.password = userReqDto.getPassword();
+    //    }
 
-//    public void update(UserReqDto userReqDto) {
-//        this.userName = userReqDto.getUserName();
-//        this.name = userReqDto.getName();
-//        this.email = userReqDto.getEmail();
-//        this.gender = userReqDto.getGender();
-//        this.password = userReqDto.getPassword();
-//    }
-
-    public void update(UserTestReqDto reqDto){
+    public void update(UserTestReqDto reqDto) {
         if (reqDto.getUserName() != null) {
             this.userName = reqDto.getUserName();
         }

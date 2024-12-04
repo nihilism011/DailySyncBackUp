@@ -23,4 +23,5 @@ public class MealReqDto {
     private Integer fat;
     private Integer carbs;
     private boolean isFavorite;
+
 }

@@ -22,8 +22,8 @@ public class BookService {
 
     public Book CreateBook(BookReqDto reqDto) {
 
-        People people =peopleRepository.findById(reqDto.getPeopleId())
-                .orElseThrow(()->new ResolutionException("??"));
+        People people = peopleRepository.findById(reqDto.getPeopleId())
+                .orElseThrow(() -> new ResolutionException("??"));
 
         Book book = Book.builder()
                 .title(reqDto.getTitle())
@@ -33,18 +33,18 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public List<BookResDto> getAllBook(){
+    public List<BookResDto> getAllBook() {
         return bookRepository.findAll()
                 .stream().map(BookResDto::of)
                 .collect(Collectors.toList());
     }
 
-    public BookResDto getBookById(Long id){
+    public BookResDto getBookById(Long id) {
         Book book = bookRepository.findById(id).orElse(null);
         return BookResDto.of(book);
     }
 
-    public void postDeleteById(long id){
+    public void postDeleteById(long id) {
         bookRepository.deleteById(id);
     }
 

@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-
 @Entity
 @Getter
 @NoArgsConstructor
@@ -24,19 +23,19 @@ import java.time.LocalDateTime;
 public class Schedule extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn (name = "user_id", nullable = false)
     private User user;
 
-    @Column(nullable = false)
+    @Column (nullable = false)
     private LocalDateTime startTime;
 
-    @Column(nullable = false)
+    @Column (nullable = false)
     private LocalDateTime endTime;
 
-    @Column(nullable = false)
+    @Column (nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column (nullable = false)
     private String description;
 
     public static ScheduleResDto toResDto(Schedule schedule) {
@@ -48,7 +47,7 @@ public class Schedule extends BaseEntity {
                 build();
     }
 
-    public static Schedule of(User user, ScheduleReqDto reqDto){
+    public static Schedule of(User user, ScheduleReqDto reqDto) {
         return Schedule.builder().
                 user(user).
                 title(reqDto.getTitle()).

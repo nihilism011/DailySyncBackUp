@@ -22,21 +22,23 @@ import java.time.LocalDateTime;
 public class TodoList extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn (name = "user_id", nullable = false)
     private User user;
 
+    @ManyToOne
+    @JoinColumn (name = "item_id", nullable = false)
+    private TodoItem todoItem;
 
     @Column
-    private LocalDate date;
+    private LocalDate date;  //To.Do 리스트의 날짜를 저장
 
     @Column
     private Long todoID;
 
     @Column
-    private LocalDateTime checkedTime;
+    private LocalDateTime checkedTime; // 리스트가 체크된 시간을 저장
 
     @Column
-    private Integer listOrder;
-
+    private Integer listOrder;// 리스트 항목의 우선순위를 저장하
 
 }

@@ -7,15 +7,16 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Builder
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountResDto {
-    private Long id;
+public class AccountReqDto {
     private String category;
     private LocalDate accountDate;
     private String title;
     private String description;
     private Integer amount;
+    private boolean fixed;
 }
+

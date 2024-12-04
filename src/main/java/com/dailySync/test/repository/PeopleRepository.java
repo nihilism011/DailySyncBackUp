@@ -1,7 +1,6 @@
 package com.dailySync.test.repository;
 
 import com.dailySync.test.entities.People;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

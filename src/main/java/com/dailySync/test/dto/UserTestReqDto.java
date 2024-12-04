@@ -12,13 +12,13 @@ public class UserTestReqDto {
     private String gender;
     private String email;
 
-//    public User toUser(){
-//        return User.builder()
-//                .userName(this.userName)
-//                .password(this.password)
-//                .gender(this.gender)
-//                .email(this.email)
-//                .name(this.name)
-//                .build();
-//    }
+    //    public User toUser(){
+    //        return User.builder()
+    //                .userName(this.userName)
+    //                .password(this.password)
+    //                .gender(this.gender)
+    //                .email(this.email)
+    //                .name(this.name)
+    //                .build();
+    //    }
 }

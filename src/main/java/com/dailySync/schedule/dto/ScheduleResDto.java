@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Builder
 @Data
@@ -19,7 +18,6 @@ public class ScheduleResDto {
     private LocalDateTime endTime;
     private String title;
     private String description;
-
 
     public static ScheduleResDto of(Schedule schedule) {
         ScheduleResDto scheduleResDto = new ScheduleResDto();
