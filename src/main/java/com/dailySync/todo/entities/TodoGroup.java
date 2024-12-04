@@ -1,6 +1,5 @@
 package com.dailySync.todo.entities;
 
-import com.dailySync.account.entity.Account;
 import com.dailySync.common.BaseEntity;
 import com.dailySync.user.entities.User;
 import jakarta.persistence.*;
@@ -20,10 +19,10 @@ import java.util.List;
 public class TodoGroup extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn (name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "todoGroup",cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "todoGroup", cascade = CascadeType.ALL)
     private List<TodoItem> todoItems;
 
     @Column
@@ -34,7 +33,5 @@ public class TodoGroup extends BaseEntity {
 
     @Column (nullable = false)
     private boolean isAuto;
-
-
 
 }

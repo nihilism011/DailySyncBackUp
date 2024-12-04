@@ -15,13 +15,13 @@ import lombok.*;
 @Builder
 public class Book extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column (nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column (nullable = false)
     private String author;
 
     @ManyToOne
-    @JoinColumn(name = "people_id", nullable = false)
+    @JoinColumn (name = "people_id", nullable = false)
     private People people;
 }

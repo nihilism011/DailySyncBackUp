@@ -17,14 +17,12 @@ public class UserTestResDto {
     private String name;
     private String gender;
 
-    public static UserTestResDto nullUser(){
+    public static UserTestResDto nullUser() {
         return new UserTestResDto();
     }
 
-
-
-    public static UserTestResDto of(UserTest user){
-        if(user==null){
+    public static UserTestResDto of(UserTest user) {
+        if (user == null) {
             return new UserTestResDto();
         }
         //UserResDto 객체 생성

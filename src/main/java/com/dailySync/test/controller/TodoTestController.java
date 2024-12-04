@@ -18,6 +18,6 @@ public class TodoTestController {
     public ResponseEntity<?> addTodo(@PathVariable ("userId") Long userId, @ModelAttribute TodoItemReqDto reqDto) {
         System.out.println(userId);
         System.out.println(reqDto);
-        return ResponseEntity.ok(todoService.addTodoItem(userId,reqDto));
+        return ResponseEntity.ok(todoService.addTodoItem(userId, reqDto));
     }
 }

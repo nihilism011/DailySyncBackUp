@@ -1,6 +1,5 @@
 package com.dailySync.meal.dto;
 
-import com.dailySync.meal.entities.Meal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

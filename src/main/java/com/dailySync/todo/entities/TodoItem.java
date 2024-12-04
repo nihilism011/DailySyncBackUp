@@ -25,7 +25,7 @@ public class TodoItem extends BaseEntity {
     @JoinColumn (name = "group_id", nullable = false)
     private TodoGroup todoGroup;
 
-    @OneToMany(mappedBy = "todoItem",cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "todoItem", cascade = CascadeType.ALL)
     private List<TodoList> todoLists;
 
     @Column

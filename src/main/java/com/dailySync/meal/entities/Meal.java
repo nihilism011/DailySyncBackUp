@@ -1,7 +1,6 @@
 package com.dailySync.meal.entities;
 
 import com.dailySync.common.BaseEntity;
-import com.dailySync.meal.dto.MealReqDto;
 import com.dailySync.meal.dto.MealResDto;
 import com.dailySync.user.entities.User;
 import jakarta.persistence.Column;
@@ -64,9 +63,8 @@ public class Meal extends BaseEntity {
     @Column (nullable = false)
     private boolean isFavorite;
 
-
-
-    public static MealResDto toRes(Meal meal){
+    // 유저의 리스트 조회시 사용
+    public static MealResDto toRes(Meal meal) {
         LocalDate date = (LocalDate) meal.getDate();
 
         // 해당 날짜가 속한 주 번호 계산 (ISO 주 번호 기준)
@@ -87,6 +85,23 @@ public class Meal extends BaseEntity {
                 .carbs(meal.getCarbs())
                 .isFavorite(meal.isFavorite())
                 .week(String.valueOf(week))
+                .build();
+    }
+
+    // 추천내용 검색시 사용
+    public static MealResDto toRecom(Meal meal) {
+        return MealResDto.builder()
+                .foodName(meal.getFoodName())
+                .category(meal.getCategory())
+                .description(meal.getDescription())
+                .icon(meal.getIcon())
+                .date(meal.getDate())
+                .kcalories(meal.getKcalories())
+                .sugar(meal.getSugar())
+                .sodium(meal.getSodium())
+                .protein(meal.getProtein())
+                .fat(meal.getFat())
+                .carbs(meal.getCarbs())
                 .build();
     }
 

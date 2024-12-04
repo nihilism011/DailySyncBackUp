@@ -8,10 +8,7 @@ import com.dailySync.todo.entities.TodoGroup;
 import com.dailySync.todo.entities.TodoItem;
 import com.dailySync.todo.entities.TodoList;
 import com.dailySync.user.dto.UserReqDto;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,34 +23,43 @@ import java.util.List;
 @Builder
 public class User extends BaseEntity {
 
-    @Column(unique = true, nullable = false)
+    @Column (unique = true, nullable = false)
     private String userName;
 
-    @Column(nullable = false)
+    @Column (nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column (nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column (nullable = false)
     private String gender;
 
-    @Column(nullable = false)
+    @Column (nullable = false)
     private String email;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToOne (mappedBy = "user", cascade = CascadeType.ALL)
+    private UserSetting userSetting;
+
+    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)
     private List<Account> accounts;
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+
+    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)
     private List<TodoItem> todoItems;
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)
     private List<TodoGroup> todoGroups;
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)
     private List<TodoList> todoLists;
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)
     private List<Meal> meals;
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)
     private List<Schedule> schedules;
 
+    public User(String userName, String password, String gender) {
+        this.userName = userName;
+        this.password = password;
+        this.gender = gender;
+    }
 
     public static User of(UserReqDto reqDto) {
         return User.builder()
@@ -65,21 +71,15 @@ public class User extends BaseEntity {
                 .build();
     }
 
-    public User(String userName, String password, String gender) {
-        this.userName = userName;
-        this.password = password;
-        this.gender = gender;
-    }
+    //    public void update(UserReqDto userReqDto) {
+    //        this.userName = userReqDto.getUserName();
+    //        this.name = userReqDto.getName();
+    //        this.email = userReqDto.getEmail();
+    //        this.gender = userReqDto.getGender();
+    //        this.password = userReqDto.getPassword();
+    //    }
 
-//    public void update(UserReqDto userReqDto) {
-//        this.userName = userReqDto.getUserName();
-//        this.name = userReqDto.getName();
-//        this.email = userReqDto.getEmail();
-//        this.gender = userReqDto.getGender();
-//        this.password = userReqDto.getPassword();
-//    }
-
-    public void update(UserReqDto reqDto){
+    public void update(UserReqDto reqDto) {
         if (reqDto.getUserName() != null) {
             this.userName = reqDto.getUserName();
         }
