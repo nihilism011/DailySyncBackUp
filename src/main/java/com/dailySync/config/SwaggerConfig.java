@@ -38,7 +38,7 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi autoGenApi2() {
         return GroupedOpenApi.builder()
-                .group("Auto Jpa Meal API")
+                .group("Auto Jpa Meals API")
                 .pathsToMatch("/meals/**")
                 .addOpenApiCustomizer(accountApiCustomizer())
                 .build();
