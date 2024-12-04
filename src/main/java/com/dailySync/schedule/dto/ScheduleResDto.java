@@ -21,13 +21,10 @@ public class ScheduleResDto {
 
     public static ScheduleResDto of(Schedule schedule) {
         ScheduleResDto scheduleResDto = new ScheduleResDto();
-
         scheduleResDto.setStartTime(schedule.getStartTime());
         scheduleResDto.setEndTime(schedule.getEndTime());
         scheduleResDto.setTitle(schedule.getTitle());
         scheduleResDto.setDescription(schedule.getDescription());
-
         return scheduleResDto;
     }
-
 }

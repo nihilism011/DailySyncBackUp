@@ -1,16 +1,20 @@
 package com.dailySync.schedule.repository;
 
+import com.dailySync.schedule.dto.ScheduleReqDto;
 import com.dailySync.schedule.entities.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    List<Schedule> findByUserId(Long userId);
+    @Query("SELECT s FROM Schedule s WHERE s.user.id = :userId AND YEAR(s.startTime) = :year AND MONTH(s.startTime) = :month")
+    List<Schedule> userScheduleList(@Param("userId") Long userId, @Param("year") int year, @Param("month") int month);
 
     @Query (value = "SELECT s.* FROM schedule s "
             + "WHERE s.user_id = :userId "
