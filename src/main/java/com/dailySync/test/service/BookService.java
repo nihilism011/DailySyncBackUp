@@ -22,7 +22,7 @@ public class BookService {
 
     public Book CreateBook(BookReqDto reqDto) {
 
-        People people =peopleRepository.findById(reqDto.getPeopleId())
+        People people = peopleRepository.findById(reqDto.getPeopleId())
                 .orElseThrow(()->new ResolutionException("??"));
 
         Book book = Book.builder()
