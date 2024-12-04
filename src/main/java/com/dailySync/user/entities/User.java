@@ -43,7 +43,6 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Account> accounts;
-
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<TodoItem> todoItems;
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
