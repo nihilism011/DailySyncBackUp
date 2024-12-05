@@ -5,18 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
-@Data
 @Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountReqDto {
+public class FavorAccountResDto {
+    private Long id;
     private String category;
-    private LocalDate accountDate;
     private String title;
     private String description;
     private Integer amount;
-    private Boolean Fixed;
 }
-
