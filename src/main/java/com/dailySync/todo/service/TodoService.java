@@ -1,8 +1,6 @@
 package com.dailySync.todo.service;//package com.dailySync.todo.service;
 
 
-import com.dailySync.test.dto.UserTestResDto;
-import com.dailySync.test.entities.UserTest;
 import com.dailySync.todo.dto.*;
 import com.dailySync.todo.entities.TodoGroup;
 import com.dailySync.todo.entities.TodoItem;
@@ -198,10 +196,10 @@ public class TodoService {
 // 그룹 정보 변경
 public TodoGroupResDto updateGroup(Long id, TodoGroupReqDto reqDto) {
     TodoGroup todoGroup = todoGroupRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("그룹을 찾을 수 없습니다"));
+            .orElseThrow(() -> new RuntimeException("그룹을 찾을 수 없엉"));
 
     User user = userRepository.findById(reqDto.getUserId())
-            .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다"));
+            .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없성"));
 
     todoGroup.setTitle(reqDto.getTitle());
     todoGroup.setDescription(reqDto.getDescription());
@@ -212,58 +210,6 @@ public TodoGroupResDto updateGroup(Long id, TodoGroupReqDto reqDto) {
     return TodoGroupResDto.oft(todoGroup);
 }
 
-
-//    // todoList 생성하고 , 우선순위(4), 날짜 설정
-//
-//    public TodoListResDto createTodoList(TodoListReqDto reqDto) {
-//        // 고정된 날짜 설정
-//        LocalDate fixedDate = LocalDate.now();
-//
-//        // title을 받아옴
-//        String title = reqDto.getTitle();
-//
-//        // TodoItem을 조회할 변수
-//        TodoItem todoItem = null;
-//
-//        // itemId가 있을 경우, 해당 TodoItem을 DB에서 찾음
-//        if (reqDto.getItemId() != null) {
-//            todoItem = todoItemRepository.findById(reqDto.getItemId())
-//                    .orElseThrow(() -> new IllegalArgumentException("itemId 없음"));
-//        }
-//
-//        // itemId가 없을 경우, title을 반드시 입력하도록 체크
-//        if (todoItem == null && (title == null || title.trim().isEmpty())) {
-//            throw new IllegalArgumentException("itemId가 없을 경우 title을 입력해야 합니다.");
-//        }
-//
-//        // listOrder 결정: itemId가 있으면 해당 TodoItem의 itemOrder, 없으면 4
-//        Integer listOrder = (todoItem != null) ? todoItem.getItemOrder() : 4;
-//
-//        // User 정보 가져오기
-//        User user = userRepository.findById(reqDto.getUserId())
-//                .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
-//
-//        // TodoList 객체 생성
-//        TodoList todoList = TodoList.builder()
-//                .user(user)
-//                .todoItem(todoItem)
-//                .date(fixedDate) // 오늘 날짜 고정
-//                .listOrder(listOrder)
-//                .title(title) // 받은 title
-//                .build();
-//
-//        // TodoList를 데이터베이스에 저장
-//        todoList = todoListRepository.save(todoList);
-//
-//        // 저장된 todoList 객체를 DTO로 변환하여 반환
-//        return new TodoListResDto(
-//                todoList.getUser().getId(),
-//                todoList.getTodoItem() != null ? todoList.getTodoItem().getId() : null,
-//                todoList.getDate().toString(),
-//                todoList.getListOrder(),
-//                todoList.getTitle()
-//        );
-//    }
 
 
 
