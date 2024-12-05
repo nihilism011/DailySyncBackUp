@@ -34,7 +34,7 @@ public class UserTestController {
         return ResponseEntity.ok(userService.findUserName(userName));
     }
 
-    //    form-data 로 데이터를 받을때
+
     @PostMapping ("Test/user")
     public ResponseEntity<?> joinUser(@ModelAttribute UserTestReqDto reqDto) {
         return ResponseEntity.ok(userService.insertUser(reqDto));
