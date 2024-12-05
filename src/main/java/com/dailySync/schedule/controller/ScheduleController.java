@@ -1,54 +1,46 @@
 package com.dailySync.schedule.controller;
 
 import com.dailySync.common.ApiResponse;
-import com.dailySync.schedule.dto.ScheduleResDto;
+import com.dailySync.schedule.dto.ScheduleReqDto;
 import com.dailySync.schedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api/schedule")
 public class ScheduleController {
-    private final ScheduleService scheduleService;
+    final private ScheduleService scheduleService;
 
-    @GetMapping ("/schedule/userId/{id}")
-    public ResponseEntity<ApiResponse<List<ScheduleResDto>>> getSchedule(@PathVariable ("id") Long userId) {
-        return ApiResponse.success(scheduleService.getUser(6L));
+    @GetMapping("item/{userId}")
+    public ResponseEntity<?> getschedule(@PathVariable Long userId) {
+        return ResponseEntity.ok(scheduleService.AllSchedules(userId));
     }
 
-    @GetMapping ("/schedule/title/{title}")
-    public ResponseEntity<ApiResponse<List<ScheduleResDto>>> searchSchedule(
-            @PathVariable ("title") String title
-
-    ) {
-        return ApiResponse.success(scheduleService.getScheduleTitle(6L, title));
+    @PostMapping ("insert")
+    public ResponseEntity<?> plusSchedule(ScheduleReqDto scheduleReqDto) {
+        //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
+        Long userId = 4L;
+        return ApiResponse.success(scheduleService.insertSchedule(userId, scheduleReqDto));
     }
 
-    @GetMapping ("/schedule/date/{year}")
-    public ResponseEntity<ApiResponse<List<ScheduleResDto>>> searchSchedule(
-            @PathVariable ("year") int year
-
-    ) {
-        return ApiResponse.success(scheduleService.getScheduleYear(6L, year));
+    @PatchMapping ("update/{id}")
+    public ResponseEntity<?> fixedSchedule(@PathVariable Long id, @RequestBody ScheduleReqDto reqDto) {
+        return ApiResponse.success(scheduleService.updateSchedule(id, reqDto));
+    }
+    //제목만 검색하여 해당항목들 모두 불러오기
+    @GetMapping ("title/{userId}/{title}")
+    public ResponseEntity<?> findByTitleAboutAll(@PathVariable Long userId, @RequestParam String title) {
+        return ResponseEntity.ok(scheduleService.searchByTitle(title));
     }
 
-    @GetMapping ("/schedule/date/{year}/{month}")
-    public ResponseEntity<ApiResponse<List<ScheduleResDto>>> searchSchedule(
-            @PathVariable ("year") int year,
-            @PathVariable ("month") int month
-
-    ) {
-        return ApiResponse.success(scheduleService.getScheduleDate(6L, year, month));
+    //일정 삭제하기
+    @DeleteMapping ("delete/{id}")
+    public ResponseEntity<?> deleteByIdSchedule(@PathVariable Long id) {
+        return ResponseEntity.ok(scheduleService.deleteSchedule(id));
     }
-
 }
-
-
-
-
 
