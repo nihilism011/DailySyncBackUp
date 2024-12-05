@@ -36,10 +36,11 @@ public class Account extends BaseEntity {
     @Column (nullable = false)
     private Integer amount;
     @Column (nullable = false)
-    private boolean fixed;
+    private Boolean fixed;
 
     public static AccountResDto toResDto(Account account) {
         return AccountResDto.builder().
+                id(account.getId()).
                 title(account.getTitle()).
                 amount(account.getAmount()).
                 accountDate(account.getAccountDate()).
@@ -56,7 +57,28 @@ public class Account extends BaseEntity {
                 category(reqDto.getCategory()).
                 description(reqDto.getDescription()).
                 title(reqDto.getTitle()).
-                fixed(reqDto.isFixed()).
+                fixed(reqDto.getFixed()).
                 build();
+    }
+
+    public void update(AccountReqDto reqDto) {
+        if (reqDto.getCategory() != null) {
+            this.category = reqDto.getCategory();
+        }
+        if (reqDto.getAccountDate() != null) {
+            this.accountDate = reqDto.getAccountDate();
+        }
+        if (reqDto.getTitle() != null) {
+            this.title = reqDto.getTitle();
+        }
+        if (reqDto.getDescription() != null) {
+            this.description = reqDto.getDescription();
+        }
+        if (reqDto.getAmount() != null) {
+            this.amount = reqDto.getAmount();
+        }
+        if (reqDto.getFixed() != null) {
+            this.fixed = reqDto.getFixed();
+        }
     }
 }

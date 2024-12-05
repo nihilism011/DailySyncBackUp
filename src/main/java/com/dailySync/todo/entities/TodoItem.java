@@ -28,16 +28,18 @@ public class TodoItem extends BaseEntity {
     @OneToMany (mappedBy = "todoItem", cascade = CascadeType.ALL)
     private List<TodoList> todoLists;
 
+    @Column (nullable = false)
+    private String title;
+
     @Column
-    private String day; // To.Do 항목이 해당하는 요일을 저장
+    private String day; // (예: "월", "화", "수" 등)
 
     @Column (nullable = false)
     private Integer itemOrder; // 항목의 우선순위를 저장
 
-    @Column (nullable = false)
-    private String title;
+    @Column (nullable = false) // (기본 값 "new")
+    private String status = "new";
 
-    @Column (nullable = false)
-    private String status;
+    private boolean isAuto; // (기본 값 false)
 
 }
