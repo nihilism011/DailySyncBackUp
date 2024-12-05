@@ -74,7 +74,10 @@ public class AccountService {
 
     public boolean createFavorAccountItem(Long userId, AccountReqDto reqDto) throws Exception {
         User user = getUserById((userId));
+        System.out.println(reqDto.getTitle());
+        System.out.println(reqDto.getAmount());
         FavoriteAccount account = FavoriteAccount.of(user, reqDto);
+        System.out.println(account.getAmount());
         favoriteRepository.save(account);
         return true;
     }
