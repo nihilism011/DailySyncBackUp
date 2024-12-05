@@ -1,6 +1,7 @@
 package com.dailySync.todo.dto;
 
 import com.dailySync.todo.entities.TodoGroup;
+import com.dailySync.todo.entities.TodoItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class TodoGroupResDto {
     private String description;
     private String createdAt;
 
+
     public TodoGroupResDto(Long id, String title, String description, String createdAt) {
     }
 
@@ -38,5 +40,12 @@ public class TodoGroupResDto {
         dto.setUserId(todoGroup.getUser().getId());  // userId 가져오기
         return dto;
     }
+    public static TodoGroupResDto oft(TodoGroup todoGroup) {
+        TodoGroupResDto dto = new TodoGroupResDto();
+        dto.setTitle(todoGroup.getTitle());
+        dto.setDescription(todoGroup.getDescription());
+        return dto;
+    }
+
 
 }

@@ -20,5 +20,4 @@ public class TodoListReqDto {
     private Integer listOrder;
     private String title;
 
-
 }

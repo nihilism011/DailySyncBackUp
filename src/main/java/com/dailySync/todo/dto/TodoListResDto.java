@@ -1,14 +1,9 @@
 package com.dailySync.todo.dto;
 
-import com.dailySync.todo.entities.TodoItem;
 import com.dailySync.todo.entities.TodoList;
-import com.dailySync.user.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -19,11 +14,13 @@ public class TodoListResDto {
     private Long itemId;
     private String date;
     private Integer listOrder;
+    private String title;
 
-    public TodoListResDto(Long id, Long itemId, String date, Integer listOrder, String s) {
-    }
 
     public TodoListResDto(Long id, String date, Integer listOrder) {
+    }
+
+    public TodoListResDto(Long id, Long itemId, String date, Integer listOrder) {
     }
 
     public static TodoListResDto of(Long id, Long itemId, String date, Integer listOrder) {
@@ -32,8 +29,19 @@ public class TodoListResDto {
     public static TodoListResDto of(Long id,  String date, Integer listOrder) {
         return new TodoListResDto(id, date, listOrder);
     }
-    public TodoListResDto of(User user, TodoItem todoItem, String date, Integer listOrder) {
-        Long itemId = (todoItem != null) ? todoItem.getId() : null;
-        return new TodoListResDto(user.getId(), itemId, date, listOrder, todoItem != null ? todoItem.getTitle() : null);
+
+    public static TodoListResDto of(TodoList todoList) {
+        TodoListResDto dto = new TodoListResDto();
+        dto.setId(todoList.getId());
+        dto.setTitle(todoList.getTitle());
+        dto.setListOrder(todoList.getListOrder());
+        dto.setDate(String.valueOf(todoList.getDate()));
+        if (todoList.getTodoItem() != null) {
+            dto.setItemId(todoList.getTodoItem().getId());
+        } else {
+            dto.setItemId(null);
+        }
+
+        return dto;
     }
 }
