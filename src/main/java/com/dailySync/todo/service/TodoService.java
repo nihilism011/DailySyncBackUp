@@ -1,8 +1,6 @@
 package com.dailySync.todo.service;//package com.dailySync.todo.service;
 
 
-import com.dailySync.test.dto.UserTestResDto;
-import com.dailySync.test.entities.UserTest;
 import com.dailySync.todo.dto.*;
 import com.dailySync.todo.entities.TodoGroup;
 import com.dailySync.todo.entities.TodoItem;
