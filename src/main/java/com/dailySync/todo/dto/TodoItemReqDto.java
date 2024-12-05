@@ -14,6 +14,11 @@ public class TodoItemReqDto {
     private String day;
     private Integer itemOrder;
     private String title;
-    private String status;
+    private Boolean isAuto;
+
+    // of 메서드 추가
+    public static TodoItemReqDto of(Long userId, Long groupId, String day, Integer itemOrder, String title, Boolean isAuto) {
+        return new TodoItemReqDto(userId, groupId, day, itemOrder, title, isAuto);
+    }
 
 }

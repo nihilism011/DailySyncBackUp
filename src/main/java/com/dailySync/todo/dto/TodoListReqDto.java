@@ -1,5 +1,7 @@
 package com.dailySync.todo.dto;
 
+import com.dailySync.todo.entities.TodoItem;
+import com.dailySync.user.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +17,8 @@ public class TodoListReqDto {
     private Long userId;
     private Long itemId;
     private LocalDate date;
-    private LocalDateTime checkedTime;
     private Integer listOrder;
+    private String title;
+
+
 }

@@ -1,79 +1,73 @@
 package com.dailySync.todo.controller;//package com.dailySync.todo.controller;
-//
-//import com.dailySync.todo.dto.TodoGroupReqDto;
-//import com.dailySync.todo.dto.TodoItemReqDto;
-//import com.dailySync.todo.dto.TodoListReqDto;
-//import com.dailySync.todo.entities.TodoGroup;
-//import com.dailySync.todo.entities.TodoItem;
-//import com.dailySync.todo.entities.TodoList;
-//import com.dailySync.todo.service.TodoService;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.*;
-//
-//import java.util.List;
-//
-//@RestController
-//@RequiredArgsConstructor
-//@RequestMapping("api/todo")
-//public class TodoController {
-//    final private TodoService todoService;
-//
-//    @GetMapping("group/view/{userId}")
-//    public List<TodoGroup> getTodoGroups(@PathVariable ("userId") Long userId) {
-//        return todoService.getTodoGroupsByUserId(userId);
+
+import com.dailySync.common.ApiResponse;
+import com.dailySync.todo.dto.*;
+import com.dailySync.todo.entities.TodoGroup;
+import com.dailySync.todo.service.TodoService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("api/todo")
+public class TodoController {
+    final private TodoService todoService;
+
+    // 조회
+
+    //userId에 해당하는 todoGroup을 조회 (5)
+    @GetMapping("/Group/{userId}")
+    public ResponseEntity<?> getTodoList(@PathVariable ("userId") Long userId){
+        return ResponseEntity.ok(todoService.getTodoGroup(userId));
+    }
+
+
+    //todoGroup을 생성 (6)
+    @PostMapping("/Group")
+    public ResponseEntity<?> addTodoGroup(@RequestBody TodoGroupReqDto reqDto) {
+        return ApiResponse.success(todoService.createTodoGroup(reqDto));
+    }
+
+    //todoItem을 생성 (7)
+    @PostMapping("/Item")
+    public ResponseEntity<?> addTodoItem(@RequestBody TodoItemReqDto reqDto) {
+        return ApiResponse.success(todoService.createTodoItem(reqDto));
+    }
+    //------------------------------------------------------------------------
+
+    //TodoList
+    //TodoList 목록 조회(날짜기준)
+    @GetMapping("/list")
+    public ResponseEntity<?> getTodoList ( @PathVariable Long userId, @PathVariable LocalDate date) {
+        List<TodoListResDto> result = todoService.getTodoList(userId, date);
+        return ResponseEntity.ok(result);
+    }
+    //TodoList 삭제
+    @DeleteMapping("list/{id}")
+    public ResponseEntity<Void> deleteTodoList(@PathVariable Long id){
+        todoService.deleteTodoList(id);
+        return ResponseEntity.ok().build();
+    }
+    //todoList 항목 수정
+    @PutMapping("/todoList/{id}")
+    public ResponseEntity<TodoListResDto> updateTodoList(@PathVariable Long id, @ModelAttribute TodoListReqDto todoListReqDto) {
+        TodoListResDto result = todoService.updateTodoList(id, todoListReqDto);
+        return  ResponseEntity.ok(result);
+    }
+
+
+
+
+//    @PostMapping("/list")
+//    public ResponseEntity<TodoListResDto> createTodoList(@ModelAttribute TodoListReqDto reqDto) {
+//        TodoListResDto result = todoService.createTodoList(reqDto);
+//        return ResponseEntity.ok(result);
 //    }
-//
-//    @GetMapping("/item/view/{userId}")
-//    public List<TodoItem> getTodoItems(@PathVariable ("userId") Long userId, @PathVariable ("groupId") Long groupId) {
-//        return todoService.getTodoItemsByUserIdAndGroupId(userId, groupId);
-//    }
-//
-//    @GetMapping("list/view/today/{userId}")
-//    public List<TodoList> getTodoListsForToday(@PathVariable ("userId") Long userId) {
-//        return todoService.getTodoListsByUserIdAndToday(userId);
-//    }
-//
-//    /** todoList 추가하기*/
-//    @PostMapping("list/create/{userId}/{itemId}")
-//    public ResponseEntity<?> addTodoList(
-//            @PathVariable ("userId") Long userId,
-//            @PathVariable ("itemId") Long itemId,
-//            @ModelAttribute TodoListReqDto reqDto) {
-//        return ResponseEntity.ok(todoService.createTodoList(userId, itemId, reqDto));
-//    }
-//    /** todoGroup 추가하기*/
-//    @PostMapping("group/create/{userId}")
-//    public ResponseEntity<?> addTodoGroup(@PathVariable ("userId") Long userId, @ModelAttribute TodoGroupReqDto reqDto) {
-//        return ResponseEntity.ok(todoService.createTodoGroup(userId, reqDto));
-//    }
-//    /** todoItem 추가하기*/
-//    @PostMapping("item/create/{userId}/{groupId}")
-//    public ResponseEntity<?> addTodoItem(
-//            @PathVariable ("userId") Long userId,
-//            @PathVariable ("groupId") Long groupId,
-//            @ModelAttribute TodoItemReqDto reqDto) {
-//        return ResponseEntity.ok(todoService.createTodoItem(userId, groupId, reqDto));
-//    }
-//    /** todoItem 삭제하기*/
-//    @DeleteMapping("item/delete/{id}")
-//    public ResponseEntity<?> deleteTodoItem(@PathVariable ("id") Long id) {
-//        todoService.deleteItemById(id);
-//        return ResponseEntity.ok().build();
-//        }
-//    /** todoList 삭제하기*/
-//    @DeleteMapping("list/delete/{id}")
-//    public ResponseEntity<?> deleteTodoList(@PathVariable ("id") Long id) {
-//        todoService.deleteListById(id);
-//        return ResponseEntity.ok().build();
-//    }
-//    /** todoGroup 삭제하기*/
-//    @DeleteMapping("group/delete/{id}")
-//    public ResponseEntity<?> deleteTodoGroup(@PathVariable ("id") Long id) {
-//        todoService.deleteGroupById(id);
-//        return ResponseEntity.ok().build();
-//    }
-//
-//
-//
-//}
+
+
+
+}
