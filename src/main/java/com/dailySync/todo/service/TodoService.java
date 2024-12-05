@@ -31,10 +31,10 @@ public class TodoService {
 
     //userId에 해당하는 todoGroup을 조회 (5)
     public List<TodoGroupResDto> getTodoGroup(Long userId) {
-    List<TodoGroup> todoGroups = todoGroupRepository.findByUserIdOrderByCreatedAtAsc(userId);
-    return todoGroups.stream()
-            .map(TodoGroupResDto::of)
-            .collect(Collectors.toList());
+        List<TodoGroup> todoGroups = todoGroupRepository.findByUserIdOrderByCreatedAtAsc(userId);
+        return todoGroups.stream()
+                .map(TodoGroupResDto::of)
+                .collect(Collectors.toList());
     }
 
 
@@ -193,26 +193,25 @@ public class TodoService {
         return TodoItemResDto.of(newTodoItem);
     }
 
-// 그룹 정보 변경
-public TodoGroupResDto updateGroup(Long id, TodoGroupReqDto reqDto) {
-    TodoGroup todoGroup = todoGroupRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("그룹을 찾을 수 없엉"));
+    // 그룹 정보 변경
+    public TodoGroupResDto updateGroup(Long id, TodoGroupReqDto reqDto) {
+        TodoGroup todoGroup = todoGroupRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("그룹을 찾을 수 없엉"));
 
-    User user = userRepository.findById(reqDto.getUserId())
-            .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없성"));
+        User user = userRepository.findById(reqDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없성"));
 
-    todoGroup.setTitle(reqDto.getTitle());
-    todoGroup.setDescription(reqDto.getDescription());
-    todoGroup.setUser(user);  // user 설정
+        todoGroup.setTitle(reqDto.getTitle());
+        todoGroup.setDescription(reqDto.getDescription());
+        todoGroup.setUser(user);  // user 설정
 
-    todoGroupRepository.save(todoGroup);
+        todoGroupRepository.save(todoGroup);
 
-    return TodoGroupResDto.oft(todoGroup);
+        return TodoGroupResDto.oft(todoGroup);
+    }
+
+
+
+
+
 }
-
-
-
-
-
-}
-

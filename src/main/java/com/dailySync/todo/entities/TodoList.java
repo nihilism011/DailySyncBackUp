@@ -40,4 +40,5 @@ public class TodoList extends BaseEntity {
     private String title; // 변동항목 타이틀
 
 
+
 }

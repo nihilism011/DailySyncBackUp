@@ -27,9 +27,9 @@ public class TodoController {
                     description =" ... "
             )
     @PutMapping("/list/update/check/{id}")
-    public ResponseEntity<TodoListResDto> updateCheckList(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<TodoListResDto>> updateCheckList(@PathVariable Long id) {
         TodoListResDto updateCheck = todoService.updateListCheck(id);
-        return ResponseEntity.ok(updateCheck);
+        return ApiResponse.success(updateCheck);
     }
 
     @Operation
@@ -38,9 +38,9 @@ public class TodoController {
             description =" ... "
     )
     @PutMapping("/item/update/status/{id}")
-    public ResponseEntity<TodoItemResDto> updateStatus(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<TodoItemResDto>> updateStatus(@PathVariable Long id) {
         TodoItemResDto updateItem = todoService.updateStatus(id);
-        return ResponseEntity.ok(updateItem);
+        return ApiResponse.success(updateItem);
     }
 
     @Operation
@@ -49,9 +49,9 @@ public class TodoController {
             description =" ... "
     )
     @PutMapping("/item/update/{id}")
-    public ResponseEntity<TodoItemResDto> updateItem(@PathVariable Long id, @RequestBody TodoItemReqDto reqDto) {
+    public ResponseEntity<ApiResponse<TodoItemResDto>> updateItem(@PathVariable Long id, @RequestBody TodoItemReqDto reqDto) {
         TodoItemResDto updatedItem = todoService.updateItem(id, reqDto);
-        return ResponseEntity.ok(updatedItem);
+        return ApiResponse.success(updatedItem);
     }
     @Operation
     (
@@ -59,9 +59,9 @@ public class TodoController {
             description =" ... "
     )
     @PutMapping("/group/update/{id}")
-    public ResponseEntity<TodoGroupResDto> updateGroup(@PathVariable Long id, @RequestBody TodoGroupReqDto reqDto) {
+    public ResponseEntity<ApiResponse<TodoGroupResDto>> updateGroup(@PathVariable Long id, @RequestBody TodoGroupReqDto reqDto) {
         TodoGroupResDto updatedItem = todoService.updateGroup(id, reqDto);
-        return ResponseEntity.ok(updatedItem);
+        return ApiResponse.success(updatedItem);
     }
 
     @Operation
@@ -70,9 +70,9 @@ public class TodoController {
             description =" ... "
     )
     @PutMapping("/list/update/{id}")
-    public ResponseEntity<TodoListResDto> updateList(@PathVariable Long id, @RequestBody TodoListReqDto reqDto ) {
+    public ResponseEntity<ApiResponse<TodoListResDto>> updateList(@PathVariable Long id, @RequestBody TodoListReqDto reqDto ) {
         TodoListResDto updateCheck = todoService.updateList(id, reqDto);
-        return ResponseEntity.ok(updateCheck);
+        return ApiResponse.success(updateCheck);
     }
 
     //GetMapping
@@ -84,7 +84,7 @@ public class TodoController {
     )
     @GetMapping("/item/{userId}/{groupId}")
     public ResponseEntity<?> getTodoItem(@PathVariable ("userId") Long userId, @PathVariable ("groupId") Long groupId){
-    return ResponseEntity.ok(todoService.getTodoItem(userId, groupId));
+        return ApiResponse.success(todoService.getTodoItem(userId, groupId));
     }
 
     @Operation
@@ -94,7 +94,7 @@ public class TodoController {
     )
     @GetMapping("/group/{userId}")
     public ResponseEntity<?> getTodoGroup(@PathVariable ("userId") Long userId){
-        return ResponseEntity.ok(todoService.getTodoGroup(userId));
+        return ApiResponse.success(todoService.getTodoGroup(userId));
     }
     @Operation
     (
@@ -103,7 +103,7 @@ public class TodoController {
     )
     @GetMapping("/list/today/{userId}")
     public ResponseEntity<?> getTodayTodoList(@PathVariable Long userId) {
-        return ResponseEntity.ok(todoService.getTodayList(userId ));
+        return ApiResponse.success(todoService.getTodayList(userId));
     }
     @Operation
     (
@@ -112,7 +112,7 @@ public class TodoController {
     )
     @GetMapping("/list/{userId}/{date}")
     public ResponseEntity<?> getTodoListByDate(@PathVariable Long userId, @PathVariable LocalDate date) {
-        return ResponseEntity.ok(todoService.getTodoList(userId, date));  // 날짜가 yyyy-MM-dd 형식으로 전달됨
+        return ApiResponse.success(todoService.getTodoList(userId, date));  // 날짜가 yyyy-MM-dd 형식으로 전달됨
     }
 
     //PostMapping
@@ -155,9 +155,9 @@ public class TodoController {
             description =" ... "
     )
     @DeleteMapping("/list/{id}")
-    public ResponseEntity<Void> deleteTodoList(@PathVariable Long id){
+    public ResponseEntity<?> deleteTodoList(@PathVariable Long id) {
         todoService.deleteTodoList(id);
-        return ResponseEntity.ok().build();
+        return ApiResponse.success(null);  // 성공적인 삭제는 데이터가 없으므로 null 반환
     }
 
     @Operation
@@ -166,9 +166,9 @@ public class TodoController {
             description =" ... "
     )
     @DeleteMapping("/group/{id}")
-    public ResponseEntity<Void> deleteTodoGroup(@PathVariable Long id){
+    public ResponseEntity<?> deleteTodoGroup(@PathVariable Long id) {
         todoService.deleteTodoGroup(id);
-        return ResponseEntity.ok().build();
+        return ApiResponse.success(null);  // 성공적인 삭제는 데이터가 없으므로 null 반환
     }
 
 
