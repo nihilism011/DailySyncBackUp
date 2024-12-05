@@ -88,6 +88,4 @@ public class AccountService {
         favoriteRepository.deleteById(favorAccountId);
         return true;
     }
-    //todo favorite_account 테이블에 대한 selectAll,update,delete 기능 구현해야함.
-
 }
