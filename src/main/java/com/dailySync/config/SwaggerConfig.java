@@ -71,6 +71,14 @@ public class SwaggerConfig {
                 .addOpenApiCustomizer(accountApiCustomizer())
                 .build();
     }
+    @Bean
+    public GroupedOpenApi allMake() {
+        return GroupedOpenApi.builder()
+                .group("ALL Make Api")
+                .pathsToMatch("/api/**")
+                .addOpenApiCustomizer(accountApiCustomizer())
+                .build();
+    }
 
     @Bean
     public GroupedOpenApi sch() {

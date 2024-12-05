@@ -25,16 +25,10 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
                                                  @Param ("month") int month,
                                                  @Param ("userId") Long userId);
 
-    @Query ("SELECT a FROM Account a " +
-            "WHERE FUNCTION('YEAR', a.accountDate) = :year " +
-            "AND FUNCTION('MONTH', a.accountDate) = :month " +
-            "AND a.user.id = :userId " +
-            "AND a.fixed = :fixed " +
-            "ORDER BY a.amount DESC")
-    List<Account> findByUserIdAndFixedAndYearAndMonth(@Param ("userId") Long userId,
-                                                      @Param ("fixed") boolean fixed,
-                                                      @Param ("year") int year,
-                                                      @Param ("month") int month);
+    List<Account> findByUserIdAndAccountDateBetweenAndFixedTrue(
+            Long userId,
+            LocalDate startDate,
+            LocalDate endDate);
 
     List<Account> findByUserIdAndAccountDate(Long userId, LocalDate accountDate);
 }

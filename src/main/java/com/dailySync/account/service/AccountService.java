@@ -24,49 +24,37 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final FavoriteAccountRepository favoriteRepository;
 
-    public List<AccountResDto> selectAccountDate(Long userId, int year, int month, int day) {
+    private User getUserById(Long userId) throws Exception {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new Exception(ResMessage.NOT_FOUND_USER));
+    }
+
+    //조회
+    public List<AccountResDto> findAccountsByDate(Long userId, int year, int month, int day) {
         LocalDate date = LocalDate.of(year, month, day);
         List<Account> oneDayList = accountRepository.findByUserIdAndAccountDate(userId, date);
         return oneDayList.stream().map(Account::toResDto).toList();
     }
 
-    public List<AccountSum> selectAccountMonth(Long userId, int year, int month) {
+    public List<AccountSum> findAccountsByMonth(Long userId, int year, int month) {
         return accountRepository.findByUserIdAndYearAndMonth(year, month, userId);
     }
 
-    public boolean insertAccountItem(Long userId, AccountReqDto reqDto) throws Exception {
-        User user = userRepository.findById(userId).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND_USER));
-        if (reqDto.getFixed()) {
-            FavoriteAccount account = FavoriteAccount.of(user, reqDto);
-            favoriteRepository.save(account);
-        }
-        accountRepository.save(Account.of(user, reqDto));
-        return true;
-    }
-
-    public boolean updateAccountItem(Long accountId, AccountReqDto reqDto) throws Exception {
-        Account account = accountRepository.findById(accountId).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND));
-        account.update(reqDto);
-        accountRepository.save(account);
-        return true;
-    }
-
-    public List<AccountResDto> selectFixedItems(Long userId, int year, int month) {
-        List<Account> list = accountRepository.findByUserIdAndFixedAndYearAndMonth(userId, true, year, month);
+    public List<AccountResDto> findFixedAccounts(Long userId, int year, int month) {
+        LocalDate startOfMonth = LocalDate.of(year, month, 1);
+        LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+        System.out.println("시작날짜");
+        System.out.println(startOfMonth);
+        System.out.println("마지막날짜");
+        System.out.println(endOfMonth);
+        List<Account> list = accountRepository.findByUserIdAndAccountDateBetweenAndFixedTrue(
+                userId,
+                startOfMonth,
+                endOfMonth);
         return list.stream().map(Account::toResDto).toList();
     }
 
-    /**
-     * favorite_account 테이블 CRUD
-     */
-    public boolean insertFavorAccountItem(Long userId, AccountReqDto reqDto) throws Exception {
-        User user = userRepository.findById(userId).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND_USER));
-        FavoriteAccount account = FavoriteAccount.of(user, reqDto);
-        favoriteRepository.save(account);
-        return true;
-    }
-
-    public List<FavorAccountResDto> selectFavorAccountItems(Long userId, String category) {
+    public List<FavorAccountResDto> findFavorAccountItems(Long userId, String category) {
         List<FavoriteAccount> accounts;
         if (category.equals("all") || category.equals("All") || category.equals("ALL")) {
             accounts = favoriteRepository.findByUserId(userId);
@@ -77,6 +65,28 @@ public class AccountService {
 
     }
 
+    //생성
+    public boolean createAccountItem(Long userId, AccountReqDto reqDto) throws Exception {
+        User user = getUserById((userId));
+        accountRepository.save(Account.of(user, reqDto));
+        return true;
+    }
+
+    public boolean createFavorAccountItem(Long userId, AccountReqDto reqDto) throws Exception {
+        User user = getUserById((userId));
+        FavoriteAccount account = FavoriteAccount.of(user, reqDto);
+        favoriteRepository.save(account);
+        return true;
+    }
+
+    //수정
+    public boolean updateAccountItem(Long accountId, AccountReqDto reqDto) throws Exception {
+        Account account = accountRepository.findById(accountId).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND));
+        account.update(reqDto);
+        accountRepository.save(account);
+        return true;
+    }
+
     public boolean updateFavorAccountItem(Long favorAccountId, AccountReqDto reqDto) throws Exception {
         FavoriteAccount favorAccount = favoriteRepository.findById(favorAccountId).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND));
         favorAccount.update(reqDto);
@@ -84,10 +94,14 @@ public class AccountService {
         return true;
     }
 
+    //삭제
+    public boolean deleteAccountItem(Long accountId) {
+        accountRepository.deleteById(accountId);
+        return true;
+    }
+
     public boolean deleteFavorAccountItem(Long favorAccountId) {
         favoriteRepository.deleteById(favorAccountId);
         return true;
     }
-    //todo favorite_account 테이블에 대한 selectAll,update,delete 기능 구현해야함.
-
 }
