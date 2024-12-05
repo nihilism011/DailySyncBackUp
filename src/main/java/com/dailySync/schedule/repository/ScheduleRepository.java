@@ -13,23 +13,23 @@ import java.util.List;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    @Query("SELECT s FROM Schedule s WHERE s.user.id = :userId AND YEAR(s.startTime) = :year AND MONTH(s.startTime) = :month")
-    List<Schedule> userScheduleList(@Param("userId") Long userId, @Param("year") int year, @Param("month") int month);
+    @Query(value = "SELECT * FROM schedule s WHERE s.user_id = :userId AND YEAR(s.start_time) = :year AND MONTH(s.start_time) = :month ORDER BY s.start_time ASC", nativeQuery = true)
+    List<Schedule> findByUserIdAndStartTimeYearAndStartTimeMonthOrderByStartTimeAsc(@Param("userId") Long userId, @Param("year") int year, @Param("month") int month);
 
-    @Query (value = "SELECT s.* FROM schedule s "
+    List<Schedule> findByUserIdAndTitleContainingOrderByStartTimeAsc(Long userId, String title);
+
+    @Query(value = "SELECT s.* FROM schedule s "
             + "WHERE s.user_id = :userId "
-            + "AND s.title LIKE %:title%", nativeQuery = true)
-    List<Schedule> findByUserId_Title(@Param ("userId") Long userId, @Param ("title") String title);
+            + "AND (YEAR(s.start_time) = :year OR YEAR(s.end_time) = :year) "
+            + "ORDER BY s.start_time ASC", nativeQuery = true)
+    List<Schedule> findByUserId_Year(@Param("userId") Long userId, @Param("year") int year);
 
-    @Query (value = "SELECT s.* FROM schedule s "
-            + "WHERE s.user_id = :userId "
-            + "AND (YEAR(s.start_time) = :year OR YEAR(s.end_time) = :year)", nativeQuery = true)
-    List<Schedule> findByUserId_Year(@Param ("userId") Long userId, @Param ("year") int year);
-
-    @Query (value = "SELECT s.* FROM schedule s "
+    @Query(value = "SELECT s.* FROM schedule s "
             + "WHERE s.user_id = :userId "
             + "AND (YEAR(s.start_time) = :year AND MONTH(s.start_time) = :month "
-            + "     OR YEAR(s.end_time) = :year AND MONTH(s.end_time) = :month)", nativeQuery = true)
-    List<Schedule> findByUserId_YearAndMonth(@Param ("userId") Long userId, @Param ("year") int year, @Param ("month") int month);
+            + "     OR YEAR(s.end_time) = :year AND MONTH(s.end_time) = :month) "
+            + "ORDER BY s.start_time ASC", nativeQuery = true)
+    List<Schedule> findByUserId_YearAndMonth(@Param("userId") Long userId, @Param("year") int year, @Param("month") int month);
 
 }
+
