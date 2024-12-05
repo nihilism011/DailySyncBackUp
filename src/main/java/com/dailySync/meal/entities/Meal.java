@@ -3,7 +3,6 @@ package com.dailySync.meal.entities;
 import com.dailySync.common.BaseEntity;
 import com.dailySync.meal.dto.MealReqDto;
 import com.dailySync.meal.dto.MealResDto;
-import com.dailySync.user.dto.UserReqDto;
 import com.dailySync.user.entities.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
