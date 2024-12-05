@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MealReqDto {
+    private Long id;
     private Long userId;
     private String foodName;
     private String category;
@@ -22,6 +23,5 @@ public class MealReqDto {
     private Integer protein;
     private Integer fat;
     private Integer carbs;
-    private boolean isFavorite;
-
+    private Boolean isFavorite;
 }

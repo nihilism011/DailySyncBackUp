@@ -3,6 +3,7 @@ package com.dailySync.schedule.entities;
 import com.dailySync.common.BaseEntity;
 import com.dailySync.schedule.dto.ScheduleReqDto;
 import com.dailySync.schedule.dto.ScheduleResDto;
+import com.dailySync.user.dto.UserReqDto;
 import com.dailySync.user.entities.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -53,7 +54,22 @@ public class Schedule extends BaseEntity {
                 title(reqDto.getTitle()).
                 startTime(reqDto.getStartTime()).
                 endTime(reqDto.getEndTime()).
+                description(reqDto.getDescription()).
                 build();
     }
 
+    public void update(ScheduleReqDto reqDto) {
+        if (reqDto.getTitle() != null) {
+            this.title = reqDto.getTitle();
+        }
+        if (reqDto.getDescription() != null) {
+            this.description = reqDto.getDescription();
+        }
+        if (reqDto.getStartTime() != null){
+            this.startTime = reqDto.getStartTime();
+        }
+        if (reqDto.getEndTime() != null){
+            this.endTime = reqDto.getEndTime();
+        }
+    }
 }

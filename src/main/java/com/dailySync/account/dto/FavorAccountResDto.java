@@ -1,22 +1,18 @@
-package com.dailySync.schedule.dto;
+package com.dailySync.account.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
-@Data
 @Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ScheduleReqDto {
-
+public class FavorAccountResDto {
     private Long id;
-    private Long userId;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private String category;
     private String title;
     private String description;
+    private Integer amount;
 }

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AccTestPage</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.13/dayjs.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        대충 날짜 선택기
+        <label for="year">년</label>
+        <select v-model="years" id="year">
+          <option v-for="year in 25" :value="1999+year">{{1999+year}}</option>
+        </select>
+        <label for="month">월</label>
+        <select v-model="months" id="month">
+          <option v-for="month in 12" :value="month">{{month}}</option>
+        </select>
+        <label for="days">일</label>
+        <select v-model="days" id="days">
+          <option v-for="day in 31" :value="day">{{day}}</option>
+        </select>
+      </div>
+      <div>선택 날짜</div>
+      <div>{{years}}년{{months}}월{{days}}일</div>
+      <div>
+        <button @click="fnListGet(years,months,days)">검색</button>
+      </div>
+    </div>
+  </body>
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          years: 2024,
+          months: 1,
+          days: 1,
+        };
+      },
+      methods: {
+        async fnListGet(year, month, date) {
+          const getThisDateUrl = `http://localhost:8080/api/account/date/${year}/${month}/${date}`;
+          const getMonthDataUrl = `http://localhost:8080/api/account/month/${this.years}/${this.months}`;
+          const { data: thisDateData } = await axios.get(getThisDateUrl);
+          const { data: monthData } = await axios.get(getMonthDataUrl);
+          console.log(thisDateData);
+          console.log(monthData);
+        },
+        initToday() {
+          this.years = dayjs().get("year");
+          this.months = dayjs().get("month") + 1;
+          this.days = dayjs().get("date");
+        },
+      },
+      mounted() {
+        this.initToday();
+      },
+    });
+    app.mount("#app");
+  </script>
+</html>

@@ -17,6 +17,6 @@ public class AccountReqDto {
     private String title;
     private String description;
     private Integer amount;
-    private boolean fixed;
+    private Boolean Fixed;
 }
 

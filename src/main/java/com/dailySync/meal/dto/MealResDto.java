@@ -1,5 +1,6 @@
 package com.dailySync.meal.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MealResDto {
+    private Long id;
     private String foodName;
     private String category;
     private String description;
@@ -23,7 +25,8 @@ public class MealResDto {
     private Integer protein;
     private Integer fat;
     private Integer carbs;
-    private boolean isFavorite;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Boolean isFavorite;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String week;
-
 }
