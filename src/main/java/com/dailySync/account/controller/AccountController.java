@@ -27,9 +27,12 @@ public class AccountController {
     @Operation (summary = "해당 날짜의 가계부 목록")
     @GetMapping ("items/date/{year}/{month}/{date}")
     public ResponseEntity<ApiResponse<List<AccountResDto>>> getAccountItemsByDate(
-            @Parameter (description = "년") @PathVariable ("year") int year,
-            @Parameter (description = "월") @PathVariable ("month") int month,
-            @Parameter (description = "일") @PathVariable ("date") int date) {
+            @Parameter (description = "년")
+            @PathVariable ("year") int year,
+            @Parameter (description = "월")
+            @PathVariable ("month") int month,
+            @Parameter (description = "일")
+            @PathVariable ("date") int date) {
         //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
         Long userId = 3L;
         return ApiResponse.success(accountService.findAccountsByDate(userId, year, month, date));
@@ -42,8 +45,10 @@ public class AccountController {
     @Operation (summary = "해당 월에 각 날짜별 수입,지출의 합산")
     @GetMapping ("items/month/{year}/{month}")
     public ResponseEntity<?> getAccountItemsSummaryByMonth(
-            @Parameter (description = "년") @PathVariable ("year") int year,
-            @Parameter (description = "월") @PathVariable ("month") int month) {
+            @Parameter (description = "년")
+            @PathVariable ("year") int year,
+            @Parameter (description = "월")
+            @PathVariable ("month") int month) {
         //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
         Long userId = 3L;
         return ApiResponse.success((accountService.findAccountsByMonth(userId, year, month)));
@@ -55,8 +60,11 @@ public class AccountController {
     @Tag (name = "ACCOUNT", description = "가계부")
     @Operation (summary = "입력한 년월 에 해당하는 고정목록")
     @GetMapping ("items/fixed/{year}/{month}")
-    public ResponseEntity<ApiResponse<List<AccountResDto>>> getFixedAccountItems(@PathVariable ("year") int year,
-                                                                                 @PathVariable ("month") int month) {
+    public ResponseEntity<ApiResponse<List<AccountResDto>>> getFixedAccountItems(
+            @Parameter (description = "년")
+            @PathVariable ("year") int year,
+            @Parameter (description = "월")
+            @PathVariable ("month") int month) {
         //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
         Long userId = 3L;
         return ApiResponse.success(accountService.findFixedAccounts(userId, year, month));
@@ -69,7 +77,7 @@ public class AccountController {
     @Operation (summary = "가계부 즐겨찾기 목록", description = " 카테고리 all 일 경우 전체")
     @GetMapping ("items/favor/{category}")
     public ResponseEntity<ApiResponse<List<FavorAccountResDto>>> getFavorAccountItems(
-            @PathVariable ("category") String category) {
+            @Parameter (description = "카테고리 'ALL' = 전부") @PathVariable ("category") String category) {
         //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
         Long userId = 3L;
         return ApiResponse.success(accountService.findFavorAccountItems(userId, category));
@@ -108,7 +116,7 @@ public class AccountController {
     @Operation (summary = "가계부 항목 수정 (전체)")
     @PutMapping ("items/{accountId}")
     public ResponseEntity<ApiResponse<Boolean>> updateAccountItem(
-            @PathVariable ("accountId") Long accountId,
+            @Parameter (description = "가계부 항목 아이디") @PathVariable ("accountId") Long accountId,
             @RequestBody AccountReqDto reqDto) throws Exception {
         return ApiResponse.success(accountService.updateAccountItem(accountId, reqDto));
     }
@@ -120,6 +128,7 @@ public class AccountController {
     @Operation (summary = "가계부 항목 수정 (일부)")
     @PatchMapping ("items/{accountId}")
     public ResponseEntity<ApiResponse<Boolean>> partiallyUpdateAccountItem(
+            @Parameter (description = "가계부 항목 아이디")
             @PathVariable ("accountId") Long accountId,
             @RequestBody AccountReqDto reqDto) throws Exception {
         return ApiResponse.success(accountService.updateAccountItem(accountId, reqDto));
@@ -132,7 +141,7 @@ public class AccountController {
     @Operation (summary = "가계부 즐겨찾기 항목 수정 (전체)")
     @PutMapping ("items/favor/{favorAccountId}")
     public ResponseEntity<ApiResponse<Boolean>> updateFavorAccountItem(
-            @PathVariable Long favorAccountId,
+            @Parameter (description = "즐겨찾기 항목 아이디") @PathVariable Long favorAccountId,
             @RequestBody AccountReqDto reqDto) throws Exception {
         return ApiResponse.success(accountService.updateFavorAccountItem(favorAccountId, reqDto));
     }
@@ -144,6 +153,7 @@ public class AccountController {
     @Operation (summary = "가계부 즐겨찾기 항목 수정 (일부)")
     @PatchMapping ("items/favor/{favorAccountId}")
     public ResponseEntity<ApiResponse<Boolean>> partiallyUpdateFavorAccountItem(
+            @Parameter (description = "즐겨찾기 항목 아이디")
             @PathVariable Long favorAccountId,
             @RequestBody AccountReqDto reqDto) throws Exception {
         return ApiResponse.success(accountService.updateFavorAccountItem(favorAccountId, reqDto));
@@ -156,6 +166,7 @@ public class AccountController {
     @Operation (summary = "가계부 항목 제거", description = "가계부 항목을 제거합니다.")
     @DeleteMapping ("items/{accountId}")
     public ResponseEntity<ApiResponse<Boolean>> deleteAccountItem(
+            @Parameter (description = "가계부 항목 아이디")
             @PathVariable ("accountId") Long accountId) {
         return ApiResponse.success(accountService.deleteAccountItem(accountId));
     }
@@ -166,7 +177,9 @@ public class AccountController {
     @Tag (name = "FAVORITE ACCOUNT", description = "가계부 즐겨찾기")
     @Operation (summary = "가계부 즐겨찾기 항목 삭제")
     @DeleteMapping ("items/favor/{favorAccountId}")
-    public ResponseEntity<ApiResponse<Boolean>> deleteFavorAccountItem(@PathVariable Long favorAccountId) {
+    public ResponseEntity<ApiResponse<Boolean>> deleteFavorAccountItem(
+            @Parameter (description = "즐겨찾기 항목 아이디")
+            @PathVariable Long favorAccountId) {
         return ApiResponse.success(accountService.deleteFavorAccountItem(favorAccountId));
     }
 }

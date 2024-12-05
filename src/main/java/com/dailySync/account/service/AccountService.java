@@ -43,10 +43,6 @@ public class AccountService {
     public List<AccountResDto> findFixedAccounts(Long userId, int year, int month) {
         LocalDate startOfMonth = LocalDate.of(year, month, 1);
         LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
-        System.out.println("시작날짜");
-        System.out.println(startOfMonth);
-        System.out.println("마지막날짜");
-        System.out.println(endOfMonth);
         List<Account> list = accountRepository.findByUserIdAndAccountDateBetweenAndFixedTrue(
                 userId,
                 startOfMonth,
@@ -74,10 +70,7 @@ public class AccountService {
 
     public boolean createFavorAccountItem(Long userId, AccountReqDto reqDto) throws Exception {
         User user = getUserById((userId));
-        System.out.println(reqDto.getTitle());
-        System.out.println(reqDto.getAmount());
         FavoriteAccount account = FavoriteAccount.of(user, reqDto);
-        System.out.println(account.getAmount());
         favoriteRepository.save(account);
         return true;
     }
