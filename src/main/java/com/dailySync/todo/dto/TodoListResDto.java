@@ -33,7 +33,7 @@ public class TodoListResDto {
     public static TodoListResDto of(Long id,  String date, Integer listOrder) {
         return new TodoListResDto(id, date, listOrder);
     }
-
+//ㅇ
     public static TodoListResDto of(TodoList todoList) {
         TodoListResDto dto = new TodoListResDto();
         dto.setId(todoList.getId());
