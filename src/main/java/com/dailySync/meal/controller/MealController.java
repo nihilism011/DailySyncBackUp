@@ -23,10 +23,10 @@ public class MealController {
      * 로그인 한 유저가 연도 year 월 month 변수에 담아 넘겨주면 해당 월의 mealList 를 전달
      */
     @Operation
-        (
-            summary = "로그인한 유저가 선택한 달의 리스트 불러오기(초기 오늘의 월)",
-            description = "year는 연도 month는 월 입력한다. week값은 주로 보여주는것을 처리하기위해 추가되었음."
-        )
+            (
+                    summary = "로그인한 유저가 선택한 달의 리스트 불러오기(초기 오늘의 월)",
+                    description = "year는 연도 month는 월 입력한다. week값은 주로 보여주는것을 처리하기위해 추가되었음."
+            )
     @GetMapping ("mealList/{year}/{month}")
     public ResponseEntity<ApiResponse<MealListResDto>> getMealList(
             @PathVariable int year,

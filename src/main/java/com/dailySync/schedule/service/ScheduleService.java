@@ -22,13 +22,13 @@ public class ScheduleService {
 
     /**유저 일정 가져오기*/
     public List<ScheduleResDto> getUser(Long userId, int year, int month) {
-        List<Schedule> scheduleList = scheduleRepository.userScheduleList(userId, year, month);
+        List<Schedule> scheduleList = scheduleRepository.findByUserIdAndStartTimeYearAndStartTimeMonthOrderByStartTimeAsc(userId, year, month);
         return scheduleList.stream().map(ScheduleResDto::of).collect(Collectors.toList());
     }
 
     /**title로 일정찾기*/
     public List<ScheduleResDto> getScheduleTitle(Long userId, String title) {
-        List<Schedule> scheduleList = scheduleRepository.findByUserId_Title(userId, title);
+        List<Schedule> scheduleList = scheduleRepository.findByUserIdAndTitleContainingOrderByStartTimeAsc(userId, title);
         return scheduleList.stream().map(Schedule::toResDto).collect(Collectors.toList());
     }
 
@@ -38,7 +38,7 @@ public class ScheduleService {
         return scheduleList.stream().map(Schedule::toResDto).collect(Collectors.toList());
     }
 
-    /**month,year로 일정찾기*/
+    /**year,month로 일정찾기*/
     public List<ScheduleResDto> getScheduleDate(Long userId, int year, int month) {
         List<Schedule> scheduleList = scheduleRepository.findByUserId_YearAndMonth(userId, year, month);
         return scheduleList.stream().map(Schedule::toResDto).collect(Collectors.toList());
