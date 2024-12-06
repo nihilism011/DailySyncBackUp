@@ -25,7 +25,7 @@ export default {
       if (res.status) {
         this.result = res.data
       } else {
-        console.log('에러메세지 :', res.message)
+        console.log(res.message)
       }
     },
   },

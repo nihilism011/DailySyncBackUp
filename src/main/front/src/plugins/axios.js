@@ -11,7 +11,9 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     // 요청 전에 수행할 작업 (토큰 추가 등)
-    console.log('Request:', config)
+    console.log('BaseUrl : ', config.baseURL)
+    console.log('RequestApi : ', config.url)
+    console.log('RequestMethod : ', config.method)
     return config
   },
   (error) => {
