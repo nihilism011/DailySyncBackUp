@@ -1,14 +1,19 @@
 <template>
-  <div class="sample">
-    <div>{{ day }}</div>
-    <div>
-      {{ 'http://localhost:8080/api/' }}
-      <input type="text" v-model="inputApiPath" @keyup.enter="fnRequest(inputApiPath)" />
-      <button @click="fnRequest(inputApiPath)">요청</button>
+  <div class="left">
+    <div class="sample">
+      <div>{{ day }}</div>
+      <div>
+        {{ 'http://localhost:8080/api/' }}
+        <input type="text" v-model="inputApiPath" @keyup.enter="fnRequest(inputApiPath)" />
+        <button @click="fnRequest(inputApiPath)">요청</button>
+      </div>
+      <BoldText value="Hi~everyone" :some="someOne" />
+      <div>응답 결과</div>
+      <div>{{ result }}</div>
     </div>
-    <BoldText value="Hi~everyone" :some="someOne" />
-    <div>응답 결과</div>
-    <div>{{ result }}</div>
+  </div>
+  <div class="right">
+    우측메뉴
   </div>
 </template>
 <script>
@@ -41,11 +46,4 @@ export default {
 }
 </script>
 <style>
-@media (min-width: 1024px) {
-  .sample {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
-}
 </style>
