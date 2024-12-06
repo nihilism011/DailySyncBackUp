@@ -25,5 +25,10 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
                                                  @Param ("month") int month,
                                                  @Param ("userId") Long userId);
 
-    List<Account> findByUser_IdAndAccountDate(Long userId, LocalDate accountDate);
+    List<Account> findByUserIdAndAccountDateBetweenAndFixedTrue(
+            Long userId,
+            LocalDate startDate,
+            LocalDate endDate);
+
+    List<Account> findByUserIdAndAccountDate(Long userId, LocalDate accountDate);
 }

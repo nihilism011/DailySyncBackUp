@@ -3,15 +3,13 @@ package com.dailySync.todo.entities;
 import com.dailySync.common.BaseEntity;
 import com.dailySync.user.entities.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -31,7 +29,5 @@ public class TodoGroup extends BaseEntity {
     @Column (nullable = false)
     private String description;
 
-    @Column (nullable = false)
-    private boolean isAuto;
 
 }
