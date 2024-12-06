@@ -14,6 +14,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -37,6 +39,9 @@ public class User extends BaseEntity {
 
     @Column (nullable = false)
     private String email;
+
+    @Column
+    private LocalDateTime lastLogin;
 
     @OneToOne (mappedBy = "user", cascade = CascadeType.ALL)
     private UserSetting userSetting;
