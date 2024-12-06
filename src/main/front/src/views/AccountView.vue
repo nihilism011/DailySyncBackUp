@@ -1,11 +1,22 @@
 <template>
-  <div></div>
+  <div class="container">
+    <ItemList account-date="" />
+  </div>
 </template>
 <script>
+import ItemList from '@/components/account/ItemList.vue'
 export default {
-  data() {
-    return {}
+  components: {
+    ItemList,
   },
+
+  data() {
+    return {
+      date: '2024-12-04',
+    }
+  },
+  methods: {},
+  mounted() {},
 }
 </script>
 <style scoped></style>
