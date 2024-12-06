@@ -7,8 +7,11 @@ import com.dailySync.schedule.repository.ScheduleRepository;
 import com.dailySync.user.entities.User;
 import com.dailySync.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +53,6 @@ public class ScheduleService {
             return false;
         }
     }
-
     //제목만으로 검색하여 관련 항목들이 모두 뜨도록 하기
     public List<ScheduleResDto> searchByTitle(String title) {
         List<Schedule> list = scheduleRepository.findByTitle(title);
@@ -60,7 +62,6 @@ public class ScheduleService {
         }
         return reList;
     }
-
     //일정 삭제하기
     public boolean deleteSchedule(Long id) {
         scheduleRepository.deleteById(id);

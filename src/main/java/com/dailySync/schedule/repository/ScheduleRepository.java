@@ -1,6 +1,7 @@
 package com.dailySync.schedule.repository;
 
 import com.dailySync.schedule.entities.Schedule;
+import com.dailySync.user.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +15,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
 
     List<Schedule> findByUserId(Long userId);
     List<Schedule> findByTitle(String Title);
+    // 특정 사용자와 날짜 범위에 맞는 일정 조회
 
 
 
