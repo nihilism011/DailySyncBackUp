@@ -61,9 +61,6 @@ public class ScheduleService {
         return reList;
     }
 
-    //시작날짜만으로 검색하여 관련 항목들이 모두 뜨도록 하기
-
-
     //일정 삭제하기
     public boolean deleteSchedule(Long id) {
         scheduleRepository.deleteById(id);
