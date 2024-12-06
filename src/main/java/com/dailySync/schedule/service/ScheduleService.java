@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,13 +23,13 @@ public class ScheduleService {
 
     /**유저 일정 가져오기*/
     public List<ScheduleResDto> getUser(Long userId, int year, int month) {
-        List<Schedule> scheduleList = scheduleRepository.userScheduleList(userId, year, month);
+        List<Schedule> scheduleList = scheduleRepository.findByUserIdAndStartTimeYearAndStartTimeMonthOrderByStartTimeAsc(userId, year, month);
         return scheduleList.stream().map(ScheduleResDto::of).collect(Collectors.toList());
     }
 
     /**title로 일정찾기*/
     public List<ScheduleResDto> getScheduleTitle(Long userId, String title) {
-        List<Schedule> scheduleList = scheduleRepository.findByUserId_Title(userId, title);
+        List<Schedule> scheduleList = scheduleRepository.findByUserIdAndTitleContainingOrderByStartTimeAsc(userId, title);
         return scheduleList.stream().map(Schedule::toResDto).collect(Collectors.toList());
     }
 
@@ -38,9 +39,17 @@ public class ScheduleService {
         return scheduleList.stream().map(Schedule::toResDto).collect(Collectors.toList());
     }
 
-    /**month,year로 일정찾기*/
+    /**year,month로 일정찾기*/
     public List<ScheduleResDto> getScheduleDate(Long userId, int year, int month) {
         List<Schedule> scheduleList = scheduleRepository.findByUserId_YearAndMonth(userId, year, month);
+        return scheduleList.stream().map(Schedule::toResDto).collect(Collectors.toList());
+    }
+
+    //**기간설정으로 일정찾기 */
+    public List<ScheduleResDto> getScheduleInRange(Long userId, LocalDate startTime, LocalDate endTime) {
+        LocalDateTime startOfDay = startTime.atStartOfDay();  // 시작 시간 00:00:0
+        LocalDateTime endOfDay = endTime.atTime(23, 59, 59, 999999999);
+        List<Schedule> scheduleList = scheduleRepository.findByUserIdAndDateRange(userId, startOfDay, endOfDay);
         return scheduleList.stream().map(Schedule::toResDto).collect(Collectors.toList());
     }
 
@@ -51,17 +60,25 @@ public class ScheduleService {
         return true;
     }
 
-    /**일정삭제*/
-    public boolean deleteSchedule(Long id) {
-        scheduleRepository.deleteById(id);
-        return true;
+    //일정 수정하기
+    public boolean updateSchedule (Long id, ScheduleReqDto scheduleReqDto) {
+        try{
+            Schedule schedule = scheduleRepository.findById(id).orElse(null);
+            if(schedule==null) {
+                return false;
+            }
+            schedule.update(scheduleReqDto);
+            scheduleRepository.save(schedule);
+            return true;
+        }catch(Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
-    /**일정수정*/
-    public boolean updateSchedule(ScheduleReqDto reqDto) throws Exception{
-        Schedule schedule = scheduleRepository.findById(reqDto.getId()).orElseThrow(() -> new Exception("Schedule not found"));
-        schedule.update(reqDto);
-        scheduleRepository.save(schedule);
+    //일정 삭제하기
+    public boolean deleteSchedule(Long id) {
+        scheduleRepository.deleteById(id);
         return true;
     }
 }

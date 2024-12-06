@@ -19,6 +19,6 @@ public class TodoListReqDto {
     private LocalDate date;
     private Integer listOrder;
     private String title;
-
+    private LocalDateTime checkedTime;
 
 }
