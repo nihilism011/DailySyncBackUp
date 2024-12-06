@@ -65,12 +65,6 @@ public class Schedule extends BaseEntity {
             this.description = scheduleReqDto.getDescription();
         }
 
-
-
-
-
     }
-
-
 }
 
