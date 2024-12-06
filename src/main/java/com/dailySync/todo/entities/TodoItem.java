@@ -38,6 +38,7 @@ public class TodoItem extends BaseEntity {
     @Column// (기본 값 "new")
     private String status = "new";
 
+    @Column
     private boolean isAuto; // (기본 값 false)
 
 

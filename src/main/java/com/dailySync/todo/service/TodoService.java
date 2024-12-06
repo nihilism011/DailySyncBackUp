@@ -11,13 +11,11 @@ import com.dailySync.todo.repository.TodoListRepository;
 import com.dailySync.user.entities.User;
 import com.dailySync.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.query.NativeQuery;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +26,7 @@ public class TodoService {
     final private TodoItemRepository todoItemRepository;
     final private TodoListRepository todoListRepository;
 
+
     // 날짜 받아와서 총개수 , null인개수 반환
     public TodoCountResponseDto getTodoCount(Long userId, LocalDate date){
 
@@ -37,7 +36,6 @@ public class TodoService {
         return new TodoCountResponseDto(nullCount, allCount);
 
     }
-
     //userId에 해당하는 todoGroup을 조회 (5)
     public List<TodoGroupResDto> getTodoGroup(Long userId) {
         List<TodoGroup> todoGroups = todoGroupRepository.findByUserIdOrderByCreatedAtAsc(userId);
@@ -45,8 +43,6 @@ public class TodoService {
                 .map(TodoGroupResDto::of)
                 .collect(Collectors.toList());
     }
-
-
     //userId, groupId 에 해당하는 todoItem 조회
     public List<TodoItemResDto> getTodoItem(Long userId, Long groupId) {
         List<TodoItem> todoItems
@@ -60,6 +56,22 @@ public class TodoService {
         return todoLists.stream()
                 .map(TodoListResDto::of)
                 .collect(Collectors.toList());
+    }
+
+    public TodoGroupResDto getTodoGroupInfo(Long id) {
+        TodoGroup todoGroup = todoGroupRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Todogroup에 id값이 없엉"));
+        return TodoGroupResDto.oft(todoGroup);
+    }
+    public TodoListResDto getTodoListInfo(Long id) {
+        TodoList todolist = todoListRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("TodoList에 id값이 없엉"));
+        return TodoListResDto.of2(todolist);
+    }
+    public TodoItemResDto getTodoItemInfo(Long id) {
+        TodoItem todoitem = todoItemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("TodoItem에 id값이 없엉"));
+        return TodoItemResDto.of(todoitem);
     }
 
 

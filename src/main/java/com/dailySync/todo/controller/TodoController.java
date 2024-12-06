@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/todo")
@@ -72,7 +71,33 @@ public class TodoController {
     }
 
     //GetMapping
-
+    @Operation(
+            summary = " todoItem 정보 조회 ",
+            description = " ... "
+    )
+    @GetMapping("/itemInfo/{id}")
+    public ResponseEntity<?> getTodoItemInfo(@PathVariable("id") Long id) {
+        TodoItemResDto rsp = todoService.getTodoItemInfo(id);
+        return ApiResponse.success(rsp);
+    }
+    @Operation(
+            summary = " todoList 정보 조회 ",
+            description = " ... "
+    )
+    @GetMapping("/listInfo/{id}")
+    public ResponseEntity<?> getTodoListInfo(@PathVariable("id") Long id) {
+        TodoListResDto rsp = todoService.getTodoListInfo(id);
+        return ApiResponse.success(rsp);
+    }
+    @Operation(
+            summary = " todoGroup 정보 조회 ",
+            description = " ... "
+    )
+    @GetMapping("/groupInfo/{id}")
+    public ResponseEntity<?> getTodoGroupInfo(@PathVariable("id") Long id) {
+        TodoGroupResDto rsp = todoService.getTodoGroupInfo(id);
+        return ApiResponse.success(rsp);
+    }
     @Operation(
             summary = " userId, date에 해당하는 todolist 의 checkItem null 개수 조회 ",
             description = " ... "
