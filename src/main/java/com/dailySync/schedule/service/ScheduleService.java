@@ -30,9 +30,6 @@ public class ScheduleService {
     //일정 정보 추가하기
     public boolean insertSchedule (Long userId, ScheduleReqDto scheduleReqDto) {
         User user = userRepository.findById(userId).orElse(null);
-        if(user == null) {
-
-        }
         Schedule schedule = Schedule.of(user, scheduleReqDto);
         scheduleRepository.save(schedule);
         return true;
