@@ -3,16 +3,14 @@ package com.dailySync.schedule.entities;
 import com.dailySync.schedule.dto.ScheduleReqDto;
 import com.dailySync.common.BaseEntity;
 import com.dailySync.user.entities.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @Entity //이 클래스가 JPA엔티티임을 나타냄,
@@ -40,7 +38,6 @@ public class Schedule extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-
     public static Schedule of(User user, ScheduleReqDto scheduleReqDto) {
         return Schedule.builder()
                 .user(user)
@@ -64,7 +61,6 @@ public class Schedule extends BaseEntity {
         if(scheduleReqDto.getDescription() != null) {
             this.description = scheduleReqDto.getDescription();
         }
-
     }
 }
 

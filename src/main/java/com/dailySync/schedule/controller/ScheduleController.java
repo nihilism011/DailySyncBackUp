@@ -8,9 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/schedule")
@@ -43,13 +40,6 @@ public class ScheduleController {
     @DeleteMapping ("delete/{id}")
     public ResponseEntity<?> deleteByIdSchedule(@PathVariable Long id) {
         return ResponseEntity.ok(scheduleService.deleteSchedule(id));
-    }
-
-    //특정 날짜의 일정을 반환
-    @GetMapping("/schedules")
-    public List<Schedule> getScheduleDetails(@RequestParam("date") String date) {
-        LocalDate localDate = LocalDate.parse(date);  // 전달된 문자열을 LocalDate로 변환
-        return scheduleService.getScheduleDetails(localDate);
     }
 }
 
