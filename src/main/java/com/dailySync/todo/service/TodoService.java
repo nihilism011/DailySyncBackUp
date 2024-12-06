@@ -11,6 +11,7 @@ import com.dailySync.todo.repository.TodoListRepository;
 import com.dailySync.user.entities.User;
 import com.dailySync.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.query.NativeQuery;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,7 +28,15 @@ public class TodoService {
     final private TodoItemRepository todoItemRepository;
     final private TodoListRepository todoListRepository;
 
-    // 리스트 조회
+    // 날짜 받아와서 총개수 , null인개수 반환
+    public TodoCountResponseDto getTodoCount(Long userId, LocalDate date){
+
+        long nullCount = todoListRepository.countByUserIdAndDateAndCheckedTimeIsNull(userId, null);
+        long allCount = todoListRepository.countByUserIdAndDate(userId, date);
+
+        return new TodoCountResponseDto(nullCount, allCount);
+
+    }
 
     //userId에 해당하는 todoGroup을 조회 (5)
     public List<TodoGroupResDto> getTodoGroup(Long userId) {
