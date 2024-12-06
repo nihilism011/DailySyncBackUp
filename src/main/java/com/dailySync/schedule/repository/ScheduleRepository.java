@@ -14,7 +14,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
 
     List<Schedule> findByUserId(Long userId);
     List<Schedule> findByTitle(String Title);
-
+    List<Schedule> findByStartTimeBetween(LocalDateTime startOfDay, LocalDateTime endOfDay);
 
 
 }

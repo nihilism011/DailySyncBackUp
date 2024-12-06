@@ -46,6 +46,10 @@ public class ScheduleController {
     }
 
     //특정 날짜의 일정을 반환
-
+    @GetMapping("/schedules")
+    public List<Schedule> getScheduleDetails(@RequestParam("date") String date) {
+        LocalDate localDate = LocalDate.parse(date);  // 전달된 문자열을 LocalDate로 변환
+        return scheduleService.getScheduleDetails(localDate);
+    }
 }
 

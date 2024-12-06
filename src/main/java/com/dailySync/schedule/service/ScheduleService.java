@@ -71,7 +71,12 @@ public class ScheduleService {
     }
 
     //날짜 클릭 시 해당 세부일정 불러오기
+    public List<Schedule> getScheduleDetails(LocalDate date) {
+        LocalDateTime startOfDay = date.atStartOfDay();
+        LocalDateTime endOfDay = date.atTime(23, 59, 59, 999999999);  // 하루의 끝 시간
 
+        return scheduleRepository.findByStartTimeBetween(startOfDay, endOfDay);
+    }
 
 }
 
