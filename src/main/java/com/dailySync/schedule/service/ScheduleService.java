@@ -9,6 +9,9 @@ import com.dailySync.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +69,9 @@ public class ScheduleService {
         scheduleRepository.deleteById(id);
         return true;
     }
+
+    //날짜 클릭 시 해당 세부일정 불러오기
+
 
 }
 

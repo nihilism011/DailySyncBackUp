@@ -2,12 +2,14 @@ package com.dailySync.schedule.controller;
 
 import com.dailySync.common.ApiResponse;
 import com.dailySync.schedule.dto.ScheduleReqDto;
+import com.dailySync.schedule.entities.Schedule;
 import com.dailySync.schedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,5 +44,8 @@ public class ScheduleController {
     public ResponseEntity<?> deleteByIdSchedule(@PathVariable Long id) {
         return ResponseEntity.ok(scheduleService.deleteSchedule(id));
     }
+
+    //특정 날짜의 일정을 반환
+
 }
 

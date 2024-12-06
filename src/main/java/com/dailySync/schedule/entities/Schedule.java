@@ -43,6 +43,7 @@ public class Schedule extends BaseEntity {
 
     public static Schedule of(User user, ScheduleReqDto scheduleReqDto) {
         return Schedule.builder()
+                .user(user)
                 .startTime(scheduleReqDto.getStartTime())
                 .endTime(scheduleReqDto.getEndTime())
                 .title(scheduleReqDto.getTitle())
