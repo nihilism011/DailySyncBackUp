@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("api/schedule")
 @RequiredArgsConstructor
 public class ScheduleController {
     private final ScheduleService scheduleService;
@@ -26,7 +26,7 @@ public class ScheduleController {
                     summary = "로그인한 유저가 선택한 달의 리스트 불러오기(초기 오늘의 월)",
                     description = "year는 연도, month는 월을 입력한다."
             )
-    @GetMapping ("/schedule/userId/{userId}/{year}/{month}")
+    @GetMapping ("userId/{userId}/{year}/{month}")
     public ResponseEntity<ApiResponse<List<ScheduleResDto>>> getSchedule(
             @PathVariable ("userId") Long userId,
             @PathVariable ("year") int year,
@@ -42,7 +42,7 @@ public class ScheduleController {
                     summary = "로그인한 유저가 검색한 제목으로 일정리스트 불러오기",
                     description = "title은 일정의 제목을 입력한다."
             )
-    @GetMapping ("/schedule/title/{title}")
+    @GetMapping ("title/{title}")
     public ResponseEntity<ApiResponse<List<ScheduleResDto>>> searchSchedule(
             @PathVariable ("title") String title
     ) {
@@ -55,7 +55,7 @@ public class ScheduleController {
                     summary = "로그인한 유저가 선택한 연도로 일정리스트 불러오기",
                     description = "year는 연도를 입력한다."
             )
-    @GetMapping ("/schedule/date/{year}")
+    @GetMapping ("date/{year}")
     public ResponseEntity<ApiResponse<List<ScheduleResDto>>> searchSchedule(
             @PathVariable ("year") int year
     ) {
@@ -63,14 +63,12 @@ public class ScheduleController {
     }
 
     /** 기간설정으로 일정리스트 찾기 */
-    @GetMapping("/schedule/date/range")
+    @GetMapping("date/range")
     public ResponseEntity<ApiResponse<List<ScheduleResDto>>> searchScheduleInRange(
             @RequestParam("startTime") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startTime,
             @RequestParam("endTime") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endTime
     ) {
-        LocalDateTime startDateTime = startTime.atStartOfDay();
-        LocalDateTime endDateTime = endTime.atTime(23, 59, 59);
-        List<ScheduleResDto> schedules = scheduleService.getScheduleInRange(6L, startDateTime, endDateTime);
+        List<ScheduleResDto> schedules = scheduleService.getScheduleInRange(6L, startTime, endTime);
         return ApiResponse.success(schedules);
     }
 
@@ -80,7 +78,7 @@ public class ScheduleController {
                     summary = "로그인한 유저가 선택한 연도의 달로 일정리스트 불러오기",
                     description = "year는 연도, month는 월을 입력한다."
             )
-    @GetMapping ("/schedule/date/{year}/{month}")
+    @GetMapping ("date/{year}/{month}")
     public ResponseEntity<ApiResponse<List<ScheduleResDto>>> searchSchedule(
             @PathVariable ("year") int year,
             @PathVariable ("month") int month
@@ -94,7 +92,7 @@ public class ScheduleController {
                     summary = "일정 리스트(데이터) 삽입",
                     description = "해당 일자 데이터 삽입할때 List에 객체를 담아와서 데이터를 삽입한다."
             )
-    @PostMapping ("/schedule/add")
+    @PostMapping ("add")
     public ResponseEntity<ApiResponse<Boolean>> addSchedule(@RequestBody ScheduleReqDto reqDto) throws Exception {
         return ApiResponse.success(scheduleService.addSchedule(6L, reqDto));
     }

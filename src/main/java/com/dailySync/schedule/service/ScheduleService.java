@@ -46,8 +46,10 @@ public class ScheduleService {
     }
 
     //**기간설정으로 일정찾기 */
-    public List<ScheduleResDto> getScheduleInRange(Long userId, LocalDateTime startTime, LocalDateTime endTime) {
-        List<Schedule> scheduleList = scheduleRepository.findByUserIdAndDateRange(userId, startTime, endTime);
+    public List<ScheduleResDto> getScheduleInRange(Long userId, LocalDate startTime, LocalDate endTime) {
+        LocalDateTime startOfDay = startTime.atStartOfDay();  // 시작 시간 00:00:0
+        LocalDateTime endOfDay = endTime.atTime(23, 59, 59, 999999999);
+        List<Schedule> scheduleList = scheduleRepository.findByUserIdAndDateRange(userId, startOfDay, endOfDay);
         return scheduleList.stream().map(Schedule::toResDto).collect(Collectors.toList());
     }
 
