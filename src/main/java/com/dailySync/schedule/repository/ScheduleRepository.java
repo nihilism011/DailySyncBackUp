@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -30,6 +31,18 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             + "     OR YEAR(s.end_time) = :year AND MONTH(s.end_time) = :month) "
             + "ORDER BY s.start_time ASC", nativeQuery = true)
     List<Schedule> findByUserId_YearAndMonth(@Param("userId") Long userId, @Param("year") int year, @Param("month") int month);
+
+    @Query(value = "SELECT s.* FROM schedule s "
+            + "WHERE s.user_id = :userId "
+            + "AND s.start_time >= :startTime "
+            + "AND s.end_time <= :endTime "
+            + "ORDER BY s.start_time ASC", nativeQuery = true)
+    List<Schedule> findByUserIdAndDateRange(
+            @Param("userId") Long userId,
+            @Param("startTime") LocalDateTime startTime,
+            @Param("endTime") LocalDateTime endTime);
+
+
 
 }
 
