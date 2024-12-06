@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,21 +16,17 @@ public class TodoListResDto {
     private Integer listOrder;
     private String title;
 
-
-
-    public TodoListResDto(Long id, String date, Integer listOrder) {
+    public static TodoListResDto of2(TodoList todoList) {
+        TodoListResDto dto = new TodoListResDto();
+        dto.setListOrder(todoList.getListOrder());
+        dto.setTitle(todoList.getTitle());
+        if (todoList.getTodoItem() != null) {
+            dto.setItemId(todoList.getTodoItem().getId());
+        } else {
+            dto.setItemId(null);
+        }
+        return dto;
     }
-
-    public TodoListResDto(Long id, Long itemId, String date, Integer listOrder) {
-    }
-
-    public static TodoListResDto of(Long id, Long itemId, String date, Integer listOrder) {
-        return new TodoListResDto(id, itemId, date, listOrder);
-    }
-    public static TodoListResDto of(Long id,  String date, Integer listOrder) {
-        return new TodoListResDto(id, date, listOrder);
-    }
-//ㅇ
     public static TodoListResDto of(TodoList todoList) {
         TodoListResDto dto = new TodoListResDto();
         dto.setId(todoList.getId());
@@ -45,7 +38,6 @@ public class TodoListResDto {
         } else {
             dto.setItemId(null);
         }
-
         return dto;
     }
 }
