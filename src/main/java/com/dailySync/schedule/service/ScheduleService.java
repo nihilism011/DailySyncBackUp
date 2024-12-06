@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +45,12 @@ public class ScheduleService {
         return scheduleList.stream().map(Schedule::toResDto).collect(Collectors.toList());
     }
 
+    //**기간설정으로 일정찾기 */
+    public List<ScheduleResDto> getScheduleInRange(Long userId, LocalDateTime startTime, LocalDateTime endTime) {
+        List<Schedule> scheduleList = scheduleRepository.findByUserIdAndDateRange(userId, startTime, endTime);
+        return scheduleList.stream().map(Schedule::toResDto).collect(Collectors.toList());
+    }
+
     /**일정추가*/
     public boolean addSchedule(Long userId, ScheduleReqDto reqDto) throws Exception{
         User user = userRepository.findById(6L).orElseThrow(() -> new Exception("user doesn't exist"));
@@ -51,17 +58,25 @@ public class ScheduleService {
         return true;
     }
 
-    /**일정삭제*/
-    public boolean deleteSchedule(Long id) {
-        scheduleRepository.deleteById(id);
-        return true;
+    //일정 수정하기
+    public boolean updateSchedule (Long id, ScheduleReqDto scheduleReqDto) {
+        try{
+            Schedule schedule = scheduleRepository.findById(id).orElse(null);
+            if(schedule==null) {
+                return false;
+            }
+            schedule.update(scheduleReqDto);
+            scheduleRepository.save(schedule);
+            return true;
+        }catch(Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
-    /**일정수정*/
-    public boolean updateSchedule(ScheduleReqDto reqDto) throws Exception{
-        Schedule schedule = scheduleRepository.findById(reqDto.getId()).orElseThrow(() -> new Exception("Schedule not found"));
-        schedule.update(reqDto);
-        scheduleRepository.save(schedule);
+    //일정 삭제하기
+    public boolean deleteSchedule(Long id) {
+        scheduleRepository.deleteById(id);
         return true;
     }
 }

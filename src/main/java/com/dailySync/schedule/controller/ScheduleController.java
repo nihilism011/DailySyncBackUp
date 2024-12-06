@@ -6,9 +6,12 @@ import com.dailySync.schedule.dto.ScheduleResDto;
 import com.dailySync.schedule.service.ScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -59,6 +62,18 @@ public class ScheduleController {
         return ApiResponse.success(scheduleService.getScheduleYear(6L, year));
     }
 
+    /** 기간설정으로 일정리스트 찾기 */
+    @GetMapping("/schedule/date/range")
+    public ResponseEntity<ApiResponse<List<ScheduleResDto>>> searchScheduleInRange(
+            @RequestParam("startTime") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startTime,
+            @RequestParam("endTime") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endTime
+    ) {
+        LocalDateTime startDateTime = startTime.atStartOfDay();
+        LocalDateTime endDateTime = endTime.atTime(23, 59, 59);
+        List<ScheduleResDto> schedules = scheduleService.getScheduleInRange(6L, startDateTime, endDateTime);
+        return ApiResponse.success(schedules);
+    }
+
     /** 연도와 달을 이용하여 일정리스트 찾기 */
     @Operation
             (
@@ -84,28 +99,27 @@ public class ScheduleController {
         return ApiResponse.success(scheduleService.addSchedule(6L, reqDto));
     }
 
-    /** 일정 데이터 삭제 */
-    @Operation
-            (
-                    summary = "일정 목록 삭제",
-                    description = "일정이 가지고있는 고유 id를 사용하여 삭제한다."
-            )
-    @PostMapping("/schedule/delete/{id}")
-    public ResponseEntity<ApiResponse<Boolean>> deleteSchedule(@RequestBody Long id) throws Exception {
-        return ApiResponse.success(scheduleService.deleteSchedule(id));
-    }
-
     /** 일정 데이터 수정 */
     @Operation
             (
                     summary = "일정 데이터 수정",
                     description = "등록된 데이터를 수정한다."
             )
-    @PatchMapping ("/schedule/update")
-    public ResponseEntity<ApiResponse<Boolean>> updateSchedule(@RequestBody ScheduleReqDto reqDto) throws Exception {
-      return ApiResponse.success( scheduleService.updateSchedule(reqDto));
+    @PatchMapping ("update/{id}")
+    public ResponseEntity<?> fixedSchedule(@PathVariable Long id, @RequestBody ScheduleReqDto reqDto) {
+        return ApiResponse.success(scheduleService.updateSchedule(id, reqDto));
     }
 
+    /** 일정 데이터 삭제 */
+    @Operation
+            (
+                    summary = "일정 목록 삭제",
+                    description = "일정이 가지고있는 고유 id를 사용하여 삭제한다."
+            )
+    @DeleteMapping ("delete/{id}")
+    public ResponseEntity<?> deleteByIdSchedule(@PathVariable Long id) {
+        return ResponseEntity.ok(scheduleService.deleteSchedule(id));
+    }
 
 }
 
