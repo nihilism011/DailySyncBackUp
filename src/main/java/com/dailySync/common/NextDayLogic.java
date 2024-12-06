@@ -1,4 +1,4 @@
-package com.dailySync.config;
+package com.dailySync.common;
 
 import com.dailySync.account.service.AccountService;
 import lombok.RequiredArgsConstructor;
