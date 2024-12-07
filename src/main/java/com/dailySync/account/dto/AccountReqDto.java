@@ -1,6 +1,6 @@
 package com.dailySync.account.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.dailySync.constant.AccountCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class AccountReqDto {
     private String title;
     private LocalDate accountDate;
-    private String category;
+    private AccountCategory category;
     private Integer amount;
     private String description;
     private Boolean Fixed;
