@@ -2,6 +2,7 @@ package com.dailySync.schedule.entities;
 
 import com.dailySync.schedule.dto.ScheduleReqDto;
 import com.dailySync.common.BaseEntity;
+import com.dailySync.schedule.dto.ScheduleResDto;
 import com.dailySync.user.entities.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -61,6 +62,16 @@ public class Schedule extends BaseEntity {
         if(scheduleReqDto.getDescription() != null) {
             this.description = scheduleReqDto.getDescription();
         }
+    }
+    public ScheduleResDto toResDto() {
+        return ScheduleResDto.builder()
+                .id(this.getId())
+                .userId(this.user.getId()) // User 엔티티의 ID를 가져옵니다.
+                .startTime(this.startTime)
+                .endTime(this.endTime)
+                .title(this.title)
+                .description(this.description)
+                .build();
     }
 }
 

@@ -7,34 +7,56 @@ import com.dailySync.schedule.repository.ScheduleRepository;
 import com.dailySync.user.entities.User;
 import com.dailySync.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
-    final private ScheduleRepository scheduleRepository;
-    final private UserRepository userRepository;
 
-    //해당 사용자의 모든 일정 달력에 뿌리기
-    public List<ScheduleResDto> AllSchedules(Long userId) {
-        List<Schedule> list = scheduleRepository.findByUserId(userId);
-        List<ScheduleResDto> resList = new ArrayList<>();
-        for (Schedule schedule : list) {
-            resList.add(ScheduleResDto.of(schedule));
-        }
-        return resList;
+    private final UserRepository userRepository;
+    private final ScheduleRepository scheduleRepository;
+
+    /**유저 일정 가져오기*/
+    public List<ScheduleResDto> getUser(Long userId, int year, int month) {
+        List<Schedule> scheduleList = scheduleRepository.findByUserIdAndStartTimeYearAndStartTimeMonthOrderByStartTimeAsc(userId, year, month);
+        return scheduleList.stream().map(ScheduleResDto::of).collect(Collectors.toList());
     }
-    //일정 정보 추가하기
-    public boolean insertSchedule (Long userId, ScheduleReqDto scheduleReqDto) {
-        User user = userRepository.findById(userId).orElse(null);
-        Schedule schedule = Schedule.of(user, scheduleReqDto);
-        scheduleRepository.save(schedule);
+
+    /**title로 일정찾기*/
+    public List<ScheduleResDto> getScheduleTitle(Long userId, String title) {
+        List<Schedule> scheduleList = scheduleRepository.findByUserIdAndTitleContainingOrderByStartTimeAsc(userId, title);
+        return scheduleList.stream().map(Schedule::toResDto).collect(Collectors.toList());
+    }
+
+    /**month로 일정찾기*/
+    public List<ScheduleResDto> getScheduleYear(Long userId, int year) {
+        List<Schedule> scheduleList = scheduleRepository.findByUserId_Year(userId, year);
+        return scheduleList.stream().map(Schedule::toResDto).collect(Collectors.toList());
+    }
+
+    /**year,month로 일정찾기*/
+    public List<ScheduleResDto> getScheduleDate(Long userId, int year, int month) {
+        List<Schedule> scheduleList = scheduleRepository.findByUserId_YearAndMonth(userId, year, month);
+        return scheduleList.stream().map(Schedule::toResDto).collect(Collectors.toList());
+    }
+
+    //**기간설정으로 일정찾기 */
+    public List<ScheduleResDto> getScheduleInRange(Long userId, LocalDate startTime, LocalDate endTime) {
+        LocalDateTime startOfDay = startTime.atStartOfDay();  // 시작 시간 00:00:0
+        LocalDateTime endOfDay = endTime.atTime(23, 59, 59, 999999999);
+        List<Schedule> scheduleList = scheduleRepository.findByUserIdAndDateRange(userId, startOfDay, endOfDay);
+        return scheduleList.stream().map(Schedule::toResDto).collect(Collectors.toList());
+    }
+
+    /**일정추가*/
+    public boolean addSchedule(Long userId, ScheduleReqDto reqDto) throws Exception{
+        User user = userRepository.findById(6L).orElseThrow(() -> new Exception("user doesn't exist"));
+        scheduleRepository.save(Schedule.of(user, reqDto));
         return true;
     }
 
@@ -53,22 +75,10 @@ public class ScheduleService {
             return false;
         }
     }
-    //제목만으로 검색하여 관련 항목들이 모두 뜨도록 하기
-    public List<ScheduleResDto> searchByTitle(String title) {
-        List<Schedule> list = scheduleRepository.findByTitle(title);
-        List<ScheduleResDto>  reList = new ArrayList<>();
-        for(Schedule schedule : list) {
-            reList.add(ScheduleResDto.of(schedule));
-        }
-        return reList;
-    }
+
     //일정 삭제하기
     public boolean deleteSchedule(Long id) {
         scheduleRepository.deleteById(id);
         return true;
     }
 }
-
-
-
-

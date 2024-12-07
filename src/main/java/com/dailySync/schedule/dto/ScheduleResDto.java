@@ -2,16 +2,19 @@ package com.dailySync.schedule.dto;
 
 import com.dailySync.schedule.entities.Schedule;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
+@Builder
 @Data
 @NoArgsConstructor  //기본 생성자 생성
 @AllArgsConstructor
 public class ScheduleResDto {
     //클라이언트와 서버 간 전용 데이터 전송용 객체, 응답 데이터를 표현
 //클라이언트에게 데이터를 보낼 때는 DTO를, 클라이언트가 서버에 보낼 때는 변환이 필요없음
+    private Long id;
     private Long userId;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
