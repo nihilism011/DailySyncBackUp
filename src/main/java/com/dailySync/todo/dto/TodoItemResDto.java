@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -33,5 +32,7 @@ public class TodoItemResDto {
         dto.setIsAuto(todoItem.isAuto());
         return dto;
     }
+
+
 
 }

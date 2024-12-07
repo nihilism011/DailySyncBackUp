@@ -1,7 +1,6 @@
 package com.dailySync.meal.service;
 
-import com.dailySync.meal.dto.MealListResDto;
-import com.dailySync.meal.dto.MealReqDto;
+import com.dailySync.meal.dto.*;
 import com.dailySync.meal.entities.Meal;
 import com.dailySync.meal.repository.MealRepository;
 import com.dailySync.user.entities.User;
@@ -10,7 +9,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,9 +19,19 @@ public class MealService {
     private final MealRepository mealRepository;
     private final UserRepository userRepository;
 
-    public MealListResDto getAllUserMealList(Integer year, Integer month) {
-        List<Meal> mealList = mealRepository.findMealsByUserIdADNYearAndMonth(7L, year, month);
+    public MealListResDto getUserMealList(Integer year, Integer month) {
+        List<Meal> mealList = mealRepository.findMealsByUserIdAndYearAndMonth(7L, year, month);
         return new MealListResDto(mealList.stream().map(Meal::toRes).toList());
+    }
+
+    public MealDayResDto getUserDayMealList(Integer year, Integer month) {
+        List<MealDayCntResDto> mealList = mealRepository.findDayByUserIdAndYearAndMonth(7L, year, month);
+        System.out.println(mealList);
+        //Map<LocalDate, List<MealDayCntResDto>> mealsByDate = mealList.stream().collect(Collectors.groupingBy(MealDayCntResDto::getDate, TreeMap::new, Collectors.toList()));
+        //System.out.println(mealsByDate);
+        //List<Map.Entry<LocalDate, List<MealDayCntResDto>>> mealDayEntries = new ArrayList<>(mealsByDate.entrySet());
+        //System.out.println(mealDayEntries);
+        return new MealDayResDto(mealList);
     }
 
     public MealListResDto getRecommandList() {

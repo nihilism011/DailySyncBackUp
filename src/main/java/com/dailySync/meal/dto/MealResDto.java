@@ -28,5 +28,5 @@ public class MealResDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Boolean isFavorite;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String week;
+    private Integer week;
 }
