@@ -2,7 +2,7 @@
     <div class="left">
         {{ dailyLsit }}
     </div>
-    <div class="right">
+    <div class="right meal-type">
         <div class="weekend-wrap">
             <div class="weekend-box" v-for="weekList in week">
                 <template v-for="(days, date) in weekList">
@@ -26,17 +26,35 @@
         </div>
         <!-- {{ fullList }} -->
         <!-- {{ fullList[`${day}`] }} -->
-        <div class="box">
+        <div class="daily-wrap">
             <template v-if="fullList[`${day}`] && fullList[`${day}`].length > 0">
-                <template v-for="item in fullList[`${day}`]">
-                    <strong>{{ item.foodName }}</strong> - {{ item.description }}<br />
-                    Calories: {{ item.kcalories }} kcal = Protein: {{ item.protein }}g<br />
-                    Fat: {{ item.fat }}g = Carbs: {{ item.carbs }}g<br>
-                    Sodium: {{ item.sodium }}g = Sugar: {{ item.sugar }}g<br>
-                    Category: {{ item.category }} = Icon: {{ item.icon }}<br>
-                </template>
+                <div class="daily-box">
+                    <template v-for="item in fullList[`${day}`]">
+                        <div class="daily">
+                            <strong>{{ item.foodName }}</strong> - {{ item.description }}<br />
+                            Calories: {{ item.kcalories }} kcal = Protein: {{ item.protein }}g<br />
+                            Fat: {{ item.fat }}g = Carbs: {{ item.carbs }}g<br>
+                            Sodium: {{ item.sodium }}g = Sugar: {{ item.sugar }}g<br>
+                            Category: {{ item.category }} = Icon: {{ item.icon }}<br>
+                        </div>
+                    </template>
+                </div>
             </template>
-            <template v-else>식단을 등록해주세요.</template>
+            <template v-else>
+                <div class="daily-box none"><span>식단을 등록해주세요.</span></div>
+            </template>
+        </div>
+        <button @click="!popupOpen" class="btn-default">식단 등록</button>
+    </div>
+    <div class="popup-box type-modal" v-if="popupOpen">
+        <div class="popup-cont">
+            <div class="popup-tit-wrap">
+                <h2 class="tit">식단 등록</h2>
+            </div>
+            <div class="pop-btn-wrap">
+                <button class="btn-default submit">등록</button>
+                <button class="btn-default cancel">취소</button>
+            </div>
         </div>
     </div>
 </template>
@@ -48,8 +66,9 @@ export default {
     return {
       dailyLsit: '',
       fullList: '',
-      day:"",
-      week:[],
+      day: "",
+      week: [],
+      popupOpen: true
     }
   },
   methods: {
@@ -89,6 +108,7 @@ export default {
     let month = this.day.split('-')[1];
     //month = 11;
     let day = this.day.split('-')[2];
+    //day = '09';
     this.fnRequest(year, month, day);
   }
 }
@@ -96,8 +116,10 @@ export default {
 <style lang="scss">
     .weekend {
         position: relative;
+        aspect-ratio: 1/1;
+        padding: 20px;
         &-wrap {
-            display: flex;
+            display: flex; width: 100%;
             padding: 10px; border-radius: 10px; overflow: hidden;
             box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.1);
         }
@@ -111,7 +133,27 @@ export default {
             height: 100%; width: 100%;
             border: 0; vertical-align: top;
         }
-        aspect-ratio: 1/1;
-        padding: 20px;
+    }
+
+    .daily {
+        flex: 0 1 calc(50% - 10px); border: 1px solid var(--color-contrastyE5);
+        padding: 20px; border-radius: 6px;
+        &-wrap {
+            margin: 40px 0;
+            width: 100%; flex-grow: 1; padding: 20px; 
+            border-radius: 10px; overflow-y: scroll;
+            box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.1);
+        }
+        &-box {
+            display: flex; flex-wrap: wrap; gap: 20px; width: 100%;
+            justify-content: space-between;
+            &.none {
+                height: 100%; align-items: center; justify-content: center;
+                span {
+                    background: url('@/assets/images/no_list_icon.png') no-repeat top center; padding-top: 74px;
+                    font-size: 18px; font-weight: bold; color: var(--color-contrastyA)
+                }
+            }
+        }
     }
 </style>
