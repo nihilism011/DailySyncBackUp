@@ -3,31 +3,67 @@
     <div class="list-container">
       <div class="list-item" v-for="(item, index) in list" :key="index">
         <div class="category">
-          <CategoryBadge :category="item.category" size="large" />
-        </div>
-        <div class="amountType">
-          <div v-if="item.id != updateRowNum" :class="item.amount > 0 ? 'plus' : 'minus'">
-            {{ item.amount > 0 ? '수입' : '지출' }}
-          </div>
-          <select v-if="item.id === updateRowNum" v-model="updateForm.amountValue">
-            <option value="plus">수입</option>
-            <option value="minus">지출</option>
+          <CategoryBadge v-if="updateRowNum != item.id" :category="item.category" size="large" />
+          <select v-else v-model="updateForm.category">
+            <option v-for="(category, i) in categoriesAsArray" :value="category.key" :key="i">
+              {{ category.name }}
+            </option>
           </select>
         </div>
         <div class="amount">
-          <div>{{ fnToWon(item.amount) }}</div>
+          <AmountBadge v-if="updateRowNum != item.id" :amount="item.amount" size="large" />
+          <div style="display: flex; width: 100%">
+            <select
+              style="width: 25%"
+              v-if="updateRowNum === item.id"
+              v-model="updateForm.amountValue"
+            >
+              <option value="plus">수입</option>
+              <option value="minus">지출</option>
+            </select>
+            <input
+              style="width: 60%"
+              v-if="updateRowNum === item.id"
+              v-model="updateForm.amount"
+              type="text"
+            />
+          </div>
         </div>
         <div class="title">
-          <div>{{ item.title }}</div>
+          <div v-if="updateRowNum != item.id">{{ item.title }}</div>
+          <input v-else v-model="updateForm.title" type="text" />
         </div>
         <div class="buttonBox">
-          <button v-if="item.id != updateRowNum" class="updateBtn" @click="fnUpdateInit(item)">
+          <button
+            v-if="item.id != updateRowNum"
+            class="updateBtn"
+            style="background-color: #515ee8"
+            @click="fnUpdateInit(item)"
+          >
             수정
           </button>
-          <button v-if="item.id === updateRowNum" class="updateBtn" @click="fnUpdate(item)">
+          <button
+            v-if="item.id != updateRowNum"
+            class="updateBtn"
+            style="background-color: #e86351"
+            @click="fnDeleteItem(item.id)"
+          >
+            삭제
+          </button>
+          <button
+            v-if="item.id === updateRowNum"
+            class="updateBtn"
+            style="background-color: #51e85e"
+            @click="fnUpdate(item)"
+          >
             저장
           </button>
-          <button v-if="item.id === updateRowNum" class="updateBtn" @click="fnUpdateCancel()">
+          <button
+            v-if="item.id === updateRowNum"
+            class="updateBtn"
+            style="background-color: #e8b451"
+            @click="fnUpdateCancel()"
+          >
             취소
           </button>
         </div>
@@ -36,11 +72,13 @@
   </div>
 </template>
 <script>
-import CategoryBadge from './CategoryBadge.vue'
-
+import AmountBadge from '@/components/account/AmountBadge.vue'
+import CategoryBadge from '@/components/account/CategoryBadge.vue'
+import { categories } from '@/constants/accountCategory.js'
 export default {
   components: {
     CategoryBadge,
+    AmountBadge,
   },
   props: {
     date: String,
@@ -48,14 +86,21 @@ export default {
   data() {
     return {
       updateRowNum: null,
-      updateItemId: null,
-      updateForm: { amountValue: '' },
+      updateForm: {},
       list: [],
     }
   },
   watch: {
     date(newDate) {
       this.fnGetItemListByDate(newDate)
+    },
+  },
+  computed: {
+    categoriesAsArray() {
+      return Object.entries(categories).map(([key, value]) => ({
+        ...value,
+        key: key.toUpperCase(),
+      }))
     },
   },
   methods: {
@@ -73,7 +118,41 @@ export default {
     },
     fnUpdateInit(item) {
       this.updateRowNum = item.id
-      this.updateForm.amountValue = item.amount > 0 ? 'plus' : 'minus'
+      this.updateForm = {
+        category: item.category,
+        title: item.title,
+        amount: Math.abs(item.amount),
+        description: item.description,
+        amountValue: item.amount > 0 ? 'plus' : 'minus',
+      }
+    },
+    async fnUpdate() {
+      const url = `account/items/${this.updateRowNum}`
+      const form = this.updateForm
+      const body = {
+        category: form.category,
+        title: form.title,
+        description: form.description,
+        amount: form.amountValue === 'plus' ? form.amount : -form.amount,
+      }
+      const { data } = await this.$axios.patch(url, body)
+      if (data) {
+        this.updateRowNum = null
+        this.updateForm = null
+        this.fnGetItemListByDate(this.date)
+      }
+    },
+    async fnDeleteItem(itemId) {
+      if (!confirm('진짜 삭제?')) {
+        return
+      }
+      const url = `account/items/${itemId}`
+      const { data } = await this.$axios.delete(url)
+      if (data) {
+        this.fnGetItemListByDate(this.date)
+      } else {
+        alert('뭔가 잘못되었으니 수정해라')
+      }
     },
     fnUpdateCancel() {
       this.updateRowNum = null
@@ -98,24 +177,11 @@ export default {
       align-content: center;
       justify-items: center;
     }
-    .amountType {
-      width: 80px;
-      align-content: center;
-      justify-items: center;
-      font-weight: bold;
-      .plus {
-        color: red;
-      }
-      .minus {
-        color: blue;
-      }
-    }
     .amount {
-      width: 150px;
+      width: 220px;
       align-content: center;
       justify-items: start;
       font-weight: bold;
-      padding-left: 30px;
     }
     .title {
       width: 200px;
@@ -127,7 +193,6 @@ export default {
       align-content: center;
       justify-items: center;
       .updateBtn {
-        background-color: #3498db;
         color: #fff;
         border: none;
         border-radius: 4px;
