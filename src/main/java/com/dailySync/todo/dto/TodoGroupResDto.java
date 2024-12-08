@@ -26,7 +26,7 @@ public class TodoGroupResDto {
         dto.setId(todoGroup.getId());
         dto.setTitle(todoGroup.getTitle());
         dto.setDescription(todoGroup.getDescription());
-        dto.setUserId(todoGroup.getUser().getId());  // userId 가져오기
+        dto.setUserId(todoGroup.getUser().getId());
         return dto;
     }
     public static TodoGroupResDto oft(TodoGroup todoGroup) {

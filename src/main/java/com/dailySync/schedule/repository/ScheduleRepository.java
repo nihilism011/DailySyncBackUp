@@ -17,7 +17,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
 //CRUD 등의 기능을 제공하는 JpaRepository를 상속받음
 
     List<Schedule> findByUserIdAndTitleContainingOrderByStartTimeAsc(Long userId, String title);
-    List<Schedule> findByUserIdAndStartTimeYearAndStartTimeMonthOrderByStartTimeAsc(Long userId, int year, int month);
+//    List<Schedule> findByUserIdAndStartTimeYearAndStartTimeMonthOrderByStartTimeAsc(Long userId, int year, int month);
     // 특정 사용자와 날짜 범위에 맞는 일정 조회
 
     @Query(value = "SELECT s.* FROM schedule s "
