@@ -31,8 +31,8 @@ input {font-size: inherit; color: inherit; appearance: none; -moz-appearance: no
 ::-webkit-scrollbar-thumb {background: #B3B3B3;} 
 .fixed {overflow: hidden!important;}
 //input[type='radio'],input[type='checkbox'],input[type='file'] {-webkit-appearance: none; appearance: none; margin: 0; width: 0; height: 0; position: absolute;}
-button {border: 0; font-size: inherit; background-color: transparent; line-height: inherit; cursor: pointer; padding: 0; color: inherit; font-family: inherit; font-weight: inherit; -webkit-tap-highlight-color: transparent;}
-body {-webkit-font-smoothing: subpixel-antialiased; -webkit-user-drag: none; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -ms-user-select: none; -moz-user-select: none; user-select: none; font-family: var(--base-font);}
+button {border: 1px solid var(--color-contrastyC); border-radius: 4px; font-size: inherit; background-color: transparent; line-height: inherit; cursor: pointer; padding: 0; color: inherit; font-family: inherit; font-weight: inherit; -webkit-tap-highlight-color: transparent;}
+body {-webkit-font-smoothing: subpixel-antialiased; /*-webkit-user-drag: none; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -ms-user-select: none; -moz-user-select: none; user-select: none;*/ font-family: var(--base-font);}
 label {cursor: pointer;}
 :root {
   --base-font: 'Rubik', 'Noto Sans', sans-serif;
