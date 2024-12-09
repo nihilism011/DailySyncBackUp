@@ -13,6 +13,7 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MealListResDto {
-    private Map<LocalDate, List<MealResDto>> mealList;
+public class MealDayResDto {
+    //private List<Map.Entry<LocalDate, List<MealDayCntResDto>>> mealDay;
+    private List<MealDayCntResDto> mealDay;
 }

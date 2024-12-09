@@ -5,14 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
-@Builder
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MealListResDto {
-    private Map<LocalDate, List<MealResDto>> mealList;
+public class MealRecomResDto {
+    private List<MealResDto> meals;
 }

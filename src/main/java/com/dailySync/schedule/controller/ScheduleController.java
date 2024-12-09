@@ -23,20 +23,20 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     /** 로그인 한 유저가 연도 year 월 month 변수에 담아 넘겨주면 해당 월의 sheduleList 를 전달 */
-    @Operation
-            (
-                    summary = "로그인한 유저가 선택한 달의 리스트 불러오기(초기 오늘의 월)",
-                    description = "year는 연도, month는 월을 입력한다."
-            )
-    @GetMapping ("userId/{userId}/{year}/{month}")
-    public ResponseEntity<ApiResponse<List<ScheduleResDto>>> getSchedule(
-            @PathVariable ("userId") Long userId,
-            @PathVariable ("year") int year,
-            @PathVariable ("month") int month)
-    {
-        List<ScheduleResDto> scheduleResDtos = scheduleService.getUser(userId, year, month);
-        return ApiResponse.success(scheduleResDtos);
-    }
+//    @Operation
+//            (
+//                    summary = "로그인한 유저가 선택한 달의 리스트 불러오기(초기 오늘의 월)",
+//                    description = "year는 연도, month는 월을 입력한다."
+//            )
+//    @GetMapping ("userId/{userId}/{year}/{month}")
+//    public ResponseEntity<ApiResponse<List<ScheduleResDto>>> getSchedule(
+//            @PathVariable ("userId") Long userId,
+//            @PathVariable ("year") int year,
+//            @PathVariable ("month") int month)
+//    {
+//        List<ScheduleResDto> scheduleResDtos = scheduleService.getUser(userId, year, month);
+//        return ApiResponse.success(scheduleResDtos);
+//    }
 
     /** 제목을 검색해 유저의 일정리스트 찾기 */
     @Operation
