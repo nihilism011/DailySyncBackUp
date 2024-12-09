@@ -29,8 +29,6 @@ public class TodoItem extends BaseEntity {
     @Column (nullable = false)
     private String title;
 
-    @ElementCollection
-    @CollectionTable(name = "todo_item_days", joinColumns = @JoinColumn(name = "todo_item_id"))
     @Column(name = "day")
     private List<String> day;
 
@@ -41,7 +39,7 @@ public class TodoItem extends BaseEntity {
     private String status = "new";
 
     @Column
-    private Integer isAuto; // (기본 값 false)
+    private Boolean isAuto; // (기본 값 false)
 
 
 

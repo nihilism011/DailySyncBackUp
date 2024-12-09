@@ -16,6 +16,6 @@ public class TodoItemReqDto {
     private List<String> day;
     private Integer itemOrder;
     private String title;
-    private Integer isAuto;
+    private Boolean isAuto;
     private String status;
 }
