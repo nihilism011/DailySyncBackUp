@@ -395,7 +395,7 @@ label, input {
 	display: flex; align-items: center; gap: 0 10px;
   label {
     font-size: 14px; font-Weight: 700; color: var(--color-contrastyA);
-    padding: 3px 0 1px 24px; background: url($ico-path + "ico_check.png") left center / auto no-repeat;
+    padding: 0px 0 1px 24px; background: url($ico-path + "ico_check.png") left center / auto no-repeat;
     cursor: pointer;
   }
   input[type=checkbox]:checked + label {
@@ -421,6 +421,19 @@ label, input {
 
 .meal-add-wrap {
   margin-top: 20px;
+  .icon-box {
+    .icon-btn {
+      width: 60px; height: 60px;
+      background: center / 40px no-repeat;
+      $iconClass: (bread, burger, cake, chicken, egg, fish, fruit, icecream, milk, noodle, pizza, rice, sausage, snack, steak);
+        @each $icon in $iconClass {
+            &.#{$icon} {
+              background-image: url("@/assets/images/ico/icon_#{$icon}.png");
+              font-size: 0;
+            }
+        }
+    }
+  }
   .nutrient-box {
     display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0;
     .ip-list {

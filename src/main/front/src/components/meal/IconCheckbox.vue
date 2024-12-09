@@ -1,13 +1,22 @@
 <template>
-    <div class="meal-icon-box" >
-        <input type="radio" name="icon" id="icon1" value="chicken" v-model="selectedOption" @change="fnIconCheck"><label for="icon1">치킨</label>
-        <input type="radio" name="icon" id="icon2" value="pizza" v-model="selectedOption" @change="fnIconCheck"><label for="icon2">피자</label>
-        <input type="radio" name="icon" id="icon3" value="egg" v-model="selectedOption" @change="fnIconCheck"><label for="icon3">계란</label>
-        <!-- <input type="radio" id="icon" value=""><label for="icon"></label> -->
+    <div class="meal-icon-box">
+        <!-- {{ iconList }} -->
+        <template v-for="(item, key, index) in iconList" :key="key">
+            <input type="radio" name="icon" :id="'icon'+index" :checked="icon==item.ename" :value="item.ename" v-model="selectedOption" @change="fnIconCheck">
+            <label :for="'icon'+index" :class="item.ename" :title="item.ename">{{ item.name }}</label>
+        </template>
     </div>
 </template>
 <script>
 export default {
+    props: {
+        icon: {
+            type: String
+        },
+        iconList: {
+            type: Object
+        }
+    },
     data() {
         return {
             selectedOption: ''
@@ -23,10 +32,25 @@ export default {
 
 <style lang="scss">
     .meal-icon-box {
-        display: flex;
+        display: flex; flex-wrap: wrap; gap: 10px; width: 300px;
+        border: 1px solid var(--color-contrastyC); border-radius: 4px; padding: 10px 5px 10px 15px;
+        background: var(--base-white); position: absolute; top:100%; left: 0; z-index: 10;
+        input {
+            display: none;
+            &:checked + label {
+                background-color: var(--color-contrastyC);
+            }
+        }
         label {
             width: 60px; height: 60px; border-radius: 4px;
-            border: 1px solid var(--color-contrastyC);
+            border: 1px solid var(--color-contrastyC); font-size: 0;
+            background: center / 40px no-repeat;
+            $iconClass: (bread, burger, cake, chicken, egg, fish, fruit, icecream, milk, noodle, pizza, rice, sausage, snack, steak);
+            @each $icon in $iconClass {
+                &.#{$icon} {
+                    background-image: url("@/assets/images/ico/icon_#{$icon}.png");
+                }
+            }
         }
     }    
 </style>

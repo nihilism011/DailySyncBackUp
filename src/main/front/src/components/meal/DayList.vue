@@ -5,7 +5,24 @@
                 <template v-for="item in fullList[`${day}`].slice().sort((a, b) => a.id - b.id)">
                     <div class="daily">
                         <template v-if="editNumber == item.id">
-                            바꿀거야
+                            <div class="icon-box">
+                                <button class="icon" :class="item.icon">이미지</button>
+                            </div>
+                            <div class="txt-box">
+                                <div class="tit-box">
+                                    <p class="category">{{ getMealName(item.category) }}</p>
+                                    <strong class="tit"><input type="text" v-model="item.foodName" value="${item.foodName}"></strong>
+                                </div>
+                                <div class="info-box">
+                                    <p class="info"><span class="tit">Calories:&nbsp;</span><input type="text" v-model="item.kcalories">kcal</p>
+                                    <p class="info"><span class="tit">Sodium:&nbsp;</span>{{ item.sodium }}mg</p>
+                                    <p class="info"><span class="tit">Carbs:&nbsp;</span>{{ item.carbs }}g</p>
+                                    <p class="info"><span class="tit">Protein:&nbsp;</span>{{ item.protein }} g</p>
+                                    <p class="info"><span class="tit">Fat:&nbsp;</span>{{ item.fat }}g</p>
+                                    <p class="info"><span class="tit">Sugar:&nbsp;</span>{{ item.sugar }}g</p>
+                                </div>
+                                <div class="desc-box">{{ item.description }}</div>
+                            </div>
                         </template>
                         <template v-else>
                             <div class="icon-box">
@@ -13,7 +30,7 @@
                             </div>
                             <div class="txt-box">
                                 <div class="tit-box">
-                                    <p class="category">{{ item.category == "BREAKFAST" ? "아침": item.category == "LUNCH" ? "점심" : item.category == "DINNER" ? "저녁" : item.category == "SNACK" ? "간식" : "야식" }}</p>
+                                    <p class="category">{{ getMealName(item.category) }}</p>
                                     <strong class="tit">{{ item.foodName }}</strong>
                                 </div>
                                 <div class="info-box">
@@ -24,9 +41,7 @@
                                     <p class="info"><span class="tit">Fat:&nbsp;</span>{{ item.fat }}g</p>
                                     <p class="info"><span class="tit">Sugar:&nbsp;</span>{{ item.sugar }}g</p>
                                 </div>
-                                <div class="desc-box">
-                                    {{ item.description }}
-                                </div>
+                                <div class="desc-box">{{ item.description }}</div>
                             </div>
                         </template>
                         <div class="btn-box">
@@ -47,6 +62,9 @@
 export default {
     props: {
         fullList: {
+            type: Object
+        },
+        categoryList: {
             type: Object
         },
         day: {
@@ -81,8 +99,12 @@ export default {
             console.log(id);
         },
         fnPatch(id) {            
-            this.editNumber = "";
-            console.log(id);
+            //this.editNumber = "";
+            console.log(this.foodName)
+            //console.log(id);
+        },
+        getMealName(category) {
+            return this.categoryList[category]?.name || 'empty';
         }
     }
 }
@@ -110,9 +132,17 @@ export default {
             }
         }
         .icon-box {
-            min-width: 60px; height: 60px; font-size: 0; border-radius: 4px;
+            display: flex; min-width: 60px; height: 60px; font-size: 0; border-radius: 4px;
             .icon {
                 width: 100%; height: 100%; background: no-repeat center;
+                background: center / 40px no-repeat;
+                $iconClass: (bread, burger, cake, chicken, egg, fish, fruit, icecream, milk, noodle, pizza, rice, sausage, snack, steak);
+                @each $icon in $iconClass {
+                    &.#{$icon} {
+                    background-image: url("@/assets/images/ico/icon_#{$icon}.png");
+                    font-size: 0;
+                    }
+                }
             }
         }
         .txt-box {

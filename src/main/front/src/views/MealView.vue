@@ -1,7 +1,3 @@
-<script setup>
-
-</script>
-
 <template>
     <div class="left">
         {{ dailyLsit }}
@@ -15,7 +11,7 @@
         <DayList 
             :fullList="fullList" 
             :day="day"
-            :cateList="cateList"
+            :categoryList="categoryList"
             @fnRequest="fnRequest"
         />
         <button @click="popupOpen = !popupOpen" class="btn-default">식단 등록</button>
@@ -26,15 +22,18 @@
                 <h2 class="tit">식단 등록</h2>
             </div>
             <div class="meal-add-wrap">
-                <div class="category-box">
+                <div class="icon-box">
                     <div class="ip-list">
                         <div class="tit-box">
                             <p class="tit">아이콘 선택</p>
                         </div>
                         <div class="bot-box">
-                            <button @click="iconSelected = !iconSelected">아이콘선택</button>
-                            <span>{{icon}}</span>
-                            <IconCheckbox v-if="iconSelected" @iconSelected="handleValueSelected"/>
+                            <button class="icon-btn" :class="icon" :title="icon" @click="iconSelected = !iconSelected">아이콘선택</button>
+                            <IconCheckbox v-if="iconSelected"
+                                :icon="icon" 
+                                :iconList="iconList"
+                                @iconSelected="handleValueSelected"
+                            />
                         </div>
                     </div>
                 </div>
@@ -47,7 +46,7 @@
                             <div class="select-box">
                                 <select id="category" v-model="category">
                                     <option value="" hidden>카테고리 선택</option>
-                                    <option v-for="item in cateList" :value="item.ename">{{ item.name }}</option>
+                                    <option v-for="item in categoryList" :value="item.ename">{{ item.name }}</option>
                                 </select>
                             </div>
                         </div>
@@ -161,9 +160,11 @@
     </div>
 </template>
 <script>
-  import WeekendList from "@/components/meal/WeekendList.vue";
-  import DayList from "@/components/meal/DayList.vue";
-  import IconCheckbox from "@/components/meal/IconCheckbox.vue"
+import WeekendList from "@/components/meal/WeekendList.vue";
+import DayList from "@/components/meal/DayList.vue";
+import IconCheckbox from "@/components/meal/IconCheckbox.vue"
+import { mealCategory } from "@/constants/mealCategory.js"
+import { iconCategory } from "@/constants/iconCategory.js"
 export default {
   components: {
     WeekendList,
@@ -172,8 +173,8 @@ export default {
   },
   data() {
     return {
-      dailyLsit: '',
-      fullList: '',
+      dailyLsit: [],
+      fullList: [],
       day: "",
       week: [],
       popupOpen: false,
@@ -189,7 +190,8 @@ export default {
       carbs: 0,
       sodium: 0,
       isFavorite: false,
-      cateList: [],
+      categoryList: mealCategory,
+      iconList: iconCategory
     }
   },
   methods: {
@@ -226,22 +228,11 @@ export default {
         }
         this.day = `${year}-${month}-${day}`;
     },
-    async fnCategory() {
-        const category = await this.$axios.get(`meal/category`);
-        if (category.status) {
-            this.cateList = category.data;
-        } else {
-            console.log(category.message);
-        }
-        //console.log(this.cateList);
-    },
     handleValueSelected(value) {
         this.icon = value;
-        //console.log(this.icon, value)
     },
     async fnSubmit() {
         console.log(this.day);
-        //return false;
         const param = [
             {
                 icon: this.icon,
@@ -258,7 +249,6 @@ export default {
                 date: this.day
             }
         ]
-        //console.log(param);
         const submit = await this.$axios.post(`meal/add`, param);
         console.log(submit);
         if(submit.status) {
@@ -273,7 +263,6 @@ export default {
   mounted() {
     this.day = this.$dayjs().format('YYYY-MM-DD');
     this.fnRequest(this.day);
-    this.fnCategory();
   }
 }
 </script>
