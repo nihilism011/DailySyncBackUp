@@ -1,5 +1,6 @@
 package com.dailySync.meal.dto;
 
+import com.dailySync.constant.MealCategory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 public class MealResDto {
     private Long id;
     private String foodName;
-    private String category;
+    private MealCategory category;
     private String description;
     private String icon;
     private LocalDate date;

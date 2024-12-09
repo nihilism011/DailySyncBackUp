@@ -1,5 +1,6 @@
 package com.dailySync.meal.service;
 
+import com.dailySync.constant.MealCategory;
 import com.dailySync.meal.dto.*;
 import com.dailySync.meal.entities.Meal;
 import com.dailySync.meal.repository.MealRepository;
@@ -40,6 +41,13 @@ public class MealService {
     public MealRecomResDto getFavoriteList(Long id) {
         List<Meal> favoriteList = mealRepository.findByUserIdAndIsFavorite(id, true);
         return new MealRecomResDto(favoriteList.stream().map(Meal::toRecom).toList());
+    }
+
+    public List<MealCategoryResDto> getCategoryList() {
+        return List.of(MealCategory.values())  // MealCategory enum 값 가져오기
+                .stream()                   // 스트림으로 처리
+                .map(MealCategoryResDto::fromMealCategory)  // 각 enum을 DTO로 변환
+                .collect(Collectors.toList());
     }
 
     public Boolean insertMealList(List<Meal> meals) {

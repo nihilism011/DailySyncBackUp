@@ -31,6 +31,7 @@ header {
   align-items: center;
   gap: 40px;
   top: 0;
+  z-index: 10;
   width: 100%;
   background-color: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(4px);
