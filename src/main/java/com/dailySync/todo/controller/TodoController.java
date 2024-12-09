@@ -168,10 +168,10 @@ public class TodoController {
     }
 
     @Operation
-    (
-            summary = " todoItem 추가 ",
-            description =" ... "
-    )
+            (
+                    summary = " todoItem 추가 ",
+                    description =" ... "
+            )
     @PostMapping("/item")
     public ResponseEntity<?> addTodoItem(@RequestBody TodoItemReqDto reqDto) {
         return ApiResponse.success(todoService.createTodoItem(reqDto));

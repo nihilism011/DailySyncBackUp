@@ -12,27 +12,39 @@
           <div>{{ item.day && Array.isArray(item.day) ? item.day.join(', ') : '' }}</div>
           <div>{{ item.isAuto == 1 ? 'Auto' : '' }}</div>
           <div class="actions">
-            <button @click="editTodoItem(item.id)" class="edit-btn">수정</button>
+            <button @click="openEditModal(item)" class="edit-btn">수정</button>
             <button @click="deleteTodoItem(item)" class="delete-btn">삭제</button>
           </div>
         </div>
-        <div class="item">
-          <div class="title" style="color: blue;" @click="openAddItemModal" :groupId="selectedGroup"> + 아이템 추가 </div>
+        <div class="item" v-if="selectedGroup">
+          <div class="title" style="color: blue;" @click="openAddItemModal"> + 아이템 추가 </div>
         </div>
       </div>
     </div>
 
-    <Modal 
-      :isVisible="isModalVisible" 
-      @close="closeModal" 
-      @add-item="handleAddItem" 
-      :groupId="selectedGroup"
+    <!-- 아이템 추가 모달 -->
+    <Modal
+      :isVisible="isModalVisible"
+      :mode="'create'"
+      :groupId="selectedGroup" 
+      @close="closeModal"
+      @save-item="fetchItemsByGroup(selectedGroup)"
+    />
+
+    <!-- 아이템 수정 모달 -->
+    <Modal
+      :isVisible="isEditModalVisible"
+      :mode="'update'"
+      :item="selectedItem"
+      :groupId="selectedGroup" 
+      @close="closeEditModal"
+      @save-item="fetchItemsByGroup(selectedGroup)"
     />
   </div>
 </template>
 
 <script>
-import Modal from './Modal.vue'; 
+import Modal from './ItemCreateModal.vue';
 
 export default {
   components: {
@@ -43,8 +55,10 @@ export default {
   },
   data() {
     return {
-      items: [], 
-      isModalVisible: false,  
+      items: [],
+      isModalVisible: false,
+      isEditModalVisible: false,
+      selectedItem: null
     };
   },
   watch: {
@@ -56,13 +70,18 @@ export default {
   },
   methods: {
     openAddItemModal() {
-      this.isModalVisible = true; 
+      this.isModalVisible = true;
     },
     closeModal() {
-      this.isModalVisible = false; 
+      this.isModalVisible = false;
     },
-    handleAddItem(newItem) {
-      this.items.push(newItem);
+    openEditModal(item) {
+      this.selectedItem = item;
+      this.isEditModalVisible = true;
+    },
+    closeEditModal() {
+      this.isEditModalVisible = false;
+      this.selectedItem = null;
     },
     async fetchItemsByGroup(groupId) {
       const userId = 5;
@@ -70,9 +89,6 @@ export default {
       const { data } = await this.$axios.get(url);
       console.log("아이템 목록:", data);
       this.items = data;
-    },
-    async editTodoItem(itemId) {
-      console.log("아이템 수정", itemId);
     },
     deleteTodoItem(item) {
       if (confirm("정말 삭제할거냐? 되돌릴 수 없다!")) {
@@ -90,6 +106,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .item-container {

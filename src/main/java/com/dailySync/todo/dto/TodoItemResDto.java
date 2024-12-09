@@ -19,13 +19,13 @@ public class TodoItemResDto {
     private List<String> day;
     private Integer itemOrder;
     private String status;
-    private Integer isAuto;
+    private Boolean isAuto;
 
 
-    public TodoItemResDto(Long id, String title, List<String> day, Integer itemOrder, String status, Integer isAuto) {
+    public TodoItemResDto(Long id, String title, List<String> day, Integer itemOrder, String status, Boolean isAuto) {
     }
 
-    public static TodoItemResDto of(Long id, String title, List<String> day, Integer itemOrder, String status, Integer isAuto) {
+    public static TodoItemResDto of(Long id, String title, List<String> day, Integer itemOrder, String status, Boolean isAuto) {
         return new TodoItemResDto(id, title, day, itemOrder, status, isAuto );
     }
 
