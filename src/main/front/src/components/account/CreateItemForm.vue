@@ -38,7 +38,7 @@ export default {
       amountType: 'minus',
       form: {
         title: '',
-        accountDate: '2024-12-08',
+        accountDate: this.date,
         category: 'FOOD',
         amount: 0,
         description: '',
@@ -62,6 +62,7 @@ export default {
         ...form,
         amount: this.amountType === 'plus' ? form.amount : -form.amount,
       }
+      console.log(body)
       if (form.amount === null || form.amount === 0) {
         alert('금액 입력 해라.')
         return
@@ -80,7 +81,7 @@ export default {
           description: '',
           fixed: false,
         }
-        this.$emit('createItem')
+        this.$emit('refresh')
       } else {
         alert('뭔가 잘못되었으니 확인해라')
       }

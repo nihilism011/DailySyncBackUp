@@ -13,4 +13,10 @@ public class AccountSum {
     private LocalDate accountDate;
     private Long plusSumAmount;
     private Long minusSumAmount;
+
+    public AccountSum(LocalDate date){
+        this.accountDate = date;
+        this.plusSumAmount = 0L;
+        this.minusSumAmount = 0L;
+    }
 }

@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { numToWon } from '../../lib/accountLib'
 export default {
   props: {
     amount: {
@@ -22,11 +23,7 @@ export default {
   },
   computed: {
     money() {
-      let won = new Intl.NumberFormat('ko-KR', {
-        style: 'currency',
-        currency: 'KRW',
-      })
-      return won.format(Math.abs(this.amount))
+      return numToWon(this.amount)
     },
     amountType() {
       return this.amount > 0 ? '수입' : '지출'

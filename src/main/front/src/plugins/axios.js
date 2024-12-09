@@ -10,10 +10,10 @@ const axiosInstance = axios.create({
 // 요청 인터셉터
 axiosInstance.interceptors.request.use(
   (config) => {
-    console.log('requestInfo : ', {
-      requestURL: `${config.baseURL}/${config.url}`,
-      requestMethod: config.method,
-    })
+    // console.log('requestInfo : ', {
+    //   requestURL: `${config.baseURL}/${config.url}`,
+    //   requestMethod: config.method,
+    // })
     return config
   },
   (error) => {

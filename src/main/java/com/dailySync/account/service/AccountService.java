@@ -59,6 +59,10 @@ public class AccountService {
         return accounts.stream().map(FavoriteAccount::toResDto).toList();
 
     }
+    public AccountSum findSumAccountByDate(Long userId, LocalDate date){
+
+        return accountRepository.findSumByUserIdAndDate(date,userId).orElse(new AccountSum(date));
+    }
 
     //생성
     public boolean createAccountItem(Long userId, AccountReqDto reqDto) throws Exception {

@@ -5,7 +5,7 @@
         <div class="category">
           <CategoryBadge v-if="updateRowNum != item.id" :category="item.category" size="large" />
           <select v-else v-model="updateForm.category">
-            <option v-for="(category, i) in categoriesAsArray" :value="category.key" :key="i">
+            <option v-for="(category, i) in categoryArray" :value="category.key" :key="i">
               {{ category.name }}
             </option>
           </select>
@@ -74,7 +74,8 @@
 <script>
 import AmountBadge from '@/components/account/AmountBadge.vue'
 import CategoryBadge from '@/components/account/CategoryBadge.vue'
-import { categories } from '@/constants/accountCategory.js'
+import { categoryArray } from '@/constants/accountCategory.js'
+import { useDateStore } from '@/stores/dateStore'
 export default {
   components: {
     CategoryBadge,
@@ -84,34 +85,26 @@ export default {
     date: String,
   },
   data() {
+    const dateStore = useDateStore()
     return {
+      dateStore,
+      categoryArray,
       updateRowNum: null,
       updateForm: {},
       list: [],
     }
   },
   watch: {
-    date(newDate) {
-      this.fnGetItemListByDate(newDate)
-    },
+    'dateStore.selectedDate': 'fetchDataList',
   },
   computed: {
-    categoriesAsArray() {
-      return Object.entries(categories).map(([key, value]) => ({
-        ...value,
-        key: key.toUpperCase(),
-      }))
+    selectedDate() {
+      return this.dateStore.selectedDate
     },
   },
   methods: {
-    fnToWon(money) {
-      let won = new Intl.NumberFormat('ko-KR', {
-        style: 'currency',
-        currency: 'KRW',
-      })
-      return won.format(Math.abs(money))
-    },
-    async fnGetItemListByDate(date) {
+    async fetchDataList() {
+      const date = this.selectedDate || this.$dayjs().format('YYYY-MM-DD')
       const url = `account/items/date/${date}`
       const { data } = await this.$axios.get(url)
       this.list = data
@@ -139,7 +132,7 @@ export default {
       if (data) {
         this.updateRowNum = null
         this.updateForm = null
-        this.fnGetItemListByDate(this.date)
+        this.$emit('refresh')
       }
     },
     async fnDeleteItem(itemId) {
@@ -149,7 +142,7 @@ export default {
       const url = `account/items/${itemId}`
       const { data } = await this.$axios.delete(url)
       if (data) {
-        this.fnGetItemListByDate(this.date)
+        this.$emit('refresh')
       } else {
         alert('뭔가 잘못되었으니 수정해라')
       }
@@ -160,7 +153,7 @@ export default {
     },
   },
   mounted() {
-    this.fnGetItemListByDate(this.date)
+    this.fetchDataList()
   },
 }
 </script>
