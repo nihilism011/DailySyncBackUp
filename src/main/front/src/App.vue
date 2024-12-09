@@ -24,16 +24,16 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <style scoped>
 header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+  position: fixed;
+  height: 80px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  top: 0;
+  z-index: 10;
 
-nav {
   width: 100%;
   font-size: 12px;
   text-align: center;

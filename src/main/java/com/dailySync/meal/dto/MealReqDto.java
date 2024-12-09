@@ -1,5 +1,6 @@
 package com.dailySync.meal.dto;
 
+import com.dailySync.constant.MealCategory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ public class MealReqDto {
     private Long id;
     private Long userId;
     private String foodName;
-    private String category;
+    private MealCategory category;
     private String description;
     private String icon;
     private LocalDate date;

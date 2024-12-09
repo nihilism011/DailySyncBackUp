@@ -1,23 +1,18 @@
 package com.dailySync.meal.entities;
 
 import com.dailySync.common.BaseEntity;
+import com.dailySync.constant.MealCategory;
 import com.dailySync.meal.dto.MealDayCntResDto;
 import com.dailySync.meal.dto.MealReqDto;
 import com.dailySync.meal.dto.MealResDto;
 import com.dailySync.user.entities.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.WeekFields;
-import java.util.Locale;
 
 @Entity
 @Getter
@@ -33,7 +28,8 @@ public class Meal extends BaseEntity {
     @Column (nullable = false)
     private String foodName;
     @Column (nullable = false)
-    private String category;
+    @Enumerated(value = EnumType.STRING)
+    private MealCategory category;
     @Column
     private String description;
     @Column (nullable = false)

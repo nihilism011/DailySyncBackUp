@@ -1,10 +1,7 @@
 package com.dailySync.meal.controller;
 
 import com.dailySync.common.ApiResponse;
-import com.dailySync.meal.dto.MealDayResDto;
-import com.dailySync.meal.dto.MealListResDto;
-import com.dailySync.meal.dto.MealRecomResDto;
-import com.dailySync.meal.dto.MealReqDto;
+import com.dailySync.meal.dto.*;
 import com.dailySync.meal.entities.Meal;
 import com.dailySync.meal.service.MealService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -78,6 +75,20 @@ public class MealController {
     public ResponseEntity<ApiResponse<MealRecomResDto>> getFavorite(@PathVariable Long id) {
         //Long id는 추후 로그인 아이디로 변경 예정
         return ApiResponse.success(mealService.getFavoriteList(id));
+    }
+
+    /**
+     * 식단 카테고리 리스트 category 전달
+     */
+    @Operation
+        (
+            summary = "식단 카테고리 리스트",
+            description = "초기 등록시 즐겨찾기 버튼으로 선택한 리스트들 불러오기"
+        )
+    @GetMapping ("category")
+    public ResponseEntity<ApiResponse<List<MealCategoryResDto>>> getCategory() {
+        //Long id는 추후 로그인 아이디로 변경 예정
+        return ApiResponse.success(mealService.getCategoryList());
     }
 
     /**
