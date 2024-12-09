@@ -102,21 +102,31 @@ public class TodoService {
 
     //todoItem을 생성 (7)
     public Boolean createTodoItem(TodoItemReqDto reqDto) {
+
+        if (reqDto.getGroupId() == null) {
+            // userId 또는 groupId가 null인 경우 예외를 던짐
+            throw new IllegalArgumentException("그룹아이디들 제대로 안넘어옴 ");
+        }
+        if (reqDto.getUserId() == null ) {
+            // userId 또는 groupId가 null인 경우 예외를 던짐
+            throw new IllegalArgumentException("유ㅜ저아이디들 제대로 안넘어옴 ");
+        }
+
         User user = userRepository.findById(reqDto.getUserId()).orElse(null);
         TodoGroup todoGroup = todoGroupRepository.findById(reqDto.getGroupId()).orElse(null);
 
         TodoItem todoItem = TodoItem.builder()
                 .user(user)
                 .todoGroup(todoGroup)
-                .day(reqDto.getDay())
+                .day(reqDto.getDay())  // List<String> 형태로 받아서 저장
                 .itemOrder(reqDto.getItemOrder())
                 .title(reqDto.getTitle())
                 .isAuto(reqDto.getIsAuto())
                 .status(reqDto.getStatus())
                 .build();
+
         todoItemRepository.save(todoItem);
         return true;
-
     }
     //todoGroup을 생성 (6)
     public Boolean createTodoGroup(TodoGroupReqDto reqDto) {
@@ -205,7 +215,7 @@ public class TodoService {
         newTodoItem.setDay(reqDto.getDay());
         newTodoItem.setItemOrder(reqDto.getItemOrder());
         newTodoItem.setStatus("new");
-        newTodoItem.setAuto(reqDto.getIsAuto());
+        newTodoItem.setIsAuto(reqDto.getIsAuto());
         newTodoItem.setUser(user);
         newTodoItem.setTodoGroup(todoGroup);
 
