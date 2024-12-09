@@ -7,18 +7,18 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import com.dailySync.user.entities.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
-//CRUD 등의 기능을 제공하는 JpaRepository를 상속받음
+public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
+    @Query(value = "SELECT * FROM schedule s WHERE s.user_id = :userId AND YEAR(s.start_time) = :year AND MONTH(s.start_time) = :month ORDER BY s.start_time ASC", nativeQuery = true)
+    List<Schedule> findByUserIdAndStartTimeYearAndStartTimeMonthOrderByStartTimeAsc(@Param("userId") Long userId, @Param("year") int year, @Param("month") int month);
 
     List<Schedule> findByUserIdAndTitleContainingOrderByStartTimeAsc(Long userId, String title);
-    List<Schedule> findByUserIdAndStartTimeYearAndStartTimeMonthOrderByStartTimeAsc(Long userId, int year, int month);
-    // 특정 사용자와 날짜 범위에 맞는 일정 조회
 
     @Query(value = "SELECT s.* FROM schedule s "
             + "WHERE s.user_id = :userId "
@@ -42,5 +42,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
             @Param("userId") Long userId,
             @Param("startTime") LocalDateTime startTime,
             @Param("endTime") LocalDateTime endTime);
-}
 
+
+
+}
