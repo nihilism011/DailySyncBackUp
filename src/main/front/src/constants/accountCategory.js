@@ -30,5 +30,5 @@ export const categories = {
 }
 export const categoryArray = Object.entries(categories).map(([key, value]) => ({
   ...value,
-  key: key.toUpperCase(),
+  key: key,
 }))

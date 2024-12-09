@@ -6,7 +6,6 @@
 
 <script>
 import { categories } from '@/constants/accountCategory.js'
-
 export default {
   props: {
     category: {
@@ -21,9 +20,14 @@ export default {
       },
     },
   },
+  data() {
+    return {
+      categories,
+    }
+  },
   computed: {
     categoryData() {
-      return categories[this.category.toLowerCase()] || {}
+      return this.categories[this.category] || {}
     },
     badgeStyle() {
       const sizeStyles = this.getSizeStyles(this.size)

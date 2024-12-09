@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { numToWon } from '../../lib/accountLib'
+import { numToWon } from '@/lib/accountLib'
 import { useDateStore } from '@/stores/dateStore'
 
 export default {

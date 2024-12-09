@@ -9,7 +9,7 @@
   </div>
   <div class="right right-container">
     <DateScore :date="selectedDate" ref="dateScoreRef" />
-    <ItemList :date="selectedDate" @refresh="fnRefresh" ref="itemListRef" />
+    <ItemList :date="selectedDate" @refresh="refresh" ref="itemListRef" />
     <button
       class="insert-btn"
       @click="
@@ -20,15 +20,15 @@
     >
       {{ !createMode ? '가계부 항목 추가' : '추가 취소' }}
     </button>
-    <CreateItemForm @refresh="fnRefresh" v-if="createMode" :date="selectedDate" />
+    <CreateItemForm @refresh="refresh" v-if="createMode" :date="selectedDate" />
   </div>
 </template>
 <script>
 import { useDateStore } from '@/stores/dateStore'
 import DateSelector from '@/components/common/DateSelector.vue'
-import ItemList from '@/components/account/AccountItemList.vue'
+import ItemList from '@/components/account/rightView/AccountItemList.vue'
 import CreateItemForm from '@/components/account/CreateItemForm.vue'
-import DateScore from '@/components/account/DateScore.vue'
+import DateScore from '@/components/account/rightView/DateScore.vue'
 export default {
   components: {
     DateSelector,
@@ -70,9 +70,9 @@ export default {
       const { data } = await this.$axios.get(url)
       this.fixedList = data
     },
-    fnRefresh() {
-      this.$refs.itemListRef.fnGetItemListByDate(this.selectedDate)
-      this.$refs.dateScoreRef.fetchData(this.selectedDate)
+    refresh() {
+      this.$refs.itemListRef.fetchDataList()
+      this.$refs.dateScoreRef.fetchData()
       this.createMode = false
     },
   },

@@ -87,14 +87,14 @@ export default {
     // 금액 스타일 비율로 조정
     getMoneyStyle() {
       return {
-        width: '60%', // 배지에 맞게 너비를 100%로 설정
-        height: '100%', // 배지에 맞게 높이를 100%로 설정
+        width: '60%',
+        height: '100%',
         display: 'flex',
         justifyContent: 'start',
         alignItems: 'center',
         paddingLeft: '20px',
-        fontSize: `${this.getFontSizeRatio() * 1.2}px`, // 조금 더 큰 폰트 크기
-        borderRadius: 'inherit', // 배지의 borderRadius 그대로 사용
+        fontSize: `${this.getFontSizeRatio() * 1.2}px`,
+        borderRadius: 'inherit',
       }
     },
 
