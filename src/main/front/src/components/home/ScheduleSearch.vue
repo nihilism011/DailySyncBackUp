@@ -1,66 +1,62 @@
 <template>
-  <div>
+   <div>
+    <!-- v-calendar의 v-model을 selectedYear, selectedMonth, selectedDateRange와 바인딩 -->
+    <v-calendar v-model="selectedYear" type="year" />
+    <v-calendar v-model="selectedMonth" type="month" />
+    <v-calendar v-model="selectedDateRange" type="range" />
+    <!-- VCalendar에 하이라이트된 날짜 범위를 보여줌 -->
+    <v-calendar :attributes="attributes" />
+    <button @click="search">검색</button>
     <div>
-      <select v-model="selectedYear">
-        <option value="" disabled selected>연도</option>
-        <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
-      </select>
-      <select v-model="selectedMonth">
-      <option value="" disabled selected>월</option>
-        <option v-for="month in months" :key="month" :value="month">{{ month }}</option>
-      </select>
       <input v-model="title" type="text" placeholder="일정"/>
       <button @click="fnClick">검색</button>
     </div>
-    <div>
-    <input v-model="startDate" type="date" placeholder="시작 날짜" />
-    <input v-model="endDate" type="date" placeholder="끝 날짜" />
-    <button @click="searchByDateRange">검색</button>
-    </div> 
-  <div>
-  <h1>{{ schedule }}</h1>
-  </div>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      selectedYear: '',  
-      selectedMonth: '', 
+      selectedYear: new Date(),  // Date 객체로 초기화
+      selectedMonth: new Date(),  // Date 객체로 초기화
+      selectedDateRange: [],  // 날짜 범위는 배열로 초기화
+      attributes: [], // 날짜 하이라이트 정보
       title: '',    
-      startDate: '',  
-      endDate: '',           
-      years: [],                  
-      months: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'], 
     };
   },
-  methods: {
-    fnClick() {
-      if (this.selectedYear && this.selectedMonth) {
-      } else if (this.selectedYear) {
-      } else {
-        alert('연도와 월을 모두 선택해주세요.');
+  watch: {
+    // selectedDateRange가 변경되면 attributes를 업데이트
+    selectedDateRange(newRange) {
+      if (newRange.length === 2) {
+        const [startDate, endDate] = newRange;
+        this.attributes = [
+          {
+            highlight: 'blue', // 하이라이트 색상
+            dates: [{ start: startDate, span: this.getDateSpan(startDate, endDate) }],
+          },
+        ];
       }
     },
-    searchByDateRange() {
-      if (this.startDate && this.endDate) {
-        const start = new Date(this.startDate);
-        const end = new Date(this.endDate);
-        if (start > end) {
-          alert('시작 날짜는 끝 날짜보다 이전이어야 합니다.');
-        } else {
-          this.schedule = `검색 범위: ${this.startDate} ~ ${this.endDate}`;
-        }
-      } else {
-        alert('시작 날짜와 끝 날짜를 모두 선택해주세요.');
+  },
+  methods: {
+     search() {
+      if (this.selectedYear) {
+        alert(`선택한 연도: ${this.selectedYear}`);
       }
+      if (this.selectedMonth) {
+        alert(`선택한 월: ${this.selectedMonth}`);
+      }
+      if (this.selectedDateRange.length === 2) {
+        alert(`선택한 날짜 범위: ${this.selectedDateRange[0]} ~ ${this.selectedDateRange[1]}`);
+      }
+    },
+  
+    fnClick() {
+     
     },
   },
   mounted() {
-    for (let i = 1900; i <= 2025; i++) {
-      this.years.push(i);  // years 배열에 연도를 추가
-    }
+    
   },
 }
 </script>
