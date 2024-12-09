@@ -5,6 +5,7 @@ import SampleView from '@/views/SampleView.vue'
 import TodoView from '@/views/TodoView.vue'
 import AccountView from '@/views/AccountView.vue'
 import MealView from '@/views/MealView.vue'
+import ScheduleView from '@/views/ScheduleView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,6 +35,11 @@ const router = createRouter({
       path: '/meal',
       name: 'meal',
       component: MealView,
+    },
+    {
+      path: '/schedule',
+      name: 'schedule',
+      component: ScheduleView,
     },
   ],
 })
