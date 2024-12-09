@@ -15,9 +15,9 @@ export default {
     },
     size: {
       type: String,
-      default: 'medium', // 기본 크기는 'medium'
+      default: 'medium',
       validator(value) {
-        return ['small', 'medium', 'large'].includes(value) // 허용되는 크기 값
+        return ['small', 'medium', 'large'].includes(value)
       },
     },
   },
