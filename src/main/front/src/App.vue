@@ -11,7 +11,7 @@ import '@/assets/scss/main.scss'
     <nav>
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/todo">Todo</RouterLink>
-      <RouterLink to="/schedule">Schedule</RouterLink>
+      <RouterLink to="/schedule">Schedule임</RouterLink>
       <RouterLink to="/account">가계부</RouterLink>
       <RouterLink to="/meal">Meal</RouterLink>
       <RouterLink to="/sample">Sample</RouterLink>

@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="list-container">
+      Group
       <div
         class="list-item"
         v-for="(item, index) in list"
@@ -79,8 +80,6 @@ export default {
   display: flex;
   margin: 10px 0;
   height: 70px;
-  border-bottom: 1px solid #eee;
-  box-shadow: 5px 5px 3px #666;
   padding: 10px;
   background-color: #f9f9f9;
   border-radius: 8px;
