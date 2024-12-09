@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -25,17 +26,13 @@ public class AccountController {
      */
     @Tag (name = "ACCOUNT", description = "가계부")
     @Operation (summary = "해당 날짜의 가계부 목록")
-    @GetMapping ("items/date/{year}/{month}/{date}")
+    @GetMapping ("items/date/{date}")
     public ResponseEntity<ApiResponse<List<AccountResDto>>> getAccountItemsByDate(
-            @Parameter (description = "년")
-            @PathVariable ("year") int year,
-            @Parameter (description = "월")
-            @PathVariable ("month") int month,
-            @Parameter (description = "일")
-            @PathVariable ("date") int date) {
+            @Parameter (description = "날짜 YYYY-MM-DD")
+            @PathVariable ("date") LocalDate date) {
         //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
         Long userId = 3L;
-        return ApiResponse.success(accountService.findAccountsByDate(userId, year, month, date));
+        return ApiResponse.success(accountService.findAccountsByDate(userId, date));
     }
 
     /**

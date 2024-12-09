@@ -1,7 +1,6 @@
 package com.dailySync.meal.service;
 
-import com.dailySync.meal.dto.MealListResDto;
-import com.dailySync.meal.dto.MealReqDto;
+import com.dailySync.meal.dto.*;
 import com.dailySync.meal.entities.Meal;
 import com.dailySync.meal.repository.MealRepository;
 import com.dailySync.user.entities.User;
@@ -10,7 +9,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,19 +19,27 @@ public class MealService {
     private final MealRepository mealRepository;
     private final UserRepository userRepository;
 
-    public MealListResDto getAllUserMealList(Integer year, Integer month) {
-        List<Meal> mealList = mealRepository.findMealsByUserIdADNYearAndMonth(7L, year, month);
-        return new MealListResDto(mealList.stream().map(Meal::toRes).toList());
+    public MealListResDto getUserMealList(Integer year, Integer month) {
+        List<Meal> meals = mealRepository.findMealsByUserIdAndYearAndMonth(7L, year, month);
+        Map<LocalDate, List<MealResDto>> mealList =  meals
+                .stream().map(Meal::toRes)
+                .collect(Collectors.groupingBy(MealResDto::getDate, TreeMap::new, Collectors.toList()));
+        return new MealListResDto(mealList);
     }
 
-    public MealListResDto getRecommandList() {
+    public MealDayResDto getUserDayMealList(Integer year, Integer month) {
+        List<MealDayCntResDto> mealList = mealRepository.findDayByUserIdAndYearAndMonth(7L, year, month);
+        return new MealDayResDto(mealList.stream().map(Meal::toDayCnt).toList());
+    }
+
+    public MealRecomResDto getRecommandList() {
         List<Meal> recommandList = mealRepository.findByUserId(1L);
-        return new MealListResDto(recommandList.stream().map(Meal::toRecom).toList());
+        return new MealRecomResDto(recommandList.stream().map(Meal::toRecom).toList());
     }
 
-    public MealListResDto getFavoriteList(Long id) {
+    public MealRecomResDto getFavoriteList(Long id) {
         List<Meal> favoriteList = mealRepository.findByUserIdAndIsFavorite(id, true);
-        return new MealListResDto(favoriteList.stream().map(Meal::toRecom).toList());
+        return new MealRecomResDto(favoriteList.stream().map(Meal::toRecom).toList());
     }
 
     public Boolean insertMealList(List<Meal> meals) {

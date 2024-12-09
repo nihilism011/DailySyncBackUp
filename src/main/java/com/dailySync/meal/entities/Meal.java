@@ -1,6 +1,7 @@
 package com.dailySync.meal.entities;
 
 import com.dailySync.common.BaseEntity;
+import com.dailySync.meal.dto.MealDayCntResDto;
 import com.dailySync.meal.dto.MealReqDto;
 import com.dailySync.meal.dto.MealResDto;
 import com.dailySync.user.entities.User;
@@ -13,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
@@ -30,48 +32,31 @@ public class Meal extends BaseEntity {
 
     @Column (nullable = false)
     private String foodName;
-
     @Column (nullable = false)
     private String category;
-
     @Column
     private String description;
-
     @Column (nullable = false)
     private String icon;
-
     @Column
     private Integer kcalories;
-
     @Column (nullable = false)
     private LocalDate date;
-
     @Column
     private Integer sugar;
-
     @Column
     private Integer sodium;
-
     @Column
     private Integer protein;
-
     @Column
     private Integer fat;
-
     @Column
     private Integer carbs;
-
     @Column (nullable = false)
     private Boolean isFavorite;
 
     // 유저의 리스트 조회시 사용
     public static MealResDto toRes(Meal meal) {
-        LocalDate date = (LocalDate) meal.getDate();
-
-        // 해당 날짜가 속한 주 번호 계산 (ISO 주 번호 기준)
-        WeekFields weekFields = WeekFields.of(Locale.getDefault());
-        // weekFields는 주단위가 1부터 MySQL은 0부터 주세는 단위가 1차이 나는 값을 빼준다.
-        int week = date.get(weekFields.weekOfYear()) - 1;
         return MealResDto.builder()
                 .id(meal.getId())
                 .foodName(meal.getFoodName())
@@ -86,9 +71,26 @@ public class Meal extends BaseEntity {
                 .fat(meal.getFat())
                 .carbs(meal.getCarbs())
                 .isFavorite(meal.getIsFavorite())
-                .week(String.valueOf(week))
                 .build();
     }
+
+    // 유저의 리스트 조회시 리스트 개수 카운팅
+    public static MealDayCntResDto toDayCnt(MealDayCntResDto mealDayCntResDto){
+
+        return MealDayCntResDto.builder()
+                .date(mealDayCntResDto.getDate())
+                .CNT(mealDayCntResDto.getCNT())
+                .build();
+    }
+
+//    public static int DateWeekCalc(LocalDate date) {
+//        // 해당 날짜가 속한 주 번호 계산 (ISO 주 번호 기준)
+//        //Locale locale = Locale.US;
+//        //WeekFields weekFields = WeekFields.of(DayOfWeek.SUNDAY, 1);
+//        WeekFields weekFields = WeekFields.of(DayOfWeek.SUNDAY, 1);
+//        // weekFields는 주단위가 1부터 MySQL은 0부터 주세는 단위가 1차이 나는 값을 빼준다.
+//        return date.get(weekFields.weekOfYear()) - 1;
+//    }
 
     // 추천내용 검색시 사용
     public static MealResDto toRecom(Meal meal) {
@@ -108,6 +110,7 @@ public class Meal extends BaseEntity {
                 .build();
     }
 
+    // 즐겨찾기 등록시 2개 등록을 위한 처리.
     public static Meal ofSaveReq(User userId, Meal meal, boolean favorite) {
         return Meal.builder()
                 .user(userId)

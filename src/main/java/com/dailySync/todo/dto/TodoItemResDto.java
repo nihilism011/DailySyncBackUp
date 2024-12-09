@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -14,13 +13,17 @@ public class TodoItemResDto {
 
     private Long id;
     private String title;
+    private Long groupId;
     private String day;
     private Integer itemOrder;
     private String status;
     private Boolean isAuto;
 
+    public TodoItemResDto(Long id, String title, String day, Integer itemOrder, String status, Boolean isAuto) {
+    }
+
     public static TodoItemResDto of(Long id, String title, String day, Integer itemOrder, String status, Boolean isAuto) {
-        return new TodoItemResDto(id, title, day, itemOrder, status, isAuto);
+        return new TodoItemResDto(id, title, day, itemOrder, status, isAuto );
     }
 
     public static TodoItemResDto of(TodoItem todoItem) {
@@ -31,7 +34,10 @@ public class TodoItemResDto {
         dto.setItemOrder(todoItem.getItemOrder());
         dto.setStatus(todoItem.getStatus());
         dto.setIsAuto(todoItem.isAuto());
+        dto.setGroupId(todoItem.getTodoGroup().getId());
         return dto;
     }
+
+
 
 }

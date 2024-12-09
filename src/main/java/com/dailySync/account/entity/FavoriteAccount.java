@@ -3,11 +3,9 @@ package com.dailySync.account.entity;
 import com.dailySync.account.dto.AccountReqDto;
 import com.dailySync.account.dto.FavorAccountResDto;
 import com.dailySync.common.BaseEntity;
+import com.dailySync.constant.AccountCategory;
 import com.dailySync.user.entities.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +21,8 @@ public class FavoriteAccount extends BaseEntity {
     @JoinColumn (name = "user_id", nullable = false)
     private User user;
     @Column
-    private String category;
+    @Enumerated (value = EnumType.STRING)
+    private AccountCategory category;
     @Column (nullable = false)
     private String title;
     @Column

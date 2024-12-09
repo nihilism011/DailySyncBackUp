@@ -1,16 +1,17 @@
-package com.dailySync.account.dto;
+package com.dailySync.meal.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.time.LocalDate;
 
-@Data
 @Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountListResDto {
-    private List<AccountResDto> accounts;
+public class MealDayCntResDto {
+    private LocalDate date;
+    private Long CNT;
 }
