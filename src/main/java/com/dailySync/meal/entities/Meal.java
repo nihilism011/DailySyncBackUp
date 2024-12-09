@@ -57,9 +57,6 @@ public class Meal extends BaseEntity {
 
     // 유저의 리스트 조회시 사용
     public static MealResDto toRes(Meal meal) {
-
-        int week = DateWeekCalc(meal.getDate());
-
         return MealResDto.builder()
                 .id(meal.getId())
                 .foodName(meal.getFoodName())
@@ -74,28 +71,26 @@ public class Meal extends BaseEntity {
                 .fat(meal.getFat())
                 .carbs(meal.getCarbs())
                 .isFavorite(meal.getIsFavorite())
-                .week(week)
                 .build();
     }
 
     // 유저의 리스트 조회시 리스트 개수 카운팅
-    public static MealDayCntResDto toDayCnt(Meal meal){
-
-        int week = DateWeekCalc(meal.getDate());
+    public static MealDayCntResDto toDayCnt(MealDayCntResDto mealDayCntResDto){
 
         return MealDayCntResDto.builder()
-                .date(meal.getDate())
-                .week(week)
+                .date(mealDayCntResDto.getDate())
+                .CNT(mealDayCntResDto.getCNT())
                 .build();
     }
 
-    public static int DateWeekCalc(LocalDate date) {
-        // 해당 날짜가 속한 주 번호 계산 (ISO 주 번호 기준)
-        Locale locale = Locale.US;
-        WeekFields weekFields = WeekFields.of(DayOfWeek.SUNDAY, 1);
-        // weekFields는 주단위가 1부터 MySQL은 0부터 주세는 단위가 1차이 나는 값을 빼준다.
-        return date.get(weekFields.weekOfYear()) - 1;
-    }
+//    public static int DateWeekCalc(LocalDate date) {
+//        // 해당 날짜가 속한 주 번호 계산 (ISO 주 번호 기준)
+//        //Locale locale = Locale.US;
+//        //WeekFields weekFields = WeekFields.of(DayOfWeek.SUNDAY, 1);
+//        WeekFields weekFields = WeekFields.of(DayOfWeek.SUNDAY, 1);
+//        // weekFields는 주단위가 1부터 MySQL은 0부터 주세는 단위가 1차이 나는 값을 빼준다.
+//        return date.get(weekFields.weekOfYear()) - 1;
+//    }
 
     // 추천내용 검색시 사용
     public static MealResDto toRecom(Meal meal) {
