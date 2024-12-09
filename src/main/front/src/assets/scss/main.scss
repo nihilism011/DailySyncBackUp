@@ -214,9 +214,9 @@ input[type='text']::-webkit-inner-spin-button {
 input {
   font-size: inherit;
   color: inherit;
-  appearance: none;
-  -moz-appearance: none;
-  -webkit-appearance: none;
+  // appearance: none;
+  // -moz-appearance: none;
+  // -webkit-appearance: none;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   font-family: inherit;
@@ -233,32 +233,13 @@ input {
   overflow: hidden !important;
 }
 //input[type='radio'],input[type='checkbox'],input[type='file'] {-webkit-appearance: none; appearance: none; margin: 0; width: 0; height: 0; position: absolute;}
-button {
-  border: 0;
-  font-size: inherit;
-  background-color: transparent;
-  line-height: inherit;
-  cursor: pointer;
-  padding: 0;
-  color: inherit;
-  font-family: inherit;
-  font-weight: inherit;
-  -webkit-tap-highlight-color: transparent;
-}
-body {
-  -webkit-font-smoothing: subpixel-antialiased;
-  -webkit-user-drag: none;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -ms-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-  font-family: var(--base-font);
-}
-label {
-  cursor: pointer;
-}
+
+button {border: 1px solid var(--color-contrastyC); border-radius: 4px; font-size: inherit; background-color: transparent; line-height: inherit; cursor: pointer; padding: 0; color: inherit; font-family: inherit; font-weight: inherit; -webkit-tap-highlight-color: transparent;}
+body {-webkit-font-smoothing: subpixel-antialiased; /*-webkit-user-drag: none; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -ms-user-select: none; -moz-user-select: none; user-select: none;*/ font-family: var(--base-font);}
+label {cursor: pointer;}
+
+
+
 :root {
   --base-font: 'Rubik', 'Noto Sans', sans-serif;
   --suit-font: 'Noto Sans', sans-serif;
@@ -300,7 +281,7 @@ label {
 }
 
 body {
-  padding-top: 80px;
+  padding-top: 80px; color: var(--color-contrasty2);
 }
 
 #app {
@@ -319,12 +300,67 @@ body {
   .right {
     padding: 40px;
     width: 70%;
+    &.meal-type {
+      display: flex; flex-direction: column;
+      align-items: flex-end;
+    }
   }
 }
 
 input {
   border: 1px solid var(--color-contrastyC);
-  height: 30px;
-  border-radius: 4px;
-  padding: 0 10px;
+
+  height: 30px; border-radius: 4px; padding: 0 10px;
 }
+
+.popup {
+  &-box {
+    box-sizing: border-box;
+    &.type-modal {
+      display: flex; justify-content: center; align-items: center;
+      position: fixed; top: 0; left: 0;
+      overflow-y: auto;
+      width: 100vw; height: 100vh;
+      backdrop-filter: blur(5px);
+      background-color: rgba(0, 0, 0, 0.7);
+      display: none; z-index: 120;
+        .popup-cont {
+            width: 660px; background-color: var(--base-white);
+            border-radius: 10px; padding: 20px;
+        }
+    }
+    .pop-btn-wrap {
+        display: flex; align-items: center;
+        margin-top: 32px; gap: 10px; 
+        .btn-default {
+          font-size: 16px; height: 40px; border-radius: 4px;
+          width: 100%; color: var(--base-white); font-weight: bold; border: 0;
+          &.submit {
+            background-color: var(--btn-blue);
+          }
+          &.cancel {
+            background-color: var(--btn-gray3);
+          }
+        }
+    }
+  }
+  &-cont {
+      z-index: 1;
+  }
+  &-tit-wrap {
+    display: flex; justify-content: space-between; align-items: center;
+    .tit {
+      font-size: 24px; font-weight: bold;
+    }
+  }
+}
+
+.btn-default {
+  height: 40px; padding: 0 14px; border-color: var(--color-contrastyFA);
+  box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.1); font-size: 15px;
+  font-weight: bold; transition: all .2s;
+  &:hover {
+    background-color: var(--color-contrasty2); color: var(--base-white); border-color: var(--color-contrasty2);
+  }
+}
+

@@ -3,6 +3,7 @@ package com.dailySync.meal.controller;
 import com.dailySync.common.ApiResponse;
 import com.dailySync.meal.dto.MealDayResDto;
 import com.dailySync.meal.dto.MealListResDto;
+import com.dailySync.meal.dto.MealRecomResDto;
 import com.dailySync.meal.dto.MealReqDto;
 import com.dailySync.meal.entities.Meal;
 import com.dailySync.meal.service.MealService;
@@ -25,7 +26,7 @@ public class MealController {
      */
     @Operation
             (
-                    summary = "로그인한 유저가 선택한 달의 리스트 불러오기(초기 오늘의 월) - 전체리스트",
+                    summary = "로그인한 유저가 선택한 달의 리스트 불러오기(초기 오늘의 월) - 일자별로 전체 리스트",
                     description = "year는 연도 month는 월 입력한다. week값은 주로 보여주는것을 처리하기위해 추가되었음."
             )
     @GetMapping ("mealList/{year}/{month}")
@@ -41,7 +42,7 @@ public class MealController {
      */
     @Operation
             (
-                    summary = "로그인한 유저가 선택한 달의 리스트 불러오기(초기 오늘의 월) - 일자별로 전체리스트 받아오기",
+                    summary = "로그인한 유저가 선택한 달의 리스트 불러오기(초기 오늘의 월) - 일자별로 개수 카운팅",
                     description = "year는 연도 month는 월 입력한다. week값은 주로 보여주는것을 처리하기위해 추가되었음."
             )
     @GetMapping ("mealDayList/{year}/{month}")
@@ -61,7 +62,7 @@ public class MealController {
             description = "관리자가 등록한 리스트 출력하므로 관리자로 지정된 아이디를 service단에 고정 id적용"
         )
     @GetMapping ("recommand")
-    public ResponseEntity<ApiResponse<MealListResDto>> getRecommand() {
+    public ResponseEntity<ApiResponse<MealRecomResDto>> getRecommand() {
         return ApiResponse.success(mealService.getRecommandList());
     }
 
@@ -74,7 +75,7 @@ public class MealController {
             description = "초기 등록시 즐겨찾기 버튼으로 선택한 리스트들 불러오기"
         )
     @GetMapping ("favorite/{id}")
-    public ResponseEntity<ApiResponse<MealListResDto>> getFavorite(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<MealRecomResDto>> getFavorite(@PathVariable Long id) {
         //Long id는 추후 로그인 아이디로 변경 예정
         return ApiResponse.success(mealService.getFavoriteList(id));
     }

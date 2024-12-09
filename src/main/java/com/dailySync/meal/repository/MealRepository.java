@@ -20,7 +20,7 @@ public interface MealRepository extends JpaRepository<Meal, Long> {
             "ORDER BY m.date ASC")
     List<Meal> findMealsByUserIdAndYearAndMonth(Long userId, int year, int month);
 
-    @Query ("SELECT new com.dailySync.meal.dto.MealDayCntResDto(m.date, WEEK(m.date), COUNT(m.date) as CNT) " +
+    @Query ("SELECT new com.dailySync.meal.dto.MealDayCntResDto(m.date, COUNT(m.date) as CNT) " +
             "FROM Meal m " +
             "WHERE m.user.id = :userId " +
             "AND YEAR(m.date) = :year " +

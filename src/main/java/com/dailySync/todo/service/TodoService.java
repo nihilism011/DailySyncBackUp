@@ -46,7 +46,7 @@ public class TodoService {
     //userId, groupId 에 해당하는 todoItem 조회
     public List<TodoItemResDto> getTodoItem(Long userId, Long groupId) {
         List<TodoItem> todoItems
-                = todoItemRepository.findByUserIdAndTodoGroupIdOrderByCreatedAtAsc(userId, groupId);
+                = todoItemRepository.findByUserIdAndTodoGroupIdAndStatusOrderByCreatedAtAsc(userId, groupId,"new");
         return todoItems.stream().map(TodoItemResDto::of).collect(Collectors.toList());
 
     }
