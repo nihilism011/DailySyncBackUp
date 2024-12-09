@@ -214,9 +214,9 @@ input[type='text']::-webkit-inner-spin-button {
 input {
   font-size: inherit;
   color: inherit;
-  appearance: none;
-  -moz-appearance: none;
-  -webkit-appearance: none;
+  // appearance: none;
+  // -moz-appearance: none;
+  // -webkit-appearance: none;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   font-family: inherit;
