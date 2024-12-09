@@ -30,8 +30,7 @@ public class AccountService {
     }
 
     //조회
-    public List<AccountResDto> findAccountsByDate(Long userId, int year, int month, int day) {
-        LocalDate date = LocalDate.of(year, month, day);
+    public List<AccountResDto> findAccountsByDate(Long userId, LocalDate date) {
         List<Account> oneDayList = accountRepository.findByUserIdAndAccountDate(userId, date);
         return oneDayList.stream().map(Account::toResDto).toList();
     }

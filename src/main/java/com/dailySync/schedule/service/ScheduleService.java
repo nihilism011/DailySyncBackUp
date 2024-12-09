@@ -21,11 +21,11 @@ public class ScheduleService {
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
 
-    /**유저 일정 가져오기*/
-    public List<ScheduleResDto> getUser(Long userId, int year, int month) {
-        List<Schedule> scheduleList = scheduleRepository.findByUserIdAndStartTimeYearAndStartTimeMonthOrderByStartTimeAsc(userId, year, month);
-        return scheduleList.stream().map(ScheduleResDto::of).collect(Collectors.toList());
-    }
+//    /**유저 일정 가져오기*/
+//    public List<ScheduleResDto> getUser(Long userId, int year, int month) {
+//        List<Schedule> scheduleList = scheduleRepository.findByUserIdAndStartTimeYearAndStartTimeMonthOrderByStartTimeAsc(userId, year, month);
+//        return scheduleList.stream().map(ScheduleResDto::of).collect(Collectors.toList());
+//    }
 
     /**title로 일정찾기*/
     public List<ScheduleResDto> getScheduleTitle(Long userId, String title) {

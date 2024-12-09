@@ -10,14 +10,13 @@ const axiosInstance = axios.create({
 // 요청 인터셉터
 axiosInstance.interceptors.request.use(
   (config) => {
-    // 요청 전에 수행할 작업 (토큰 추가 등)
-    console.log('BaseUrl : ', config.baseURL)
-    console.log('RequestApi : ', config.url)
-    console.log('RequestMethod : ', config.method)
+    console.log('requestInfo : ', {
+      requestURL: `${config.baseURL}/${config.url}`,
+      requestMethod: config.method,
+    })
     return config
   },
   (error) => {
-    // 요청 에러 처리
     console.error('Request Error:', error)
     return Promise.reject(error)
   },
@@ -33,6 +32,7 @@ axiosInstance.interceptors.response.use(
         data: response.data.data,
       }
     } else if (response.data.status === 'fail' || response.data.status === 'error') {
+      console.log(response.data.message)
       return {
         status: false,
         message: response.data.message,

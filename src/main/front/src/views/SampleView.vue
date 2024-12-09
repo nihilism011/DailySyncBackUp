@@ -12,9 +12,7 @@
       <div>{{ result }}</div>
     </div>
   </div>
-  <div class="right">
-    우측메뉴
-  </div>
+  <div class="right">우측메뉴</div>
 </template>
 <script>
 import BoldText from '../components/sample/BoldText.vue'
@@ -45,5 +43,4 @@ export default {
   },
 }
 </script>
-<style>
-</style>
+<style></style>
