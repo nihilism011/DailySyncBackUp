@@ -29,8 +29,8 @@ public class TodoItem extends BaseEntity {
     @Column (nullable = false)
     private String title;
 
-    @Column
-    private String day; // (예: "월", "화", "수" 등)
+    @Column(name = "day")
+    private List<String> day;
 
     @Column (nullable = false)
     private Integer itemOrder; // 항목의 우선순위를 저장
@@ -39,7 +39,8 @@ public class TodoItem extends BaseEntity {
     private String status = "new";
 
     @Column
-    private boolean isAuto; // (기본 값 false)
+    private Boolean isAuto; // (기본 값 false)
+
 
 
 }

@@ -3,6 +3,8 @@ package com.dailySync.schedule.service;
 import com.dailySync.schedule.dto.ScheduleReqDto;
 import com.dailySync.schedule.dto.ScheduleResDto;
 import com.dailySync.schedule.entities.Schedule;
+import com.dailySync.schedule.entities.ScheduleDetail;
+import com.dailySync.schedule.repository.ScheduleDetailRepository;
 import com.dailySync.schedule.repository.ScheduleRepository;
 import com.dailySync.user.entities.User;
 import com.dailySync.user.repository.UserRepository;
@@ -15,17 +17,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class ScheduleService {
 
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
+    private final ScheduleDetailRepository scheduleDetailRepository;
 
-//    /**유저 일정 가져오기*/
-//    public List<ScheduleResDto> getUser(Long userId, int year, int month) {
-//        List<Schedule> scheduleList = scheduleRepository.findByUserIdAndStartTimeYearAndStartTimeMonthOrderByStartTimeAsc(userId, year, month);
-//        return scheduleList.stream().map(ScheduleResDto::of).collect(Collectors.toList());
-//    }
+    /**유저 일정 가져오기*/
+    public List<ScheduleResDto> getUser(Long userId, int year, int month) {
+        List<Schedule> scheduleList = scheduleRepository.findByUserIdAndStartTimeYearAndStartTimeMonthOrderByStartTimeAsc(userId, year, month);
+        return scheduleList.stream().map(ScheduleResDto::of).collect(Collectors.toList());
+    }
 
     /**title로 일정찾기*/
     public List<ScheduleResDto> getScheduleTitle(Long userId, String title) {
@@ -81,4 +84,18 @@ public class ScheduleService {
         scheduleRepository.deleteById(id);
         return true;
     }
+
+    public ScheduleService(UserRepository userRepository, ScheduleRepository scheduleRepository, ScheduleDetailRepository scheduleDetailRepository) {
+        this.userRepository = userRepository;
+        this.scheduleRepository = scheduleRepository;
+        this.scheduleDetailRepository = scheduleDetailRepository;
+    }
+
+    public List<ScheduleDetail> getSchedulesByDate(LocalDate date) {
+        return scheduleDetailRepository.findByDate(date);
+    }
+
+
+
+
 }

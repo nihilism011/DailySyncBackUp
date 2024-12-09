@@ -3,6 +3,8 @@ package com.dailySync.schedule.controller;
 import com.dailySync.common.ApiResponse;
 import com.dailySync.schedule.dto.ScheduleReqDto;
 import com.dailySync.schedule.dto.ScheduleResDto;
+import com.dailySync.schedule.entities.Schedule;
+import com.dailySync.schedule.entities.ScheduleDetail;
 import com.dailySync.schedule.service.ScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -16,25 +18,25 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/schedule")
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class ScheduleController {
     private final ScheduleService scheduleService;
 
     /** 로그인 한 유저가 연도 year 월 month 변수에 담아 넘겨주면 해당 월의 sheduleList 를 전달 */
-//    @Operation
-//            (
-//                    summary = "로그인한 유저가 선택한 달의 리스트 불러오기(초기 오늘의 월)",
-//                    description = "year는 연도, month는 월을 입력한다."
-//            )
-//    @GetMapping ("userId/{userId}/{year}/{month}")
-//    public ResponseEntity<ApiResponse<List<ScheduleResDto>>> getSchedule(
-//            @PathVariable ("userId") Long userId,
-//            @PathVariable ("year") int year,
-//            @PathVariable ("month") int month)
-//    {
-//        List<ScheduleResDto> scheduleResDtos = scheduleService.getUser(userId, year, month);
-//        return ApiResponse.success(scheduleResDtos);
-//    }
+    @Operation
+            (
+                    summary = "로그인한 유저가 선택한 달의 리스트 불러오기(초기 오늘의 월)",
+                    description = "year는 연도, month는 월을 입력한다."
+            )
+    @GetMapping ("userId/{userId}/{year}/{month}")
+    public ResponseEntity<ApiResponse<List<ScheduleResDto>>> getSchedule(
+            @PathVariable ("userId") Long userId,
+            @PathVariable ("year") int year,
+            @PathVariable ("month") int month)
+    {
+        List<ScheduleResDto> scheduleResDtos = scheduleService.getUser(userId, year, month);
+        return ApiResponse.success(scheduleResDtos);
+    }
 
     /** 제목을 검색해 유저의 일정리스트 찾기 */
     @Operation
@@ -119,9 +121,15 @@ public class ScheduleController {
         return ResponseEntity.ok(scheduleService.deleteSchedule(id));
     }
 
+
+
+    public ScheduleController(ScheduleService scheduleService) {
+        this.scheduleService = scheduleService;
+    }
+
+    @GetMapping("/{date}")
+    public List<ScheduleDetail> getSchedulesByDate(@PathVariable String date) {
+        LocalDate localDate = LocalDate.parse(date); // 날짜 문자열을 LocalDate로 변환
+        return scheduleService.getSchedulesByDate(localDate);
+    }
 }
-
-
-
-
-

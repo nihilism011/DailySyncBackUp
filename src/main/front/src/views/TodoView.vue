@@ -10,7 +10,7 @@
     </div>
     <div class="right">
       <div class="right-left">
-        
+        <TodoList/>
       </div>
       <div class="right-middle">
         
@@ -28,12 +28,13 @@
 import DateSelector from '@/components/common/DateSelector.vue';
 import TodoGroup from '@/components/todo/TodoGroup.vue';
 import TodoItem from '@/components/todo/TodoItem.vue';
-
+import TodoList from '@/components/todo/TodoList.vue';
 export default {
   components: {
     DateSelector,
     TodoGroup,
     TodoItem,
+    TodoList
   },
   data() {
     return {
