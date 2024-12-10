@@ -21,6 +21,7 @@
     :account="account"
     @refresh="refresh"
     @close="viewUpdatePopup = false"
+    :update="true"
   />
 </template>
 <script>

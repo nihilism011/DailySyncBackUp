@@ -1,40 +1,36 @@
 <template>
   <div class="left left-container">
     <div class="left-top">
-      <DateSelector v-model="date" />
+      <AccountDateSelector v-model="date" />
     </div>
     <div class="left-bottom">
       <div>{{ fixedList }}</div>
     </div>
   </div>
   <div class="right right-container">
-    <DateScore :date="selectedDate" ref="dateScoreRef" />
-    <ItemList :date="selectedDate" @refresh="refresh" ref="itemListRef" />
-    <button
-      class="insert-btn"
-      @click="
-        () => {
-          createMode = !createMode
-        }
-      "
-    >
-      {{ !createMode ? '가계부 항목 추가' : '추가 취소' }}
-    </button>
-    <CreateItemForm @refresh="refresh" v-if="createMode" :date="selectedDate" />
+    <DateScore ref="dateScoreRef" />
+    <AccountItemList @refresh="refresh" ref="itemListRef" />
+    <button @click="viewUpdatePopup = true" class="insert-btn">가계부 항목 추가</button>
+    <UpdatePopup
+      v-if="viewUpdatePopup"
+      @refresh="refresh"
+      @close="viewUpdatePopup = false"
+      :update="false"
+    />
   </div>
 </template>
 <script>
 import { useDateStore } from '@/stores/dateStore'
-import DateSelector from '@/components/common/DateSelector.vue'
-import ItemList from '@/components/account/rightView/AccountItemList.vue'
-import CreateItemForm from '@/components/account/CreateItemForm.vue'
+import AccountDateSelector from '@/components/account/leftView/AccountDateSelector.vue'
+import AccountItemList from '@/components/account/rightView/AccountItemList.vue'
 import DateScore from '@/components/account/rightView/DateScore.vue'
+import UpdatePopup from '@/components/account/UpdatePopup.vue'
 export default {
   components: {
-    DateSelector,
-    CreateItemForm,
-    ItemList,
+    AccountDateSelector,
+    AccountItemList,
     DateScore,
+    UpdatePopup,
   },
   data() {
     const dateStore = useDateStore()
@@ -43,18 +39,8 @@ export default {
       date: '',
       dateList: [],
       fixedList: [],
-      createMode: false,
+      viewUpdatePopup: false,
     }
-  },
-  watch: {
-    date(newDate) {
-      this.changeDate(newDate)
-    },
-  },
-  computed: {
-    selectedDate() {
-      return this.dateStore.selectedDate
-    },
   },
   methods: {
     changeDate(date) {
