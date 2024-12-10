@@ -15,6 +15,15 @@ import java.time.LocalDate;
 public class TodoController {
     final private TodoService todoService;
 
+    @PostMapping("/autoTest")
+    public String autoGenerateTodoList() {
+        Long userId = 5L;
+        // 자동 생성 로직 호출
+        todoService.TodoLoginAutoListCreate(userId);
+
+        return "유저아이디" + userId;
+    }
+
     //putMapping
     @Operation
             (

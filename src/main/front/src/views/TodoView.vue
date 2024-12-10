@@ -50,6 +50,10 @@ export default {
     },
   },
   methods: {
+    async test() {
+      const url = `todo/autoTest`;
+      await this.$axios.post(url);
+    },
     fnInit(date) {
       this.fnGetFixedItemListByMonth(date);
     },
@@ -63,6 +67,7 @@ export default {
   },
   mounted() {
     this.fnInit(this.selectedDate);
+    this.test();
   },
 };
 </script>
