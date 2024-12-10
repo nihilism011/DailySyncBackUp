@@ -3,7 +3,6 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-
   <header id="header">
     <RouterLink to="/" class="logo"
       ><img alt="DailySync" src="@/assets/images/h_logo.png"
@@ -16,7 +15,6 @@ import { RouterLink, RouterView } from 'vue-router'
       <RouterLink to="/meal">Meal</RouterLink>
       <RouterLink to="/sample">Sample</RouterLink>
     </nav>
-
   </header>
 
   <div id="container">
