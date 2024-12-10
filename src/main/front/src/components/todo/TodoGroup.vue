@@ -5,14 +5,16 @@
       <div class="list-item" v-for="(item, index) in list" 
       :key="index" @click="selectGroup(item.id)">
         <div class="title">{{ item.title }}</div>
+        
         <div class="actions">
+          <div class="description">{{ item.description }}</div>
           <button @click="openEditModal(item)" class="edit-btn">수정</button>
           <button @click="deleteGroup(item.id)" class="delete-btn">삭제</button>
         </div>
       </div>
-      <div class="list-item">
+      <div class="list-item" @click="openAddItemModal">
         <div class="title">
-          <div style="color: blue;" @click="openAddItemModal">+ 그룹 추가</div>
+          <div style="color: blue;" >+ 그룹 추가</div>
         </div>
       </div>
     </div>
@@ -48,7 +50,7 @@ export default {
       list: [],
       isModalVisible: false,
       isEditModalVisible: false,
-      selectedItem: null, // 선택된 그룹을 저장
+      selectedItem: null, 
     };
   },
   methods: {

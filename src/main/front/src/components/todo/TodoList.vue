@@ -2,7 +2,6 @@
   <div>
     <div class="list-container">
       List
-      
       <div
         class="list-item" v-for="(item, index) in list"
         :key="index" @click="selectGroup(item.id)" >
@@ -16,12 +15,13 @@
           <div>{{ item.title }}</div>
         </div>
         <div class="actions">
+          <button @click="openEditModal(item)" class="edit-btn">수정</button>
           <button @click="deleteGroup(item.id)" class="delete-btn" >삭제</button>
         </div>
       </div>
-      <div class="list-item">
+      <div class="list-item" @click="openAddItemModal">
         <div class="title">
-          <div style="color: blue;" @click="openAddItemModal">+ 리스트 추가</div>
+          <div style="color: blue;" >+ 리스트 추가</div>
         </div>
       </div>
     </div>
@@ -30,6 +30,13 @@
       :isVisible="isModalVisible"
       :mode="'create'"
       @close="closeModal"
+      @save-item="fetchListByUserId"
+    />
+    <Modal
+      :isVisible="isEditModalVisible"
+      :mode="'update'"
+      :item="selectedItem"
+      @close="closeEditModal"
       @save-item="fetchListByUserId"
     />
   </div>
@@ -44,9 +51,33 @@ export default {
   data() {
     return {
       list: [],
+      isModalVisible: false,
+      isEditModalVisible: false,
+      selectedItem: null, 
     };
   },
   methods: {
+    openEditModal(item) {
+      this.selectedItem = item; 
+      this.isEditModalVisible = true;
+      console.log(item);
+    },
+    closeEditModal() {
+      this.isEditModalVisible = false;
+      this.selectedItem = null; 
+    },
+    async deleteGroup(id) {
+      if(confirm("삭제할거임?")){
+         const url = `todo/list/${id}`
+        try {
+          await this.$axios.delete(url);
+          this.fetchListByUserId();
+          alert("삭제됐음");
+        } catch (error) {
+          alert("삭제실패" + error);
+        }
+      }
+    },
     openAddItemModal() {
       this.isModalVisible = true;
     },
