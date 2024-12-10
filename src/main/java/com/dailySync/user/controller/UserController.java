@@ -57,4 +57,14 @@ public class UserController {
 
         return ResponseEntity.ok(userService.updateUser(id, reqDto));
     }
+
+    //비밀번호찾기
+    @PostMapping("api/user/findPassword")
+    public ResponseEntity<?> findPassword (
+            @RequestBody UserReqDto userReqDto
+            ) {
+        String name = userReqDto.getName();
+        String email = userReqDto.getEmail();
+        return ResponseEntity.ok(userService.findPasswordWithNameAndEmail(name, email));
+    }
 }
