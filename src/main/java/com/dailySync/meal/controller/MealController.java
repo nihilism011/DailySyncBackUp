@@ -71,10 +71,10 @@ public class MealController {
             summary = "즐겨찾기 리스트",
             description = "초기 등록시 즐겨찾기 버튼으로 선택한 리스트들 불러오기"
         )
-    @GetMapping ("favorite/{id}")
-    public ResponseEntity<ApiResponse<MealRecomResDto>> getFavorite(@PathVariable Long id) {
+    @GetMapping ("favorite")
+    public ResponseEntity<ApiResponse<MealRecomResDto>> getFavorite() {
         //Long id는 추후 로그인 아이디로 변경 예정
-        return ApiResponse.success(mealService.getFavoriteList(id));
+        return ApiResponse.success(mealService.getFavoriteList(7L));
     }
 
     /**

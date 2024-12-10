@@ -222,6 +222,14 @@ input {
   font-family: inherit;
   padding: 0;
 }
+input[type='number'] {
+  appearance: textfield;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 ::-webkit-scrollbar {
   width: 3px;
   height: 3px;
@@ -288,6 +296,8 @@ label {
   --btn-gray3: #666666;
 }
 /*** //basic-reset ***/
+$img-path: '@/assets/images/';
+$ico-path: '@/assets/images/ico/';
 
 * {
   margin: 0;
@@ -326,8 +336,7 @@ body {
 
 input {
   border: 1px solid var(--color-contrastyC);
-
-  height: 30px;
+  height: 34px;
   border-radius: 4px;
   padding: 0 10px;
 }
@@ -345,9 +354,6 @@ input {
       overflow-y: auto;
       width: 100vw;
       height: 100vh;
-      backdrop-filter: blur(5px);
-      background-color: rgba(0, 0, 0, 0.7);
-      display: none;
       z-index: 120;
       .popup-cont {
         width: 660px;
@@ -377,6 +383,26 @@ input {
         }
       }
     }
+    .dimmed {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(5px);
+      background-color: rgba(0, 0, 0, 0.5);
+      font-size: 0;
+    }
+    .btn-default {
+      font-size: 14px;
+      height: 34px;
+      font-weight: normal;
+      border: 1px solid var(--color-contrastyC);
+    }
+    .tab-btn {
+      margin: 20px 0 0;
+    }
   }
   &-cont {
     z-index: 1;
@@ -404,5 +430,166 @@ input {
     background-color: var(--color-contrasty2);
     color: var(--base-white);
     border-color: var(--color-contrasty2);
+  }
+}
+
+label,
+input {
+  user-select: none;
+}
+
+.ip-list {
+  .tit-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    .tit {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-contrastyA);
+    }
+  }
+  .bot-box {
+    margin-top: 10px;
+    position: relative;
+    width: 100%;
+  }
+  & + .ip-list {
+    margin-top: 20px;
+  }
+}
+
+.ip-box {
+  input {
+    width: 100%;
+    font-size: 14px;
+  }
+}
+
+.ip-chk-txt {
+  display: flex;
+  align-items: center;
+  gap: 0 10px;
+  label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-contrastyA);
+    padding: 0px 0 1px 24px;
+    background: url($ico-path + 'ico_check.png') left center / auto no-repeat;
+    cursor: pointer;
+  }
+  input[type='checkbox']:checked + label {
+    background-image: url($ico-path + 'ico_check1_2.png');
+    color: var(--color-contrasty2);
+  }
+}
+
+.select-box {
+  select {
+    height: 34px;
+    border-radius: 4px;
+    border: 1px solid var(--color-contrastyC);
+    padding: 0 40px 0 10px;
+    font-size: 14px;
+    cursor: pointer;
+    background: url($ico-path + 'ico_select.png') no-repeat right 8px center;
+  }
+}
+
+.text-box {
+  textarea {
+    width: 100%;
+    resize: none;
+    border-radius: 4px;
+    padding: 10px;
+    border: 1px solid var(--color-contrastyC);
+    height: 150px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+}
+
+.meal-add-wrap {
+  margin-top: 20px;
+  .meal-top-wrap {
+    display: flex;
+    gap: 0 20px;
+    margin-bottom: 16px;
+    .icon-box {
+      .icon-btn {
+        width: 60px;
+        height: 60px;
+        background: center / 40px no-repeat;
+        $iconClass: (
+          bread,
+          burger,
+          cake,
+          chicken,
+          egg,
+          fish,
+          fruit,
+          icecream,
+          milk,
+          noodle,
+          pizza,
+          rice,
+          sausage,
+          snack,
+          steak
+        );
+        @each $icon in $iconClass {
+          &.#{$icon} {
+            background-image: url('@/assets/images/ico/icon_#{$icon}.png');
+            font-size: 0;
+          }
+        }
+      }
+    }
+  }
+  .nutrient-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 16px 0;
+    .ip-list {
+      width: calc(calc(100% / 3) - (20px / 3));
+      margin-top: 0;
+      .ip-box {
+        position: relative;
+        input {
+          width: 100%;
+          font-size: 14px;
+          padding-right: 40px;
+        }
+        .unit {
+          position: absolute;
+          right: 8px;
+          top: 50%;
+          margin-top: -6px;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+.tab-default {
+  display: flex;
+  button {
+    flex: 0 1 100%;
+    border-radius: 0;
+    height: 32px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.2s;
+    &.active {
+      color: var(--base-white);
+      background-color: var(--color-contrasty2);
+      border-color: var(--color-contrasty2);
+    }
+    & + button {
+      border-left: 0;
+    }
   }
 }
