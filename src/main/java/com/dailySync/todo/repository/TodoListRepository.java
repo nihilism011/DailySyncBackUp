@@ -17,4 +17,6 @@ public interface TodoListRepository extends JpaRepository<TodoList, Long> {
 
     // 날짜에 대해 완료된 TodoList(checkedTime이 있는) 수를 세는 쿼리
     long countByUserIdAndDateAndCheckedTimeIsNull(Long userId, LocalDate date);
+
+    boolean existsByUserIdAndDateAndTodoItemId(Long userId, LocalDate date, Long todoItemId);
 }

@@ -84,9 +84,10 @@ export default {
     closeModal() {
       this.isModalVisible = false;
     },
-    fetchCheckByListID(id){
-      const url=`todo/list/update/check/${id}`
-      this.$axios.put(url);
+    async fetchCheckByListID(id) {
+      const url = `todo/list/update/check/${id}`;
+      await this.$axios.put(url);
+      await this.fetchListByUserId(); 
     },
     async fetchListByUserId() {
       const userId = 5;
