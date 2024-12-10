@@ -123,13 +123,5 @@ public class ScheduleController {
 
 
 
-    public ScheduleController(ScheduleService scheduleService) {
-        this.scheduleService = scheduleService;
-    }
 
-    @GetMapping("/{date}")
-    public List<ScheduleDetail> getSchedulesByDate(@PathVariable String date) {
-        LocalDate localDate = LocalDate.parse(date); // 날짜 문자열을 LocalDate로 변환
-        return scheduleService.getSchedulesByDate(localDate);
-    }
 }
