@@ -1,40 +1,31 @@
 <template>
   <div class="left left-container">
     <div class="left-top">
-      <DateSelector v-model="date" />
+      <AccountDateSelector v-model="date" />
     </div>
-    <div class="left-bottom">
-      <div>{{ fixedList }}</div>
-    </div>
+    <div class="left-bottom"><FixedItemList /></div>
   </div>
   <div class="right right-container">
-    <DateScore :date="selectedDate" ref="dateScoreRef" />
-    <ItemList :date="selectedDate" @refresh="refresh" ref="itemListRef" />
-    <button
-      class="insert-btn"
-      @click="
-        () => {
-          createMode = !createMode
-        }
-      "
-    >
-      {{ !createMode ? '가계부 항목 추가' : '추가 취소' }}
-    </button>
-    <CreateItemForm @refresh="refresh" v-if="createMode" :date="selectedDate" />
+    <DateScore ref="dateScoreRef" />
+    <AccountItemList />
+    <button @click="viewUpdatePopup = true" class="insert-btn">가계부 항목 추가</button>
+    <UpdatePopup v-if="viewUpdatePopup" @close="viewUpdatePopup = false" action="create" />
   </div>
 </template>
 <script>
 import { useDateStore } from '@/stores/dateStore'
-import DateSelector from '@/components/common/DateSelector.vue'
-import ItemList from '@/components/account/rightView/AccountItemList.vue'
-import CreateItemForm from '@/components/account/CreateItemForm.vue'
+import AccountDateSelector from '@/components/account/leftView/AccountDateSelector.vue'
+import AccountItemList from '@/components/account/rightView/AccountItemList.vue'
 import DateScore from '@/components/account/rightView/DateScore.vue'
+import UpdatePopup from '@/components/account/UpdatePopup.vue'
+import FixedItemList from '@/components/account/leftView/FixedItemList.vue'
 export default {
   components: {
-    DateSelector,
-    CreateItemForm,
-    ItemList,
+    AccountDateSelector,
+    AccountItemList,
+    FixedItemList,
     DateScore,
+    UpdatePopup,
   },
   data() {
     const dateStore = useDateStore()
@@ -43,42 +34,12 @@ export default {
       date: '',
       dateList: [],
       fixedList: [],
-      createMode: false,
+      viewUpdatePopup: false,
     }
   },
-  watch: {
-    date(newDate) {
-      this.changeDate(newDate)
-    },
-  },
-  computed: {
-    selectedDate() {
-      return this.dateStore.selectedDate
-    },
-  },
-  methods: {
-    changeDate(date) {
-      this.dateStore.setSelectedDate(date)
-    },
-    fnInit(date) {
-      this.fnGetFixedItemListByMonth(date)
-    },
-    async fnGetFixedItemListByMonth(date) {
-      const year = this.$dayjs(date).get('year')
-      const month = this.$dayjs(date).get('month') + 1
-      const url = `account/items/fixed/${year}/${month}`
-      const { data } = await this.$axios.get(url)
-      this.fixedList = data
-    },
-    refresh() {
-      this.$refs.itemListRef.fetchDataList()
-      this.$refs.dateScoreRef.fetchData()
-      this.createMode = false
-    },
-  },
+  methods: {},
   mounted() {
     this.date = this.dateStore.selectedDate
-    this.fnInit(this.selectedDate)
   },
 }
 </script>

@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import SampleView from '@/views/SampleView.vue'
-
 import TodoView from '@/views/TodoView.vue'
 import AccountView from '@/views/AccountView.vue'
 import MealView from '@/views/MealView.vue'
 import ScheduleView from '@/views/ScheduleView.vue'
+import UserView from '@/views/UserView.vue'
+import FindUser from '@/views/FindUser.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,6 +40,16 @@ const router = createRouter({
       path: '/schedule',
       name: 'schedule',
       component: ScheduleView,
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: UserView,
+    },
+    {
+      path: '/findUser',
+      name: 'findUser',
+      component: FindUser,
     },
   ],
 })

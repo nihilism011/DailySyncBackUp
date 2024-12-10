@@ -26,8 +26,6 @@ public class UserSetting {
     @Column
     private Integer height;
     @Column
-    private Integer accountStartDate;
-    @Column
     private Integer recommendCal;
     @Column
     private String darkMode;
