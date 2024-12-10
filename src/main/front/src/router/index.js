@@ -24,7 +24,6 @@ const router = createRouter({
       path: '/todo',
       name: 'todo',
       component: TodoView,
-
     },
     {
       path: '/account',

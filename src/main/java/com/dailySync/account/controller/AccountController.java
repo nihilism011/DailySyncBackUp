@@ -48,7 +48,20 @@ public class AccountController {
             @PathVariable ("month") int month) {
         //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
         Long userId = 3L;
-        return ApiResponse.success((accountService.findAccountsByMonth(userId, year, month)));
+        return ApiResponse.success(accountService.findAccountsByMonth(userId, year, month));
+    }
+
+    /**
+     * 날짜 가계부 합산 조회
+     */
+    @Tag (name = "ACCOUNT", description = "가계부")
+    @Operation (summary = "해당 날짜의 수입,지출의 합산")
+    @GetMapping ("items/sum/{date}")
+    public ResponseEntity<?> getAccountItemsSummaryByDate(
+            @Parameter (description = "날짜 ex.'2024-12-12'")
+            @PathVariable ("date") LocalDate date) {
+        Long userId = 3L;
+        return ApiResponse.success(accountService.findSumAccountByDate(userId, date));
     }
 
     /**

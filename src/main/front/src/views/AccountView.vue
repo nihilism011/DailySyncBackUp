@@ -1,46 +1,65 @@
 <template>
   <div class="left left-container">
     <div class="left-top">
-      <DateSelector v-model="selectedDate" />
+      <DateSelector v-model="date" />
     </div>
     <div class="left-bottom">
       <div>{{ fixedList }}</div>
     </div>
   </div>
-  <div class="right">
-    <div class="right-container">
-      <ItemList :date="selectedDate" ref="itemListRef" />
-      <button class="insert-btn" @click="fnInsertView">
-        {{ !createMode ? '가계부 항목 추가' : '추가 취소' }}
-      </button>
-      <CreateItemForm @createItem="fnInsertView" v-if="createMode" date="selectedDate" />
-    </div>
+  <div class="right right-container">
+    <DateScore :date="selectedDate" ref="dateScoreRef" />
+    <ItemList :date="selectedDate" @refresh="refresh" ref="itemListRef" />
+    <button
+      class="insert-btn"
+      @click="
+        () => {
+          createMode = !createMode
+        }
+      "
+    >
+      {{ !createMode ? '가계부 항목 추가' : '추가 취소' }}
+    </button>
+    <CreateItemForm @refresh="refresh" v-if="createMode" :date="selectedDate" />
   </div>
 </template>
 <script>
+import { useDateStore } from '@/stores/dateStore'
 import DateSelector from '@/components/common/DateSelector.vue'
-import ItemList from '@/components/account/ItemList.vue'
+import ItemList from '@/components/account/rightView/AccountItemList.vue'
 import CreateItemForm from '@/components/account/CreateItemForm.vue'
+import DateScore from '@/components/account/rightView/DateScore.vue'
 export default {
   components: {
     DateSelector,
     CreateItemForm,
     ItemList,
+    DateScore,
   },
   data() {
+    const dateStore = useDateStore()
     return {
-      selectedDate: this.$dayjs().format('YYYY-MM-DD'),
+      dateStore,
+      date: '',
       dateList: [],
       fixedList: [],
       createMode: false,
     }
   },
   watch: {
-    selectedDate(newDate) {
-      this.fnInit(newDate)
+    date(newDate) {
+      this.changeDate(newDate)
+    },
+  },
+  computed: {
+    selectedDate() {
+      return this.dateStore.selectedDate
     },
   },
   methods: {
+    changeDate(date) {
+      this.dateStore.setSelectedDate(date)
+    },
     fnInit(date) {
       this.fnGetFixedItemListByMonth(date)
     },
@@ -51,14 +70,14 @@ export default {
       const { data } = await this.$axios.get(url)
       this.fixedList = data
     },
-    fnInsertView() {
-      if (this.createMode) {
-        this.$refs.itemListRef.fnGetItemListByDate(this.selectedDate)
-      }
-      this.createMode = !this.createMode
+    refresh() {
+      this.$refs.itemListRef.fetchDataList()
+      this.$refs.dateScoreRef.fetchData()
+      this.createMode = false
     },
   },
   mounted() {
+    this.date = this.dateStore.selectedDate
     this.fnInit(this.selectedDate)
   },
 }
