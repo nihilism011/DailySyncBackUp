@@ -16,8 +16,8 @@
             <button @click="deleteTodoItem(item)" class="delete-btn">삭제</button>
           </div>
         </div>
-        <div class="item" v-if="selectedGroup">
-          <div class="title" style="color: blue;" @click="openAddItemModal"> + 아이템 추가 </div>
+        <div class="item" v-if="selectedGroup" @click="openAddItemModal">
+          <div class="title" style="color: blue;" > + 아이템 추가 </div>
         </div>
       </div>
     </div>

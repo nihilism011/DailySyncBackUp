@@ -84,19 +84,22 @@ public class TodoService {
     //생성
 
     //todolist을 생성 (7)
-    public Boolean createTodoList(TodoListReqDto reqDto) {
-        User user = userRepository.findById(reqDto.getUserId()).orElse(null);
+    public Boolean createTodoList(Long userId,TodoListReqDto reqDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자 ID입니다."));
+
+        int listOrder = reqDto.getListOrder() != null ? reqDto.getListOrder() : 4; // 고정값
 
         TodoList todoList = TodoList.builder()
                 .user(user)
-                .date(reqDto.getDate())
+                .date(LocalDate.now())
                 .checkedTime(null)
                 .title(reqDto.getTitle())
-                .listOrder(4)
+                .listOrder(listOrder)
                 .build();
+
         todoListRepository.save(todoList);
         return true;
-
     }
 
 

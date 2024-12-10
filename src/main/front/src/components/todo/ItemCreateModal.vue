@@ -49,10 +49,10 @@
         <label>
           <input type="checkbox" v-model="newItem.isAuto" value='1' /> Auto
         </label>
-      </div>
-      <div class="modal-footer">
-        <button @click="saveItem">{{ mode === 'create' ? '추가' : '수정' }}</button>
-        <button @click="closeModal">취소</button>
+        <div class="modal-footer">
+          <button @click="saveItem">{{ mode === 'create' ? '추가' : '수정' }}</button>
+          <button @click="closeModal">취소</button>
+        </div>
       </div>
     </div>
   </div>

@@ -152,9 +152,9 @@ public class TodoController {
             summary = " todoList에 변동일정 추가하기 listOrder(4) 고정 ",
             description =" ... "
     )
-    @PostMapping("/list/change/")
-    public ResponseEntity<?> addTodoList(@RequestBody TodoListReqDto reqDto) {
-        return ApiResponse.success(todoService.createTodoList(reqDto));
+    @PostMapping("/list/change/{userId}")
+    public ResponseEntity<?> addTodoList(@PathVariable Long userId,@RequestBody TodoListReqDto reqDto) {
+        return ApiResponse.success(todoService.createTodoList(userId,reqDto));
     }
 
     @Operation
