@@ -31,9 +31,15 @@
       </div>
 
       <div class="button-group">
-        <button @click="updateItem" class="button save-btn">저장</button>
+        <button @click="saveItem" class="button save-btn">저장</button>
         <button @click="$emit('close')" class="button cancel-btn">취소</button>
-        <button v-if="update" @click="deleteItem" class="button delete-btn">삭제</button>
+        <button v-if="action === 'update'" @click="deleteItem" class="button delete-btn">
+          삭제
+        </button>
+      </div>
+      <div>
+        <label for="isFixed">고정 내역</label>
+        <input id="isFixed" type="checkbox" v-model="requestBody.fixed" />
       </div>
     </div>
   </div>
@@ -41,18 +47,17 @@
 
 <script>
 import { categoryArray } from '@/constants/accountCategory'
-import { deleteAccountItem, updateAccountItem, isValid } from '@/lib/accountLib'
+import { deleteAccountItem, updateAccountItem, createAccountItem, isValid } from '@/lib/accountLib'
 import { useDateStore } from '@/stores/dateStore'
+import { useRefreshStore } from '@/stores/refreshStore'
 export default {
-  emits: ['refresh', 'close'],
+  emits: ['close'],
   props: {
     account: {
       type: Object,
       default() {
-        const dateStore = useDateStore()
         return {
           title: '',
-          accountDate: dateStore.selectedDate,
           category: 'FOOD',
           amount: 0,
           description: '',
@@ -64,10 +69,18 @@ export default {
       type: Boolean,
       default: false,
     },
-    update: {
-      type: Boolean,
-      default: false,
+    action: {
+      type: String,
+      required: true,
+      validator(value) {
+        return ['update', 'create'].includes(value)
+      },
     },
+  },
+  setup() {
+    const refreshStore = useRefreshStore()
+    const dateStore = useDateStore()
+    return { dateStore, refreshStore }
   },
   data() {
     return {
@@ -78,18 +91,16 @@ export default {
         amount: Math.abs(this.account.amount),
         title: this.account.title,
         description: this.account.description,
+        fixed: this.account.fixed,
       },
     }
   },
   methods: {
+    createAccountItem,
     deleteAccountItem,
     updateAccountItem,
     isValid,
-    refresh() {
-      this.$emit('refresh')
-      this.$emit('close')
-    },
-    async updateItem() {
+    async saveItem() {
       const requestBody = { ...this.requestBody }
       //todo 유효성겁사 alert로 구성되어 있는데 isValid 수정해서 좀더 괜찮은 디자인으로 하면 좋을듯.
       if (
@@ -101,9 +112,20 @@ export default {
       }
       requestBody.amount =
         this.amountType === 'plus' ? this.requestBody.amount : -this.requestBody.amount
-      const success = await this.updateAccountItem(this.account.id, requestBody)
-      if (success) {
-        this.refresh()
+      let res = false
+      if (this.action === 'create') {
+        const createReqBody = {
+          ...requestBody,
+          accountDate: this.dateStore.selectedDate,
+        }
+        res = await createAccountItem(createReqBody)
+      }
+      if (this.action === 'update') {
+        res = await this.updateAccountItem(this.account.id, requestBody)
+      }
+      if (res) {
+        this.refreshStore.setRefresh()
+        this.$emit('close')
       }
     },
     async deleteItem() {
@@ -113,7 +135,8 @@ export default {
       }
       const success = await this.deleteAccountItem(this.account.id)
       if (success) {
-        this.refresh()
+        this.refreshStore.setRefresh()
+        this.$emit('close')
       }
     },
   },

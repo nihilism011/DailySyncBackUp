@@ -45,6 +45,7 @@ public class Account extends BaseEntity {
                 accountDate(account.getAccountDate()).
                 description(account.getDescription()).
                 category(account.getCategory()).
+                fixed(account.getFixed()).
                 build();
     }
 

@@ -3,20 +3,13 @@
     <div class="left-top">
       <AccountDateSelector v-model="date" />
     </div>
-    <div class="left-bottom">
-      <div>{{ fixedList }}</div>
-    </div>
+    <div class="left-bottom"><FixedItemList /></div>
   </div>
   <div class="right right-container">
     <DateScore ref="dateScoreRef" />
-    <AccountItemList @refresh="refresh" ref="itemListRef" />
+    <AccountItemList />
     <button @click="viewUpdatePopup = true" class="insert-btn">가계부 항목 추가</button>
-    <UpdatePopup
-      v-if="viewUpdatePopup"
-      @refresh="refresh"
-      @close="viewUpdatePopup = false"
-      :update="false"
-    />
+    <UpdatePopup v-if="viewUpdatePopup" @close="viewUpdatePopup = false" action="create" />
   </div>
 </template>
 <script>
@@ -25,10 +18,12 @@ import AccountDateSelector from '@/components/account/leftView/AccountDateSelect
 import AccountItemList from '@/components/account/rightView/AccountItemList.vue'
 import DateScore from '@/components/account/rightView/DateScore.vue'
 import UpdatePopup from '@/components/account/UpdatePopup.vue'
+import FixedItemList from '@/components/account/leftView/FixedItemList.vue'
 export default {
   components: {
     AccountDateSelector,
     AccountItemList,
+    FixedItemList,
     DateScore,
     UpdatePopup,
   },
@@ -42,29 +37,9 @@ export default {
       viewUpdatePopup: false,
     }
   },
-  methods: {
-    changeDate(date) {
-      this.dateStore.setSelectedDate(date)
-    },
-    fnInit(date) {
-      this.fnGetFixedItemListByMonth(date)
-    },
-    async fnGetFixedItemListByMonth(date) {
-      const year = this.$dayjs(date).get('year')
-      const month = this.$dayjs(date).get('month') + 1
-      const url = `account/items/fixed/${year}/${month}`
-      const { data } = await this.$axios.get(url)
-      this.fixedList = data
-    },
-    refresh() {
-      this.$refs.itemListRef.fetchDataList()
-      this.$refs.dateScoreRef.fetchData()
-      this.createMode = false
-    },
-  },
+  methods: {},
   mounted() {
     this.date = this.dateStore.selectedDate
-    this.fnInit(this.selectedDate)
   },
 }
 </script>
