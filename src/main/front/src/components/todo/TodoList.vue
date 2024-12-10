@@ -4,11 +4,8 @@
       List
       
       <div
-        class="list-item"
-        v-for="(item, index) in list"
-        :key="index"
-        @click="selectGroup(item.id)"
-      >
+        class="list-item" v-for="(item, index) in list"
+        :key="index" @click="selectGroup(item.id)" >
         <div class="title">
           <input
             type="checkbox"
@@ -24,22 +21,38 @@
       </div>
       <div class="list-item">
         <div class="title">
-          <div style="color: blue;">+ 리스트 추가</div>
+          <div style="color: blue;" @click="openAddItemModal">+ 리스트 추가</div>
         </div>
       </div>
     </div>
+    <!-- 리스트 추가 모달-->
+    <Modal
+      :isVisible="isModalVisible"
+      :mode="'create'"
+      @close="closeModal"
+      @save-item="fetchListByUserId"
+    />
   </div>
 </template>
 
 <script>
+import Modal from './ListCreateModal.vue';
 export default {
+  components: {
+    Modal
+  },
   data() {
     return {
       list: [],
     };
   },
   methods: {
-
+    openAddItemModal() {
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    },
     fetchCheckByListID(id){
       const url=`todo/list/update/check/${id}`
       this.$axios.put(url);
