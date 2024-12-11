@@ -8,10 +8,18 @@
         <button @click="closeModal">X</button>
       </div>
       <div v-if = "mode === 'update'">
-        리스트 맨위로 올리기 
+        <label>중요도 : 긴급  
         <input type="radio" v-model="newItem.listOrder" value='0'/>
-        리스트 아래로 올리기 
-        <input type="radio" v-model="newItem.listOrder" value='4'/>
+        </label>
+        <label> 높음  
+        <input type="radio" v-model="newItem.listOrder" value='1'/>
+        </label>
+        <label> 보통  
+        <input type="radio" v-model="newItem.listOrder" value='2'/>
+        </label>
+        <label> 낮음   
+        <input type="radio" v-model="newItem.listOrder" value='3'/>
+        </label>
       </div>
       <div class="modal-body">
         <input v-model="newItem.title" placeholder="제목 입력" />

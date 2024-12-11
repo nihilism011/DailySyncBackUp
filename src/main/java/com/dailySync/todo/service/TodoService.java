@@ -48,12 +48,11 @@ public class TodoService {
 
     // 유저에 맞춰 TodoList를 생성하는 메서드
     private void createTodoListsForUser(User user, LocalDate today) {
-        // 1. TodoItem들을 조회 (status가 "new"인 아이템만 조회)
+
         List<TodoItem> todoItems = todoItemRepository.findByUserIdAndStatusAndIsAuto(user.getId(), "new", true);
 
-        // 2. 각 TodoItem에 대해 day 배열을 확인하고, 해당 요일에 맞는 TodoList 생성
+        //각 TodoItem에 대해 day 배열을 확인하고, 해당 요일에 맞는 TodoList 생성
         for (TodoItem todoItem : todoItems) {
-            // 3. TodoItem의 day 속성 (예: ["수", "목", "금"])을 확인
             for (String day : todoItem.getDay()) {
                 // 4. 오늘 날짜를 기준으로 해당 요일에 맞는 날짜를 계산
                 LocalDate targetDate = getNextDateForDay(today, day);
@@ -122,7 +121,7 @@ public class TodoService {
     }
     //userId에 해당하는 todoGroup을 조회 (5)
     public List<TodoGroupResDto> getTodoGroup(Long userId) {
-        List<TodoGroup> todoGroups = todoGroupRepository.findByUserIdOrderByCreatedAtAsc(userId);
+        List<TodoGroup> todoGroups = todoGroupRepository.findByUserIdAndStatusOrderByCreatedAtAsc(userId, "new");
         return todoGroups.stream()
                 .map(TodoGroupResDto::of)
                 .collect(Collectors.toList());
@@ -223,6 +222,7 @@ public class TodoService {
                 .user(user)
                 .title(reqDto.getTitle())
                 .description(reqDto.getDescription())
+                .status("new")
                 .build();
 
         todoGroupRepository.save(todoGroup);
@@ -241,6 +241,20 @@ public class TodoService {
     }
 
     // 업데이트
+
+    public TodoGroupResDto updateGroupStatus(Long id) {
+        TodoGroup todoGroup = todoGroupRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("그룹을 찾을수 없어용"));
+        todoGroup.setStatus("old");
+        todoGroupRepository.save(todoGroup);
+
+        for (TodoItem todoItem : todoGroup.getTodoItems()) {
+            todoItem.setStatus("old");
+            todoItemRepository.save(todoItem); // 상태 변경된 아이템을 저장
+        }
+
+        return TodoGroupResDto.of(todoGroup);
+    }
 
     public TodoItemResDto updateStatus(Long id) {
         TodoItem todoItem = todoItemRepository.findById(id)
