@@ -1,7 +1,7 @@
 <template>
   <div class="left">
     {{ dailyLsit }}
-    <Calendar :dailyLsit="dailyLsit" @fnRequest="fnRequest" />
+    <Calendar :dailyLsit="dailyLsit" @fnMealList="fnMealList" @fnDayList="fnDayList" />
   </div>
   <div class="right meal-type">
     <WeekendList :fullList="fullList" :day="day" :week="week" />
@@ -11,7 +11,7 @@
       :day="day"
       :categoryList="categoryList"
       @openPopup="openPopup"
-      @fnRequest="fnRequest"
+      @fnMealList="fnMealList"
     />
     <button @click="openPopup([])" class="btn-default">식단 등록</button>
     <MealModal
@@ -21,7 +21,7 @@
       :iconList="iconList"
       :editInfo="editInfo"
       @closePopup="popupState = false"
-      @fnRequest="fnRequest"
+      @fnMealList="fnMealList"
     />
   </div>
 </template>
@@ -61,13 +61,22 @@ export default {
     }
   },
   methods: {
-    async fnRequest(inputDay) {
+    async fnMealList(inputDay) {
       let year = inputDay.split('-')[0]
       let month = inputDay.split('-')[1]
       let day = inputDay.split('-')[2]
-      //day = '03';
-      const daily = await this.$axios.get(`meal/mealDayList/${year}/${month}`)
       const full = await this.$axios.get(`meal/mealList/${year}/${month}`)
+      if (full.status) {
+        this.fullList = full.data.mealList
+      } else {
+        console.log(full.message)
+      }
+      await this.fnDayClick(year, month, day)
+    },
+    async fnDayList(inputDay) {
+      let year = inputDay.split('-')[0]
+      let month = inputDay.split('-')[1]
+      const daily = await this.$axios.get(`meal/mealDayList/${year}/${month}`)
       if (daily.status) {
         this.dailyLsit = daily.data.mealDay.map((item) => ({
           title: `${item.cnt}`, // cnt를 title로 사용
@@ -76,12 +85,6 @@ export default {
       } else {
         console.log(daily.message)
       }
-      if (full.status) {
-        this.fullList = full.data.mealList
-      } else {
-        console.log(full.message)
-      }
-      await this.fnDayClick(year, month, day)
     },
     async fnDayClick(year, month, day) {
       let firstDay = new Date(year, month - 1, 1).getDay()
@@ -109,7 +112,8 @@ export default {
   },
   mounted() {
     this.day = this.$dayjs().format('YYYY-MM-DD')
-    this.fnRequest(this.day)
+    this.fnMealList(this.day)
+    this.fnMealList(this.day)
   },
 }
 </script>
