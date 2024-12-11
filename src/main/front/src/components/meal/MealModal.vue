@@ -200,7 +200,7 @@ export default {
       type: String,
     },
   },
-  emits: ['closePopup', 'fnRequest'],
+  emits: ['closePopup', 'fnMealList'],
   components: {
     IconCheckbox,
     RecomModal,
@@ -246,7 +246,7 @@ export default {
       const submit = await this.$axios.post(`meal/add`, param)
       if (submit.status) {
         alert('등록 되었습니다.')
-        this.$emit('fnRequest', this.$dayjs().format('YYYY-MM-DD'))
+        this.$emit('fnMealList', this.$dayjs().format('YYYY-MM-DD'))
         this.popupClsoe()
       } else {
         alert(submit.message)
@@ -257,7 +257,7 @@ export default {
       const edit = await this.$axios.patch(`meal/edit`, param)
       if (edit.status) {
         alert('수정 되었습니다.')
-        this.$emit('fnRequest', this.$dayjs().format('YYYY-MM-DD'))
+        this.$emit('fnMealList', this.$dayjs().format('YYYY-MM-DD'))
         this.popupClsoe()
       } else {
         alert(edit.message)
