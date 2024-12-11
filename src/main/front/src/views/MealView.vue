@@ -1,6 +1,7 @@
 <template>
   <div class="left">
     {{ dailyLsit }}
+    <Calendar :dailyLsit="dailyLsit" @fnRequest="fnRequest" />
   </div>
   <div class="right meal-type">
     <WeekendList :fullList="fullList" :day="day" :week="week" />
@@ -30,12 +31,14 @@ import DayList from '@/components/meal/DayList.vue'
 import MealModal from '@/components/meal/MealModal.vue'
 import { mealCategory } from '@/constants/mealCategory.js'
 import { iconCategory } from '@/constants/iconCategory.js'
+import Calendar from '@/components/meal/Calendar.vue'
 
 export default {
   components: {
     WeekendList,
     DayList,
     MealModal,
+    Calendar,
   },
   data() {
     return {
@@ -47,6 +50,14 @@ export default {
       categoryList: mealCategory,
       iconList: iconCategory,
       editInfo: [],
+      todayNutrient: {
+        kcal: 0,
+        sodium: 0,
+        carb: 0,
+        protein: 0,
+        fat: 0,
+        suger: 0,
+      },
     }
   },
   methods: {
@@ -58,7 +69,10 @@ export default {
       const daily = await this.$axios.get(`meal/mealDayList/${year}/${month}`)
       const full = await this.$axios.get(`meal/mealList/${year}/${month}`)
       if (daily.status) {
-        this.dailyLsit = daily.data
+        this.dailyLsit = daily.data.mealDay.map((item) => ({
+          title: `${item.cnt}`, // cnt를 title로 사용
+          date: item.date, // 해당 날짜로 설정
+        }))
       } else {
         console.log(daily.message)
       }
@@ -83,6 +97,10 @@ export default {
             : { [`${year}-${month}-${check.toString().padStart(2, '0')}`]: check } // 날짜가 유효하지 않으면 0 처리
       }
       this.day = `${year}-${month}-${day}`
+      this.fnNutrient(this.day)
+    },
+    fnNutrient(day) {
+      console.log(this.fullList[day])
     },
     openPopup(itemInfo) {
       this.editInfo = itemInfo
