@@ -21,8 +21,9 @@ export default {
           email: this.email,
         })
         .then((response) => {
+          console.log('응답 데이터:', response.data) // 응답 내용을 확인
           if (response.data) {
-            alert(`비밀번호: ${response.data}`) // 비밀번호를 찾은 경우
+            alert(`비밀번호: ${response.data}`)
           } else {
             alert('해당 이름과 이메일로 등록된 사용자를 찾을 수 없습니다.')
           }

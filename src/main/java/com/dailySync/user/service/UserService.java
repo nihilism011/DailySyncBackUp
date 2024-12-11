@@ -81,8 +81,8 @@ public class UserService {
     }
 
     //이름과 이메일 두 가지를 입력 받고 비밀번호 찾기
-    public UserResDto findPasswordWithNameAndEmail(String Name, String email) {
-        User user = userRepository.findByNameAndEmail(Name, email).orElse(null);
+    public UserResDto findPasswordWithNameAndEmail(String name, String email) {
+        User user = userRepository.findByNameAndEmail(name, email).orElse(null);
         return UserResDto.of(user);
     }
 }
