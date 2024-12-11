@@ -29,5 +29,8 @@ public class TodoGroup extends BaseEntity {
     @Column (nullable = false)
     private String description;
 
+    @Column// (기본 값 "new")
+    private String status = "new";
+
 
 }

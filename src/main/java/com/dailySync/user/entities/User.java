@@ -9,15 +9,12 @@ import com.dailySync.todo.entities.TodoItem;
 import com.dailySync.todo.entities.TodoList;
 import com.dailySync.user.dto.UserReqDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-
+@Setter
 @Entity
 @Getter
 @NoArgsConstructor

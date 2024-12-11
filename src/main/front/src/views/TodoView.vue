@@ -1,12 +1,8 @@
 <template>
   <div class="container">
     <div class="left left-container">
-      <div class="left-top">
-        <DateSelector v-model="selectedDate" />
-      </div>
-      <div class="left-bottom">
-       
-      </div>
+      <Calendar />
+      
     </div>
     <div class="right">
       <div class="right-left">
@@ -25,16 +21,16 @@
 </template>
 
 <script>
-import DateSelector from '@/components/common/DateSelector.vue';
 import TodoGroup from '@/components/todo/TodoGroup.vue';
 import TodoItem from '@/components/todo/TodoItem.vue';
 import TodoList from '@/components/todo/TodoList.vue';
+import Calendar from '@/components/meal/Calendar.vue';
 export default {
   components: {
-    DateSelector,
     TodoGroup,
     TodoItem,
-    TodoList
+    TodoList,
+    Calendar
   },
   data() {
     return {
@@ -50,6 +46,10 @@ export default {
     },
   },
   methods: {
+    async test() {
+      const url = `todo/autoTest`;
+      await this.$axios.post(url);
+    },
     fnInit(date) {
       this.fnGetFixedItemListByMonth(date);
     },
@@ -63,6 +63,7 @@ export default {
   },
   mounted() {
     this.fnInit(this.selectedDate);
+    this.test();
   },
 };
 </script>
@@ -83,7 +84,7 @@ export default {
 
 .left-top {
   flex: 1;
-  padding: 20px;
+ 
   display: flex;
   justify-content: center;
   align-items: center;

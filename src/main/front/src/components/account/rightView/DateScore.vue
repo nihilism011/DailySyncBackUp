@@ -10,17 +10,21 @@
 <script>
 import { numToWon } from '@/lib/accountLib'
 import { useDateStore } from '@/stores/dateStore'
+import { useRefreshStore } from '@/stores/refreshStore'
 
 export default {
   data() {
     const dateStore = useDateStore()
+    const refreshStore = useRefreshStore()
     return {
       dateStore,
+      refreshStore,
       money: { plus: 0, minus: 0 },
     }
   },
   watch: {
     'dateStore.selectedDate': 'fetchData',
+    'refreshStore.refreshState': 'fetchData',
   },
   computed: {
     selectedDate() {

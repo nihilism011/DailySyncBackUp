@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface TodoGroupRepository extends JpaRepository<TodoGroup, Long> {
     // 유저의 TodoGroup을 생성일자를 기준으로 오름차순 정렬해서 가져오는 쿼리
-    List<TodoGroup> findByUserIdOrderByCreatedAtAsc(Long userId);
+    List<TodoGroup> findByUserIdAndStatusOrderByCreatedAtAsc(Long userId, String status);
 
 }

@@ -19,4 +19,5 @@ public class AccountResDto {
     private String title;
     private String description;
     private Integer amount;
+    private Boolean fixed;
 }

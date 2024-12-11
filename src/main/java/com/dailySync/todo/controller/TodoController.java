@@ -15,6 +15,15 @@ import java.time.LocalDate;
 public class TodoController {
     final private TodoService todoService;
 
+    @PostMapping("/autoTest")
+    public String autoGenerateTodoList() {
+        Long userId = 5L;
+        // 자동 생성 로직 호출
+        todoService.TodoLoginAutoListCreate(userId);
+
+        return "유저아이디" + userId;
+    }
+
     //putMapping
     @Operation
             (
@@ -35,6 +44,16 @@ public class TodoController {
     @PutMapping("/item/update/status/{id}")
     public ResponseEntity<ApiResponse<TodoItemResDto>> updateStatus(@PathVariable Long id) {
         TodoItemResDto updateItem = todoService.updateStatus(id);
+        return ApiResponse.success(updateItem);
+    }
+    @Operation
+            (
+                    summary = " todogroup 삭제시(클라이언트입장)  status값  old로 변경 ",
+                    description =" ... "
+            )
+    @PutMapping("/group/update/status/{id}")
+    public ResponseEntity<ApiResponse<TodoGroupResDto>> updateGroupStatus(@PathVariable Long id) {
+        TodoGroupResDto updateItem = todoService.updateGroupStatus(id);
         return ApiResponse.success(updateItem);
     }
 
@@ -152,9 +171,9 @@ public class TodoController {
             summary = " todoList에 변동일정 추가하기 listOrder(4) 고정 ",
             description =" ... "
     )
-    @PostMapping("/list/change/")
-    public ResponseEntity<?> addTodoList(@RequestBody TodoListReqDto reqDto) {
-        return ApiResponse.success(todoService.createTodoList(reqDto));
+    @PostMapping("/list/change/{userId}")
+    public ResponseEntity<?> addTodoList(@PathVariable Long userId,@RequestBody TodoListReqDto reqDto) {
+        return ApiResponse.success(todoService.createTodoList(userId,reqDto));
     }
 
     @Operation

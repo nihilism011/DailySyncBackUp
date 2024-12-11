@@ -5,14 +5,16 @@
       <div class="list-item" v-for="(item, index) in list" 
       :key="index" @click="selectGroup(item.id)">
         <div class="title">{{ item.title }}</div>
+        
         <div class="actions">
+          <div class="description">{{ item.description }}</div>
           <button @click="openEditModal(item)" class="edit-btn">수정</button>
           <button @click="deleteGroup(item.id)" class="delete-btn">삭제</button>
         </div>
       </div>
-      <div class="list-item">
+      <div class="list-item" @click="openAddItemModal">
         <div class="title">
-          <div style="color: blue;" @click="openAddItemModal">+ 그룹 추가</div>
+          <div style="color: blue;" >+ 그룹 추가</div>
         </div>
       </div>
     </div>
@@ -48,7 +50,7 @@ export default {
       list: [],
       isModalVisible: false,
       isEditModalVisible: false,
-      selectedItem: null, // 선택된 그룹을 저장
+      selectedItem: null, 
     };
   },
   methods: {
@@ -77,11 +79,12 @@ export default {
     },
     async deleteGroup(id) {
       if (confirm("정말 삭제할거냐? 되돌릴 수 없다!")) {
-        const url = `todo/group/${id}`;
+        const url = `todo/group/update/status/${id}`;
         try {
-          await this.$axios.delete(url);
-          this.fnMyGroup(); // 삭제 후 최신 목록을 가져옵니다.
-          alert("아이템 삭제");
+          await this.$axios.put(url);
+          await this.fnMyGroup(); // 삭제 후 최신 목록을 가져옵니다.
+          this.$emit('updateSelectedGroup', null);
+          alert("그룹 삭제");
         } catch (error) {
           alert("삭제 실패: " + error);
         }
@@ -91,7 +94,7 @@ export default {
     },
   },
   mounted() {
-    this.fnMyGroup(); // 페이지 로드 시 그룹 목록을 불러옵니다.
+    this.fnMyGroup(); 
   },
 };
 </script>

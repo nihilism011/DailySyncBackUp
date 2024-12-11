@@ -5,7 +5,7 @@
         v-for="(account, index) in list"
         :key="index"
         :account="account"
-        @refresh="$emit('refresh')"
+        size="large"
       />
     </div>
   </div>
@@ -13,6 +13,7 @@
 <script>
 import AccountItemRow from './AccountItemRow.vue'
 import { useDateStore } from '@/stores/dateStore'
+import { useRefreshStore } from '@/stores/refreshStore'
 export default {
   emits: ['refresh'],
   components: {
@@ -20,22 +21,20 @@ export default {
   },
   data() {
     const dateStore = useDateStore()
+    const refreshStore = useRefreshStore()
     return {
+      refreshStore,
       dateStore,
       list: [],
     }
   },
   watch: {
     'dateStore.selectedDate': 'fetchDataList',
-  },
-  computed: {
-    selectedDate() {
-      return this.dateStore.selectedDate
-    },
+    'refreshStore.refreshState': 'fetchDataList',
   },
   methods: {
     async fetchDataList() {
-      const date = this.selectedDate || this.$dayjs().format('YYYY-MM-DD')
+      const date = this.dateStore.selectedDate || this.$dayjs().format('YYYY-MM-DD')
       const url = `account/items/date/${date}`
       const { data } = await this.$axios.get(url)
       this.list = data
