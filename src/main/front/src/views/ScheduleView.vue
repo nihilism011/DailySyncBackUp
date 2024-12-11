@@ -9,45 +9,35 @@
   </div>
   <div class="right right-container">
     <ScheduleSearch/>
+    <Calendar :dailyLsit="dailyLsit" @fnMealList="fnMealList" @fnDayList="fnDayList" />
   </div> 
 </template>
 <script>
-import ScheduleList from '@/components/Schedule/ScheduleList.vue'
-import ScheduleSearch from '@/components/Schedule/ScheduleSearch.vue'
+import Calendar from '@/components/meal/Calendar.vue'
+import ScheduleList from '@/components/schedule/ScheduleList.vue'
+import ScheduleSearch from '@/components/schedule/ScheduleSearch.vue'
 import DateSelector from '@/components/common/DateSelector.vue'
 export default {
   components: {
     DateSelector,
     ScheduleList,
-    ScheduleSearch
+    ScheduleSearch,
+    Calendar,
   },
   data() {
     return {
-      selectedDate: this.$dayjs().format('YYYY-MM-DD'), 
-      selectedGroup: null, 
-      dateList: [],
-      fixedList: [],
+      selectedDate : ''
     };
   },
-  watch: {
-    selectedDate(newDate) {
-      this.fnInit(newDate);
-    },
-  },
+  
   methods: {
-     fnInit(date) {
-      this.fnGetFixedItemListByMonth(date);
-    },
-    async fnGetFixedItemListByMonth(date) {
-      const year = this.$dayjs(date).get('year');
-      const month = this.$dayjs(date).get('month') + 1;
-      const url = `account/items/fixed/${year}/${month}`;
-      const { data } = await this.$axios.get(url);
-      this.fixedList = data;
+    async fnRequest() {
+      console.log(this.selectedDate);
     },
   },
   mounted() {
-   
+    this.selectedDate = this.$dayjs().format('YYYY-MM-DD')
+    this.fnRequest();
   },
 }
 </script>
