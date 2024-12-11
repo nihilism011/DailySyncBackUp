@@ -46,6 +46,16 @@ public class TodoController {
         TodoItemResDto updateItem = todoService.updateStatus(id);
         return ApiResponse.success(updateItem);
     }
+    @Operation
+            (
+                    summary = " todogroup 삭제시(클라이언트입장)  status값  old로 변경 ",
+                    description =" ... "
+            )
+    @PutMapping("/group/update/status/{id}")
+    public ResponseEntity<ApiResponse<TodoGroupResDto>> updateGroupStatus(@PathVariable Long id) {
+        TodoGroupResDto updateItem = todoService.updateGroupStatus(id);
+        return ApiResponse.success(updateItem);
+    }
 
     @Operation
     (

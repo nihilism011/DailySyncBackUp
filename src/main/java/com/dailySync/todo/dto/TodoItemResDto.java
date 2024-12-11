@@ -20,6 +20,7 @@ public class TodoItemResDto {
     private Integer itemOrder;
     private String status;
     private Boolean isAuto;
+    private String groupTitle;
 
 
     public TodoItemResDto(Long id, String title, List<String> day, Integer itemOrder, String status, Boolean isAuto) {
@@ -38,6 +39,7 @@ public class TodoItemResDto {
         dto.setStatus(todoItem.getStatus());
         dto.setIsAuto(todoItem.getIsAuto());
         dto.setGroupId(todoItem.getTodoGroup().getId());
+        dto.setGroupTitle(todoItem.getTodoGroup().getTitle());
         return dto;
     }
 

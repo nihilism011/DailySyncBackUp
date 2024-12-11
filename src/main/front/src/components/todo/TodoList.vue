@@ -1,45 +1,56 @@
 <template>
-  <div>
-    <div class="list-container">
-      List
+  <div class="list-container">
+    List
+    <div v-if="list.length === 0" class="list-item" @click="openAddItemModal">
+      <div class="title">
+        <div style="color: blue;">+ 리스트 추가</div>
+      </div>
+    </div>
+    <div v-for="order in [0, 1, 2, 3, 4]" :key="order" class="group">
+      <h3 v-if="list.some(i => i.listOrder === order)">{{ getOrderTitle(order) }}</h3>
       <div
-        class="list-item" v-for="(item, index) in list"
-        :key="index" @click="selectGroup(item.id)" >
+        v-for="(item, index) in list.filter(i => i.listOrder == order)"
+        :key="index"
+        class="list-item"
+        @click="selectGroup(item.id)"
+      >
         <div class="title">
           <input
             type="checkbox"
-            style="margin-right: 10px;"
+            style="margin-right: 10px; width: 20px;;"
             :checked="item.checkedTime !== null" 
             @change="fetchCheckByListID(item.id)"
           />
+          <div style="font-size: 12px; margin-right: 2px;">{{ item.groupTitle }}</div>
           <div>{{ item.title }}</div>
         </div>
         <div class="actions">
           <button @click="openEditModal(item)" class="edit-btn">수정</button>
-          <button @click="deleteGroup(item.id)" class="delete-btn" >삭제</button>
-        </div>
-      </div>
-      <div class="list-item" @click="openAddItemModal">
-        <div class="title">
-          <div style="color: blue;" >+ 리스트 추가</div>
+          <button @click="deleteGroup(item.id)" class="delete-btn">삭제</button>
         </div>
       </div>
     </div>
-    <!-- 리스트 추가 모달-->
-    <Modal
-      :isVisible="isModalVisible"
-      :mode="'create'"
-      @close="closeModal"
-      @save-item="fetchListByUserId"
-    />
-    <Modal
-      :isVisible="isEditModalVisible"
-      :mode="'update'"
-      :item="selectedItem"
-      @close="closeEditModal"
-      @save-item="fetchListByUserId"
-    />
+
+    <div v-if="list.length > 0" class="list-item" @click="openAddItemModal">
+      <div class="title">
+        <div style="color: blue;">+ 리스트 추가</div>
+      </div>
+    </div>
   </div>
+
+  <Modal
+    :isVisible="isModalVisible" 
+    :mode="'create'"
+    @close="closeModal"
+    @save-item="fetchListByUserId"
+  />
+  <Modal
+    :isVisible="isEditModalVisible"
+    :mode="'update'"
+    :item="selectedItem"
+    @close="closeEditModal"
+    @save-item="fetchListByUserId"
+  />
 </template>
 
 <script>
@@ -57,6 +68,15 @@ export default {
     };
   },
   methods: {
+    getOrderTitle(order) {
+      switch (order) {
+        case 0: return '긴급';
+        case 1: return '높음';
+        case 2: return '보통';
+        case 3: return '낮음';
+        default: return '';
+      }
+    },
     openEditModal(item) {
       this.selectedItem = item; 
       this.isEditModalVisible = true;
@@ -126,7 +146,7 @@ export default {
 }
 
 .title {
-  width: 200px;
+  width: 300px;
   font-size: 20px;
   align-items: center;
   justify-content: start;

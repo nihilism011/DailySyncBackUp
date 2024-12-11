@@ -18,6 +18,7 @@ public class TodoGroupResDto {
     private String title;
     private String description;
     private String createdAt;
+    private String status;
 
 
 
@@ -27,6 +28,7 @@ public class TodoGroupResDto {
         dto.setTitle(todoGroup.getTitle());
         dto.setDescription(todoGroup.getDescription());
         dto.setUserId(todoGroup.getUser().getId());
+        dto.setStatus(todoGroup.getStatus());
         return dto;
     }
     public static TodoGroupResDto oft(TodoGroup todoGroup) {

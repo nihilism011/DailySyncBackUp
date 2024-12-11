@@ -18,6 +18,7 @@ public class TodoListResDto {
     private Integer listOrder;
     private String title;
     private LocalDateTime checkedTime;
+    private String GroupTitle;
 
     public TodoListResDto(Long id, Long aLong, String string, Integer listOrder, String title) {
     }
@@ -56,6 +57,7 @@ public class TodoListResDto {
         dto.setCheckedTime(todoList.getCheckedTime());
         if (todoList.getTodoItem() != null) {
             dto.setItemId(todoList.getTodoItem().getId());
+            dto.setGroupTitle(todoList.getTodoItem().getTodoGroup().getTitle());
         } else {
             dto.setItemId(null);
         }

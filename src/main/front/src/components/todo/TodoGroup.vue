@@ -79,11 +79,12 @@ export default {
     },
     async deleteGroup(id) {
       if (confirm("정말 삭제할거냐? 되돌릴 수 없다!")) {
-        const url = `todo/group/${id}`;
+        const url = `todo/group/update/status/${id}`;
         try {
-          await this.$axios.delete(url);
-          this.fnMyGroup(); // 삭제 후 최신 목록을 가져옵니다.
-          alert("아이템 삭제");
+          await this.$axios.put(url);
+          await this.fnMyGroup(); // 삭제 후 최신 목록을 가져옵니다.
+          this.$emit('updateSelectedGroup', null);
+          alert("그룹 삭제");
         } catch (error) {
           alert("삭제 실패: " + error);
         }
@@ -93,7 +94,7 @@ export default {
     },
   },
   mounted() {
-    this.fnMyGroup(); // 페이지 로드 시 그룹 목록을 불러옵니다.
+    this.fnMyGroup(); 
   },
 };
 </script>
