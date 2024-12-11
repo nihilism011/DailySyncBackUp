@@ -11,7 +11,10 @@ export default {
     dailyLsit: {
       type: Object,
     },
-    fnRequest: {
+    fnMealList: {
+      type: Function,
+    },
+    fnDayList: {
       type: Function,
     },
   },
@@ -32,22 +35,26 @@ export default {
         initialView: 'dayGridMonth',
         events: [],
         eventClick: this.handleEventClick,
-        datesSet: this.handleDatesChange,
+        datesSet: this.handleMonthChange,
+        dateClick: this.handleDateClick,
       },
     }
   },
   methods: {
     handleEventClick: function (info) {
       if (typeof info === 'string') {
-        this.$emit('fnRequest', info)
+        this.$emit('fnMealList', info)
       } else {
-        this.$emit('fnRequest', info.event.startStr)
+        this.$emit('fnMealList', info.event.startStr)
       }
     },
-    handleDatesChange({ view }) {
+    handleMonthChange({ view }) {
       const start = view.currentStart
-      const dateSet = `${start.getFullYear()}-${start.getMonth() + 1}-01`
-      this.handleEventClick(dateSet)
+      const dateSet = `${start.getFullYear()}-${start.getMonth() + 1}`
+      this.$emit('fnDayList', dateSet)
+    },
+    handleDateClick() {
+      console.log('날짜선택')
     },
   },
   mounted() {},

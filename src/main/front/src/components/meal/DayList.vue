@@ -51,7 +51,7 @@ export default {
       type: Boolean,
     },
   },
-  emits: ['closePopup', 'fnRequest'],
+  emits: ['closePopup', 'fnMealList'],
   data() {
     return {}
   },
@@ -60,7 +60,7 @@ export default {
       if (confirm('삭제하시겠습니까?')) {
         const remove = await this.$axios.delete(`meal/delete/${id}`)
         if (remove.status) {
-          this.$emit('fnRequest', this.day)
+          this.$emit('fnMealList', this.day)
         }
       }
     },
