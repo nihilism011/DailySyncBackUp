@@ -116,14 +116,15 @@ export default {
         fat: 0,
         sugar: 0,
       }
-      Object.keys(this.todayNutrient).map((key) => {
-        return this.fullList[day].filter((item) => {
-          if (key in item) {
-            this.todayNutrient[key] += item[key]
-            console.log(key + '  ' + this.todayNutrient[key])
-          }
+      if(this.fullList[day] != undefined) {
+        Object.keys(this.todayNutrient).map((key) => {
+          return this.fullList[day].filter((item) => {
+            if (key in item) {
+              this.todayNutrient[key] += item[key]
+            }
+          })          
         })
-      })
+      }
     },
     openPopup(itemInfo) {
       this.editInfo = itemInfo

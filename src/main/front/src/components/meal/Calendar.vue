@@ -31,6 +31,10 @@ export default {
   data() {
     return {
       calendarOptions: {
+        locale: 'kr',
+        height: 500,
+        showNonCurrentDates: false,
+        handleWindowResize: false,
         plugins: [dayGridPlugin, interactionPlugin],
         initialView: 'dayGridMonth',
         events: [],
