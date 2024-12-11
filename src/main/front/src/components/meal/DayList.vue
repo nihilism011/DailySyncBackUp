@@ -51,7 +51,7 @@ export default {
       type: Boolean,
     },
   },
-  emits: ['closePopup', 'fnMealList'],
+  emits: ['openPopup', 'closePopup', 'fnMealList', 'fnDayList'],
   data() {
     return {}
   },
@@ -61,6 +61,7 @@ export default {
         const remove = await this.$axios.delete(`meal/delete/${id}`)
         if (remove.status) {
           this.$emit('fnMealList', this.day)
+          this.$emit('fnDayList', this.day)
         }
       }
     },
@@ -84,7 +85,6 @@ export default {
   padding: 20px;
   border-radius: 6px;
   &-wrap {
-    margin: 40px 0;
     width: 100%;
     flex-grow: 1;
     padding: 20px;

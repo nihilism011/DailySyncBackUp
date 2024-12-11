@@ -53,8 +53,8 @@ export default {
       const dateSet = `${start.getFullYear()}-${start.getMonth() + 1}`
       this.$emit('fnDayList', dateSet)
     },
-    handleDateClick() {
-      console.log('날짜선택')
+    handleDateClick(info) {
+      this.$emit('fnMealList', info.dateStr)
     },
   },
   mounted() {},
