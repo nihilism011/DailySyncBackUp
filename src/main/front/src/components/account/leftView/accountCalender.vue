@@ -6,6 +6,7 @@ import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { useDateStore } from '@/stores/dateStore'
+import { useRefreshStore } from '@/stores/refreshStore'
 import { numToWon } from '@/lib/accountLib'
 export default {
   components: {
@@ -18,9 +19,11 @@ export default {
   },
   setup() {
     const dateStore = useDateStore()
-    return { dateStore }
+    const refreshStore = useRefreshStore()
+    return { dateStore, refreshStore }
   },
   watch: {
+    'refreshStore.refreshState': 'fetchData',
     'dateStore.selectedDate': function (newDate) {
       this.updateCalendarDate(newDate)
       this.fetchData()
@@ -45,6 +48,7 @@ export default {
         dateClick: this.handleDateClick,
         dayCellContent: this.dayCellContent,
         datesSet: this.handleDatesChange,
+        height: '100%',
         footerToolbar: {
           right: 'today',
         },

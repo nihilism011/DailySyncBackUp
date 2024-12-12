@@ -8,6 +8,7 @@ import com.dailySync.account.entity.Account;
 import com.dailySync.account.entity.FavoriteAccount;
 import com.dailySync.account.repository.AccountRepository;
 import com.dailySync.account.repository.FavoriteAccountRepository;
+import com.dailySync.constant.AccountCategory;
 import com.dailySync.constant.ResMessage;
 import com.dailySync.user.entities.User;
 import com.dailySync.user.repository.UserRepository;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,7 +38,26 @@ public class AccountService {
     }
 
     public List<AccountSum> findAccountsByMonth(Long userId, int year, int month) {
-        return accountRepository.findByUserIdAndYearAndMonth(year, month, userId);
+        int prevMonth = month-1;
+        int prevYear = year;
+        if(month ==0){
+            prevMonth = 12;
+            prevYear--;
+        }
+        int nextMonth =  month+1;
+        int nextYear = year;
+        if(month ==13){
+            nextMonth =1;
+            nextYear++;
+        }
+        List <AccountSum> result = new ArrayList<>();
+        List<AccountSum> prev = accountRepository.findByUserIdAndYearAndMonth(prevYear, prevMonth, userId);
+        List<AccountSum> current = accountRepository.findByUserIdAndYearAndMonth(year, month, userId);
+        List<AccountSum> next = accountRepository.findByUserIdAndYearAndMonth(nextYear, nextMonth, userId);
+        result.addAll(prev);
+        result.addAll(current);
+        result.addAll(next);
+        return result;
     }
 
     public List<AccountResDto> findFixedAccounts(Long userId, int year, int month) {
@@ -54,10 +75,9 @@ public class AccountService {
         if (category.equals("all") || category.equals("All") || category.equals("ALL")) {
             accounts = favoriteRepository.findByUserId(userId);
         } else {
-            accounts = favoriteRepository.findByUserIdAndCategory(userId, category);
+            accounts = favoriteRepository.findByUserIdAndCategory(userId, AccountCategory.fromString(category));
         }
         return accounts.stream().map(FavoriteAccount::toResDto).toList();
-
     }
     public AccountSum findSumAccountByDate(Long userId, LocalDate date){
 
