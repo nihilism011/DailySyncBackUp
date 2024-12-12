@@ -3,16 +3,24 @@
     <div class="form-container">
       <div>
         <select v-model="form.searchType">
+          <option value="">선택해주세요</option>
           <option value="year">연도</option>
           <option value="yearMonth">월</option>
           <option value="title">제목</option>
           <option value="range">기간설정</option>
         </select>
         <div v-if="form.searchType === 'year'">
-          <input type="number" v-model="form.year" placeholder="예) 2024 입력" />
+          <select v-model="form.year">
+            <option v-for="(year, index) in years" :key="index" :value="year">{{ year }}</option>
+          </select>
         </div>
         <div v-if="form.searchType === 'yearMonth'">
-          <input type="number" v-model="form.month" placeholder="예) 2024.01 입력" />
+          <select v-model="form.year">
+            <option v-for="(year, index) in years" :key="index" :value="year">{{ year }}</option>
+          </select>
+          <select v-model="form.month">
+            <option v-for="(month, index) in months" :value="month" :key="index">{{ month }}</option>
+          </select>
         </div>
         <div v-if="form.searchType === 'range'">
           <input type="date" v-model="form.startTime" placeholder="시작일을 입력하세요" />
@@ -47,26 +55,35 @@ export default {
       form: {
         searchType: '', 
         title: '',      
-        year: '',      
-        month: '',     
+        year: '2024',      
+        month: '12',     
         startTime: '', 
         endTime: '',    
       },
       list: [], 
+      years:[],
+      months:[
+        1,2,3,4,5,6,7,8,9,10,11,12
+      ],
+      
     };
+    
   },
   methods: {
+    initYears(){
+      const currentYear = new Date().getFullYear();
+      const startYear = currentYear - 14;
+      for(let year = startYear; year <= currentYear; year++){
+        this.years.push(year);
+      }
+    },
     async fnSearch() {
       let url = ''; 
       if (this.form.searchType === 'year' && this.form.year) {
         url = `schedule/date/${this.form.year}`;
       }
-      else if (this.form.searchType === 'yearMonth' && this.form.month) {
-        const monthStr = String(this.form.month);
-        const [year, month] = monthStr.split('.'); 
-        this.form.year = year;  
-        this.form.month = month;  
-        url = `schedule/date/${year}/${month}`;
+      else if (this.form.searchType === 'yearMonth'  && this.form.year && this.form.month) {
+        url = `schedule/date/${this.form.year}/${this.form.month}`;
       }
       else if (this.form.searchType === 'range' && this.form.startTime && this.form.endTime) {
         const startTime = this.form.startTime;
@@ -95,7 +112,9 @@ export default {
       return formattedDate.toLocaleDateString(); 
     },
   },
-  mounted() {},
+  mounted() {
+    this.initYears();
+  },
 };
 </script>
 
