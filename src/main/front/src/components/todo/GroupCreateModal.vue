@@ -35,13 +35,13 @@ export default {
     },
     mode: {
       type: String,
-      default: 'create', // 기본 모드는 'create', 'update'로 변경 가능
+      default: 'create', 
     },
     item: {
       type: Object,
       default: () => ({
-        title: '', // 초기값
-        description: '', // 초기값
+        title: '', 
+        description: '', 
       }),
     },
   },
@@ -72,15 +72,13 @@ export default {
         const data = {
           title: this.newItem.title,
           description: this.newItem.description,
-          userId: 5, // 예시로 userId는 5로 고정
+          userId: 5, 
         };
 
         if (this.mode === 'create') {
-          // 그룹 추가
           url = 'todo/group';
           method = 'post';
         } else if (this.mode === 'update') {
-          // 그룹 수정
           url = `todo/group/update/${this.item.id}`;
           method = 'put';
         }
