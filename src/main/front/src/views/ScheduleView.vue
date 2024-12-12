@@ -1,6 +1,7 @@
 <template>
   <div class="left left-container">
     <div class="left-top">
+      <DateSelector v-model="selectedDate" />
     </div>
     <div class="left-bottom">
     <ScheduleList/>
@@ -8,15 +9,17 @@
   </div>
   <div class="right right-container">
     <ScheduleSearch/>
-    <Calendar :dailyLsit="dailyLsit" @fnScheduleList="fnScheduleList" @fnDayList="fnDayList"/>
+    <Calendar :dailyLsit="dailyLsit" @fnMealList="fnMealList" @fnDayList="fnDayList" />
   </div>
 </template>
 <script>
 import Calendar from '@/components/schedule/ScheduleCalendar.vue'
 import ScheduleList from '@/components/schedule/ScheduleList.vue'
 import ScheduleSearch from '@/components/schedule/ScheduleSearch.vue'
+import DateSelector from '@/components/common/DateSelector.vue'
 export default {
   components: {
+    DateSelector,
     ScheduleList,
     ScheduleSearch,
     Calendar,
