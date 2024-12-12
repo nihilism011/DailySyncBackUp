@@ -77,6 +77,15 @@
 
 <script>
 export default {
+  props: {
+    fullList: {
+      type: Object,
+    },
+    day: {
+      type: String,
+    }
+  },
+  emits: ['fnScheduleList', 'fnDayList'],
   data() {
     return {
       list: [],
@@ -95,6 +104,14 @@ export default {
         description: ''
       },
     };
+  },
+  watch: {
+    fullList(newList) {
+      if (newList && typeof newList === 'object') {
+        this.list = Object.values(newList);  // 객체의 값을 배열로 변환
+        this.todaySchedule();
+      }
+    }
   },
   methods: {
     async fnListByUserId() {
@@ -186,18 +203,21 @@ export default {
       const response = await this.$axios.post('schedule/add', this.newSchedule);
       if (response.status) {
         alert('일정이 등록되었습니다.');
-        this.isAdding = false;
+        this.isAdd = false;
         this.fnListByUserId(); 
         this.$emit('fnScheduleList', this.day);
         this.$emit('fnDayList', this.day);
+        
       } else {
         alert(response.message);
       }
     },
-
+    handleScheduleClick(item) {
+      this.$emit('selectSchedule', item);  // 부모에게 클릭된 일정 전달
+    }
   },
   mounted() {
-    this.day = this.$dayjs().format('YYYY-MM-DDTHH:mm:ss');
+    this.day = this.$dayjs().format('YYYY-MM-DD');
     this.fnListByUserId();
   },
 };
