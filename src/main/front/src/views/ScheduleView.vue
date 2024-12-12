@@ -15,10 +15,8 @@
 import Calendar from '@/components/schedule/ScheduleCalendar.vue'
 import ScheduleList from '@/components/schedule/ScheduleList.vue'
 import ScheduleSearch from '@/components/schedule/ScheduleSearch.vue'
-import DateSelector from '@/components/common/DateSelector.vue'
 export default {
   components: {
-    DateSelector,
     ScheduleList,
     ScheduleSearch,
     Calendar,
