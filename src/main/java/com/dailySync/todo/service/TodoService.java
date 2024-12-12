@@ -43,30 +43,42 @@ public class TodoService {
             // 4. 마지막 로그인 날짜를 오늘 날짜로 업데이트
             user.setLastLogin(LocalDateTime.now());
             userRepository.save(user);
+
+            updateOldTodoLists(userId);
         }
     }
 
-    // 유저에 맞춰 TodoList를 생성하는 메서드
+    private void updateOldTodoLists(Long userId) {
+
+        List<TodoList> todoLists = todoListRepository.findByUserIdAndTodoItemIsNullAndCheckedTimeIsNotNull(userId);
+
+        for (TodoList todoList : todoLists) {
+            todoList.setStatus("old");
+            todoList.setDate(todoList.getCheckedTime().toLocalDate());
+
+            todoListRepository.save(todoList);
+        }
+    }
+
+
+
     private void createTodoListsForUser(User user, LocalDate today) {
 
         List<TodoItem> todoItems = todoItemRepository.findByUserIdAndStatusAndIsAuto(user.getId(), "new", true);
 
-        //각 TodoItem에 대해 day 배열을 확인하고, 해당 요일에 맞는 TodoList 생성
         for (TodoItem todoItem : todoItems) {
             for (String day : todoItem.getDay()) {
-                // 4. 오늘 날짜를 기준으로 해당 요일에 맞는 날짜를 계산
                 LocalDate targetDate = getNextDateForDay(today, day);
-
                 if (targetDate != null && targetDate.isEqual(today)) {  // 오늘 날짜와 매칭되는 경우만 생성
-                    // 이미 해당 날짜에 TodoList가 생성되었는지 확인
                     if (!todoListRepository.existsByUserIdAndDateAndTodoItemId(user.getId(), targetDate, todoItem.getId())) {
-                        // TodoList 생성
+
                         TodoList todoList = TodoList.builder()
                                 .user(user)
                                 .todoItem(todoItem)
                                 .date(targetDate)
                                 .title(todoItem.getTitle())  // 제목은 TodoItem에서 가져옴
                                 .listOrder(todoItem.getItemOrder())  // 우선순위(기본값)
+                                .status("new")
                                 .build();
 
                         todoListRepository.save(todoList);
@@ -135,7 +147,7 @@ public class TodoService {
     }
     public List<TodoListResDto> getTodayList(Long userId) {
         LocalDate today = LocalDate.now();
-        List<TodoList> todoLists = todoListRepository.findByUserIdAndDateOrderByListOrderAsc(userId, today);
+        List<TodoList> todoLists = todoListRepository.findByUserIdAndDateOrderByListOrderAndGroupId(userId, today);
         return todoLists.stream()
                 .map(TodoListResDto::of)
                 .collect(Collectors.toList());
@@ -179,6 +191,7 @@ public class TodoService {
                 .checkedTime(null)
                 .title(reqDto.getTitle())
                 .listOrder(listOrder)
+                .status("new")
                 .build();
 
         todoListRepository.save(todoList);

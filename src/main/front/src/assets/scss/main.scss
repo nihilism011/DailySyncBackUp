@@ -331,6 +331,22 @@ body {
       flex-direction: column;
       align-items: flex-end;
     }
+    & > .tit-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      position: relative;
+      .btn-default {
+        position: absolute;
+        right: 0;
+      }
+      .tit {
+        font-size: 32px;
+        font-weight: bold;
+        margin: 40px 0;
+      }
+    }
   }
 }
 
@@ -340,11 +356,6 @@ input {
   border-radius: 4px;
   padding: 0 10px;
 }
-
-.mg40 {
-  margin: 30px 0;
-}
-
 .popup {
   &-box {
     box-sizing: border-box;
@@ -426,7 +437,7 @@ input {
   height: 40px;
   padding: 0 14px;
   border-color: var(--color-contrastyFA);
-  box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.2);
   font-size: 15px;
   font-weight: bold;
   transition: all 0.2s;
@@ -598,7 +609,28 @@ input {
   }
 }
 
-.fc-event-main {
+.fc-daygrid-body {
+  // td:not(data-date) {
+  //   display: none;
+  // }
+  tbody tr:nth-of-type(1) td.fc-day-disabled {
+    background-color: var(--base-white);
+    border: 0;
+  }
+  :where(tbody tr:nth-last-of-type(1), tbody tr:nth-last-of-type(2))
+    > td:not(.fc-day-future, .fc-day-past) {
+    display: none;
+  }
+}
+
+.fc-dayGridMonth-view {
+  box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.3);
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.fc-event-main,
+.fc-day:not(.fc-day-disabled) {
   cursor: pointer;
 }
 // .fc-day-disabled {

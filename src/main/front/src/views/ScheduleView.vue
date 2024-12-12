@@ -9,14 +9,16 @@
   <div class="right right-container">
     <ScheduleSearch/>
     <Calendar :dailyLsit="dailyLsit" @fnScheduleList="fnScheduleList" @fnDayList="fnDayList"/>
-  </div> 
+  </div>
 </template>
 <script>
 import Calendar from '@/components/schedule/ScheduleCalendar.vue'
 import ScheduleList from '@/components/schedule/ScheduleList.vue'
 import ScheduleSearch from '@/components/schedule/ScheduleSearch.vue'
+import DateSelector from '@/components/common/DateSelector.vue'
 export default {
   components: {
+    DateSelector,
     ScheduleList,
     ScheduleSearch,
     Calendar,
@@ -28,10 +30,10 @@ export default {
       fullList: [],
     };
   },
-  
+
   methods: {
     async fnScheduleList(inputDay) {
-      const userId = 6; 
+      const userId = 6;
       console.log(inputDay);
       let year = inputDay.split('-')[0]
       let month = inputDay.split('-')[1]
@@ -46,7 +48,7 @@ export default {
     },
     async fnDayList(inputDay) {
       console.log(inputDay);
-      const userId = 6; 
+      const userId = 6;
       let year = inputDay.split('-')[0]
       let month = inputDay.split('-')[1]
       const daily = await this.$axios.get(`schedule/userId/${userId}/${year}/${month}`)
