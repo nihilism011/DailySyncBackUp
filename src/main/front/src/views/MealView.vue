@@ -2,9 +2,11 @@
   <div class="left">
     {{ dailyLsit }}
     <Calendar :dailyLsit="dailyLsit" @fnMealList="fnMealList" @fnDayList="fnDayList" />
+    <TotalNutrient :todayNutrient="todayNutrient" />
   </div>
   <div class="right meal-type">
     <WeekendList :fullList="fullList" :day="day" :week="week" />
+    <button @click="openPopup([])" class="btn-default mg40">식단 등록</button>
     <DayList
       :popupState="popupState"
       :fullList="fullList"
@@ -12,8 +14,8 @@
       :categoryList="categoryList"
       @openPopup="openPopup"
       @fnMealList="fnMealList"
+      @fnDayList="fnDayList"
     />
-    <button @click="openPopup([])" class="btn-default">식단 등록</button>
     <MealModal
       :popupState="popupState"
       :day="day"
@@ -22,6 +24,7 @@
       :editInfo="editInfo"
       @closePopup="popupState = false"
       @fnMealList="fnMealList"
+      @fnDayList="fnDayList"
     />
   </div>
 </template>
@@ -32,6 +35,7 @@ import MealModal from '@/components/meal/MealModal.vue'
 import { mealCategory } from '@/constants/mealCategory.js'
 import { iconCategory } from '@/constants/iconCategory.js'
 import Calendar from '@/components/meal/Calendar.vue'
+import TotalNutrient from '@/components/meal/TotalNutrient.vue'
 
 export default {
   components: {
@@ -39,6 +43,7 @@ export default {
     DayList,
     MealModal,
     Calendar,
+    TotalNutrient,
   },
   data() {
     return {
@@ -51,12 +56,12 @@ export default {
       iconList: iconCategory,
       editInfo: [],
       todayNutrient: {
-        kcal: 0,
+        kcalories: 0,
         sodium: 0,
-        carb: 0,
+        carbs: 0,
         protein: 0,
         fat: 0,
-        suger: 0,
+        sugar: 0,
       },
     }
   },
@@ -103,7 +108,23 @@ export default {
       this.fnNutrient(this.day)
     },
     fnNutrient(day) {
-      console.log(this.fullList[day])
+      this.todayNutrient = {
+        kcalories: 0,
+        sodium: 0,
+        carbs: 0,
+        protein: 0,
+        fat: 0,
+        sugar: 0,
+      }
+      if (this.fullList[day] != undefined) {
+        Object.keys(this.todayNutrient).map((key) => {
+          return this.fullList[day].filter((item) => {
+            if (key in item) {
+              this.todayNutrient[key] += item[key]
+            }
+          })
+        })
+      }
     },
     openPopup(itemInfo) {
       this.editInfo = itemInfo
@@ -112,7 +133,6 @@ export default {
   },
   mounted() {
     this.day = this.$dayjs().format('YYYY-MM-DD')
-    this.fnMealList(this.day)
     this.fnMealList(this.day)
   },
 }
