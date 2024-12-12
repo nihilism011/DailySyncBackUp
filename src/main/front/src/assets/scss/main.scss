@@ -341,6 +341,10 @@ input {
   padding: 0 10px;
 }
 
+.mg40 {
+  margin: 30px 0;
+}
+
 .popup {
   &-box {
     box-sizing: border-box;
@@ -593,3 +597,10 @@ input {
     }
   }
 }
+
+.fc-event-main {
+  cursor: pointer;
+}
+// .fc-day-disabled {
+//   display: none;
+// }

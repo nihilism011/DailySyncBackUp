@@ -1,7 +1,7 @@
 <template>
   <div class="left left-container">
     <div class="left-top">
-      <AccountDateSelector v-model="date" />
+      <Calendar />
     </div>
     <div class="left-bottom"><FixedItemList /></div>
   </div>
@@ -14,18 +14,18 @@
 </template>
 <script>
 import { useDateStore } from '@/stores/dateStore'
-import AccountDateSelector from '@/components/account/leftView/AccountDateSelector.vue'
 import AccountItemList from '@/components/account/rightView/AccountItemList.vue'
 import DateScore from '@/components/account/rightView/DateScore.vue'
 import UpdatePopup from '@/components/account/UpdatePopup.vue'
 import FixedItemList from '@/components/account/leftView/FixedItemList.vue'
+import Calendar from '@/components/account/leftView/accountCalender.vue'
 export default {
   components: {
-    AccountDateSelector,
     AccountItemList,
     FixedItemList,
     DateScore,
     UpdatePopup,
+    Calendar,
   },
   data() {
     const dateStore = useDateStore()
@@ -45,16 +45,11 @@ export default {
 </script>
 <style scoped>
 .left-container {
-  display: flex;
-  flex-direction: column;
   .left-top {
-    align-content: center;
-    justify-items: center;
-    height: 50%;
-    padding: 20px;
+    height: 60%;
   }
   .left-bottom {
-    height: 50%;
+    height: 40%;
     padding: 20px;
   }
 }

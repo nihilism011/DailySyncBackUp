@@ -173,10 +173,12 @@
     <div class="dimmed" @click="popupClsoe">dim</div>
   </div>
   <RecomModal
+    ref="recomRefresh"
     :categoryList="categoryList"
     :recomState="recomState"
     @recomClose="recomState = false"
     @recomInfo="fnRecom"
+    @recomAdd="recomRefresh"
   />
 </template>
 <script>
@@ -199,8 +201,11 @@ export default {
     day: {
       type: String,
     },
+    fnDayList: {
+      type: Function,
+    },
   },
-  emits: ['closePopup', 'fnMealList'],
+  emits: ['closePopup', 'fnMealList', 'fnDayList'],
   components: {
     IconCheckbox,
     RecomModal,
@@ -246,7 +251,12 @@ export default {
       const submit = await this.$axios.post(`meal/add`, param)
       if (submit.status) {
         alert('등록 되었습니다.')
-        this.$emit('fnMealList', this.$dayjs().format('YYYY-MM-DD'))
+        let today = this.$dayjs().format('YYYY-MM-DD')
+        this.$emit('fnMealList', today)
+        this.$emit('fnDayList', today)
+        if (param[0].isFavorite) {
+          this.recomRefresh()
+        }
         this.popupClsoe()
       } else {
         alert(submit.message)
@@ -268,6 +278,7 @@ export default {
       this.iconSelected = false
     },
     popupClsoe() {
+      this.recomToggle = true
       this.$emit('closePopup')
     },
     resetToDefault() {
@@ -328,6 +339,9 @@ export default {
     },
     closeRecom() {
       this.recomState = false
+    },
+    recomRefresh() {
+      this.$refs.recomRefresh.fnFavorite()
     },
   },
   mounted() {},

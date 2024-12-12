@@ -28,6 +28,9 @@ public class Schedule extends BaseEntity {
     private User user;
 
     @Column (nullable = false)
+    private Long id;
+
+    @Column (nullable = false)
     private LocalDateTime startTime;
 
     @Column (nullable = false)
@@ -41,6 +44,7 @@ public class Schedule extends BaseEntity {
 
     public static ScheduleResDto toResDto(Schedule schedule) {
         return ScheduleResDto.builder().
+                id(schedule.getId()).
                 title(schedule.getTitle()).
                 description(schedule.getDescription()).
                 startTime(schedule.getStartTime()).
@@ -51,6 +55,7 @@ public class Schedule extends BaseEntity {
     public static Schedule of(User user, ScheduleReqDto reqDto) {
         return Schedule.builder().
                 user(user).
+                id(reqDto.getId()).
                 title(reqDto.getTitle()).
                 startTime(reqDto.getStartTime()).
                 endTime(reqDto.getEndTime()).
@@ -59,6 +64,9 @@ public class Schedule extends BaseEntity {
     }
 
     public void update(ScheduleReqDto reqDto) {
+        if (reqDto.getId() != null){
+            this.id = reqDto.getId();
+        }
         if (reqDto.getTitle() != null) {
             this.title = reqDto.getTitle();
         }

@@ -77,7 +77,8 @@ export default {
       } else {
         console.log(recommand.message)
       }
-
+    },
+    async fnFavorite() {
       const favorite = await this.$axios.get(`meal/favorite`)
       if (favorite.status) {
         this.favoriteList = favorite.data
@@ -101,17 +102,17 @@ export default {
       this.$emit('recomClose')
     },
     async fnRemove(id) {
-      console.log(id)
       if (confirm('삭제하시겠습니까?')) {
         const remove = await this.$axios.delete(`meal/delete/${id}`)
         if (remove.status) {
-          this.fnRecomList()
+          this.fnFavorite()
         }
       }
     },
   },
   mounted() {
     this.fnRecomList()
+    this.fnFavorite()
   },
 }
 </script>
