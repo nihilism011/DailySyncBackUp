@@ -19,8 +19,8 @@ public class TodoController {
     public String autoGenerateTodoList() {
         Long userId = 5L;
         // 자동 생성 로직 호출
-        todoService.TodoLoginAutoListCreate(userId);
 
+        todoService.TodoLoginAutoListCreate(userId);
         return "유저아이디" + userId;
     }
 
