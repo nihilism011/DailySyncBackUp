@@ -14,11 +14,13 @@ public class TodoListResDto {
 
     private Long id;
     private Long itemId;
+    private Long groupId;
     private String date;
     private Integer listOrder;
     private String title;
     private LocalDateTime checkedTime;
     private String GroupTitle;
+
 
     public TodoListResDto(Long id, Long aLong, String string, Integer listOrder, String title) {
     }
@@ -58,6 +60,7 @@ public class TodoListResDto {
         if (todoList.getTodoItem() != null) {
             dto.setItemId(todoList.getTodoItem().getId());
             dto.setGroupTitle(todoList.getTodoItem().getTodoGroup().getTitle());
+            dto.setGroupId(todoList.getTodoItem().getTodoGroup().getId());
         } else {
             dto.setItemId(null);
         }
