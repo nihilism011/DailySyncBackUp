@@ -312,12 +312,12 @@ body {
 
 #app {
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 80px);
 }
 
 #container {
   display: flex;
-  min-height: 100vh;
+  min-height: 100%;
   .left {
     width: 30%;
     padding: 30px;
@@ -500,6 +500,25 @@ input {
   }
 }
 
+.ip-ra-txt {
+  display: flex;
+  align-items: center;
+  gap: 0 10px;
+  label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-contrastyA);
+    padding-left: 24px;
+    background: left center/auto no-repeat;
+    background-image: url($ico-path + 'ico_radio.png');
+    cursor: pointer;
+  }
+  input:checked + label {
+    background-image: url($ico-path + 'ico_radio1_2.png');
+    color: var(--color-contrasty2);
+  }
+}
+
 .select-box {
   select {
     height: 34px;
@@ -535,7 +554,8 @@ input {
       .icon-btn {
         width: 60px;
         height: 60px;
-        background: center / 40px no-repeat;
+        font-size: 0;
+        background: url($ico-path + 'icon_default.png') center / 40px no-repeat;
         $iconClass: (
           bread,
           burger,

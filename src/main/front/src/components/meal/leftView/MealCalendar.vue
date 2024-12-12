@@ -8,7 +8,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 
 export default {
   props: {
-    dailyLsit: {
+    dailyList: {
       type: Object,
     },
     fnMealList: {
@@ -22,16 +22,16 @@ export default {
     FullCalendar, // make the <FullCalendar> tag available
   },
   watch: {
-    dailyLsit(newValue) {
+    dailyList(newValue) {
       if (newValue && Array.isArray(newValue)) {
-        this.calendarOptions.events = this.dailyLsit
+        this.calendarOptions.events = this.dailyList
       }
     },
   },
   data() {
     return {
       calendarOptions: {
-        locale: 'kr',
+        locale: 'ko',
         height: 550,
         showNonCurrentDates: false,
         plugins: [dayGridPlugin, interactionPlugin],
@@ -47,6 +47,12 @@ export default {
         },
         footerToolbar: {
           right: 'today',
+        },
+        buttonText: {
+          today: '오늘',
+        },
+        dayCellContent: function (info) {
+          return parseInt(info.dayNumberText)
         },
       },
     }

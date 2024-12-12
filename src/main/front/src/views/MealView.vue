@@ -1,6 +1,6 @@
 <template>
   <div class="left">
-    <Calendar :dailyLsit="dailyLsit" @fnMealList="fnMealList" @fnDayList="fnDayList" />
+    <Calendar :dailyList="dailyList" @fnMealList="fnMealList" @fnDayList="fnDayList" />
     <TotalNutrient :todayNutrient="todayNutrient" />
   </div>
   <div class="right meal-type">
@@ -33,13 +33,13 @@
   </div>
 </template>
 <script>
-import WeekendList from '@/components/meal/WeekendList.vue'
-import DayList from '@/components/meal/DayList.vue'
-import MealModal from '@/components/meal/MealModal.vue'
+import WeekendList from '@/components/meal/rightView/WeekendList.vue'
+import DayList from '@/components/meal/rightView/DayList.vue'
+import MealModal from '@/components/meal/popup/MealModal.vue'
 import { mealCategory } from '@/constants/mealCategory.js'
 import { iconCategory } from '@/constants/iconCategory.js'
-import Calendar from '@/components/meal/Calendar.vue'
-import TotalNutrient from '@/components/meal/TotalNutrient.vue'
+import Calendar from '@/components/meal/leftView/MealCalendar.vue'
+import TotalNutrient from '@/components/meal/leftView/TotalNutrient.vue'
 
 export default {
   components: {
@@ -51,7 +51,7 @@ export default {
   },
   data() {
     return {
-      dailyLsit: [],
+      dailyList: [],
       fullList: [],
       day: '',
       week: [],
@@ -87,7 +87,7 @@ export default {
       let month = inputDay.split('-')[1]
       const daily = await this.$axios.get(`meal/mealDayList/${year}/${month}`)
       if (daily.status) {
-        this.dailyLsit = daily.data.mealDay.map((item) => ({
+        this.dailyList = daily.data.mealDay.map((item) => ({
           title: `${item.cnt}`, // cnt를 title로 사용
           date: item.date, // 해당 날짜로 설정
         }))

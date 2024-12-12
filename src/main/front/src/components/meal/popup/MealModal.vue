@@ -14,15 +14,15 @@
               <div class="bot-box">
                 <button
                   class="icon-btn"
-                  :class="icon"
-                  :title="icon"
+                  :class="nutrient.icon"
+                  :title="nutrient.icon ? nutrient.icon : '아이콘 선택'"
                   @click="iconSelected = !iconSelected"
                 >
                   아이콘선택
                 </button>
                 <IconCheckbox
                   v-if="iconSelected"
-                  :icon="icon"
+                  :icon="nutrient.icon"
                   :iconList="iconList"
                   @iconSelected="valueChecge"
                 />
@@ -36,7 +36,7 @@
               </div>
               <div class="bot-box">
                 <div class="select-box">
-                  <select id="category" v-model="category">
+                  <select id="category" v-model="nutrient.category">
                     <option value="" hidden>카테고리 선택</option>
                     <option v-for="item in categoryList" :value="item.ename">
                       {{ item.name }}
@@ -66,7 +66,7 @@
             </div>
             <div class="bot-box">
               <div class="ip-box">
-                <input type="text" v-model="foodName" />
+                <input type="text" v-model="nutrient.foodName" />
               </div>
             </div>
           </div>
@@ -78,7 +78,7 @@
             </div>
             <div class="bot-box">
               <div class="ip-box">
-                <input type="number" v-model="kcalories" />
+                <input type="number" v-model="nutrient.kcalories" />
                 <span class="unit">kcal</span>
               </div>
             </div>
@@ -89,7 +89,7 @@
             </div>
             <div class="bot-box">
               <div class="ip-box">
-                <input type="number" v-model="sodium" />
+                <input type="number" v-model="nutrient.sodium" />
                 <span class="unit">mg</span>
               </div>
             </div>
@@ -100,7 +100,7 @@
             </div>
             <div class="bot-box">
               <div class="ip-box">
-                <input type="number" v-model="carbs" />
+                <input type="number" v-model="nutrient.carbs" />
                 <span class="unit">g</span>
               </div>
             </div>
@@ -111,7 +111,7 @@
             </div>
             <div class="bot-box">
               <div class="ip-box">
-                <input type="number" v-model="protein" />
+                <input type="number" v-model="nutrient.protein" />
                 <span class="unit">g</span>
               </div>
             </div>
@@ -122,7 +122,7 @@
             </div>
             <div class="bot-box">
               <div class="ip-box">
-                <input type="number" v-model="fat" />
+                <input type="number" v-model="nutrient.fat" />
                 <span class="unit">g</span>
               </div>
             </div>
@@ -133,7 +133,7 @@
             </div>
             <div class="bot-box">
               <div class="ip-box">
-                <input type="number" v-model="sugar" />
+                <input type="number" v-model="nutrient.sugar" />
                 <span class="unit">g</span>
               </div>
             </div>
@@ -146,7 +146,7 @@
             </div>
             <div class="bot-box">
               <div class="text-box">
-                <textarea v-model="description"></textarea>
+                <textarea v-model="nutrient.description"></textarea>
               </div>
             </div>
           </div>
@@ -154,7 +154,7 @@
         <template v-if="!editMode && recomToggle">
           <div class="favorite-box">
             <div class="ip-chk-txt">
-              <input type="checkbox" id="favorite" v-model="isFavorite" />
+              <input type="checkbox" id="favorite" v-model="nutrient.isFavorite" />
               <label for="favorite">즐겨찾기 추가</label>
             </div>
           </div>
@@ -182,8 +182,9 @@
   />
 </template>
 <script>
-import IconCheckbox from '@/components/meal/IconCheckbox.vue'
-import RecomModal from '@/components/meal/RecomModal.vue'
+import { useNutrientStore } from '@/stores/nutrientStore'
+import IconCheckbox from '@/components/meal/popup/IconCheckbox.vue'
+import RecomModal from '@/components/meal/popup/RecomModal.vue'
 export default {
   props: {
     popupState: {
@@ -212,49 +213,44 @@ export default {
   },
   data() {
     return {
-      id: '',
-      icon: '',
+      nutrientStore: useNutrientStore(),
       iconSelected: false,
-      category: '',
-      foodName: '',
-      description: '',
-      kcalories: 0,
-      sugar: 0,
-      protein: 0,
-      fat: 0,
-      carbs: 0,
-      sodium: 0,
       isFavorite: false,
       editMode: false,
       recomState: false,
       recomToggle: true,
     }
   },
+  computed: {
+    nutrient() {
+      const nutrientData = this.nutrientStore.nutrient
+      nutrientData.date = this.day
+      return nutrientData
+    },
+    isEditMode() {
+      return this.nutrientStore.editMode
+    },
+  },
   watch: {
     editInfo() {
       if (Object.keys(this.editInfo).length > 0) {
+        this.nutrientStore.setNutrient(this.editInfo)
         this.editMode = true
-        Object.keys(this.$data).forEach((key) => {
-          if (key in this.editInfo) {
-            this[key] = this.editInfo[key]
-          }
-        })
       } else {
+        this.nutrientStore.resetNutrient()
         this.editMode = false
-        this.resetToDefault()
       }
     },
   },
   methods: {
     async fnSubmit() {
-      const param = this.fnParam()
-      const submit = await this.$axios.post(`meal/add`, param)
+      const { id, ...param } = this.nutrient
+      const submit = await this.$axios.post(`meal/add`, [param])
       if (submit.status) {
         alert('등록 되었습니다.')
-        let today = this.$dayjs().format('YYYY-MM-DD')
-        this.$emit('fnMealList', today)
-        this.$emit('fnDayList', today)
-        if (param[0].isFavorite) {
+        this.$emit('fnMealList', this.day)
+        this.$emit('fnDayList', this.day)
+        if (param.isFavorite) {
           this.recomRefresh()
         }
         this.popupClsoe()
@@ -263,7 +259,7 @@ export default {
       }
     },
     async fnEdit() {
-      const param = this.fnParam()
+      const param = this.nutrient
       const edit = await this.$axios.patch(`meal/edit`, param)
       if (edit.status) {
         alert('수정 되었습니다.')
@@ -274,57 +270,18 @@ export default {
       }
     },
     valueChecge(value) {
-      this.icon = value
+      this.nutrient.icon = value
       this.iconSelected = false
     },
     popupClsoe() {
       this.recomToggle = true
+      this.iconSelected = false
       this.$emit('closePopup')
     },
-    resetToDefault() {
-      this.id = ''
-      this.icon = ''
-      this.iconSelected = false
-      this.category = ''
-      this.foodName = ''
-      this.description = ''
-      this.kcalories = 0
-      this.sugar = 0
-      this.protein = 0
-      this.fat = 0
-      this.carbs = 0
-      this.sodium = 0
-      this.isFavorite = false
-      this.editMode = false
-    },
-    fnParam() {
-      if (this.id == null || this.id == '') {
-        return [this.paramInfo()]
-      } else {
-        return this.paramInfo()
-      }
-    },
-    paramInfo() {
-      return {
-        id: this.id,
-        icon: this.icon,
-        category: this.category,
-        foodName: this.foodName,
-        description: this.description,
-        kcalories: this.kcalories,
-        sugar: this.sugar,
-        protein: this.protein,
-        fat: this.fat,
-        carbs: this.carbs,
-        sodium: this.sodium,
-        isFavorite: this.isFavorite,
-        date: this.day,
-      }
-    },
     fnRecom(item) {
-      Object.keys(this.$data).forEach((key) => {
+      Object.keys(this.nutrient).forEach((key) => {
         if (key in item[0]) {
-          this[key] = item[0][key]
+          this.nutrient[key] = item[0][key]
         }
       })
       if (item[1]) {
@@ -336,6 +293,7 @@ export default {
     },
     openRecom() {
       this.recomState = true
+      this.iconSelected = false
     },
     closeRecom() {
       this.recomState = false
