@@ -39,6 +39,9 @@ public class TodoList extends BaseEntity {
     @Column
     private String title; // 변동항목 타이틀
 
+    @Column
+    private String status;
+
 
 
 }

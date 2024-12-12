@@ -7,21 +7,23 @@
         </div>
         <button @click="closeModal">X</button>
       </div>
-      <div v-if = "mode === 'update'">
-        <label>중요도 : 긴급  
+      <div v-if = "mode === 'update' && newItem.listOrder !=4 ">
+        <span style="margin-right: 20px;">중요도 : </span> 
+        <label style="margin-right: 20px;">긴급  
         <input type="radio" v-model="newItem.listOrder" value='0'/>
         </label>
-        <label> 높음  
+        <label style="margin-right: 20px;"> 높음  
         <input type="radio" v-model="newItem.listOrder" value='1'/>
         </label>
-        <label> 보통  
+        <label style="margin-right: 20px;"> 보통  
         <input type="radio" v-model="newItem.listOrder" value='2'/>
         </label>
         <label> 낮음   
         <input type="radio" v-model="newItem.listOrder" value='3'/>
         </label>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="margin-top: 20px;">
+        <span style="margin-right: 20px;">제목: </span> 
         <input v-model="newItem.title" placeholder="제목 입력" />
       </div>
       <div class="modal-footer">
