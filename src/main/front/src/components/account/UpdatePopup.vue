@@ -36,7 +36,13 @@
         <button v-if="mode === 'update'" @click="deleteItem" class="button delete-btn">삭제</button>
       </div>
       <div class="button-group" v-if="mode === 'favor'">
-        <button @click="saveItem" class="button save-btn">즐겨찾기 등록</button>
+        <button @click="saveItem" class="button save-btn">즐찾등록</button>
+        <button v-if="requestBody.id != null" @click="updateFavor" class="button save-btn">
+          즐찾수정
+        </button>
+        <button @click="deleteFavor" v-if="requestBody.id != null" class="button delete-btn">
+          즐찾삭제
+        </button>
         <button @click="$emit('close')" class="button cancel-btn">취소</button>
       </div>
       <div>
@@ -47,7 +53,9 @@
     <div class="favor-contents">
       <div>
         즐겨찾기
-        <button class="button favor-btn" @click="changeFavorMode">즐겨찾기 추가/제거</button>
+        <button class="button favor-btn" @click="changeFavorMode" v-if="mode != 'favor'">
+          즐겨찾기 추가/제거
+        </button>
       </div>
       <div class="form-group">
         <select v-model="favorSearchCategory" class="input-field">
@@ -94,6 +102,7 @@ export default {
       type: Object,
       default() {
         return {
+          id: null,
           title: '',
           category: 'OTHER',
           amount: 0,
@@ -126,6 +135,9 @@ export default {
     favorSearch() {
       this.fetchFavorList()
     },
+    'refreshStore.refreshState': function () {
+      this.fetchFavorList()
+    },
   },
   data() {
     return {
@@ -150,18 +162,22 @@ export default {
     updateAccountItem,
     isValid,
     numToWon,
-    async saveItem() {
-      const requestBody = { ...this.requestBody }
-      //todo 유효성겁사 alert로 구성되어 있는데 isValid 수정해서 좀더 괜찮은 디자인으로 하면 좋을듯.
+    makeRequestBody() {
+      const data = { ...this.requestBody }
       if (
-        !isValid(requestBody.title, 'title') ||
-        !isValid(requestBody.amount, 'amount') ||
-        !isValid(requestBody.description, 'description')
+        !isValid(data.title, 'title') ||
+        !isValid(data.amount, 'amount') ||
+        !isValid(data.description, 'description')
       ) {
-        return
+        return false
       }
-      requestBody.amount =
-        this.amountType === 'plus' ? this.requestBody.amount : -this.requestBody.amount
+      data.amount = this.amountType === 'plus' ? this.requestBody.amount : -this.requestBody.amount
+
+      return data
+    },
+    async saveItem() {
+      const requestBody = this.makeRequestBody()
+      if (!requestBody) return
       let res = false
       if (this.mode === 'create') {
         const createReqBody = {
@@ -185,11 +201,23 @@ export default {
     replaceFavorItem(item) {
       this.amountType = item.amount > 0 ? 'plus' : 'minus'
       this.requestBody = {
+        id: item.id,
         category: item.category,
         amount: Math.abs(item.amount),
         title: item.title,
         description: item.description,
         fixed: false,
+      }
+    },
+    async updateFavor() {
+      const requestBody = this.makeRequestBody()
+      if (!requestBody) return
+      const { data } = await this.$axios.patch(
+        `account/items/favor/${this.requestBody.id}`,
+        this.requestBody,
+      )
+      if (data) {
+        this.refreshStore.setRefresh()
       }
     },
     async deleteItem() {
@@ -203,10 +231,18 @@ export default {
         this.$emit('close')
       }
     },
+    async deleteFavor() {
+      if (!confirm('이 항목을 삭제 하시겠습니까?')) {
+        return
+      }
+      const { data } = await this.$axios.delete(`account/items/favor/${this.requestBody.id}`)
+      if (data) {
+        this.refreshStore.setRefresh()
+      }
+    },
     async fetchFavorList() {
       const url = `account/items/favor/${this.favorSearchCategory}`
       const { data: favorList } = await this.$axios.get(url)
-      console.log(favorList)
       const filteredList = favorList.filter(
         (item) =>
           item.title.includes(this.favorSearch) || item.description.includes(this.favorSearch),

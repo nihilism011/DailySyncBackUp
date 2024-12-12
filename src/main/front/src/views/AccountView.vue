@@ -6,6 +6,7 @@
     <div class="left-bottom"><FixedItemList /></div>
   </div>
   <div class="right right-container">
+    <div>{{ dateStore.selectedDate }}</div>
     <DateScore ref="dateScoreRef" />
     <AccountItemList />
     <button @click="viewUpdatePopup = true" class="insert-btn">가계부 항목 추가</button>
@@ -27,29 +28,30 @@ export default {
     UpdatePopup,
     Calendar,
   },
-  data() {
+  setup() {
     const dateStore = useDateStore()
+    return { dateStore }
+  },
+  data() {
     return {
-      dateStore,
-      date: '',
       dateList: [],
       fixedList: [],
       viewUpdatePopup: false,
     }
   },
   methods: {},
-  mounted() {
-    this.date = this.dateStore.selectedDate
-  },
 }
 </script>
 <style scoped>
 .left-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   .left-top {
-    height: 60%;
+    height: 65%;
   }
   .left-bottom {
-    height: 40%;
+    height: 30%;
     padding: 20px;
   }
 }

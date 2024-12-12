@@ -1,5 +1,10 @@
 <template>
   <FullCalendar :options="calendarOptions" />
+  <div>{{ $dayjs(dateStore.selectedDate).get('month') + 1 }} 월 총합</div>
+  <div class="month-sum">
+    <div>수입 : {{ totalPlusSum }}</div>
+    <div>지출 : {{ totalMinusSum }}</div>
+  </div>
 </template>
 <script>
 import FullCalendar from '@fullcalendar/vue3'
@@ -34,11 +39,13 @@ export default {
   },
   data() {
     return {
+      totalPlusSum: 0,
+      totalMinusSum: 0,
       calendarData: [],
       calendarOptions: {
         plugins: [dayGridPlugin, interactionPlugin],
+        showNonCurrentDates: false,
         initialView: 'dayGridMonth',
-        initialDate: this.dateStore.selectedDate,
         headerToolbar: {
           left: 'prev',
           center: 'title',
@@ -46,6 +53,7 @@ export default {
         },
         events: [],
         dateClick: this.handleDateClick,
+        eventClick: this.handleEventClick,
         dayCellContent: this.dayCellContent,
         datesSet: this.handleDatesChange,
         height: '100%',
@@ -62,6 +70,19 @@ export default {
       const month = this.$dayjs(this.dateStore.selectedDate).get('month') + 1
       const url = `account/items/month/${year}/${month}`
       const { data } = await this.$axios.get(url)
+      let plus = 0
+      let minus = 0
+      data.map((item) => {
+        if (
+          this.$dayjs(item.accountDate).get('month') ===
+          this.$dayjs(this.dateStore.selectedDate).get('month')
+        ) {
+          plus += item.plusSumAmount
+          minus += item.minusSumAmount
+        }
+      })
+      this.totalPlusSum = this.numToWon(plus)
+      this.totalMinusSum = this.numToWon(minus)
       const transformedData = data.flatMap((item) => {
         const result = []
         if (item.plusSumAmount !== 0) {
@@ -83,6 +104,10 @@ export default {
       })
       this.calendarData = transformedData
     },
+    handleEventClick(info) {
+      const dateSet = info.event.startStr
+      this.handleDateClick({ dateStr: dateSet })
+    },
     handleDateClick(info) {
       this.dateStore.setSelectedDate(info.dateStr)
     },
@@ -102,4 +127,8 @@ export default {
   },
 }
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.month-sum {
+  display: flex;
+}
+</style>

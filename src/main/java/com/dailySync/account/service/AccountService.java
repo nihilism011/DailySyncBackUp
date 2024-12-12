@@ -38,19 +38,15 @@ public class AccountService {
     }
 
     public List<AccountSum> findAccountsByMonth(Long userId, int year, int month) {
-        int prevMonth = month-1;
-        int prevYear = year;
-        if(month ==0){
-            prevMonth = 12;
-            prevYear--;
-        }
-        int nextMonth =  month+1;
-        int nextYear = year;
-        if(month ==13){
-            nextMonth =1;
-            nextYear++;
-        }
-        List <AccountSum> result = new ArrayList<>();
+        int prevMonth = month == 1 ? 12 : month - 1;
+        int prevYear = (month == 1) ? year - 1 : year;
+
+        // 다음 달 계산
+        int nextMonth = month == 12 ? 1 : month + 1;
+        int nextYear = (month == 12) ? year + 1 : year;
+
+        // 결과 리스트 초기화
+        List<AccountSum> result = new ArrayList<>();
         List<AccountSum> prev = accountRepository.findByUserIdAndYearAndMonth(prevYear, prevMonth, userId);
         List<AccountSum> current = accountRepository.findByUserIdAndYearAndMonth(year, month, userId);
         List<AccountSum> next = accountRepository.findByUserIdAndYearAndMonth(nextYear, nextMonth, userId);
@@ -79,9 +75,10 @@ public class AccountService {
         }
         return accounts.stream().map(FavoriteAccount::toResDto).toList();
     }
-    public AccountSum findSumAccountByDate(Long userId, LocalDate date){
 
-        return accountRepository.findSumByUserIdAndDate(date,userId).orElse(new AccountSum(date));
+    public AccountSum findSumAccountByDate(Long userId, LocalDate date) {
+
+        return accountRepository.findSumByUserIdAndDate(date, userId).orElse(new AccountSum(date));
     }
 
     //생성
