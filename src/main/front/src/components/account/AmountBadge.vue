@@ -50,11 +50,11 @@ export default {
           borderRadius: '8px',
         },
         medium: {
-          width: '200px',
-          height: '50px',
+          width: '180px',
+          height: '30px',
           fontSize: 16,
           lineHeight: '50px',
-          borderRadius: '12px',
+          borderRadius: '8px',
         },
         large: {
           width: '250px',
@@ -93,7 +93,7 @@ export default {
         justifyContent: 'start',
         alignItems: 'center',
         paddingLeft: '20px',
-        fontSize: `${this.getFontSizeRatio() * 1.2}px`,
+        fontSize: `${this.getFontSizeRatio()}px`,
         borderRadius: 'inherit',
       }
     },
@@ -102,7 +102,7 @@ export default {
     getFontSizeRatio() {
       switch (this.size) {
         case 'small':
-          return 10
+          return 12
         case 'medium':
           return 16
         case 'large':

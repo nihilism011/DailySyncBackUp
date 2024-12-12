@@ -20,7 +20,7 @@ public class FavoriteAccount extends BaseEntity {
     @ManyToOne
     @JoinColumn (name = "user_id", nullable = false)
     private User user;
-    @Column
+    @Column (nullable = false)
     @Enumerated (value = EnumType.STRING)
     private AccountCategory category;
     @Column (nullable = false)
