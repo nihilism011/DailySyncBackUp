@@ -9,55 +9,70 @@
           </div>
       </div>
     </div>
-        <!-- 오늘의 첫 번째 일정 -->
-        <div class="today-schedule">
-        <h3>오늘의 첫 번째 일정</h3>
-        <div v-if="firstTodaySchedule">
-          <div>{{ firstTodaySchedule.title }}</div>
-          <div>
-            {{ firstTodaySchedule.startTime }} ~ {{ firstTodaySchedule.endTime }}
-          </div>
-          <div>{{ firstTodaySchedule.description }}</div>
+    <!-- 오늘의 첫 번째 일정 -->
+    <div v-if="firstTodaySchedule">
+      <div>{{ firstTodaySchedule.title }}</div>
+      <div>
+        {{ firstTodaySchedule.startTime }} ~ {{ firstTodaySchedule.endTime }}
+      </div>
+      <div>{{ firstTodaySchedule.description }}</div>
+    </div>
+    <!-- 선택한 일정의 상세 정보 -->
+    <div v-if="selectedSchedule" class="schedule-detail">
+      <div v-if="isUpdate">
+        <div>
+          <label for="editTitle">제목</label>
+          <input type="text" v-model="selectedSchedule.title" id="updateTitle" />
         </div>
-        <div v-else>
-          <p>오늘의 일정이 없습니다.</p>
+        <div>
+          <label for="editStartTime">시작 시간</label>
+          <input type="datetime-local" v-model="selectedSchedule.startTime" id="updateStartTime" />
         </div>
-      </div>
-       <!-- 선택한 일정의 상세 정보 -->
-      <div v-if="selectedSchedule" class="schedule-detail">
-        <h3>상세 정보</h3>
-    <div v-if="isUpdate">
-      <div>
-        <label for="editTitle">제목</label>
-        <input type="text" v-model="selectedSchedule.title" id="updateTitle" />
-      </div>
-      <div>
-        <label for="editStartTime">시작 시간</label>
-        <input type="datetime-local" v-model="selectedSchedule.startTime" id="updateStartTime" />
-      </div>
-      <div>
-        <label for="editEndTime">끝 시간</label>
-        <input type="datetime-local" v-model="selectedSchedule.endTime" id="updateEndTime" />
-      </div>
-      <div>
-        <label for="editDescription">설명</label>
-        <textarea v-model="selectedSchedule.description" id="updateDescription"></textarea>
+        <div>
+          <label for="editEndTime">끝 시간</label>
+          <input type="datetime-local" v-model="selectedSchedule.endTime" id="updateEndTime" />
+        </div>
+        <div>
+          <label for="editDescription">설명</label>
+          <textarea v-model="selectedSchedule.description" id="updateDescription"></textarea>
+        </div>
+
+        <button @click="fnSaveUpdate">저장</button>
+        <button @click="fnCancle">취소</button>
       </div>
 
-      <button @click="fnSave">수정 저장</button>
-      <button @click="fnCancle">취소</button>
+      <div v-else>
+        <div>{{ selectedSchedule.title }}</div>
+        <div>{{ formatDate(selectedSchedule.startTime) }} ~ {{ formatDate(selectedSchedule.endTime) }}</div>
+        <div>{{ selectedSchedule.description }}</div>
+      </div>
+
+      <button @click="fnUpdate">수정</button>
+      <button @click="fnRemove">삭제</button>
+      </div>
+  </div>
+  <button @click="fnAdd">일정등록</button>
+  <div v-if="isAdd" class="add-schedule-form">
+    <div>
+      <label for="newTitle">제목</label>
+      <input type="text" v-model="newSchedule.title" id="newTitle" placeholder="일정 제목" />
+    </div>
+    <div>
+      <label for="newStartTime">시작 시간</label>
+      <input type="datetime-local" v-model="newSchedule.startTime" id="newStartTime" />
+    </div>
+    <div>
+      <label for="newEndTime">끝 시간</label>
+      <input type="datetime-local" v-model="newSchedule.endTime" id="newEndTime" />
+    </div>
+    <div>
+      <label for="newDescription">설명</label>
+      <textarea v-model="newSchedule.description" id="newDescription" placeholder="일정 설명"></textarea>
     </div>
 
-  <div v-else>
-    <div>{{ selectedSchedule.title }}</div>
-    <div>{{ formatDate(selectedSchedule.startTime) }} ~ {{ formatDate(selectedSchedule.endTime) }}</div>
-    <div>{{ selectedSchedule.description }}</div>
+    <button @click="fnSaveNewSchedule">저장</button>
+    <button @click="fnCancelAdd">취소</button>
   </div>
-
-  <button @click="fnUpdate">수정</button>
-  <button @click="fnRemove">삭제</button>
-  </div>
-</div>
 </template>
 
 <script>
@@ -72,6 +87,13 @@ export default {
       month: new Date().getMonth() + 1, 
       selectedSchedule: null,  
       isUpdate: false, 
+      isAdd: false,
+      newSchedule: {     
+        title: '',
+        startTime: '',
+        endTime: '',
+        description: ''
+      },
     };
   },
   methods: {
@@ -119,7 +141,7 @@ export default {
       this.scheduleDetails(this.selectedSchedule); 
     },
 
-    async fnSave() {
+    async fnSaveUpdate() {
       const updatedSchedule = this.selectedSchedule;
       const id = updatedSchedule.id;
       const response = await this.$axios.patch(`schedule/update/${id}`, updatedSchedule);  
@@ -127,6 +149,8 @@ export default {
         alert('수정 되었습니다.');
         this.isUpdate = false;  
         this.fnListByUserId();  
+        this.$emit('fnScheduleList', this.day);
+        this.$emit('fnDayList', this.day);
       } else {
         alert(response.message)
       }
@@ -137,7 +161,9 @@ export default {
           const id = this.selectedSchedule.id;
           const response = await this.$axios.delete(`schedule/delete/${id}`);
           if(response.status){
-            this.fnListByUserId()
+            this.fnListByUserId();
+            this.$emit('fnScheduleList', this.day);
+            this.$emit('fnDayList', this.day);
           }
         }
         this.selectedSchedule = null; 
@@ -145,7 +171,29 @@ export default {
 
     formatDate(date) {
     return this.$dayjs(date).format('YYYY-MM-DD');  
-}
+  },
+ 
+   fnAdd() {
+      this.isAdd = true;  
+    },
+
+    fnCancelAdd() {
+      this.isAdd = false;  
+      this.newSchedule = { title: '', startTime: '', endTime: '', description: '' }; 
+    },
+
+    async fnSaveNewSchedule() {
+      const response = await this.$axios.post('schedule/add', this.newSchedule);
+      if (response.status) {
+        alert('일정이 등록되었습니다.');
+        this.isAdding = false;
+        this.fnListByUserId(); 
+        this.$emit('fnScheduleList', this.day);
+        this.$emit('fnDayList', this.day);
+      } else {
+        alert(response.message);
+      }
+    },
 
   },
   mounted() {
