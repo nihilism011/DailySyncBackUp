@@ -96,7 +96,6 @@ public class Meal extends BaseEntity {
                 .category(meal.getCategory())
                 .description(meal.getDescription())
                 .icon(meal.getIcon())
-                .date(meal.getDate())
                 .kcalories(meal.getKcalories())
                 .sugar(meal.getSugar())
                 .sodium(meal.getSodium())

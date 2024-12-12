@@ -8,13 +8,13 @@ import { RouterLink, RouterView } from 'vue-router'
       ><img alt="DailySync" src="@/assets/images/h_logo.png"
     /></RouterLink>
     <nav>
-      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/">메인</RouterLink>
       <RouterLink to="/todo">Todo</RouterLink>
-      <RouterLink to="/schedule">Schedule</RouterLink>
+      <RouterLink to="/schedule">일정</RouterLink>
       <RouterLink to="/account">가계부</RouterLink>
-      <RouterLink to="/meal">Meal</RouterLink>
+      <RouterLink to="/meal">식단</RouterLink>
       <RouterLink to="/sample">Sample</RouterLink>
-      <RouterLink to="/user">User</RouterLink>
+      <RouterLink to="/user">회원가입?</RouterLink>
       <RouterLink to="/findUser">비밀번호 찾기</RouterLink>
     </nav>
   </header>
@@ -44,6 +44,12 @@ header {
   nav {
     display: flex;
     gap: 0 20px;
+    a {
+      &.router-link-active {
+        font-weight: bold;
+        color: var(--color-red);
+      }
+    }
   }
 }
 </style>

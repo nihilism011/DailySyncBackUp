@@ -4,16 +4,16 @@
       <DateSelector v-model="selectedDate" />
     </div>
     <div class="left-bottom">
-    <ScheduleList/>
+      <ScheduleList />
     </div>
   </div>
   <div class="right right-container">
-    <ScheduleSearch/>
-    <Calendar :dailyLsit="dailyLsit" @fnMealList="fnMealList" @fnDayList="fnDayList" />
-  </div> 
+    <ScheduleSearch />
+    <Calendar :dailyList="dailyList" @fnMealList="fnMealList" @fnDayList="fnDayList" />
+  </div>
 </template>
 <script>
-import Calendar from '@/components/meal/Calendar.vue'
+import Calendar from '@/components/meal/leftView/MealCalendar.vue'
 import ScheduleList from '@/components/schedule/ScheduleList.vue'
 import ScheduleSearch from '@/components/schedule/ScheduleSearch.vue'
 import DateSelector from '@/components/common/DateSelector.vue'
@@ -26,18 +26,18 @@ export default {
   },
   data() {
     return {
-      selectedDate : ''
-    };
+      selectedDate: '',
+    }
   },
-  
+
   methods: {
     async fnRequest() {
-      console.log(this.selectedDate);
+      console.log(this.selectedDate)
     },
   },
   mounted() {
     this.selectedDate = this.$dayjs().format('YYYY-MM-DD')
-    this.fnRequest();
+    this.fnRequest()
   },
 }
 </script>

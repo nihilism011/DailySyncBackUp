@@ -19,6 +19,7 @@ public class MealResDto {
     private MealCategory category;
     private String description;
     private String icon;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDate date;
     private Integer kcalories;
     private Integer sugar;
