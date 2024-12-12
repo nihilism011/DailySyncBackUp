@@ -4,7 +4,11 @@
       <template v-for="(days, day) in weekList">
         <template v-if="days != 0">
           <div class="weekend">
-            <span class="date">{{ days }}</span>
+            <span
+              class="date"
+              @click="fnDayClick(day.split('-')[0], day.split('-')[1], day.split('-')[2])"
+              >{{ days }}</span
+            >
             <template v-if="fullList[`${day}`]">
               <button @click="fnDayClick(day.split('-')[0], day.split('-')[1], day.split('-')[2])">
                 <template v-for="item in fullList[`${day}`].slice().sort((a, b) => a.id - b.id)">
@@ -55,7 +59,7 @@ export default {
     padding: 10px;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.3);
   }
   &-box {
     width: calc(100% / 7);
@@ -64,6 +68,7 @@ export default {
     position: absolute;
     top: 10px;
     left: 10px;
+    cursor: pointer;
   }
   button {
     height: 100%;
@@ -76,6 +81,7 @@ export default {
     align-items: center;
     span {
       font-size: 12px;
+      transition: all 0.2s;
     }
   }
 }

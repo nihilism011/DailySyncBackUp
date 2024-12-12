@@ -267,7 +267,7 @@ export default {
       const edit = await this.$axios.patch(`meal/edit`, param)
       if (edit.status) {
         alert('수정 되었습니다.')
-        this.$emit('fnMealList', this.$dayjs().format('YYYY-MM-DD'))
+        this.$emit('fnMealList', this.day)
         this.popupClsoe()
       } else {
         alert(edit.message)
