@@ -42,11 +42,14 @@ export default {
 .nutrient {
   &-wrap {
     margin-top: 30px;
+    box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    padding: 10px 20px 20px;
   }
   &-box {
     display: flex;
     align-items: center;
-    gap: 5px 0;
+    gap: 8px 0;
     flex-wrap: wrap;
     justify-content: space-between;
   }

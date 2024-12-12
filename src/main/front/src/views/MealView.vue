@@ -1,12 +1,16 @@
 <template>
   <div class="left">
-    {{ dailyLsit }}
     <Calendar :dailyLsit="dailyLsit" @fnMealList="fnMealList" @fnDayList="fnDayList" />
     <TotalNutrient :todayNutrient="todayNutrient" />
   </div>
   <div class="right meal-type">
     <WeekendList :fullList="fullList" :day="day" :week="week" />
-    <button @click="openPopup([])" class="btn-default mg40">식단 등록</button>
+    <div class="tit-wrap">
+      <h2 class="tit">
+        {{ day.split('-')[0] }}년 {{ day.split('-')[1] }}월 {{ day.split('-')[2] }}일
+      </h2>
+      <button @click="openPopup([])" class="btn-default">식단 등록</button>
+    </div>
     <DayList
       :popupState="popupState"
       :fullList="fullList"

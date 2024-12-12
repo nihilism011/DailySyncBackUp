@@ -32,15 +32,22 @@ export default {
     return {
       calendarOptions: {
         locale: 'kr',
-        height: 500,
+        height: 550,
         showNonCurrentDates: false,
-        handleWindowResize: false,
         plugins: [dayGridPlugin, interactionPlugin],
         initialView: 'dayGridMonth',
         events: [],
         eventClick: this.handleEventClick,
         datesSet: this.handleMonthChange,
         dateClick: this.handleDateClick,
+        headerToolbar: {
+          left: 'prev',
+          center: 'title',
+          right: 'next',
+        },
+        footerToolbar: {
+          right: 'today',
+        },
       },
     }
   },
