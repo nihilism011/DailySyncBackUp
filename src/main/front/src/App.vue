@@ -14,8 +14,7 @@ import { RouterLink, RouterView } from 'vue-router'
       <RouterLink to="/account">가계부</RouterLink>
       <RouterLink to="/meal">Meal</RouterLink>
       <RouterLink to="/sample">Sample</RouterLink>
-      <RouterLink to="/user">User</RouterLink>
-      <RouterLink to="/findUser">비밀번호 찾기</RouterLink>
+      <RouterLink to="/login">User</RouterLink>
     </nav>
   </header>
 

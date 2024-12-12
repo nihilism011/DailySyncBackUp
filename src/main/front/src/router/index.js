@@ -5,8 +5,8 @@ import TodoView from '@/views/TodoView.vue'
 import AccountView from '@/views/AccountView.vue'
 import MealView from '@/views/MealView.vue'
 import ScheduleView from '@/views/ScheduleView.vue'
-import UserView from '@/views/UserView.vue'
-import FindUser from '@/views/FindUser.vue'
+import SignupView from '@/views/SignupView.vue'
+import LoginView from '@/views/LoginView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,14 +42,14 @@ const router = createRouter({
       component: ScheduleView,
     },
     {
-      path: '/user',
-      name: 'user',
-      component: UserView,
+      path: '/signup',
+      name: 'signup',
+      component: SignupView,
     },
     {
-      path: '/findUser',
-      name: 'findUser',
-      component: FindUser,
+      path: '/login',
+      name: 'login',
+      component: LoginView,
     },
   ],
 })
