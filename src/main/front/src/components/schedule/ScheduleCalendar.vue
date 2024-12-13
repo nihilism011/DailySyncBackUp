@@ -12,11 +12,11 @@
     },
 
     props: {
-      dailyLsit: {
+      dailyList: {
       type: Object,
     },
       fnScheduleList: {
-      type: Object,
+      type: Function,
     },
     fnDayList: {
       type: Function,
@@ -25,12 +25,15 @@
   },
 
   watch: {
-    dailyLsit(newValue) {
-    if (newValue && Array.isArray(newValue)) {
-      this.calendarOptions.events = this.dailyLsit
-    }
+    // dailyList가 업데이트되면, 객체 형태에 맞게 events를 설정
+    dailyList(newValue) {
+      if (newValue && typeof newValue === 'object') {
+        // 객체에서 필요한 데이터만 뽑아서 배열로 변환
+        this.calendarOptions.events = Object.values(newValue); // 객체의 값을 배열로 변환
+      }
     },
   },
+
     data() {
       return {
         calendarOptions: {

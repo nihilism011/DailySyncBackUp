@@ -1,25 +1,22 @@
 <template>
   <div class="left left-container">
     <div class="left-top">
-      <DateSelector v-model="selectedDate" />
     </div>
     <div class="left-bottom">
-    <ScheduleList/>
+      <ScheduleList />
     </div>
   </div>
   <div class="right right-container">
     <ScheduleSearch/>
-    <Calendar :dailyLsit="dailyLsit" @fnMealList="fnMealList" @fnDayList="fnDayList" />
+    <Calendar :dailyList="dailyList" @fnScheduleList="fnScheduleList" @fnDayList="fnDayList" />
   </div>
 </template>
 <script>
 import Calendar from '@/components/schedule/ScheduleCalendar.vue'
 import ScheduleList from '@/components/schedule/ScheduleList.vue'
 import ScheduleSearch from '@/components/schedule/ScheduleSearch.vue'
-import DateSelector from '@/components/common/DateSelector.vue'
 export default {
   components: {
-    DateSelector,
     ScheduleList,
     ScheduleSearch,
     Calendar,
@@ -27,8 +24,8 @@ export default {
   data() {
     return {
       day : '',
-      dailyLsit: [],
-      fullList: [],
+      dailyList: [],
+      fullList: [], 
     };
   },
 
@@ -45,7 +42,7 @@ export default {
       } else {
         console.log(full.message)
       }
-      await this.fnDayClick(year, month, day)
+      await this.fnDayClick(year, month, day);  
     },
     async fnDayList(inputDay) {
       console.log(inputDay);
@@ -54,29 +51,14 @@ export default {
       let month = inputDay.split('-')[1]
       const daily = await this.$axios.get(`schedule/userId/${userId}/${year}/${month}`)
       if (daily.status) {
-        this.dailyLsit = daily.data.map((item) => ({
+        this.dailyList = daily.data.map(item => ({
           title: item.title,
           start: item.startTime,
-          end: item.endTime
-        }))
+          end: item.endTime,
+        }));
       } else {
         console.log(daily.message)
       }
-    },
-    async fnDayClick(year, month, day) {
-      let firstDay = new Date(year, month - 1, 1).getDay()
-      let lastDay = new Date(year, month, 0).getDate()
-      let toDay = new Date(year, month - 1, day).getDate()
-      let thisWeek = parseInt((firstDay - 1 + toDay) / 7)
-      this.week = new Array(7).fill(0)
-      for (let i = 0; i < 7; i++) {
-        let check = thisWeek === 0 ? i - (firstDay - 1) : i + 7 * thisWeek - firstDay + 1
-        this.week[i] =
-          check > lastDay || check < 1
-            ? { 0: 0 }
-            : { [`${year}-${month}-${check.toString().padStart(2, '0')}`]: check } // 날짜가 유효하지 않으면 0 처리
-      }
-      this.day = `${year}-${month}-${day}`
     },
   },
   mounted() {
