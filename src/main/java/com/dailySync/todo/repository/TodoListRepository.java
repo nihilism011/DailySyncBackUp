@@ -17,7 +17,7 @@ public interface TodoListRepository extends JpaRepository<TodoList, Long> {
             "LEFT JOIN tl.todoItem ti " +
             "LEFT JOIN ti.todoGroup tg " +
             "WHERE tl.user.id = :userId " +
-            "AND (tl.date = :date OR (tl.checkedTime IS NULL AND ti.id IS NULL)) " +
+            "AND (tl.date = :date OR (ti.id IS NULL)) " +
             "AND tl.status = 'new' " +
             "ORDER BY " +
             "    CASE WHEN tl.listOrder = 0 THEN 0 ELSE 1 END, " +

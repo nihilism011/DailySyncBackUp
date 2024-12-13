@@ -24,13 +24,12 @@
 import TodoGroup from '@/components/todo/TodoGroup.vue';
 import TodoItem from '@/components/todo/TodoItem.vue';
 import TodoList from '@/components/todo/TodoList.vue';
-import Calendar from '@/components/meal/Calendar.vue';
 export default {
   components: {
     TodoGroup,
     TodoItem,
     TodoList,
-    Calendar
+
   },
   data() {
     return {
