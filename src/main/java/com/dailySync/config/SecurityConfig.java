@@ -22,11 +22,12 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/api/login","/api/signup").permitAll()
-                                .anyRequest().authenticated()
+                                .requestMatchers("/api/login", "/api/signup").permitAll()
+                                .anyRequest().permitAll()
 
                 )
-                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);;
+                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        ;
 
         return http.build();
     }

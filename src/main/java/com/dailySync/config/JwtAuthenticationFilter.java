@@ -25,6 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if(token != null && jwtUtil.validateToken(token)){
             Long userId = jwtUtil.extractUserId(token);
         }
+        filterChain.doFilter(request, response);
     }
 
     private String extractToken(HttpServletRequest request){
