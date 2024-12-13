@@ -629,30 +629,41 @@ input {
   }
 }
 
-.fc-daygrid-body {
-  // td:not(data-date) {
-  //   display: none;
-  // }
-  tbody tr:nth-of-type(1) td.fc-day-disabled {
-    background-color: var(--base-white);
-    border: 0;
-  }
-  :where(tbody tr:nth-last-of-type(1), tbody tr:nth-last-of-type(2))
-    > td:not(.fc-day-future, .fc-day-past) {
-    display: none;
-  }
-}
-
-.fc-dayGridMonth-view {
+.fc {
   box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.3);
-  padding: 5px;
-  border-radius: 5px;
-}
+  padding: 20px;
+  border-radius: 10px;
+  .fc-scroller {
+    margin-top: 1px;
+  }
+  .fc-header-toolbar {
+    .fc-toolbar-chunk {
+      .fc-button {
+        background-color: var(--base-white);
+        border: none;
+        .fc-icon {
+          color: var(--color-contrasty2);
+        }
+      }
+    }
+  }
+  .fc-daygrid-body {
+    tbody {
+      margin-bottom: -1px;
+      tr:nth-of-type(1) td.fc-day-disabled {
+        background-color: var(--base-white);
+        border: 0;
+      }
+      :where(tr:nth-last-of-type(1), tr:nth-last-of-type(2)) {
+        & > td:not(.fc-day-future, .fc-day-past) {
+          display: none;
+        }
+      }
+    }
+  }
 
-.fc-event-main,
-.fc-day:not(.fc-day-disabled) {
-  cursor: pointer;
+  .fc-event-main,
+  .fc-day:not(.fc-day-disabled) {
+    cursor: pointer;
+  }
 }
-// .fc-day-disabled {
-//   display: none;
-// }

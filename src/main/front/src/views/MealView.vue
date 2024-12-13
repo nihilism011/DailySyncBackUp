@@ -1,6 +1,6 @@
 <template>
   <div class="left">
-    <Calendar :dailyList="dailyList" @fnMealList="fnMealList" @fnDayList="fnDayList" />
+    <MealCalendar :dailyList="dailyList" @fnMealList="fnMealList" @fnDayList="fnDayList" />
     <TotalNutrient :todayNutrient="todayNutrient" />
   </div>
   <div class="right meal-type">
@@ -38,7 +38,7 @@ import DayList from '@/components/meal/rightView/DayList.vue'
 import MealModal from '@/components/meal/popup/MealModal.vue'
 import { mealCategory } from '@/constants/mealCategory.js'
 import { iconCategory } from '@/constants/iconCategory.js'
-import Calendar from '@/components/meal/leftView/MealCalendar.vue'
+import MealCalendar from '@/components/meal/leftView/MealCalendar.vue'
 import TotalNutrient from '@/components/meal/leftView/TotalNutrient.vue'
 
 export default {
@@ -46,7 +46,7 @@ export default {
     WeekendList,
     DayList,
     MealModal,
-    Calendar,
+    MealCalendar,
     TotalNutrient,
   },
   data() {

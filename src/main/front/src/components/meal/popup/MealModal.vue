@@ -53,7 +53,12 @@
                   <p class="tit">추천 및 즐겨찾기</p>
                 </div>
                 <div class="bot-box">
-                  <button @click="openRecom" class="btn-default">추천 및 즐겨찾기</button>
+                  <button
+                    @click="((this.recomState = true), (this.iconSelected = false))"
+                    class="btn-default"
+                  >
+                    추천 및 즐겨찾기
+                  </button>
                 </div>
               </div>
             </div>
@@ -276,6 +281,7 @@ export default {
     popupClsoe() {
       this.recomToggle = true
       this.iconSelected = false
+      this.nutrientStore.setNutrient(this.editInfo)
       this.$emit('closePopup')
     },
     fnRecom(item) {
@@ -290,13 +296,6 @@ export default {
         this.recomToggle = false
         this.isFavorite = false
       }
-    },
-    openRecom() {
-      this.recomState = true
-      this.iconSelected = false
-    },
-    closeRecom() {
-      this.recomState = false
     },
     recomRefresh() {
       this.$refs.recomRefresh.fnFavorite()
