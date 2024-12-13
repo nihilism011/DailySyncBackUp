@@ -3,11 +3,21 @@
     <div class="form-container">
       <div class="ip-list">
         <div class="tit-box">
-          <p class="tit"><label for="userName">아이디</label></p>
+          <p class="tit"><label for="email">이메일</label></p>
         </div>
         <div class="bot-box">
           <div class="ip-box">
-            <input type="text" id="userName" v-model="userName" placeholder="아이디를 입력하세요" />
+            <input type="email" id="email" v-model="email" placeholder="이메일을 입력하세요" />
+          </div>
+        </div>
+      </div>
+      <div class="ip-list">
+        <div class="tit-box">
+          <p class="tit"><label for="userName">이름</label></p>
+        </div>
+        <div class="bot-box">
+          <div class="ip-box">
+            <input type="text" id="userName" v-model="userName" placeholder="이름을 입력하세요" />
           </div>
         </div>
       </div>
@@ -28,16 +38,6 @@
       </div>
       <div class="ip-list">
         <div class="tit-box">
-          <p class="tit"><label for="name">이름</label></p>
-        </div>
-        <div class="bot-box">
-          <div class="ip-box">
-            <input type="text" id="name" v-model="name" placeholder="이름을 입력하세요" />
-          </div>
-        </div>
-      </div>
-      <div class="ip-list">
-        <div class="tit-box">
           <p class="tit">성별</p>
         </div>
         <div class="bot-box">
@@ -49,39 +49,33 @@
           </div>
         </div>
       </div>
-      <div class="ip-list">
-        <div class="tit-box">
-          <p class="tit"><label for="email">이메일</label></p>
-        </div>
-        <div class="bot-box">
-          <div class="ip-box">
-            <input type="email" id="email" v-model="email" placeholder="이메일을 입력하세요" />
-          </div>
-        </div>
-      </div>
+
       <button @click="signUp" class="btn-default">가입하기</button>
     </div>
   </div>
 </template>
 
 <script>
+import { useRouter } from 'vue-router'
 export default {
+  setup() {
+    const router = useRouter()
+    return { router }
+  },
   data() {
     return {
       userName: '',
       password: '',
-      name: '',
       gender: '',
       email: '',
     }
   },
   methods: {
     async signUp() {
-      const url = 'user'
+      const url = 'signup'
       const requestBody = {
         userName: this.userName,
         password: this.password,
-        name: this.name,
         gender: this.gender,
         email: this.email,
       }
@@ -90,9 +84,9 @@ export default {
         alert('가입 완료.')
         this.userName = ''
         this.password = ''
-        this.name = ''
         this.gender = ''
         this.email = ''
+        this.router.push('/login')
       }
     },
   },

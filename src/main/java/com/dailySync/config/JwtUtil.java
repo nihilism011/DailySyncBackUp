@@ -16,6 +16,7 @@ public class JwtUtil {
 
     public String generateToken(User user) {
         // 토큰 유효시간 (예: 24시간)
+        // 이번엔 적용 안함.
         long expirationTime = 1000 * 60 * 60 * 24;
 
         return Jwts.builder()
@@ -34,7 +35,6 @@ public class JwtUtil {
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
-
         } catch (Exception e) {
             throw new RuntimeException("JWT 검증 실패", e); // 검증 실패 시 예외 처리
         }
@@ -48,7 +48,13 @@ public class JwtUtil {
     public boolean isTokenExpired(String token){
         return extractClaims(token).getExpiration().before(new Date());
     }
-    public boolean validateToken(String token){
-        return !isTokenExpired(token);
+    public boolean validateToken(String token) {
+        try {
+            // 서명이 유효한지 체크
+            extractClaims(token);
+            return true; // 유효한 서명이면 true 반환
+        } catch (Exception e) {
+            return false; // 예외가 발생하면 토큰이 유효하지 않음
+        }
     }
 }

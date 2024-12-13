@@ -13,45 +13,32 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api")
+@RequestMapping ("api")
 public class UserController {
     final private UserService userService;
 
-    @PostMapping("login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) throws Exception{
+    /**
+     * {@code 로그인}
+     */
+    @PostMapping ("login")
+    public ResponseEntity<ApiResponse<String>> login(@RequestBody LoginRequest loginRequest) throws Exception {
         return ApiResponse.success(userService.login(loginRequest));
     }
+
+    /**
+     * {@code 회원가입}
+     */
+    @PostMapping ("signup")
+    public ResponseEntity<ApiResponse<Boolean>> joinUser(@RequestBody UserReqDto reqDto) {
+        return ApiResponse.success(userService.createUser(reqDto));
+    }
+
     @GetMapping ("user")
     public ResponseEntity<?> getAllUser() {
         List<UserResDto> list = userService.getAllUser();
         return ResponseEntity.ok(list);
     }
 
-    /**
-     * 주소창
-     * db저장소에 저장한다. 겟올유저 로
-     * 리스트에 유저서비스에서 getalluser함수로 만든거 담는다
-     * 리턴한다.
-     */
-    @GetMapping ("user/userId/{id}")
-    public ResponseEntity<?> findByIdUser(@PathVariable ("id") Long userId) {
-        return ResponseEntity.ok(userService.findUser(userId));
-    }
-
-    //    form-data 로 데이터를 받을때
-    @PostMapping ("user")
-    public ResponseEntity<?> joinUser(@ModelAttribute UserReqDto reqDto) {
-        return ResponseEntity.ok(userService.insertUser(reqDto));
-    }
-
-    //    @GetMapping
-    //    @PostMapping
-    //    @PatchMapping
-    //    @PutMapping
-    //    @DeleteMapping
-    //유저 업데이트
-    //    url에서 데이터를 받을 경우 +
-    //    json 형태로 데이터를 받을 경우
     @PatchMapping ("user/userId/{id}")
     public ResponseEntity<?> updateUser(
             @PathVariable ("id") Long id,
@@ -60,13 +47,4 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(id, reqDto));
     }
 
-    //비밀번호찾기
-    @PostMapping("api/user/findPassword")
-    public ResponseEntity<?> findPassword (
-            @RequestBody UserReqDto userReqDto
-            ) {
-        String name = userReqDto.getName();
-        String email = userReqDto.getEmail();
-        return ResponseEntity.ok(userService.findPasswordWithNameAndEmail(name, email));
-    }
 }
