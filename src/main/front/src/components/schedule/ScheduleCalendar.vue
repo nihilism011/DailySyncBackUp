@@ -13,24 +13,22 @@
 
     props: {
       dailyList: {
-      type: Object,
+        type: Array,
+      //type: Object,
     },
       fnScheduleList: {
       type: Function,
     },
-    fnDayList: {
-      type: Function,
-    },
-
   },
 
   watch: {
-    // dailyList가 업데이트되면, 객체 형태에 맞게 events를 설정
     dailyList(newValue) {
-      if (newValue && typeof newValue === 'object') {
-        // 객체에서 필요한 데이터만 뽑아서 배열로 변환
-        this.calendarOptions.events = Object.values(newValue); // 객체의 값을 배열로 변환
+      if (newValue && Array.isArray(newValue)) {
+        this.calendarOptions.events = newValue; // dailyList 데이터를 FullCalendar에 맞게 전달
       }
+      // if (newValue && typeof newValue === 'object') {
+      //   this.calendarOptions.events = Object.values(newValue); 
+      // }
     },
   },
 
@@ -51,19 +49,28 @@
       }
     },
     methods: {
-      handleEventClick: function (info) {
-        if (typeof info === 'string') {
-          this.$emit('fnScheduleList', info)
-        } else {
-          this.$emit('fnScheduleList', info.event.startStr)
-        }
+      handleEventClick(info) {
+        console.log("info입니다", info)
+        const selectedId = info.event.id;
+        this.$emit('fnSchduleDayList', selectedId);
       },
+
       handleMonthChange({ view }) {
         const start = view.currentStart
         const dateSet = `${start.getFullYear()}-${start.getMonth() + 1}`
-        this.$emit('fnDayList', dateSet)
+        this.$emit('fnScheduleList', dateSet)
       },
       handleDateClick(info) {
+        const date = info.dateStr;
+        console.log("여기야",this.dailyList);
+        const isSchedule = this.dailyList.start
+        console.log("일정있다",isSchedule)
+
+        // if(isSchedule && Array.isArray(isSchedule) && isSchedule.length > 0){
+        //   this.$emit('fnScheduleList', info.title)
+        // }
+        
+        
         this.$emit('fnScheduleList', info.dateStr)
       },
     },

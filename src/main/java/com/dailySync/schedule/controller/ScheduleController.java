@@ -38,6 +38,21 @@ public class ScheduleController {
         return ApiResponse.success(scheduleResDtos);
     }
 
+    /** 로그인 한 유저가 schedule의 id를 변수에 담아 넘겨주면 해당 sheduleList 를 전달 */
+    @Operation
+            (
+                    summary = "로그인한 유저가 선택한 일정의 리스트 불러오기",
+                    description = "id를 입력한다."
+            )
+    @GetMapping ("userId/id/{userId}/{id}")
+    public ResponseEntity<ApiResponse<List<ScheduleResDto>>> getScheduleInfo(
+            @PathVariable ("userId") Long userId,
+            @PathVariable ("id") Long id)
+    {
+        List<ScheduleResDto> scheduleResDtos = scheduleService.getSchedule(userId,id);
+        return ApiResponse.success(scheduleResDtos);
+    }
+
     /** 제목을 검색해 유저의 일정리스트 찾기 */
     @Operation
             (

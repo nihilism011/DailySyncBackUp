@@ -2,11 +2,9 @@
   <div>
     <div class="list-container">
        list : {{list}}
-      <div class="list-item" v-for="(item, index) in list" :key="index">
-          <div @click="scheduleDetails(item)">
-            {{ item.scheduleId }}
+      <div class="list-item" v-for="(item, index) in list" :key="index" @click="handleScheduleClick(item)">
+            {{ item.id }}
             {{ item.title }} 
-          </div>
       </div>
     </div>
     <!-- 오늘의 첫 번째 일정 -->
@@ -108,12 +106,24 @@ export default {
   watch: {
     fullList(newList) {
       if (newList && typeof newList === 'object') {
-        this.list = Object.values(newList);  // 객체의 값을 배열로 변환
-        this.todaySchedule();
+        this.list = Object.values(newList);  
       }
     }
   },
   methods: {
+    // FullCalendar에서 전달받은 일정 ID를 이용해 일정 상세 정보를 가져오는 메소드
+    async fnSchduleDayList(id) {
+      console.log("list에서 id입니다.", id)
+      const userId = 6;
+      const response = await this.$axios.get(`schedule/userId/id/${userId}/${id}`);
+      console.log("response입니다.", response)
+      if (response.status) {
+        this.selectedSchedule = response.data;
+      } else {
+        alert(response.message);
+      }
+    },
+    
     async fnListByUserId() {
       const userId = 6; 
       try {
@@ -203,21 +213,22 @@ export default {
       const response = await this.$axios.post('schedule/add', this.newSchedule);
       if (response.status) {
         alert('일정이 등록되었습니다.');
-        this.isAdd = false;
+        this.isAdding = false;
         this.fnListByUserId(); 
         this.$emit('fnScheduleList', this.day);
         this.$emit('fnDayList', this.day);
-        
       } else {
         alert(response.message);
       }
     },
     handleScheduleClick(item) {
-      this.$emit('selectSchedule', item);  // 부모에게 클릭된 일정 전달
+      console.log("item입니다",item)
+      this.selectedSchedule = item;
     }
+
   },
   mounted() {
-    this.day = this.$dayjs().format('YYYY-MM-DD');
+    this.day = this.$dayjs().format('YYYY-MM-DDTHH:mm:ss');
     this.fnListByUserId();
   },
 };

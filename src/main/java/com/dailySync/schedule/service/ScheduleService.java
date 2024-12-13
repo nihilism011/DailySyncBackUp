@@ -30,6 +30,12 @@ public class ScheduleService {
         return scheduleList.stream().map(ScheduleResDto::of).collect(Collectors.toList());
     }
 
+    /**id로 일정 가져오기*/
+    public List<ScheduleResDto> getSchedule(Long userId, Long id) {
+        List<Schedule> scheduleList = scheduleRepository.findByUserIdAndId(userId, id);
+        return scheduleList.stream().map(ScheduleResDto::of).collect(Collectors.toList());
+    }
+
     /**title로 일정찾기*/
     public List<ScheduleResDto> getScheduleTitle(Long userId, String title) {
         List<Schedule> scheduleList = scheduleRepository.findByUserIdAndTitleContainingOrderByStartTimeAsc(userId, title);
