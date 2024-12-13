@@ -1,5 +1,7 @@
 package com.dailySync.user.controller;
 
+import com.dailySync.common.ApiResponse;
+import com.dailySync.user.dto.LoginRequest;
 import com.dailySync.user.dto.UserReqDto;
 import com.dailySync.user.dto.UserResDto;
 import com.dailySync.user.service.UserService;
@@ -11,9 +13,14 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api")
 public class UserController {
     final private UserService userService;
 
+    @PostMapping("login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) throws Exception{
+        return ApiResponse.success(userService.login(loginRequest));
+    }
     @GetMapping ("user")
     public ResponseEntity<?> getAllUser() {
         List<UserResDto> list = userService.getAllUser();
@@ -29,11 +36,6 @@ public class UserController {
     @GetMapping ("user/userId/{id}")
     public ResponseEntity<?> findByIdUser(@PathVariable ("id") Long userId) {
         return ResponseEntity.ok(userService.findUser(userId));
-    }
-
-    @GetMapping ("user/userName/{userName}")
-    public ResponseEntity<?> findByIdUser(@PathVariable ("userName") String userName) {
-        return ResponseEntity.ok(userService.findUserName(userName));
     }
 
     //    form-data 로 데이터를 받을때

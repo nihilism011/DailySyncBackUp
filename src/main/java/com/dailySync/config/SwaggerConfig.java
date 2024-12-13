@@ -19,15 +19,6 @@ public class SwaggerConfig {
     }
 
     @Bean
-    public GroupedOpenApi autoGenApi() {
-        return GroupedOpenApi.builder()
-                .group("Auto Account API")
-                .pathsToMatch("/accounts/**", "/favoriteAccounts/**")
-                .addOpenApiCustomizer(accountApiCustomizer())
-                .build();
-    }
-
-    @Bean
     public GroupedOpenApi todoApi() {
         return GroupedOpenApi.builder()
                 .group("Todo API")
@@ -36,14 +27,6 @@ public class SwaggerConfig {
                 .build();
     }
 
-    @Bean
-    public GroupedOpenApi autoT() {
-        return GroupedOpenApi.builder()
-                .group("Auto Todo API")
-                .pathsToMatch("/todoItems/**", "/todoLists/**")
-                .addOpenApiCustomizer(accountApiCustomizer())
-                .build();
-    }
 
     @Bean
     public GroupedOpenApi groupedOpenApi2() {
@@ -55,27 +38,10 @@ public class SwaggerConfig {
     }
 
     @Bean
-    public GroupedOpenApi autoGenApi2() {
-        return GroupedOpenApi.builder()
-                .group("Auto Meals API")
-                .pathsToMatch("/meals/**")
-                .addOpenApiCustomizer(accountApiCustomizer())
-                .build();
-    }
-
-    @Bean
     public GroupedOpenApi alls() {
         return GroupedOpenApi.builder()
                 .group("ALL API")
                 .pathsToMatch("/**")
-                .addOpenApiCustomizer(accountApiCustomizer())
-                .build();
-    }
-    @Bean
-    public GroupedOpenApi allMake() {
-        return GroupedOpenApi.builder()
-                .group("ALL Make Api")
-                .pathsToMatch("/api/**")
                 .addOpenApiCustomizer(accountApiCustomizer())
                 .build();
     }
@@ -90,19 +56,10 @@ public class SwaggerConfig {
     }
 
     @Bean
-    public GroupedOpenApi autoC() {
-        return GroupedOpenApi.builder()
-                .group("Auto Schedule API")
-                .pathsToMatch("/schedules/**")
-                .addOpenApiCustomizer(accountApiCustomizer())
-                .build();
-    }
-
-    @Bean
     public GroupedOpenApi userE() {
         return GroupedOpenApi.builder()
                 .group("Auto User API")
-                .pathsToMatch("/users/**", "/userSettings/**")
+                .pathsToMatch("/api/user/**", "api/userSetting/**")
                 .addOpenApiCustomizer(accountApiCustomizer())
                 .build();
     }
