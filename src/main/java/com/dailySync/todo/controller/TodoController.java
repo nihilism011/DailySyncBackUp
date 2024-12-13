@@ -37,10 +37,10 @@ public class TodoController {
     }
 
     @Operation
-    (
-            summary = " todoItem 삭제시(클라이언트입장)  status값  old로 변경 ",
-            description =" ... "
-    )
+            (
+                    summary = " todoItem 삭제시(클라이언트입장)  status값  old로 변경 ",
+                    description =" ... "
+            )
     @PutMapping("/item/update/status/{id}")
     public ResponseEntity<ApiResponse<TodoItemResDto>> updateStatus(@PathVariable Long id) {
         TodoItemResDto updateItem = todoService.updateStatus(id);
@@ -58,20 +58,20 @@ public class TodoController {
     }
 
     @Operation
-    (
-            summary = " todoItem 정보 변경시 기존id status old처리 / 그후 새로생성 ",
-            description =" ... "
-    )
+            (
+                    summary = " todoItem 정보 변경시 기존id status old처리 / 그후 새로생성 ",
+                    description =" ... "
+            )
     @PutMapping("/item/update/{id}")
     public ResponseEntity<ApiResponse<TodoItemResDto>> updateItem(@PathVariable Long id, @RequestBody TodoItemReqDto reqDto) {
         TodoItemResDto updatedItem = todoService.updateItem(id, reqDto);
         return ApiResponse.success(updatedItem);
     }
     @Operation
-    (
-            summary = " 그룹정보 변경 ",
-            description =" ... "
-    )
+            (
+                    summary = " 그룹정보 변경 ",
+                    description =" ... "
+            )
     @PutMapping("/group/update/{id}")
     public ResponseEntity<ApiResponse<TodoGroupResDto>> updateGroup(@PathVariable Long id, @RequestBody TodoGroupReqDto reqDto) {
         TodoGroupResDto updatedItem = todoService.updateGroup(id, reqDto);
@@ -79,10 +79,10 @@ public class TodoController {
     }
 
     @Operation
-    (
-            summary = " todoList 변경",
-            description =" ... "
-    )
+            (
+                    summary = " todoList 변경",
+                    description =" ... "
+            )
     @PutMapping("/list/update/{id}")
     public ResponseEntity<ApiResponse<TodoListResDto>> updateList(@PathVariable Long id, @RequestBody TodoListReqDto reqDto ) {
         TodoListResDto updateCheck = todoService.updateList(id, reqDto);
@@ -127,38 +127,38 @@ public class TodoController {
         return ApiResponse.success(rsp);
     }
     @Operation
-    (
-            summary = " userId, groupId 에 해당하는 todoItem 조회 ",
-            description =" ... "
-    )
+            (
+                    summary = " userId, groupId 에 해당하는 todoItem 조회 ",
+                    description =" ... "
+            )
     @GetMapping("/item/{userId}/{groupId}")
     public ResponseEntity<?> getTodoItem(@PathVariable ("userId") Long userId, @PathVariable ("groupId") Long groupId){
         return ApiResponse.success(todoService.getTodoItem(userId, groupId));
     }
 
     @Operation
-    (
-            summary = " userId에 해당하는 todoGroup을 조회 ",
-            description =" ... "
-    )
+            (
+                    summary = " userId에 해당하는 todoGroup을 조회 ",
+                    description =" ... "
+            )
     @GetMapping("/group/{userId}")
     public ResponseEntity<?> getTodoGroup(@PathVariable ("userId") Long userId){
         return ApiResponse.success(todoService.getTodoGroup(userId));
     }
     @Operation
-    (
-            summary = " 금일 날짜 해당하는 todoList를 조회 ",
-            description =" ... "
-    )
+            (
+                    summary = " 금일 날짜 해당하는 todoList를 조회 ",
+                    description =" ... "
+            )
     @GetMapping("/list/today/{userId}")
     public ResponseEntity<?> getTodayTodoList(@PathVariable Long userId) {
         return ApiResponse.success(todoService.getTodayList(userId));
     }
     @Operation
-    (
-            summary = " 날짜 해당하는 todoList를 조회  ",
-            description =" ... "
-    )
+            (
+                    summary = " 날짜 해당하는 todoList를 조회  ",
+                    description =" ... "
+            )
     @GetMapping("/list/{userId}/{date}")
     public ResponseEntity<?> getTodoListByDate(@PathVariable Long userId, @PathVariable LocalDate date) {
         return ApiResponse.success(todoService.getTodoList(userId, date));  // 날짜가 yyyy-MM-dd 형식으로 전달됨
@@ -167,20 +167,20 @@ public class TodoController {
     //PostMapping
 
     @Operation
-    (
-            summary = " todoList에 변동일정 추가하기 listOrder(4) 고정 ",
-            description =" ... "
-    )
+            (
+                    summary = " todoList에 변동일정 추가하기 listOrder(4) 고정 ",
+                    description =" ... "
+            )
     @PostMapping("/list/change/{userId}")
     public ResponseEntity<?> addTodoList(@PathVariable Long userId,@RequestBody TodoListReqDto reqDto) {
         return ApiResponse.success(todoService.createTodoList(userId,reqDto));
     }
 
     @Operation
-    (
-            summary = " todoGroup 추가 ",
-            description =" ... "
-    )
+            (
+                    summary = " todoGroup 추가 ",
+                    description =" ... "
+            )
     @PostMapping("/group")
     public ResponseEntity<?> addTodoGroup(@RequestBody TodoGroupReqDto reqDto) {
         return ApiResponse.success(todoService.createTodoGroup(reqDto));
@@ -199,10 +199,10 @@ public class TodoController {
     //DeleteMapping
 
     @Operation
-    (
-            summary = " todoList 삭제 ",
-            description =" ... "
-    )
+            (
+                    summary = " todoList 삭제 ",
+                    description =" ... "
+            )
     @DeleteMapping("/list/{id}")
     public ResponseEntity<?> deleteTodoList(@PathVariable Long id) {
         todoService.deleteTodoList(id);
@@ -210,10 +210,10 @@ public class TodoController {
     }
 
     @Operation
-    (
-            summary = " todoGroup 삭제 ",
-            description =" ... "
-    )
+            (
+                    summary = " todoGroup 삭제 ",
+                    description =" ... "
+            )
     @DeleteMapping("/group/{id}")
     public ResponseEntity<?> deleteTodoGroup(@PathVariable Long id) {
         todoService.deleteTodoGroup(id);
