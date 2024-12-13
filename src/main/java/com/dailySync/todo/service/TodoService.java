@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,26 @@ public class TodoService {
     final private TodoGroupRepository todoGroupRepository;
     final private TodoItemRepository todoItemRepository;
     final private TodoListRepository todoListRepository;
+
+
+    public List<TodoItemResDto> getTodoItemDay(Long userId, String day) {
+        // 해당 userId와 day를 가진 TodoItem 조회
+        List<TodoItem> todoItems = todoItemRepository.findByUserIdAndDay(userId, day);
+
+        // TodoItem들을 TodoItemResDto로 변환하여 반환
+        return todoItems.stream()
+                .map(TodoItemResDto::of3)
+                .collect(Collectors.toList());
+    }
+
+
+    // 달력 일 가져오기
+    public List<TodoListResDto> getTodoList(Long userId, LocalDate date) {
+        List<TodoList> todoLists = todoListRepository.findByUserIdAndDateOrderByListOrderAsc(userId, date);
+        return todoLists.stream()
+                .map(TodoListResDto::of)
+                .collect(Collectors.toList());
+    }
 
 
     public void TodoLoginAutoListCreate(Long userId) {
@@ -122,15 +143,7 @@ public class TodoService {
     }
 
 
-    // 날짜 받아와서 총개수 , null인개수 반환
-    public TodoCountResponseDto getTodoCount(Long userId, LocalDate date){
 
-        long nullCount = todoListRepository.countByUserIdAndDateAndCheckedTimeIsNull(userId, null);
-        long allCount = todoListRepository.countByUserIdAndDate(userId, date);
-
-        return new TodoCountResponseDto(nullCount, allCount);
-
-    }
     //userId에 해당하는 todoGroup을 조회 (5)
     public List<TodoGroupResDto> getTodoGroup(Long userId) {
         List<TodoGroup> todoGroups = todoGroupRepository.findByUserIdAndStatusOrderByCreatedAtAsc(userId, "new");
@@ -168,15 +181,6 @@ public class TodoService {
                 .orElseThrow(() -> new RuntimeException("TodoItem에 id값이 없엉"));
         return TodoItemResDto.of(todoitem);
     }
-
-
-    public List<TodoListResDto> getTodoList(Long userId, LocalDate date) {
-        List<TodoList> todoLists = todoListRepository.findByUserIdAndDateOrderByListOrderAsc(userId, date);
-        return todoLists.stream()
-                .map(TodoListResDto::of)
-                .collect(Collectors.toList());
-    }
-    //생성
 
     //todolist을 생성 (7)
     public Boolean createTodoList(Long userId,TodoListReqDto reqDto) {

@@ -1,3 +1,69 @@
 <template>
-  <div>Todo Calendar</div>
+  <!-- FullCalendar 컴포넌트 -->
+  <FullCalendar :options="calendarOptions" />
+
+  <Modal
+      :isVisible="isModalVisible"
+      :selectedDate="selectedDate" 
+      @close="closeModal"
+  />
 </template>
+
+<script>
+import FullCalendar from '@fullcalendar/vue3'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction'
+import Modal from './TodoSelectModal.vue'
+
+export default {
+  components: {
+    FullCalendar,
+    Modal
+  },
+  data() {
+    return {
+      selectedDate: null, // 선택된 날짜
+      isModalVisible: false, // 모달의 표시 여부
+      calendarOptions: {
+        locale: 'ko', // 한국어 설정
+        height: 550,
+        showNonCurrentDates: false,
+        plugins: [dayGridPlugin, interactionPlugin], // 플러그인 등록
+        initialView: 'dayGridMonth', // 월별 뷰 설정
+        events: [], // 이벤트 초기화
+        eventClick: this.handleEventClick, // 일정 클릭 시 호출
+        dateClick: this.handleDateClick, // 날짜 클릭 시 호출
+        headerToolbar: {
+          left: 'prev',
+          center: 'title',
+          right: 'next',
+        },
+        footerToolbar: {
+          right: 'today',
+        },
+        buttonText: {
+          today: '오늘',
+        },
+        dayCellContent: function (info) {
+          return parseInt(info.dayNumberText)
+        },
+      },
+    };
+  },
+  methods: {
+    openAddItemModal() {
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    },
+    handleDateClick(info) {
+      this.selectedDate = info.dateStr; // 선택된 날짜 저장
+      this.openAddItemModal(); // 모달 열기
+    },
+    handleEventClick(info) {
+      console.log('Event clicked:', info.event.startStr);
+    },
+  },
+}
+</script>

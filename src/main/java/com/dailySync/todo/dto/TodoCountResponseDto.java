@@ -5,13 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class TodoCountResponseDto {
 
-    private long nullCount;
-    private long allCount;
-
+    private LocalDate date;
+    private Long CNT;
 }
+

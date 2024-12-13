@@ -20,6 +20,8 @@ public class TodoListResDto {
     private String title;
     private LocalDateTime checkedTime;
     private String GroupTitle;
+    private LocalDateTime createdAt;
+    private String status;
 
 
     public TodoListResDto(Long id, Long aLong, String string, Integer listOrder, String title) {
@@ -57,6 +59,8 @@ public class TodoListResDto {
         dto.setListOrder(todoList.getListOrder());
         dto.setDate(String.valueOf(todoList.getDate()));
         dto.setCheckedTime(todoList.getCheckedTime());
+        dto.setCreatedAt(todoList.getCreatedAt());
+        dto.setStatus(todoList.getStatus());
         if (todoList.getTodoItem() != null) {
             dto.setItemId(todoList.getTodoItem().getId());
             dto.setGroupTitle(todoList.getTodoItem().getTodoGroup().getTitle());
