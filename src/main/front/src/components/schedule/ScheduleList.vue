@@ -43,7 +43,7 @@
       <!-- <button @click="fnUpdate">수정</button>
       <button @click="fnRemove">삭제</button>
       </div>
-  </div>
+  </div>-->
   <button @click="fnAdd">일정등록</button>
   <div v-if="isAdd" class="add-schedule-form">
     <div>
@@ -65,7 +65,7 @@
 
     <button @click="fnSaveNewSchedule">저장</button>
     <button @click="fnCancelAdd">취소</button>
-  </div> -->
+  </div> 
 </template>
 
 <script>
@@ -90,15 +90,15 @@ export default {
       day: '',  
       year: new Date().getFullYear(), 
       month: new Date().getMonth() + 1, 
-      selectedSchedule: '',  
+      //selectedSchedule: '',  
       // isUpdate: false, 
-      // isAdd: false,
-      // newSchedule: {     
-      //   title: '',
-      //   startTime: '',
-      //   endTime: '',
-      //   description: ''
-      // },
+      isAdd: false,
+      newSchedule: {     
+        title: '',
+        startTime: '',
+        endTime: '',
+        description: ''
+      },
     };
   },
   watch: {
@@ -238,33 +238,33 @@ export default {
     return this.$dayjs(date).format('YYYY-MM-DD');  
   },
  
-  //  fnAdd() {
-  //     this.isAdd = true;  
-  //   },
+   fnAdd() {
+      this.isAdd = true;  
+    },
 
-  //   fnCancelAdd() {
-  //     this.isAdd = false;  
-  //     this.newSchedule = { title: '', startTime: '', endTime: '', description: '' }; 
-  //   },
+    fnCancelAdd() {
+      this.isAdd = false;  
+      this.newSchedule = { title: '', startTime: '', endTime: '', description: '' }; 
+    },
 
-  //   async fnSaveNewSchedule() {
-  //     const response = await this.$axios.post('schedule/add', this.newSchedule);
-  //     if (response.status) {
-  //       alert('일정이 등록되었습니다.');
-  //       this.isAdd = false;
-  //       this.$emit('fnScheduleList', this.day);
-  //       this.$emit('fnDayList', this.day);
-  //     } else {
-  //       alert(response.message);
-  //     }
-  //   },
+    async fnSaveNewSchedule() {
+      const response = await this.$axios.post('schedule/add', this.newSchedule);
+      if (response.status) {
+        alert('일정이 등록되었습니다.');
+        this.isAdd = false;
+        this.$emit('fnScheduleList', this.day);
+        this.$emit('fnDayList', this.day);
+      } else {
+        alert(response.message);
+      }
+    },
     
 
   },
   mounted() {
     //this.SelectedSchedule(this.SelectedSchedule.id);
     this.day = this.$dayjs().format('YYYY-MM-DDTHH:mm:ss');
-    console.log('SelectedSchedule 호출');
+    //console.log('SelectedSchedule 호출');
     //this.SelectedSchedule(1);  // 예시로 첫 번째 일정을 선택해본다.
     //this.fnListByUserId();
   },
