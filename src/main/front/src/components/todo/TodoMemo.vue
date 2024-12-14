@@ -3,7 +3,7 @@
     <h2>메모장</h2>
     <textarea
       v-model="Memo"
-      @input="updateContents"
+      @input="handleInput"
       placeholder="메모를 작성하세요..."
       class="memo-textarea"
     ></textarea>
@@ -15,7 +15,8 @@ export default {
   data() {
     return { 
       Memo: "",
-      MemoId: '',
+      MemoId: "",
+      saveTimer: null, 
     };
   },
 
@@ -38,36 +39,42 @@ export default {
 
     async SaveMemo() {
       if (!this.Memo.trim()) {
-        return;
+        this.Memo = " ";
       }
-      
+
       const userId = 5;
       if (this.MemoId) {
         const url = `todo/memo/${userId}/${this.MemoId}`;
         await this.$axios.put(url, {
-          contents: this.Memo
+          contents: this.Memo,
         });
       } else {
         const url = `todo/memo/${userId}`;
         await this.$axios.post(url, {
-          contents: this.Memo
-        });  
+          contents: this.Memo,
+        });
       }
-      await this.getMemo(); 
+      await this.getMemo();
     },
 
-   
-   
-    updateContents() {
-   
-      if (this.Memo.trim()) {
-        this.SaveMemo();
+    handleInput() {
+      if (this.saveTimer) {
+        clearTimeout(this.saveTimer);
       }
+
+      this.saveTimer = setTimeout(() => {
+        this.SaveMemo();
+      }, 1000);
     },
   },
 
   mounted() {
     this.getMemo();
+  },
+  beforeUnmount() { 
+    if (this.saveTimer) {
+      clearTimeout(this.saveTimer);
+    }
   },
 };
 </script>
@@ -83,7 +90,7 @@ export default {
 
 .memo-textarea {
   width: 100%;
-  height: 200px;
+  height: 300%;
   padding: 10px;
   margin-top: 20px;
   font-size: 16px;
@@ -91,5 +98,4 @@ export default {
   border-radius: 5px;
   resize: none;
 }
-
 </style>

@@ -19,7 +19,7 @@ public class TodoMemo extends BaseEntity {
     @JoinColumn (name = "user_id", nullable = false)
     private User user;
 
-    @Column (nullable = false)
+    @Column(nullable = false, length = 5000)
     private String contents;
 
 
