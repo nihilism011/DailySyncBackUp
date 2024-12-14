@@ -39,15 +39,28 @@ public class TodoService {
             Long totalCount = (Long) obj[1];  // 두 번째 값: 총 개수
             Long checkedCount = (Long) obj[2];  // 세 번째 값: 체크된 개수
 
+            // 완료율 계산
+            double completionRate = totalCount == 0 ? 0 : (double) checkedCount / totalCount * 100;
+
             return TodoCountResponseDto.builder()
                     .date(date)
                     .CNT(totalCount)  // 총 개수
                     .checkedCnt(checkedCount)  // 체크된 개수
+                    .completionRate(completionRate)  // 완료율 추가
                     .build();
         }).collect(Collectors.toList());
 
+        // 완료율을 기반으로 title 설정
+        double totalCnt = todoCountList.stream().mapToLong(TodoCountResponseDto::getCNT).sum();
+        double checkedCnt = todoCountList.stream().mapToLong(TodoCountResponseDto::getCheckedCnt).sum();
+        double totalCompletionRate = totalCnt == 0 ? 0 : (checkedCnt / totalCnt) * 100;
+
+        // 완료율을 포함한 title
+        String titleWithCompletionRate = String.format("Todo List (%.2f%% 완료)", totalCompletionRate);
+
         // TodoListResDto에 결과 담기
         return TodoListResDto.builder()
+                .title(titleWithCompletionRate)  // 완료율이 포함된 title
                 .todoCounts(todoCountList)  // 날짜별 통계 포함
                 .build();
     }

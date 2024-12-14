@@ -14,9 +14,10 @@ import java.time.LocalDate;
 @Builder
 public class TodoCountResponseDto {
 
-    private LocalDate date;
-    private Long CNT; // 총 개수
-    private Long checkedCnt; // 체크된 개수 (추가된 필드)
+    private LocalDate date;  // 날짜
+    private Long CNT;  // 총 개수
+    private Long checkedCnt;  // 체크된 개수
+    private double completionRate;  // 완료율
 
 }
 

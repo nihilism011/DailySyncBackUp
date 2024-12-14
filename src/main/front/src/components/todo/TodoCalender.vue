@@ -16,9 +16,25 @@ import interactionPlugin from '@fullcalendar/interaction'
 import Modal from './TodoSelectModal.vue'
 
 export default {
+  props : {
+
+    dailyList: {
+    type: Object,
+     },
+  },
   components: {
     FullCalendar,
     Modal
+  },
+  fnDayList: {
+    type: Function,
+  },
+  watch: {
+    dailyList(newValue) {
+      if (newValue && Array.isArray(newValue)) {
+        this.calendarOptions.events = this.dailyList
+      }
+    },
   },
   data() {
     return {
@@ -32,6 +48,7 @@ export default {
         initialView: 'dayGridMonth', // 월별 뷰 설정
         events: [], // 이벤트 초기화
         eventClick: this.handleEventClick, // 일정 클릭 시 호출
+        datesSet: this.handleMonthChange,
         dateClick: this.handleDateClick, // 날짜 클릭 시 호출
         headerToolbar: {
           left: 'prev',
@@ -63,6 +80,11 @@ export default {
     },
     handleEventClick(info) {
       console.log('Event clicked:', info.event.startStr);
+    },
+    handleMonthChange({ view }) {
+      const start = view.currentStart
+      const dateSet = `${start.getFullYear()}-${start.getMonth() + 1}`
+      this.$emit('fnDayList', dateSet)
     },
   },
 }
