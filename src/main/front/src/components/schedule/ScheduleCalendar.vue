@@ -1,5 +1,5 @@
 <template>
-    <FullCalendar :options="calendarOptions" />
+    <FullCalendar :options="calendarOptions" @SelectedSchedule="handleEventClick"/>
   </template>
   <script>
   import FullCalendar from '@fullcalendar/vue3'
@@ -16,9 +16,12 @@
         type: Array,
       //type: Object,
     },
-      fnScheduleList: {
-      type: Function,
+    selectedSchedule: {
+      type: Object,
     },
+    fnScheduleList: {
+    type: Function,
+  },
   },
 
   watch: {
@@ -26,9 +29,6 @@
       if (newValue && Array.isArray(newValue)) {
         this.calendarOptions.events = newValue; // dailyList 데이터를 FullCalendar에 맞게 전달
       }
-      // if (newValue && typeof newValue === 'object') {
-      //   this.calendarOptions.events = Object.values(newValue); 
-      // }
     },
   },
 
@@ -51,9 +51,10 @@
     methods: {
       handleEventClick(info) {
         console.log("info입니다", info)
-        const selectedId = info.event.id;
-        this.$emit('fnSchduleDayList', selectedId);
-      },
+        const id = info.event.id;
+        console.log("선택된 일정 ID:", id); 
+        this.$emit('SelectedSchedule', id); 
+    },
 
       handleMonthChange({ view }) {
         const start = view.currentStart
@@ -62,17 +63,9 @@
       },
       handleDateClick(info) {
         const date = info.dateStr;
-        console.log("여기야",this.dailyList);
-        const isSchedule = this.dailyList.start
-        console.log("일정있다",isSchedule)
-
-        // if(isSchedule && Array.isArray(isSchedule) && isSchedule.length > 0){
-        //   this.$emit('fnScheduleList', info.title)
-        // }
-        
-        
-        this.$emit('fnScheduleList', info.dateStr)
+        this.$emit('fnScheduleList', date); // 클릭된 날짜에 맞는 일정을 가져오도록 부모에 전달
       },
+  
     },
     mounted() {},
   }
