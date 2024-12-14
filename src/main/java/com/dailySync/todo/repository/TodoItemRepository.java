@@ -20,4 +20,5 @@ public interface TodoItemRepository extends JpaRepository<TodoItem, Long> {
     @Query("SELECT t FROM TodoItem t WHERE t.user.id = :userId AND t.day = :day")
     List<TodoItem> findByUserIdAndDay(@Param("userId") Long userId, @Param("day") String day);
 
+
 }

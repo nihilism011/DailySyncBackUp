@@ -6,9 +6,11 @@ import com.dailySync.todo.dto.*;
 import com.dailySync.todo.entities.TodoGroup;
 import com.dailySync.todo.entities.TodoItem;
 import com.dailySync.todo.entities.TodoList;
+import com.dailySync.todo.entities.TodoMemo;
 import com.dailySync.todo.repository.TodoGroupRepository;
 import com.dailySync.todo.repository.TodoItemRepository;
 import com.dailySync.todo.repository.TodoListRepository;
+import com.dailySync.todo.repository.TodoMemoRepository;
 import com.dailySync.user.entities.User;
 import com.dailySync.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +28,8 @@ public class TodoService {
     final private TodoGroupRepository todoGroupRepository;
     final private TodoItemRepository todoItemRepository;
     final private TodoListRepository todoListRepository;
+    final private TodoMemoRepository todoMemoRepository;
+
 
     public TodoListResDto getUserTodolList(Long userId, Integer year, Integer month) {
         // 쿼리 실행: 날짜별 총 개수와 체크된 개수 가져오기
@@ -64,8 +66,6 @@ public class TodoService {
                 .todoCounts(todoCountList)  // 날짜별 통계 포함
                 .build();
     }
-//    public TodoListResDto getUserDayMealList(Long userId, Integer year, Integer month) {
-//    }
 
     public List<TodoItemResDto> getTodoItemDay(Long userId, String day) {
         // 해당 userId와 day를 가진 TodoItem 조회
@@ -241,7 +241,23 @@ public class TodoService {
         return true;
     }
 
+    //todoMemo을 생성
+    public Boolean createTodoMemo(Long userId,TodoMemoReqDto reqDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자 ID입니다."));
+        TodoMemo todomemo = TodoMemo.builder()
+                .user(user)
+                .contents(reqDto.getContents())
+                .build();
+       todoMemoRepository.save(todomemo);
+       return true;
+    }
+    //userId해당하는는 todoMemo 조회
+    public TodoMemoResDto getTodoMemo(Long userId) {
+        TodoMemo todoMemo = todoMemoRepository.findByUserId(userId).orElse(null);
+        return TodoMemoResDto.of(todoMemo);
 
+    }
     //todoItem을 생성 (7)
     public Boolean createTodoItem(TodoItemReqDto reqDto) {
 
@@ -294,6 +310,10 @@ public class TodoService {
 
     public void deleteTodoGroup(Long id) {
         todoGroupRepository.deleteById(id);
+    }
+
+    public void deleteTodoMemo(Long id) {
+        todoMemoRepository.deleteById(id);
     }
 
     // 업데이트
@@ -396,6 +416,20 @@ public class TodoService {
         todoGroupRepository.save(todoGroup);
 
         return TodoGroupResDto.oft(todoGroup);
+    }
+
+    public TodoMemoResDto getTodoUpdateMemo(Long userId, Long id, TodoMemoReqDto reqDto) {
+        TodoMemo todomemo = todoMemoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("메모을 찾을 수 없엉"));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없성"));
+
+        todomemo.setContents(reqDto.getContents());
+
+        todoMemoRepository.save(todomemo);
+
+        return TodoMemoResDto.of(todomemo);
     }
 
 

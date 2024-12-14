@@ -2,7 +2,7 @@
   <div class="container">
     <div class="left left-container">
       <Calendar :dailyList="dailyList" @fnDayList="fnDayList" />
-      <TodoView/>
+      <TodoMemo/>
     </div>
     <div class="right">
       <div class="right-left">
@@ -23,7 +23,7 @@ import TodoGroup from '@/components/todo/TodoGroup.vue';
 import TodoItem from '@/components/todo/TodoItem.vue';
 import TodoList from '@/components/todo/TodoList.vue';
 import Calendar from '@/components/todo/TodoCalender.vue';
-import TodoView from '@/components/todo/TodoDays.vue';
+import TodoMemo from '@/components/todo/TodoMemo.vue';
 
 export default {
   components: {
@@ -31,7 +31,7 @@ export default {
     TodoItem,
     TodoList,
     Calendar,
-    TodoView,
+    TodoMemo,
   },
   data() {
     return {
