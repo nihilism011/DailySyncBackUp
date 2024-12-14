@@ -14,7 +14,6 @@
     props: {
       dailyList: {
         type: Array,
-      //type: Object,
     },
     selectedSchedule: {
       type: Object,
@@ -27,7 +26,7 @@
   watch: {
     dailyList(newValue) {
       if (newValue && Array.isArray(newValue)) {
-        this.calendarOptions.events = newValue; // dailyList 데이터를 FullCalendar에 맞게 전달
+        this.calendarOptions.events = newValue; 
       }
     },
   },
@@ -45,6 +44,7 @@
           eventClick: this.handleEventClick,
           datesSet: this.handleMonthChange,
           dateClick: this.handleDateClick,
+          eventContent: this.renderEventContent, 
         },
       }
     },
@@ -63,9 +63,13 @@
       },
       handleDateClick(info) {
         const date = info.dateStr;
-        this.$emit('fnScheduleList', date); // 클릭된 날짜에 맞는 일정을 가져오도록 부모에 전달
+        this.$emit('fnScheduleList', date); 
       },
-  
+      renderEventContent(eventInfo) {
+    return {
+      html: eventInfo.event.title,  
+    }
+  }
     },
     mounted() {},
   }

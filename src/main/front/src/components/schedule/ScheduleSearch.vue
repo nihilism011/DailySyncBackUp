@@ -98,6 +98,7 @@ export default {
         try {
           const { data } = await this.$axios.get(url);
           this.list = data; 
+          this.$emit('searchResult', data);  // 검색 결과 부모로 전달
         } catch (error) {
           console.error("오류 :", error);
         }
@@ -105,7 +106,6 @@ export default {
         console.log("검색할 조건을 입력하세요.");
       }
     },
-
       formatDate(date) {
       if (!date) return ''; 
       const formattedDate = new Date(date);
