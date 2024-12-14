@@ -48,8 +48,7 @@ public class AccountController {
             @PathVariable ("year") int year,
             @Parameter (description = "월")
             @PathVariable ("month") int month) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = (Long) authentication.getPrincipal();
+        Long userId = getUserId();
         return ApiResponse.success(accountService.findAccountsByMonth(userId, year, month));
     }
 
@@ -62,8 +61,7 @@ public class AccountController {
     public ResponseEntity<?> getAccountItemsSummaryByDate(
             @Parameter (description = "날짜 ex.'2024-12-12'")
             @PathVariable ("date") LocalDate date) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = (Long) authentication.getPrincipal();
+        Long userId = getUserId();
         return ApiResponse.success(accountService.findSumAccountByDate(userId, date));
     }
 
@@ -78,8 +76,7 @@ public class AccountController {
             @PathVariable ("year") int year,
             @Parameter (description = "월")
             @PathVariable ("month") int month) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = (Long) authentication.getPrincipal();
+        Long userId = getUserId();
         return ApiResponse.success(accountService.findFixedAccounts(userId, year, month));
     }
 
@@ -91,8 +88,7 @@ public class AccountController {
     @GetMapping ("items/favor/{category}")
     public ResponseEntity<ApiResponse<List<FavorAccountResDto>>> getFavorAccountItems(
             @Parameter (description = "카테고리 'ALL' = 전부") @PathVariable ("category") String category) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = (Long) authentication.getPrincipal();
+        Long userId = getUserId();
         return ApiResponse.success(accountService.findFavorAccountItems(userId, category));
     }
 
@@ -104,8 +100,7 @@ public class AccountController {
     @PostMapping ("items")
     public ResponseEntity<ApiResponse<Boolean>> createAccountItem(
             @RequestBody AccountReqDto reqDto) throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = (Long) authentication.getPrincipal();
+        Long userId = getUserId();
         return ApiResponse.success(accountService.createAccountItem(userId, reqDto));
     }
 
@@ -117,8 +112,7 @@ public class AccountController {
     @PostMapping ("items/favor")
     public ResponseEntity<ApiResponse<Boolean>> createFavorAccountItem(
             @RequestBody AccountReqDto reqDto) throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = (Long) authentication.getPrincipal();
+        Long userId = getUserId();
         return ApiResponse.success(accountService.createFavorAccountItem(userId, reqDto));
     }
 
@@ -194,5 +188,9 @@ public class AccountController {
             @Parameter (description = "즐겨찾기 항목 아이디")
             @PathVariable Long favorAccountId) {
         return ApiResponse.success(accountService.deleteFavorAccountItem(favorAccountId));
+    }
+
+    private Long getUserId(){
+        return (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

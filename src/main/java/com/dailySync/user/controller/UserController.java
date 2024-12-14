@@ -43,7 +43,7 @@ public class UserController {
     /**
      * {@code 유저 정보 수정}
      */
-    @PatchMapping ("user/userId")
+    @PatchMapping ("user/info")
     public ResponseEntity<ApiResponse<Boolean>> updateUser(
             @RequestBody UserReqDto reqDto) throws Exception {
         Long userId = getUserId();
@@ -53,7 +53,7 @@ public class UserController {
     /**
      * {@code 유저 비밀번호 수정}
      */
-    @PatchMapping ("user/userId")
+    @PatchMapping ("user/password")
     public ResponseEntity<ApiResponse<Boolean>> updateUserPassword(
             @RequestBody UserReqDto reqDto) throws Exception {
         Long userId = getUserId();
@@ -61,6 +61,6 @@ public class UserController {
     }
 
     private Long getUserId(){
-        return  (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }
