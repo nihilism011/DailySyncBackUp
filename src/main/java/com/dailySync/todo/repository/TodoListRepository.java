@@ -38,8 +38,11 @@ public interface TodoListRepository extends JpaRepository<TodoList, Long> {
     List<TodoList> findByUserIdAndDateOrderByListOrderAndGroupId(Long userId, LocalDate date);
     //    // 날짜에 대한 총 TodoList 수를 세는 쿼리
     // userId, year, month로 TodoList 조회
-    @Query("SELECT t FROM TodoList t WHERE t.user.id = :userId AND YEAR(t.date) = :year AND MONTH(t.date) = :month")
-    List<TodoList> findByUserIdAndYearAndMonth(Long userId, int year, int month);
+    @Query("SELECT t.date, COUNT(t), COUNT(t.checkedTime) " +
+            "FROM TodoList t WHERE t.user.id = :userId " +
+            "AND YEAR(t.date) = :year AND MONTH(t.date) = :month " +
+            "GROUP BY t.date")
+    List<Object[]> findTodoCountsByDate(Long userId, int year, int month);
 
     boolean existsByUserIdAndDateAndTodoItemId(Long userId, LocalDate date, Long todoItemId);
 

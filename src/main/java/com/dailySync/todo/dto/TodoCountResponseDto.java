@@ -15,15 +15,8 @@ import java.time.LocalDate;
 public class TodoCountResponseDto {
 
     private LocalDate date;
-    private Long CNT;
-
-    public static TodoCountResponseDto toDayCnt(TodoCountResponseDto todoCountResponseDto){
-
-        return todoCountResponseDto.builder()
-                .date(todoCountResponseDto.getDate())
-                .CNT(todoCountResponseDto.getCNT())
-                .build();
-    }
+    private Long CNT; // 총 개수
+    private Long checkedCnt; // 체크된 개수 (추가된 필드)
 
 }
 

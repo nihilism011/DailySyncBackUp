@@ -29,12 +29,28 @@ public class TodoService {
     final private TodoItemRepository todoItemRepository;
     final private TodoListRepository todoListRepository;
 
-//    public TodoListResDto getUserMealList(Long userId, Integer year, Integer month) {
-//        List<TodoList> todoLists = todoListRepository.findByUserIdAndYearAndMonth(userId, year, month);
-//        Map<LocalDate, List<TodoListResDto>> todolists = todoLists.stream().map(todoCountResponseDto::toDayCnt).
-//        return mapToDto(todoLists);
-//    }
-//
+    public TodoListResDto getUserTodolList(Long userId, Integer year, Integer month) {
+        // 쿼리 실행: 날짜별 총 개수와 체크된 개수 가져오기
+        List<Object[]> result = todoListRepository.findTodoCountsByDate(userId, year, month);
+
+        // 결과를 DTO로 변환
+        List<TodoCountResponseDto> todoCountList = result.stream().map(obj -> {
+            LocalDate date = (LocalDate) obj[0];  // 첫 번째 값: 날짜
+            Long totalCount = (Long) obj[1];  // 두 번째 값: 총 개수
+            Long checkedCount = (Long) obj[2];  // 세 번째 값: 체크된 개수
+
+            return TodoCountResponseDto.builder()
+                    .date(date)
+                    .CNT(totalCount)  // 총 개수
+                    .checkedCnt(checkedCount)  // 체크된 개수
+                    .build();
+        }).collect(Collectors.toList());
+
+        // TodoListResDto에 결과 담기
+        return TodoListResDto.builder()
+                .todoCounts(todoCountList)  // 날짜별 통계 포함
+                .build();
+    }
 //    public TodoListResDto getUserDayMealList(Long userId, Integer year, Integer month) {
 //    }
 
