@@ -1,6 +1,7 @@
 package com.dailySync.todo.service;//package com.dailySync.todo.service;
 
 
+import com.dailySync.meal.repository.MealRepository;
 import com.dailySync.todo.dto.*;
 import com.dailySync.todo.entities.TodoGroup;
 import com.dailySync.todo.entities.TodoItem;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +29,14 @@ public class TodoService {
     final private TodoItemRepository todoItemRepository;
     final private TodoListRepository todoListRepository;
 
+//    public TodoListResDto getUserMealList(Long userId, Integer year, Integer month) {
+//        List<TodoList> todoLists = todoListRepository.findByUserIdAndYearAndMonth(userId, year, month);
+//        Map<LocalDate, List<TodoListResDto>> todolists = todoLists.stream().map(todoCountResponseDto::toDayCnt).
+//        return mapToDto(todoLists);
+//    }
+//
+//    public TodoListResDto getUserDayMealList(Long userId, Integer year, Integer month) {
+//    }
 
     public List<TodoItemResDto> getTodoItemDay(Long userId, String day) {
         // 해당 userId와 day를 가진 TodoItem 조회
@@ -358,8 +368,6 @@ public class TodoService {
 
         return TodoGroupResDto.oft(todoGroup);
     }
-
-
 
 
 

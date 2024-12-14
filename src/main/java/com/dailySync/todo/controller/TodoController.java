@@ -18,9 +18,39 @@ import java.time.LocalDate;
 public class TodoController {
     final private TodoService todoService;
 
-    /**
-     * 로그인 한 유저가 연도 year 월 month 변수에 담아 넘겨주면 해당 월의 mealList 를 전달
-     */
+//    /**
+//     * 로그인 한 유저가 연도 year 월 month 변수에 담아 넘겨주면 해당 월의 mealList 를 전달
+//     */
+//    @Operation
+//            (
+//                    summary = "로그인한 유저가 선택한 달의 리스트 불러오기(초기 오늘의 월) - 일자별로 전체 리스트",
+//                    description = "year는 연도 month는 월 입력한다. week값은 주로 보여주는것을 처리하기위해 추가되었음."
+//            )
+//    @GetMapping ("list/{userId}/{year}/{month}")
+//    public ResponseEntity<ApiResponse<TodoListResDto>> getMealList(
+//            @PathVariable Long userId,
+//            @PathVariable int year,
+//            @PathVariable int month
+//    ) {
+//        return ApiResponse.success(todoService.getUserMealList(userId, year, month));
+//    }
+//
+//    /**
+//     * 로그인 한 유저가 연도 year 월 month 변수에 담아 넘겨주면 해당 월의 mealList 를 전달
+//     */
+//    @Operation
+//            (
+//                    summary = "로그인한 유저가 선택한 달의 리스트 불러오기(초기 오늘의 월) - 일자별로 개수 카운팅",
+//                    description = "year는 연도 month는 월 입력한다. week값은 주로 보여주는것을 처리하기위해 추가되었음."
+//            )
+//    @GetMapping ("list/{userId}/{year}/{month}")
+//    public ResponseEntity<ApiResponse<TodoListResDto>> getDayMealList(
+//            @PathVariable Long userId,
+//            @PathVariable int year,
+//            @PathVariable int month
+//    ) {
+//        return ApiResponse.success(todoService.getUserDayMealList(userId,year, month));
+//    }
 
     @PostMapping("/autoTest")
     public String autoGenerateTodoList() {
