@@ -76,10 +76,16 @@ export default {
     },
     handleDateClick(info) {
       this.selectedDate = info.dateStr; // 선택된 날짜 저장
+      console.log(info.dateStr + "날짜임");
       this.openAddItemModal(); // 모달 열기
     },
     handleEventClick(info) {
-      console.log('Event clicked:', info.event.startStr);
+      const eventStartDate = info.event.start;
+      eventStartDate.setDate(eventStartDate.getDate() + 1);
+      const eventDateStr = eventStartDate.toISOString().split('T')[0];
+      this.selectedDate = eventDateStr;
+      console.log(eventDateStr + " 이벤트 날짜 (+1일)");
+      this.openAddItemModal(); // 모달 열기
     },
     handleMonthChange({ view }) {
       const start = view.currentStart
