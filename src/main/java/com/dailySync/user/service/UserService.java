@@ -4,23 +4,24 @@ import com.dailySync.config.JwtUtil;
 import com.dailySync.constant.ResMessage;
 import com.dailySync.user.dto.LoginRequest;
 import com.dailySync.user.dto.UserReqDto;
-import com.dailySync.user.dto.UserResDto;
 import com.dailySync.user.entities.User;
+import com.dailySync.user.entities.UserSetting;
 import com.dailySync.user.repository.UserRepository;
+import com.dailySync.user.repository.UserSettingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     final private UserRepository userRepository;
+    private final UserSettingRepository userSettingRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     final private JwtUtil jwtUtil;
-
 
     /**
      * {@code 로그인}
@@ -28,7 +29,8 @@ public class UserService {
     public String login(LoginRequest request) throws Exception {
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND_USER));
         if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            System.out.println(jwtUtil);
+            user.setLastLogin(LocalDateTime.now());
+            userRepository.save(user);
             return jwtUtil.generateToken(user);
         }
         throw new Exception(ResMessage.NOT_MATCH_PASSWORD);
@@ -41,34 +43,45 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(userReqDto.getPassword());
         User user = User.of(userReqDto, encodedPassword);
         userRepository.save(user);
+        UserSetting userSetting = new UserSetting(user);
+        userSettingRepository.save(userSetting);
         return true;
     }
-    public String refreshToken(String token) throws Exception{
-        if(jwtUtil.validateToken(token)){
+
+    /**
+     * {@code 토큰 재발급}
+     */
+    public String refreshToken(String token) throws Exception {
+        if (jwtUtil.validateToken(token)) {
             Long userId = jwtUtil.extractUserId(token);
-            User user = userRepository.findById(userId).orElseThrow(()->new Exception(ResMessage.NOT_FOUND_USER));
+            User user = userRepository.findById(userId).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND_USER));
+            user.setLastLogin(LocalDateTime.now());
+            userRepository.save(user);
             return jwtUtil.generateToken(user);
-        }else{
+        } else {
             return null;
         }
     }
-    public List<UserResDto> getAllUser() {
-        return userRepository.findAll().stream().map(UserResDto::of).toList();
+
+    /**
+     * {@code 유저 정보 수정}
+     */
+    public boolean updateUser(Long userId, UserReqDto userReqDto) throws Exception {
+        User user = userRepository.findById(userId).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND_USER));
+        user.update(userReqDto);
+        userRepository.save(user);
+        return true;
     }
 
-    public boolean updateUser(Long id, UserReqDto userReqDto) {
-        try {
-            User user = userRepository.findById(id).orElse(null);
-            if (user == null) {
-                return false;
-            }
-            user.update(userReqDto);
-            userRepository.save(user);
-            return true;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
+    /**
+     * {@code 유저 비밀번호 수정}
+     */
+    public boolean updateUserPassword(Long userId, UserReqDto userReqDto) throws Exception {
+        User user = userRepository.findById(userId).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND_USER));
+        String encodedPassword = passwordEncoder.encode(userReqDto.getPassword());
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+        return true;
     }
 
     public boolean deleteUser(Long id) {

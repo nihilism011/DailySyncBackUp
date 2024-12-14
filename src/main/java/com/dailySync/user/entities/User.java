@@ -36,7 +36,7 @@ public class User extends BaseEntity {
 
     @NotBlank
     @Column (nullable = false)
-    @Size (min=1,max=10)
+    @Size (min = 1, max = 10)
     private String gender;
 
     @Email
@@ -79,17 +79,14 @@ public class User extends BaseEntity {
     }
 
     public void update(UserReqDto reqDto) {
-        if (reqDto.getUserName() != null) {
+        if (reqDto.getUserName() != null && !reqDto.getUserName().isEmpty()) {
             this.userName = reqDto.getUserName();
         }
-        if (reqDto.getEmail() != null) {
+        if (reqDto.getEmail() != null && !reqDto.getEmail().isEmpty()) {
             this.email = reqDto.getEmail();
         }
-        if (reqDto.getGender() != null) {
+        if (reqDto.getGender() != null && !reqDto.getGender().isEmpty()) {
             this.gender = reqDto.getGender();
-        }
-        if (reqDto.getPassword() != null) {
-            this.password = reqDto.getPassword();
         }
     }
 

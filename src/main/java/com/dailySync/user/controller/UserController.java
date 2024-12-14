@@ -4,13 +4,11 @@ import com.dailySync.common.ApiResponse;
 import com.dailySync.user.dto.LoginRequest;
 import com.dailySync.user.dto.TokenRequest;
 import com.dailySync.user.dto.UserReqDto;
-import com.dailySync.user.dto.UserResDto;
 import com.dailySync.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,23 +31,36 @@ public class UserController {
     public ResponseEntity<ApiResponse<Boolean>> joinUser(@RequestBody UserReqDto reqDto) {
         return ApiResponse.success(userService.createUser(reqDto));
     }
+
+    /**
+     * {@code JWT 재발급}
+     */
     @PostMapping ("token/refresh")
-    public ResponseEntity<ApiResponse<String>> refreshToken(@RequestBody TokenRequest token) throws Exception{
+    public ResponseEntity<ApiResponse<String>> refreshToken(@RequestBody TokenRequest token) throws Exception {
         return ApiResponse.success(userService.refreshToken(token.getToken()));
     }
 
-    @GetMapping ("user")
-    public ResponseEntity<?> getAllUser() {
-        List<UserResDto> list = userService.getAllUser();
-        return ResponseEntity.ok(list);
+    /**
+     * {@code 유저 정보 수정}
+     */
+    @PatchMapping ("user/userId")
+    public ResponseEntity<ApiResponse<Boolean>> updateUser(
+            @RequestBody UserReqDto reqDto) throws Exception {
+        Long userId = getUserId();
+        return ApiResponse.success(userService.updateUser(userId, reqDto));
     }
 
-    @PatchMapping ("user/userId/{id}")
-    public ResponseEntity<?> updateUser(
-            @PathVariable ("id") Long id,
-            @RequestBody UserReqDto reqDto) {
-
-        return ResponseEntity.ok(userService.updateUser(id, reqDto));
+    /**
+     * {@code 유저 비밀번호 수정}
+     */
+    @PatchMapping ("user/userId")
+    public ResponseEntity<ApiResponse<Boolean>> updateUserPassword(
+            @RequestBody UserReqDto reqDto) throws Exception {
+        Long userId = getUserId();
+        return ApiResponse.success(userService.updateUserPassword(userId, reqDto));
     }
 
+    private Long getUserId(){
+        return  (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
 }
