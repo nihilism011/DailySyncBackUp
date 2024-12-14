@@ -8,7 +8,7 @@ import ScheduleView from '@/views/ScheduleView.vue'
 import SignupView from '@/views/SignupView.vue'
 import LoginView from '@/views/LoginView.vue'
 import LoginTestPage from '@/views/LoginTestPage.vue'
-
+import { refreshToken } from '@/lib/auth'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -64,7 +64,7 @@ const router = createRouter({
     },
   ],
 })
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const localToken = localStorage.getItem('jwtToken')
   const sessionToken = sessionStorage.getItem('jwtToken')
   const token = localToken ?? sessionToken // JWT 토큰 가져오기
@@ -74,6 +74,7 @@ router.beforeEach((to, from, next) => {
       alert('로그인이 필요합니다. 로그인 페이지로 이동합니다.')
       next({ name: 'login' })
     } else {
+      await refreshToken(token)
       next() // 토큰이 있으면 해당 페이지로 접근
     }
   } else {

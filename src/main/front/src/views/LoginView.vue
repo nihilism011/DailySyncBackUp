@@ -16,6 +16,8 @@
 import { useRouter } from 'vue-router'
 export default {
   setup() {
+    localStorage.removeItem('jwtToken')
+    sessionStorage.removeItem('jwtToken')
     const router = useRouter()
     return { router }
   },

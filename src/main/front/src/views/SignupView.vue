@@ -90,6 +90,10 @@ export default {
       }
     },
   },
+  mounted() {
+    localStorage.removeItem('jwtToken')
+    sessionStorage.removeItem('jwtToken')
+  },
 }
 </script>
 

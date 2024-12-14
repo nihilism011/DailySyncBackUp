@@ -21,12 +21,14 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     final private JwtUtil jwtUtil;
 
+
     /**
      * {@code 로그인}
      */
     public String login(LoginRequest request) throws Exception {
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND_USER));
         if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            System.out.println(jwtUtil);
             return jwtUtil.generateToken(user);
         }
         throw new Exception(ResMessage.NOT_MATCH_PASSWORD);
@@ -41,7 +43,15 @@ public class UserService {
         userRepository.save(user);
         return true;
     }
-
+    public String refreshToken(String token) throws Exception{
+        if(jwtUtil.validateToken(token)){
+            Long userId = jwtUtil.extractUserId(token);
+            User user = userRepository.findById(userId).orElseThrow(()->new Exception(ResMessage.NOT_FOUND_USER));
+            return jwtUtil.generateToken(user);
+        }else{
+            return null;
+        }
+    }
     public List<UserResDto> getAllUser() {
         return userRepository.findAll().stream().map(UserResDto::of).toList();
     }

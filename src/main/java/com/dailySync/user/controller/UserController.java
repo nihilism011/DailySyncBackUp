@@ -2,6 +2,7 @@ package com.dailySync.user.controller;
 
 import com.dailySync.common.ApiResponse;
 import com.dailySync.user.dto.LoginRequest;
+import com.dailySync.user.dto.TokenRequest;
 import com.dailySync.user.dto.UserReqDto;
 import com.dailySync.user.dto.UserResDto;
 import com.dailySync.user.service.UserService;
@@ -31,6 +32,11 @@ public class UserController {
     @PostMapping ("signup")
     public ResponseEntity<ApiResponse<Boolean>> joinUser(@RequestBody UserReqDto reqDto) {
         return ApiResponse.success(userService.createUser(reqDto));
+    }
+    @PostMapping ("token/refresh")
+    public ResponseEntity<ApiResponse<String>> refreshToken(@RequestBody TokenRequest token) throws Exception{
+        System.out.println(token.getToken());
+        return ApiResponse.success(userService.refreshToken(token.getToken()));
     }
 
     @GetMapping ("user")
