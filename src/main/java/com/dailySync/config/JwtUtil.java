@@ -22,7 +22,6 @@ public class JwtUtil {
 
     public String generateToken(User user) {
         long expirationTime = 1000 * 60 * 60 * 24 * 7;
-
         return Jwts.builder()
                 .signWith(key)
                 .subject(user.getUserName())

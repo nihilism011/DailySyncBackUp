@@ -14,12 +14,14 @@
 </template>
 <script>
 import { useRouter } from 'vue-router'
+import { useRefreshStore } from '@/stores/refreshStore'
 export default {
   setup() {
     localStorage.removeItem('jwtToken')
     sessionStorage.removeItem('jwtToken')
     const router = useRouter()
-    return { router }
+    const refreshStore = useRefreshStore()
+    return { router, refreshStore }
   },
   data() {
     return {
@@ -47,13 +49,13 @@ export default {
       }
       const url = 'login'
       const res = await this.$axios.post(url, loginRequest)
-      console.log(res)
       if (res.status) {
         if (this.loginFix) {
           localStorage.setItem('jwtToken', res.data)
         } else {
           sessionStorage.setItem('jwtToken', res.data)
         }
+        this.refreshStore.setRefresh()
         this.router.push('/')
       } else {
         alert(res.message)

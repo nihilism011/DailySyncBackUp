@@ -35,7 +35,6 @@ public class UserController {
     }
     @PostMapping ("token/refresh")
     public ResponseEntity<ApiResponse<String>> refreshToken(@RequestBody TokenRequest token) throws Exception{
-        System.out.println(token.getToken());
         return ApiResponse.success(userService.refreshToken(token.getToken()));
     }
 

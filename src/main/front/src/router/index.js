@@ -74,8 +74,12 @@ router.beforeEach(async (to, from, next) => {
       alert('로그인이 필요합니다. 로그인 페이지로 이동합니다.')
       next({ name: 'login' })
     } else {
-      await refreshToken(token)
-      next() // 토큰이 있으면 해당 페이지로 접근
+      const check = await refreshToken(token)
+      if (check) {
+        next()
+      } else {
+        next({ name: 'login' })
+      }
     }
   } else {
     next() // 인증이 필요 없는 페이지는 그대로 진행
