@@ -35,6 +35,7 @@ export default {
     return {
       day : '',
       dailyList: [],
+      fullList: [],
       selectedDay: this.$dayjs().format('YYYY-MM-DD'), 
       selectedSchedule: '',
       popupState: false,
