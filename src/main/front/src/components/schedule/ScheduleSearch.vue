@@ -34,15 +34,7 @@
       <div class="list-container">
         <div v-if="list.length === 0">검색 결과가 없습니다.</div>
         <div v-else>
-          <div class="list-item" v-for="(item, index) in list" :key="index">
-            <div class="title">
-              <div>
-                {{ item.title }}
-                {{ formatDate(item.startTime) }} ~ {{ formatDate(item.endTime) }}
-              </div>
-            </div>
-          </div>
-        </div>
+      </div>
       </div>
     </div>
   </div>

@@ -59,24 +59,24 @@ export default {
         }));
 
         // 가장 빠른 일정을 선택하기
-        const earliestSchedule = this.getEarliestSchedule(this.dailyList);
-        this.selectedSchedule = earliestSchedule;  // 이 시점에 selectedSchedule을 설정
+        // const earliestSchedule = this.getEarliestSchedule(this.dailyList);
+        // this.selectedSchedule = earliestSchedule;  // 이 시점에 selectedSchedule을 설정
       } else {
         console.log('해당 날짜에 일정이 없습니다.');
+        }
+      } catch (error) {
+        console.error('일정을 불러오는 중 오류가 발생했습니다:', error);
       }
-    } catch (error) {
-      console.error('일정을 불러오는 중 오류가 발생했습니다:', error);
-    }
-  },
+    },
 
   // 가장 빠른 일정을 찾는 함수
-  getEarliestSchedule(scheduleList) {
-    return scheduleList.reduce((earliest, current) => {
-      const currentStart = new Date(current.start);
-      const earliestStart = new Date(earliest.start);
-      return currentStart < earliestStart ? current : earliest;
-    });
-  },
+    // getEarliestSchedule(scheduleList) {
+    //   return scheduleList.reduce((earliest, current) => {
+    //     const currentStart = new Date(current.start);
+    //     const earliestStart = new Date(earliest.start);
+    //     return currentStart < earliestStart ? current : earliest;
+    //   });
+    // },
     // async fnScheduleList(inputDay) {
     //   const userId = 6;
     //   let year = inputDay.split('-')[0]
@@ -103,10 +103,6 @@ export default {
       }
   
     },
-    // openModal(searchResults) {
-    //   this.searchResults = searchResults;
-    //   this.popupState = true; 
-    // },
   },
 
   mounted() {
