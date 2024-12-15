@@ -67,10 +67,13 @@ public class UserService {
     /**
      * {@code 유저 정보 수정}
      */
-    public boolean updateUser(Long userId, UserReqDto userReqDto) throws Exception {
-        User user = userRepository.findById(userId).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND_USER));
-        user.update(userReqDto);
+    public boolean updateUser(Long userId, UserInfoDto userInfo) throws Exception {
+        User user = getUser(userId);
+        user.update(userInfo);
         userRepository.save(user);
+        UserSetting setting = user.getUserSetting();
+        setting.update(userInfo);
+        userSettingRepository.save(setting);
         return true;
     }
 
@@ -84,7 +87,7 @@ public class UserService {
         userRepository.save(user);
         return true;
     }
-
+    /**{@code 유저정보 불러오기}*/
     public UserInfoDto getUserInfo(Long userId) throws Exception {
         User user = getUser(userId);
         UserSetting setting = userSettingRepository.findById(userId).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND_USER));

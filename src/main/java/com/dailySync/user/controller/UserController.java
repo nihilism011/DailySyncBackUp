@@ -44,11 +44,11 @@ public class UserController {
     /**
      * {@code 유저 정보 수정}
      */
-    @PatchMapping ("user/info")
+    @PutMapping ("user/info")
     public ResponseEntity<ApiResponse<Boolean>> updateUser(
-            @RequestBody UserReqDto reqDto) throws Exception {
+            @RequestBody UserInfoDto userInfo) throws Exception {
         Long userId = getUserId();
-        return ApiResponse.success(userService.updateUser(userId, reqDto));
+        return ApiResponse.success(userService.updateUser(userId, userInfo));
     }
 
     /**
@@ -64,8 +64,8 @@ public class UserController {
     /**
      * {@code 유저 정보}
      */
-    @GetMapping("user/info")
-    public ResponseEntity<ApiResponse<UserInfoDto>> getUserInfo() throws Exception{
+    @GetMapping ("user/info")
+    public ResponseEntity<ApiResponse<UserInfoDto>> getUserInfo() throws Exception {
         Long userId = getUserId();
         return ApiResponse.success(userService.getUserInfo(userId));
     }

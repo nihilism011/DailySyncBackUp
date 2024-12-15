@@ -7,6 +7,7 @@ import com.dailySync.schedule.entities.Schedule;
 import com.dailySync.todo.entities.TodoGroup;
 import com.dailySync.todo.entities.TodoItem;
 import com.dailySync.todo.entities.TodoList;
+import com.dailySync.user.dto.UserInfoDto;
 import com.dailySync.user.dto.UserReqDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -78,16 +79,8 @@ public class User extends BaseEntity {
                 .build();
     }
 
-    public void update(UserReqDto reqDto) {
-        if (reqDto.getUserName() != null && !reqDto.getUserName().isEmpty()) {
-            this.userName = reqDto.getUserName();
-        }
-        if (reqDto.getEmail() != null && !reqDto.getEmail().isEmpty()) {
-            this.email = reqDto.getEmail();
-        }
-        if (reqDto.getGender() != null && !reqDto.getGender().isEmpty()) {
-            this.gender = reqDto.getGender();
-        }
+    public void update(UserInfoDto userInfo) {
+        this.userName = userInfo.getUserName();
+        this.gender = userInfo.getGender();
     }
-
 }

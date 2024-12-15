@@ -11,7 +11,7 @@ import com.dailySync.account.repository.FavoriteAccountRepository;
 import com.dailySync.constant.AccountCategory;
 import com.dailySync.constant.ResMessage;
 import com.dailySync.user.entities.User;
-import com.dailySync.user.repository.UserRepository;
+import com.dailySync.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +22,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AccountService {
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final AccountRepository accountRepository;
     private final FavoriteAccountRepository favoriteRepository;
-
-    private User getUserById(Long userId) throws Exception {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new Exception(ResMessage.NOT_FOUND_USER));
-    }
 
     //조회
     public List<AccountResDto> findAccountsByDate(Long userId, LocalDate date) {
@@ -45,7 +40,6 @@ public class AccountService {
         int nextMonth = month == 12 ? 1 : month + 1;
         int nextYear = (month == 12) ? year + 1 : year;
 
-        // 결과 리스트 초기화
         List<AccountSum> result = new ArrayList<>();
         List<AccountSum> prev = accountRepository.findByUserIdAndYearAndMonth(prevYear, prevMonth, userId);
         List<AccountSum> current = accountRepository.findByUserIdAndYearAndMonth(year, month, userId);
@@ -83,13 +77,14 @@ public class AccountService {
 
     //생성
     public boolean createAccountItem(Long userId, AccountReqDto reqDto) throws Exception {
-        User user = getUserById((userId));
+
+        User user = userService.getUser(userId);
         accountRepository.save(Account.of(user, reqDto));
         return true;
     }
 
     public boolean createFavorAccountItem(Long userId, AccountReqDto reqDto) throws Exception {
-        User user = getUserById((userId));
+        User user = userService.getUser(userId);
         FavoriteAccount account = FavoriteAccount.of(user, reqDto);
         favoriteRepository.save(account);
         return true;

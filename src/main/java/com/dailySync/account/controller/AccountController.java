@@ -5,13 +5,12 @@ import com.dailySync.account.dto.AccountResDto;
 import com.dailySync.account.dto.FavorAccountResDto;
 import com.dailySync.account.service.AccountService;
 import com.dailySync.common.ApiResponse;
+import com.dailySync.common.CommonService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -22,9 +21,10 @@ import java.util.List;
 @RequestMapping ("api/account")
 public class AccountController {
     private final AccountService accountService;
+    private final CommonService commonService;
 
     /**
-     * 날짜별 가계부 항목 조회
+     * {@code 날짜별 가계부 항목 조회}
      */
     @Tag (name = "ACCOUNT", description = "가계부")
     @Operation (summary = "해당 날짜의 가계부 목록")
@@ -32,13 +32,12 @@ public class AccountController {
     public ResponseEntity<ApiResponse<List<AccountResDto>>> getAccountItemsByDate(
             @Parameter (description = "날짜 YYYY-MM-DD")
             @PathVariable ("date") LocalDate date) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = (Long) authentication.getPrincipal();
+        Long userId = commonService.getUserId();
         return ApiResponse.success(accountService.findAccountsByDate(userId, date));
     }
 
     /**
-     * 월 단위 날짜별 가계부 항목 합산 조회
+     * {@code 월 단위 날짜별 가계부 항목 합산 조회}
      */
     @Tag (name = "ACCOUNT", description = "가계부")
     @Operation (summary = "해당 월에 각 날짜별 수입,지출의 합산")
@@ -48,12 +47,12 @@ public class AccountController {
             @PathVariable ("year") int year,
             @Parameter (description = "월")
             @PathVariable ("month") int month) {
-        Long userId = getUserId();
+        Long userId = commonService.getUserId();
         return ApiResponse.success(accountService.findAccountsByMonth(userId, year, month));
     }
 
     /**
-     * 날짜 가계부 합산 조회
+     * {@code 날짜 가계부 합산 조회}
      */
     @Tag (name = "ACCOUNT", description = "가계부")
     @Operation (summary = "해당 날짜의 수입,지출의 합산")
@@ -61,12 +60,12 @@ public class AccountController {
     public ResponseEntity<?> getAccountItemsSummaryByDate(
             @Parameter (description = "날짜 ex.'2024-12-12'")
             @PathVariable ("date") LocalDate date) {
-        Long userId = getUserId();
+        Long userId = commonService.getUserId();
         return ApiResponse.success(accountService.findSumAccountByDate(userId, date));
     }
 
     /**
-     * 고정 항목 조회
+     * {@code 고정 항목 조회}
      */
     @Tag (name = "ACCOUNT", description = "가계부")
     @Operation (summary = "입력한 년월 에 해당하는 고정목록")
@@ -76,48 +75,48 @@ public class AccountController {
             @PathVariable ("year") int year,
             @Parameter (description = "월")
             @PathVariable ("month") int month) {
-        Long userId = getUserId();
+        Long userId = commonService.getUserId();
         return ApiResponse.success(accountService.findFixedAccounts(userId, year, month));
     }
 
     /**
-     * 즐겨찾기 항목 조회
+     * {@code 즐겨찾기 항목 조회}
      */
     @Tag (name = "FAVORITE ACCOUNT", description = "가계부 즐겨찾기")
     @Operation (summary = "가계부 즐겨찾기 목록", description = " 카테고리 all 일 경우 전체")
     @GetMapping ("items/favor/{category}")
     public ResponseEntity<ApiResponse<List<FavorAccountResDto>>> getFavorAccountItems(
             @Parameter (description = "카테고리 'ALL' = 전부") @PathVariable ("category") String category) {
-        Long userId = getUserId();
+        Long userId = commonService.getUserId();
         return ApiResponse.success(accountService.findFavorAccountItems(userId, category));
     }
 
     /**
-     * 새로운 가계부 항목 추가
+     * {@code 새로운 가계부 항목 추가}
      */
     @Tag (name = "ACCOUNT", description = "가계부")
     @Operation (summary = "가계부 항목 추가", description = "새로운 가계부 항목을 추가합니다.")
     @PostMapping ("items")
     public ResponseEntity<ApiResponse<Boolean>> createAccountItem(
             @RequestBody AccountReqDto reqDto) throws Exception {
-        Long userId = getUserId();
+        Long userId = commonService.getUserId();
         return ApiResponse.success(accountService.createAccountItem(userId, reqDto));
     }
 
     /**
-     * 즐겨찾기 항목 추가
+     * {@code 즐겨찾기 항목 추가}
      */
     @Tag (name = "FAVORITE ACCOUNT", description = "가계부 즐겨찾기")
     @Operation (summary = "가계부 즐겨찾기 추가")
     @PostMapping ("items/favor")
     public ResponseEntity<ApiResponse<Boolean>> createFavorAccountItem(
             @RequestBody AccountReqDto reqDto) throws Exception {
-        Long userId = getUserId();
+        Long userId = commonService.getUserId();
         return ApiResponse.success(accountService.createFavorAccountItem(userId, reqDto));
     }
 
     /**
-     * 가계부 항목 전체 수정
+     * {@code 가계부 항목 전체 수정}
      */
     @Tag (name = "ACCOUNT", description = "가계부")
     @Operation (summary = "가계부 항목 수정 (전체)")
@@ -129,7 +128,7 @@ public class AccountController {
     }
 
     /**
-     * 가계부 항목 부분 수정
+     * {@code 가계부 항목 부분 수정}
      */
     @Tag (name = "ACCOUNT", description = "가계부")
     @Operation (summary = "가계부 항목 수정 (일부)")
@@ -142,7 +141,7 @@ public class AccountController {
     }
 
     /**
-     * 즐겨찾기 항목 전체 수정
+     * {@code 즐겨찾기 항목 전체 수정}
      */
     @Tag (name = "FAVORITE ACCOUNT", description = "가계부 즐겨찾기")
     @Operation (summary = "가계부 즐겨찾기 항목 수정 (전체)")
@@ -154,7 +153,7 @@ public class AccountController {
     }
 
     /**
-     * 즐겨찾기 항목 부분 수정
+     * {@code 즐겨찾기 항목 부분 수정}
      */
     @Tag (name = "FAVORITE ACCOUNT", description = "가계부 즐겨찾기")
     @Operation (summary = "가계부 즐겨찾기 항목 수정 (일부)")
@@ -167,7 +166,7 @@ public class AccountController {
     }
 
     /**
-     * 가계부 항목 삭제
+     * {@code 가계부 항목 삭제}
      */
     @Tag (name = "ACCOUNT", description = "가계부")
     @Operation (summary = "가계부 항목 제거", description = "가계부 항목을 제거합니다.")
@@ -179,7 +178,7 @@ public class AccountController {
     }
 
     /**
-     * 즐겨찾기 항목 삭제
+     * {@code 즐겨찾기 항목 삭제}
      */
     @Tag (name = "FAVORITE ACCOUNT", description = "가계부 즐겨찾기")
     @Operation (summary = "가계부 즐겨찾기 항목 삭제")
@@ -190,7 +189,4 @@ public class AccountController {
         return ApiResponse.success(accountService.deleteFavorAccountItem(favorAccountId));
     }
 
-    private Long getUserId(){
-        return (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
 }
