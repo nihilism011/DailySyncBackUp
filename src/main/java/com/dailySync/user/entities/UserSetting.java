@@ -1,5 +1,6 @@
 package com.dailySync.user.entities;
 
+import com.dailySync.user.dto.UserInfoDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,4 +30,14 @@ public class UserSetting {
     private Integer recommendCal;
     @Column
     private String darkMode;
+
+    public UserSetting(User user) {
+        this.user = user;
+    }
+
+    public void update(UserInfoDto updateInfo) {
+        this.weight = updateInfo.getWeight();
+        this.height = updateInfo.getHeight();
+        this.recommendCal = updateInfo.getRecommendCal();
+    }
 }

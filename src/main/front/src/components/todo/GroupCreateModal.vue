@@ -1,28 +1,40 @@
 <template>
-  <div v-if="isVisible" class="modal-overlay">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div style="font-size: 30px;">
+  <div v-if="isVisible" class="popup-box type-modal">
+    <div class="popup-cont type2">
+      <div class="popup-tit-wrap">
+        <h2 class="tit">
           {{ mode === 'create' ? '그룹 추가' : '그룹 수정' }}
-        </div>
-        <button @click="closeModal">X</button>
+        </h2>
       </div>
-      <div class="modal-body">
-        <div>
-          <!-- 제목 입력 -->
-          <input v-model="newItem.title" placeholder="제목 입력" />
+      <div class="todo-wrap">
+        <div class="ip-list">
+          <div class="tit-box">
+            <p class="tit">제목</p>
+          </div>
+          <div class="bot-box">
+            <div class="ip-box">
+              <input type="text" v-model="newItem.title" placeholder="제목 입력" />
+            </div>
+          </div>
         </div>
-        <div>
-          <!-- 상세설명 입력 -->
-          <input v-model="newItem.description" placeholder="상세설명 입력" />
+        <div class="ip-list">
+          <div class="tit-box">
+            <p class="tit">상세설명</p>
+          </div>
+          <div class="bot-box">
+            <div class="ip-box">
+              <input type="text" v-model="newItem.description" placeholder="상세설명 입력" />
+            </div>
+          </div>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="pop-btn-wrap">
         <!-- 저장 버튼 (추가/수정) -->
-        <button @click="saveItem">{{ mode === 'create' ? '추가' : '수정' }}</button>
-        <button @click="closeModal">취소</button>
+        <button @click="saveItem" class="btn-default submit">{{ mode === 'create' ? '추가' : '수정' }}</button>
+        <button @click="closeModal" class="btn-default cancel">취소</button>
       </div>
     </div>
+    <div class="dimmed">dim</div>
   </div>
 </template>
 

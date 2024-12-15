@@ -14,7 +14,7 @@ public class GlobalExceptionHandler {
     // 예외 처리 메서드
     @ExceptionHandler (Exception.class)
     public ResponseEntity<?> handleException(Exception e) {
-        return ApiResponse.error("문제 발생: " + e.getMessage());
+        return ApiResponse.error(e.getMessage());
     }
 
     // 리소스가 존재하지 않을 때

@@ -14,7 +14,6 @@ public class UserResDto {
 
     private Long id;
     private String userName;
-    private String name;
     private String gender;
 
     public static UserResDto nullUser() {
@@ -30,7 +29,6 @@ public class UserResDto {
         //UserResDto 생성한 객체에 매개변수로 받은 User 객체에 있던 userName 정보를 입력.
         userResDto.setId(user.getId());
         userResDto.setUserName(user.getUserName());
-        userResDto.setName(user.getName());
         userResDto.setGender(user.getGender());
         //UserResDto 객체 리턴.
         return userResDto;

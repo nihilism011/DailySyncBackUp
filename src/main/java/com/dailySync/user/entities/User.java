@@ -7,13 +7,18 @@ import com.dailySync.schedule.entities.Schedule;
 import com.dailySync.todo.entities.TodoGroup;
 import com.dailySync.todo.entities.TodoItem;
 import com.dailySync.todo.entities.TodoList;
+import com.dailySync.user.dto.UserInfoDto;
+import com.dailySync.todo.entities.TodoMemo;
 import com.dailySync.user.dto.UserReqDto;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+
 @Setter
 @Entity
 @Getter
@@ -22,19 +27,22 @@ import java.util.List;
 @Builder
 public class User extends BaseEntity {
 
+    @NotBlank
     @Column (unique = true, nullable = false)
+    @Size (min = 2, max = 20)
     private String userName;
 
-    @Column (nullable = false)
-    private String name;
-
+    @NotBlank
     @Column (nullable = false)
     private String password;
 
+    @NotBlank
     @Column (nullable = false)
+    @Size (min = 1, max = 10)
     private String gender;
 
-    @Column (nullable = false)
+    @Email
+    @Column (unique = true, nullable = false)
     private String email;
 
     @Column
@@ -48,6 +56,10 @@ public class User extends BaseEntity {
 
     @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)
     private List<TodoItem> todoItems;
+
+    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)
+    private List<TodoMemo> todoMemos;
+
     @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)
     private List<TodoGroup> todoGroups;
     @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)
@@ -63,41 +75,17 @@ public class User extends BaseEntity {
         this.gender = gender;
     }
 
-    public static User of(UserReqDto reqDto) {
+    public static User of(UserReqDto userInfo, String encodedPassword) {
         return User.builder()
-                .name(reqDto.getName())
-                .email(reqDto.getEmail())
-                .userName(reqDto.getUserName())
-                .gender(reqDto.getGender())
-                .password(reqDto.getPassword())
+                .email(userInfo.getEmail())
+                .userName(userInfo.getUserName())
+                .gender(userInfo.getGender())
+                .password(encodedPassword)
                 .build();
     }
 
-    //    public void update(UserReqDto userReqDto) {
-    //        this.userName = userReqDto.getUserName();
-    //        this.name = userReqDto.getName();
-    //        this.email = userReqDto.getEmail();
-    //        this.gender = userReqDto.getGender();
-    //        this.password = userReqDto.getPassword();
-    //    }
-
-    public void update(UserReqDto reqDto) {
-        if (reqDto.getUserName() != null) {
-            this.userName = reqDto.getUserName();
-        }
-        if (reqDto.getName() != null) {
-            this.name = reqDto.getName();
-        }
-        if (reqDto.getEmail() != null) {
-            this.email = reqDto.getEmail();
-        }
-        if (reqDto.getGender() != null) {
-            this.gender = reqDto.getGender();
-        }
-        if (reqDto.getPassword() != null) {
-            this.password = reqDto.getPassword();
-        }
+    public void update(UserInfoDto userInfo) {
+        this.userName = userInfo.getUserName();
+        this.gender = userInfo.getGender();
     }
-
-
 }
