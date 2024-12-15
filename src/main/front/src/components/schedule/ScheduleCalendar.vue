@@ -26,7 +26,7 @@
   watch: {
     dailyList(newValue) {
       if (newValue && Array.isArray(newValue)) {
-        this.calendarOptions.events = newValue; 
+        this.calendarOptions.events = this.dailyList
       }
     },
   },
