@@ -56,45 +56,50 @@ export default {
           title: item.title,
           start: item.startTime,
           end: item.endTime,
+          description: item.description,
         }));
 
-        // 가장 빠른 일정을 선택하기
-        // const earliestSchedule = this.getEarliestSchedule(this.dailyList);
-        // this.selectedSchedule = earliestSchedule;  // 이 시점에 selectedSchedule을 설정
+       this.selectEarliestSchedule(inputDay); 
       } else {
         console.log('해당 날짜에 일정이 없습니다.');
-        }
-      } catch (error) {
-        console.error('일정을 불러오는 중 오류가 발생했습니다:', error);
       }
+    } catch (error) {
+      console.error('일정을 불러오는 중 오류가 발생했습니다:', error);
+    }
     },
-
-  // 가장 빠른 일정을 찾는 함수
-    // getEarliestSchedule(scheduleList) {
-    //   return scheduleList.reduce((earliest, current) => {
-    //     const currentStart = new Date(current.start);
-    //     const earliestStart = new Date(earliest.start);
-    //     return currentStart < earliestStart ? current : earliest;
-    //   });
-    // },
-    // async fnScheduleList(inputDay) {
-    //   const userId = 6;
-    //   let year = inputDay.split('-')[0]
-    //   let month = inputDay.split('-')[1]
-    //   const full = await this.$axios.get(`schedule/userId/${userId}/${year}/${month}`)
-    //   if (full.status) {
-    //     this.dailyList = full.data.map(item => ({
-    //       id:item.id,
-    //       title: item.title,
-    //       start: item.startTime,
-    //       end: item.endTime,
-    //     }));
-    //   }
-    // },
-
+   
+    selectEarliestSchedule(todayDate) {
+      if (this.dailyList.length === 0) {
+        this.selectedSchedule = null;
+        return;
+      }
+      const todaySchedules = this.dailyList.filter(item => {
+        const startDate = new Date(item.start);
+        const today = new Date(todayDate);
+        return startDate.getFullYear() === today.getFullYear() &&
+              startDate.getMonth() === today.getMonth() &&
+              startDate.getDate() === today.getDate();
+      });
+      if (todaySchedules.length === 0) {
+        console.log("오늘 일정이 없습니다.");
+        return;
+      }
+      const earliestSchedule = todaySchedules.reduce((earliest, current) => {
+        const currentStart = new Date(current.start);  
+        const earliestStart = new Date(earliest.start);
+        return currentStart < earliestStart ? current : earliest;
+      });
+      this.selectedSchedule = {
+      ...earliestSchedule,
+      startTime: this.$dayjs(earliestSchedule.start).format('YYYY-MM-DDTHH:mm'), 
+      endTime: this.$dayjs(earliestSchedule.end).format('YYYY-MM-DDTHH:mm') 
+    };
+      console.log("오늘 가장 빠른 일정: ", this.selectedSchedule);  
+    },
+ 
     async SelectedSchedule(id){
       const userId = 6;
-      console.log("SelectedSchedule에 id가 들어왔습니다:", id); // ID 확인
+      console.log("SelectedSchedule에 id가 들어왔습니다:", id); 
       const response = await this.$axios.get(`schedule/userId/id/${userId}/${id}`);
         if (response.status) {
           this.selectedSchedule = response.data[0];  
