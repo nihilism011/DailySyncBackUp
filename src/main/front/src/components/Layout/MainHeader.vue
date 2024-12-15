@@ -61,8 +61,8 @@ export default {
 <style lang="scss" scoped>
 header {
   position: fixed;
-  height: 80px;
-  padding: 10px;
+  height: 90px;
+  padding: 10px 20px;
   display: flex;
   align-items: center;
   gap: 40px;
@@ -78,7 +78,7 @@ header {
   nav {
     display: flex;
     gap: 0 20px;
-    a {
+    a, button {
       &.router-link-active {
         font-weight: bold;
         color: var(--color-red);

@@ -1,10 +1,10 @@
 <template>
-  <div class="container">
-    <div class="left left-container">
-      <Calendar :dailyList="dailyList" @fnDayList="fnDayList" />
-      <TodoMemo/>
-    </div>
-    <div class="right">
+  <div class="left">
+    <TodoCalendar :dailyList="dailyList" @fnDayList="fnDayList" />
+    <TodoMemo/>
+  </div>
+  <div class="right todo-type">
+    <div class="todo-wrap">
       <div class="right-left">
         <TodoList/>
       </div>
@@ -22,7 +22,7 @@
 import TodoGroup from '@/components/todo/TodoGroup.vue';
 import TodoItem from '@/components/todo/TodoItem.vue';
 import TodoList from '@/components/todo/TodoList.vue';
-import Calendar from '@/components/todo/TodoCalender.vue';
+import TodoCalendar from '@/components/todo/TodoCalender.vue';
 import TodoMemo from '@/components/todo/TodoMemo.vue';
 
 export default {
@@ -30,7 +30,7 @@ export default {
     TodoGroup,
     TodoItem,
     TodoList,
-    Calendar,
+    TodoCalendar,
     TodoMemo,
   },
   data() {
@@ -71,39 +71,23 @@ export default {
 </script>
 
 <style scoped>
-.container {
+.todo-wrap {
   display: flex;
-  width: 100%;
-  height: 100vh;
-}
-
-.left-container {
-  width: 30%;
-  display: flex;
-  flex-direction: column;
+  height: 100%;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.3);
   padding: 20px;
+  gap: 0 20px;
 }
-
-.right {
-  width: 70%;
-  display: flex;
-}
-
 .right-left {
-  width: 50%;
-  padding: 20px;
-  background-color: lightgray;
+  width: 40%;
 }
 
 .right-middle {
-  width: 20%;
-  padding: 20px;
-  background-color: lightgreen;
+  width: 25%;
 }
 
 .right-right {
-  width: 30%;
-  padding: 20px;
-  background-color: lightblue;
+  width: 35%;
 }
 </style>

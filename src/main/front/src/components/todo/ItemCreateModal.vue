@@ -1,60 +1,78 @@
 <template>
-  <div v-if="isVisible" class="modal-overlay">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div style="font-size: 30px;">
+  <div v-if="isVisible" class="popup-box type-modal">
+    <div class="popup-cont type2">
+      <div class="popup-tit-wrap">
+        <div class="tit">
           {{ mode === 'create' ? '아이템 추가' : '아이템 수정' }}
         </div>
-        <button @click="closeModal">X</button>
       </div>
-      <div class="modal-body">
-        <input v-model="newItem.title" placeholder="제목 입력" />
-        <div>
-          <div>요일 선택</div>
-          <label>
-            <input type="checkbox" v-model="newItem.day" value="월" /> 월
-          </label>
-          <label>
-            <input type="checkbox" v-model="newItem.day" value="화" /> 화
-          </label>
-          <label>
-            <input type="checkbox" v-model="newItem.day" value="수" /> 수
-          </label>
-          <label>
-            <input type="checkbox" v-model="newItem.day" value="목" /> 목
-          </label>
-          <label>
-            <input type="checkbox" v-model="newItem.day" value="금" /> 금
-          </label>
-          <label>
-            <input type="checkbox" v-model="newItem.day" value="토" /> 토
-          </label>
-          <label>
-            <input type="checkbox" v-model="newItem.day" value="일" /> 일
-          </label>
+      <div class="todo-wrap">
+        <div class="ip-list">
+          <div class="tit-box">
+            <p class="tit">제목</p>
+          </div>
+          <div class="bot-box">
+            <div class="ip-box">              
+              <input type="text" v-model="newItem.title" placeholder="제목 입력" />
+            </div>
+          </div>
         </div>
-        <div>
-          <div>우선순위</div>
-          <label>
-            <input type="radio" v-model="newItem.itemOrder" value='1' /> 높음
-          </label>
-          <label>
-            <input type="radio" v-model="newItem.itemOrder" value='2' /> 보통
-          </label>
-          <label>
-            <input type="radio" v-model="newItem.itemOrder" value='3' /> 낮음
-          </label>
+        <div class="ip-list">
+          <div class="tit-box">
+            <p class="tit">요일선택</p>
+          </div>
+          <div class="bot-box">
+            <div class="ip-chk-txt">
+              <input type="checkbox" id="day1" v-model="newItem.day" value="월" />
+              <label for="day1">월</label>
+              <input type="checkbox" id="day2" v-model="newItem.day" value="화" />
+              <label for="day2">화</label>
+              <input type="checkbox" id="day3" v-model="newItem.day" value="수" />
+              <label for="day3">수</label>
+              <input type="checkbox" id="day4" v-model="newItem.day" value="목" />
+              <label for="day4">목</label>
+              <input type="checkbox" id="day5" v-model="newItem.day" value="금" />
+              <label for="day5">금</label>
+              <input type="checkbox" id="day6" v-model="newItem.day" value="토" />
+              <label for="day6">토</label>
+              <input type="checkbox" id="day7" v-model="newItem.day" value="일" />
+              <label for="day7">일</label>
+            </div>
+          </div>
         </div>
-        <div>자동여부</div>
-        <label>
-          <input type="checkbox" v-model="newItem.isAuto" value='1' /> Auto
-        </label>
-        <div class="modal-footer">
-          <button @click="saveItem">{{ mode === 'create' ? '추가' : '수정' }}</button>
-          <button @click="closeModal">취소</button>
+        <div class="ip-list">
+          <div class="tit-box">
+            <p class="tit">우선순위</p>
+          </div>
+          <div class="bot-box">
+            <div class="ip-ra-txt">
+              <input type="radio" id="order1" v-model="newItem.itemOrder" value='1' />
+              <label for="order1">높음</label>
+              <input type="radio" id="order2" v-model="newItem.itemOrder" value='2' />
+              <label for="order2">보통</label>
+              <input type="radio" id="order3" v-model="newItem.itemOrder" value='3' />
+              <label for="order3">낮음</label>
+            </div>
+          </div>
+        </div>
+        <div class="ip-list">
+          <div class="tit-box">
+            <p class="tit">자동여부</p>
+          </div>
+          <div class="bot-box">
+            <div class="ip-chk-txt">
+              <input type="checkbox" id="auto" v-model="newItem.isAuto" value='1' />
+              <label for="auto">Auto</label>
+            </div>
+          </div>
+        </div>
+        <div class="pop-btn-wrap">
+          <button @click="saveItem" class="btn-default submit">{{ mode === 'create' ? '추가' : '수정' }}</button>
+          <button @click="closeModal" class="btn-default cancel">취소</button>
         </div>
       </div>
     </div>
+    <div class="dimmed">dim</div>
   </div>
 </template>
 
