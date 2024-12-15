@@ -90,13 +90,13 @@ export default {
 }
 
 .right-left {
-  width: 100%;
+  width: 50%;
   padding: 20px;
   background-color: lightgray;
 }
 
 .right-middle {
-  width: 15%;
+  width: 20%;
   padding: 20px;
   background-color: lightgreen;
 }
