@@ -28,4 +28,6 @@ public class UserInfoDto {
                 .recommendCal(setting.getRecommendCal())
                 .build();
     }
+
+
 }
