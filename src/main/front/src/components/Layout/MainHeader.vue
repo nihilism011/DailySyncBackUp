@@ -8,9 +8,10 @@
         <RouterLink to="/">메인</RouterLink>
         <RouterLink to="/todo">Todo</RouterLink>
         <RouterLink to="/schedule">일정</RouterLink>
-        <RouterLink v-if="isLogin" to="/account">가계부</RouterLink>
-        <RouterLink v-if="isLogin" to="/meal">식단</RouterLink>
+        <RouterLink to="/account">가계부</RouterLink>
+        <RouterLink to="/meal">식단</RouterLink>
         <button @click="handleLogout">로그아웃</button>
+        <button><RouterLink to="/userInfo">회원정보</RouterLink></button>
       </template>
       <template v-if="!isLogin">
         <RouterLink to="/login">User</RouterLink>
