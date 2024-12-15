@@ -1,85 +1,82 @@
 <template>
   <div>
-    <div class="list-container">
-       list : {{list}}
-      <div class="list-item" v-for="(item, index) in list" :key="index">
-          <div @click="scheduleDetails(item)">
-            {{ item.scheduleId }}
-            {{ item.title }} 
-          </div>
-      </div>
-    </div>
-    <!-- 오늘의 첫 번째 일정 -->
-    <div v-if="firstTodaySchedule">
-      <div>{{ firstTodaySchedule.title }}</div>
+    <div v-if="isUpdate">
       <div>
-        {{ firstTodaySchedule.startTime }} ~ {{ firstTodaySchedule.endTime }}
+        <label for="editTitle">제목</label>
+        <input type="text" v-model="selectedSchedule.title" id="updateTitle" />
       </div>
-      <div>{{ firstTodaySchedule.description }}</div>
+      <div>
+        <label for="editStartTime">시작 시간</label>
+        <input type="datetime-local" v-model="selectedSchedule.startTime" id="updateStartTime" />
+      </div>
+      <div>
+        <label for="editEndTime">끝 시간</label>
+        <input type="datetime-local" v-model="selectedSchedule.endTime" id="updateEndTime" />
+      </div>
+      <div>
+        <label for="editDescription">설명</label>
+        <textarea v-model="selectedSchedule.description" id="updateDescription"></textarea>
+      </div>
+
+      <button @click="fnSaveUpdate">저장</button>
+      <button @click="fnCancle">취소</button>
     </div>
-    <!-- 선택한 일정의 상세 정보 -->
-    <div v-if="selectedSchedule" class="schedule-detail">
-      <div v-if="isUpdate">
-        <div>
-          <label for="editTitle">제목</label>
-          <input type="text" v-model="selectedSchedule.title" id="updateTitle" />
-        </div>
-        <div>
-          <label for="editStartTime">시작 시간</label>
-          <input type="datetime-local" v-model="selectedSchedule.startTime" id="updateStartTime" />
-        </div>
-        <div>
-          <label for="editEndTime">끝 시간</label>
-          <input type="datetime-local" v-model="selectedSchedule.endTime" id="updateEndTime" />
-        </div>
-        <div>
-          <label for="editDescription">설명</label>
-          <textarea v-model="selectedSchedule.description" id="updateDescription"></textarea>
-        </div>
 
-        <button @click="fnSaveUpdate">저장</button>
-        <button @click="fnCancle">취소</button>
+    <div v-else>
+      <div>
+        <div class="schedule-info">
+        <div class="info-item">
+          <div class="info-value">{{ selectedSchedule.title }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-value">{{ selectedSchedule.startTime }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-value">{{ selectedSchedule.endTime }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-value">{{ selectedSchedule.description }}</div>
+        </div>
+        <div v-if="!isUpdate && selectedSchedule">
+          <button @click="fnUpdate">수정</button>
+          <button @click="fnRemove">삭제</button>
+        </div>
       </div>
-
-      <div v-else>
-        <div>{{ selectedSchedule.title }}</div>
-        <div>{{ formatDate(selectedSchedule.startTime) }} ~ {{ formatDate(selectedSchedule.endTime) }}</div>
-        <div>{{ selectedSchedule.description }}</div>
       </div>
-
-      <button @click="fnUpdate">수정</button>
-      <button @click="fnRemove">삭제</button>
-      </div>
+    </div>
   </div>
-  <button @click="fnAdd">일정등록</button>
+  <button v-if="!isAdd && !isUpdate" @click="fnAdd">일정등록</button>
   <div v-if="isAdd" class="add-schedule-form">
     <div>
       <label for="newTitle">제목</label>
       <input type="text" v-model="newSchedule.title" id="newTitle" placeholder="일정 제목" />
     </div>
     <div>
-      <label for="newStartTime">시작 시간</label>
+      <label for="newStartTime">일정 시작</label>
       <input type="datetime-local" v-model="newSchedule.startTime" id="newStartTime" />
     </div>
     <div>
-      <label for="newEndTime">끝 시간</label>
+      <label for="newEndTime">일정 마침</label>
       <input type="datetime-local" v-model="newSchedule.endTime" id="newEndTime" />
     </div>
     <div>
       <label for="newDescription">설명</label>
       <textarea v-model="newSchedule.description" id="newDescription" placeholder="일정 설명"></textarea>
     </div>
-
     <button @click="fnSaveNewSchedule">저장</button>
     <button @click="fnCancelAdd">취소</button>
-  </div>
+  </div> 
 </template>
 
 <script>
 export default {
   props: {
     fullList: {
+      type: Array,
+    },
+    selectedSchedule: {
       type: Object,
+      default: null,
     },
     day: {
       type: String,
@@ -88,13 +85,9 @@ export default {
   emits: ['fnScheduleList', 'fnDayList'],
   data() {
     return {
-      list: [],
-      todayList: [],
-      firstTodaySchedule: null, 
       day: '',  
       year: new Date().getFullYear(), 
-      month: new Date().getMonth() + 1, 
-      selectedSchedule: null,  
+      month: new Date().getMonth() + 1,  
       isUpdate: false, 
       isAdd: false,
       newSchedule: {     
@@ -105,90 +98,52 @@ export default {
       },
     };
   },
-  watch: {
-    fullList(newList) {
-      if (newList && typeof newList === 'object') {
-        this.list = Object.values(newList);  // 객체의 값을 배열로 변환
-        this.todaySchedule();
-      }
-    }
-  },
   methods: {
-    async fnListByUserId() {
-      const userId = 6; 
-      try {
-        const response = await this.$axios.get(`schedule/userId/${userId}/${this.year}/${this.month}`);
+    async SelectedSchedule(id) {
+      console.log('SelectedSchedule 메서드 호출', id);
+      const userId = 6;
+        const response = await this.$axios.get(`schedule/userId/id/${userId}/${id}`);
         if (response.status) {
-          this.list = response.data;
-          this.todaySchedule();
-        } else {
-          console.log(response.message);
-        }
-      } catch (error) {
-        console.error("일정을 가져오는 중 오류 발생: ", error);
-      }
+         (Array.isArray(response.data) && response.data.length > 0) 
+            this.selectedSchedule = response.data[0];  
+          } else {
+            console.log("일정이 없습니다.");
+          }
     },
-    todaySchedule() {
-      const today = this.$dayjs().format('YYYY-MM-DD');  
-      this.todayList = this.list.filter(item => {
-        const itemDate = this.$dayjs(item.startTime).format('YYYY-MM-DD');
-        return itemDate === today;
-      });
-
-      // 오늘 일정이 있을 경우, 가장 첫 번째 일정을 선택
-      if (this.todayList.length > 0) {
-        this.firstTodaySchedule = this.todayList
-          .sort((a, b) => this.$dayjs(a.startTime).isBefore(this.$dayjs(b.startTime)) ? -1 : 1)[0];
-      } else {
-        this.firstTodaySchedule = null; 
-      }
-    },
-
-    scheduleDetails(item) {
-      this.selectedSchedule = item;
-      this.isUpdate = false; 
-    },
-   
     fnUpdate() {
       this.isUpdate = true; 
     },
-
     fnCancle() {
       this.isUpdate = false; 
-      this.scheduleDetails(this.selectedSchedule); 
     },
-
     async fnSaveUpdate() {
+      if (new Date(this.newSchedule.startTime) > new Date(this.newSchedule.endTime)) {
+        alert('마치는 시간이 시작 시간보다 앞설 수 없습니다.');
+        return;  
+      }
       const updatedSchedule = this.selectedSchedule;
       const id = updatedSchedule.id;
       const response = await this.$axios.patch(`schedule/update/${id}`, updatedSchedule);  
       if (response.status) {
         alert('수정 되었습니다.');
-        this.isUpdate = false;  
-        this.fnListByUserId();  
+        this.isUpdate = false;   
         this.$emit('fnScheduleList', this.day);
         this.$emit('fnDayList', this.day);
       } else {
         alert(response.message)
       }
     },
-
     async fnRemove() {
       if(confirm('일정을 삭제하시겠습니까?')){
           const id = this.selectedSchedule.id;
           const response = await this.$axios.delete(`schedule/delete/${id}`);
           if(response.status){
-            this.fnListByUserId();
             this.$emit('fnScheduleList', this.day);
             this.$emit('fnDayList', this.day);
           }
         }
         this.selectedSchedule = null; 
     },
-
-    formatDate(date) {
-    return this.$dayjs(date).format('YYYY-MM-DD');  
-  },
  
    fnAdd() {
       this.isAdd = true;  
@@ -200,30 +155,65 @@ export default {
     },
 
     async fnSaveNewSchedule() {
+       if (new Date(this.newSchedule.startTime) > new Date(this.newSchedule.endTime)) {
+        alert('마치는 시간이 시작 시간보다 앞설 수 없습니다.');
+        return;  
+      }
       const response = await this.$axios.post('schedule/add', this.newSchedule);
       if (response.status) {
         alert('일정이 등록되었습니다.');
         this.isAdd = false;
-        this.fnListByUserId(); 
         this.$emit('fnScheduleList', this.day);
         this.$emit('fnDayList', this.day);
-        
       } else {
         alert(response.message);
       }
     },
-    handleScheduleClick(item) {
-      this.$emit('selectSchedule', item);  // 부모에게 클릭된 일정 전달
-    }
   },
   mounted() {
-    this.day = this.$dayjs().format('YYYY-MM-DD');
-    this.fnListByUserId();
+    this.day = this.$dayjs().format('YYYY-MM-DDTHH:mm:ss');
   },
 };
 </script>
 
 <style scoped>
-.list-item {
+.schedule-info {
+  display: grid;
+  grid-template-columns: 1fr;  
+  gap: 15px;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: white; 
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black; 
+  padding: 10px;
+  
+}
+
+.info-value {
+  flex-grow: 1;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+button {
+  padding: 8px 12px;
+  margin-top: 10px;
+  background-color: white;
+  color: black;
+  border: 1px solid black; 
+  border-radius: 5px;
   cursor: pointer;
-}</style>
+}
+
+button:hover {
+  background-color: #f0f0f0;  
+  border-color: #333; 
+}
+</style>
