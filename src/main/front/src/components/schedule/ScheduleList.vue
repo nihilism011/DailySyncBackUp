@@ -45,7 +45,7 @@
       </div>
     </div>
   </div>
-  <button v-if="!isAdd && !isUpdate" @click="fnAdd">일정등록</button>
+  <button v-if="!isAdd && !isUpdate" @click="fnAdd" class="add-schedule-btn">일정등록</button>
   <div v-if="isAdd" class="add-schedule-form">
     <div>
       <label for="newTitle">제목</label>
@@ -202,9 +202,15 @@ export default {
   padding-right: 10px;
 }
 
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px; /* 버튼 사이 간격을 20px로 설정 */
+}
+
+
 button {
   padding: 8px 12px;
-  margin-top: 10px;
   background-color: white;
   color: black;
   border: 1px solid black; 
@@ -215,5 +221,15 @@ button {
 button:hover {
   background-color: #f0f0f0;  
   border-color: #333; 
+}
+
+.add-schedule-btn {
+  margin-top: 20px;
+  padding: 8px 12px;
+  background-color: white;
+  color: black;
+  border: 1px solid black; 
+  border-radius: 5px;
+  cursor: pointer;
 }
 </style>

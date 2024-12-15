@@ -65,11 +65,11 @@
         const date = info.dateStr;
         this.$emit('fnScheduleList', date); 
       },
-      renderEventContent(eventInfo) {
-    return {
-      html: eventInfo.event.title,  
+    renderEventContent(eventInfo) {
+      return {
+        html: `<div style="text-align: center;">${eventInfo.event.title}</div>`
+      }
     }
-  }
     },
     mounted() {},
   }
