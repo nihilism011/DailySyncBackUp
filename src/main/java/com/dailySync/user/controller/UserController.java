@@ -3,6 +3,7 @@ package com.dailySync.user.controller;
 import com.dailySync.common.ApiResponse;
 import com.dailySync.user.dto.LoginRequest;
 import com.dailySync.user.dto.TokenRequest;
+import com.dailySync.user.dto.UserInfoDto;
 import com.dailySync.user.dto.UserReqDto;
 import com.dailySync.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +61,16 @@ public class UserController {
         return ApiResponse.success(userService.updateUserPassword(userId, reqDto));
     }
 
-    private Long getUserId(){
+    /**
+     * {@code 유저 정보}
+     */
+    @GetMapping("user/info")
+    public ResponseEntity<ApiResponse<UserInfoDto>> getUserInfo() throws Exception{
+        Long userId = getUserId();
+        return ApiResponse.success(userService.getUserInfo(userId));
+    }
+
+    private Long getUserId() {
         return (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

@@ -3,6 +3,7 @@ package com.dailySync.user.service;
 import com.dailySync.config.JwtUtil;
 import com.dailySync.constant.ResMessage;
 import com.dailySync.user.dto.LoginRequest;
+import com.dailySync.user.dto.UserInfoDto;
 import com.dailySync.user.dto.UserReqDto;
 import com.dailySync.user.entities.User;
 import com.dailySync.user.entities.UserSetting;
@@ -84,9 +85,18 @@ public class UserService {
         return true;
     }
 
+    public UserInfoDto getUserInfo(Long userId) throws Exception {
+        User user = getUser(userId);
+        UserSetting setting = userSettingRepository.findById(userId).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND_USER));
+        return UserInfoDto.of(user,setting);
+    }
+
     public boolean deleteUser(Long id) {
         userRepository.deleteById(id);
         return true;
     }
 
+    public User getUser(Long userId) throws Exception {
+        return userRepository.findById(userId).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND_USER));
+    }
 }

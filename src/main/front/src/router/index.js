@@ -7,8 +7,8 @@ import MealView from '@/views/MealView.vue'
 import ScheduleView from '@/views/ScheduleView.vue'
 import SignupView from '@/views/SignupView.vue'
 import LoginView from '@/views/LoginView.vue'
-import LoginTestPage from '@/views/LoginTestPage.vue'
 import { refreshToken } from '@/lib/auth'
+import UserInfo from '@/views/UserInfo.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -57,9 +57,9 @@ const router = createRouter({
       component: LoginView,
     },
     {
-      path: '/testPage',
-      name: 'testPage',
-      component: LoginTestPage,
+      path: '/userInfo',
+      name: 'userInfo',
+      component: UserInfo,
       meta: { requiresAuth: true },
     },
   ],
