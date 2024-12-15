@@ -2,71 +2,65 @@ package com.dailySync.user.controller;
 
 import com.dailySync.common.ApiResponse;
 import com.dailySync.user.dto.LoginRequest;
+import com.dailySync.user.dto.TokenRequest;
 import com.dailySync.user.dto.UserReqDto;
-import com.dailySync.user.dto.UserResDto;
 import com.dailySync.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api")
+@RequestMapping ("api")
 public class UserController {
     final private UserService userService;
 
-    @PostMapping("login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) throws Exception{
+    /**
+     * {@code 로그인}
+     */
+    @PostMapping ("login")
+    public ResponseEntity<ApiResponse<String>> login(@RequestBody LoginRequest loginRequest) throws Exception {
         return ApiResponse.success(userService.login(loginRequest));
-    }
-    @GetMapping ("user")
-    public ResponseEntity<?> getAllUser() {
-        List<UserResDto> list = userService.getAllUser();
-        return ResponseEntity.ok(list);
     }
 
     /**
-     * 주소창
-     * db저장소에 저장한다. 겟올유저 로
-     * 리스트에 유저서비스에서 getalluser함수로 만든거 담는다
-     * 리턴한다.
+     * {@code 회원가입}
      */
-    @GetMapping ("user/userId/{id}")
-    public ResponseEntity<?> findByIdUser(@PathVariable ("id") Long userId) {
-        return ResponseEntity.ok(userService.findUser(userId));
+    @PostMapping ("signup")
+    public ResponseEntity<ApiResponse<Boolean>> joinUser(@RequestBody UserReqDto reqDto) {
+        return ApiResponse.success(userService.createUser(reqDto));
     }
 
-    //    form-data 로 데이터를 받을때
-    @PostMapping ("user")
-    public ResponseEntity<?> joinUser(@ModelAttribute UserReqDto reqDto) {
-        return ResponseEntity.ok(userService.insertUser(reqDto));
+    /**
+     * {@code JWT 재발급}
+     */
+    @PostMapping ("token/refresh")
+    public ResponseEntity<ApiResponse<String>> refreshToken(@RequestBody TokenRequest token) throws Exception {
+        return ApiResponse.success(userService.refreshToken(token.getToken()));
     }
 
-    //    @GetMapping
-    //    @PostMapping
-    //    @PatchMapping
-    //    @PutMapping
-    //    @DeleteMapping
-    //유저 업데이트
-    //    url에서 데이터를 받을 경우 +
-    //    json 형태로 데이터를 받을 경우
-    @PatchMapping ("user/userId/{id}")
-    public ResponseEntity<?> updateUser(
-            @PathVariable ("id") Long id,
-            @RequestBody UserReqDto reqDto) {
-
-        return ResponseEntity.ok(userService.updateUser(id, reqDto));
+    /**
+     * {@code 유저 정보 수정}
+     */
+    @PatchMapping ("user/info")
+    public ResponseEntity<ApiResponse<Boolean>> updateUser(
+            @RequestBody UserReqDto reqDto) throws Exception {
+        Long userId = getUserId();
+        return ApiResponse.success(userService.updateUser(userId, reqDto));
     }
 
-    //비밀번호찾기
-    @PostMapping("api/user/findPassword")
-    public ResponseEntity<?> findPassword (
-            @RequestBody UserReqDto userReqDto
-            ) {
-        String name = userReqDto.getName();
-        String email = userReqDto.getEmail();
-        return ResponseEntity.ok(userService.findPasswordWithNameAndEmail(name, email));
+    /**
+     * {@code 유저 비밀번호 수정}
+     */
+    @PatchMapping ("user/password")
+    public ResponseEntity<ApiResponse<Boolean>> updateUserPassword(
+            @RequestBody UserReqDto reqDto) throws Exception {
+        Long userId = getUserId();
+        return ApiResponse.success(userService.updateUserPassword(userId, reqDto));
+    }
+
+    private Long getUserId(){
+        return (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }
