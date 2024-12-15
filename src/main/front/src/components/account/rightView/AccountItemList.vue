@@ -1,23 +1,18 @@
 <template>
   <div>
-    <div class="list-container">
-      <AccountItemRow
-        v-for="(account, index) in list"
-        :key="index"
-        :account="account"
-        size="large"
-      />
-    </div>
+    <p class="list-tit">
+      <AccountItem v-for="(account, index) in list" :key="index" :account="account" />
+    </p>
   </div>
 </template>
 <script>
-import AccountItemRow from './AccountItemRow.vue'
 import { useDateStore } from '@/stores/dateStore'
 import { useRefreshStore } from '@/stores/refreshStore'
+import AccountItem from '../AccountItem.vue'
 export default {
   emits: ['refresh'],
   components: {
-    AccountItemRow,
+    AccountItem,
   },
   data() {
     const dateStore = useDateStore()
