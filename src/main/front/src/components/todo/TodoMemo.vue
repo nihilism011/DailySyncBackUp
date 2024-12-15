@@ -1,12 +1,14 @@
 <template>
-  <div class="memo-container">
-    <h2>메모장</h2>
-    <textarea
-      v-model="Memo"
-      @input="handleInput"
-      placeholder="메모를 작성하세요..."
-      class="memo-textarea"
-    ></textarea>
+  <div class="todo-text-wrap">
+    <p class="memo-title">메모장</p>
+    <div class="text-box">
+      <textarea
+        v-model="Memo"
+        @input="handleInput"
+        placeholder="메모를 작성하세요..."
+        class="memo-textarea"
+      ></textarea>
+    </div>
   </div>
 </template>
 
@@ -80,22 +82,18 @@ export default {
 </script>
 
 <style scoped>
-.memo-container {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  text-align: center;
+.todo-text-wrap {
+  margin-top: 40px;
+  padding: 20px 20px 30px;
+  box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
 }
-
-.memo-textarea {
-  width: 100%;
-  height: 300%;
-  padding: 10px;
-  margin-top: 20px;
-  font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  resize: none;
+.memo-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 14px;
+}
+textarea {
+  height: 250px;
 }
 </style>

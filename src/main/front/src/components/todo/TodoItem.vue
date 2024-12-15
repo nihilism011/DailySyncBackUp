@@ -1,26 +1,26 @@
 <template>
-  <div>
-    <div v-if="!selectedGroup">
-      <div>그룹 선택ㄱㄱ</div>
-    </div>
+  <div class="list-container">
+    <template v-if="!selectedGroup">
+      <p class="list-tit">Select Group</p>
+    </template>
 
-    <div v-if="selectedGroup">
-      <div class="item-container">
-        Item
-        <div class="item" v-for="(item, index) in items" :key="index">
+    <template v-if="selectedGroup">
+      <p class="list-tit">Item</p>
+      <div class="list-item" v-for="(item, index) in items" :key="index">
+        <div class="tit-box">
           <div class="title">{{ item.title }}</div>
-          <div>{{ item.day && Array.isArray(item.day) ? item.day.join(', ') : '' }}</div>
-          <div>{{ item.isAuto == 1 ? 'Auto' : '' }}</div>
-          <div class="actions">
-            <button @click="openEditModal(item)" class="edit-btn">수정</button>
-            <button @click="deleteTodoItem(item)" class="delete-btn">삭제</button>
-          </div>
+          <div class="day"><span>반복요일: </span>{{ item.day && Array.isArray(item.day) ? item.day.join(', ') : '' }}</div>
+          <div class="auto" title="자동여부">{{ item.isAuto == 1 ? 'A' : '' }}</div>
         </div>
-        <div class="item" v-if="selectedGroup" @click="openAddItemModal">
-          <div class="title" style="color: blue;" > + 아이템 추가 </div>
+        <div class="btn-box">
+          <button @click="openEditModal(item)" class="edit-btn">수정</button>
+          <button @click="deleteTodoItem(item)" class="remove-btn">삭제</button>
         </div>
       </div>
-    </div>
+      <div class="list-item center" v-if="selectedGroup" @click="openAddItemModal">
+        <div class="add">아이템 추가 </div>
+      </div>
+    </template>
 
     <!-- 아이템 추가 모달 -->
     <Modal
@@ -108,56 +108,4 @@ export default {
 </script>
 
 
-<style scoped>
-.item-container {
-  margin-top: 20px;
-}
-.item {
-  display: flex;
-  margin: 10px 0;
-  height: 45px;
-  padding: 10px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  position: relative;
-  transition: background-color 0.3s ease;
-}
-.item:hover {
-  background-color: #faf7a3;
-}
-.title {
-  width: 200px;
-  font-size: 20px;
-  align-items: center;
-  justify-content: start;
-  display: flex;
-}
-.actions {
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  display: none;
-}
-.item:hover .actions {
-  display: block;
-}
-.edit-btn,
-.delete-btn {
-  margin-left: 10px;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: #f0f0f0;
-  transition: background-color 0.3s;
-}
-.edit-btn:hover {
-  background-color: #4CAF50;
-  color: white;
-}
-.delete-btn:hover {
-  background-color: #f44336;
-  color: white;
-}
-</style>
+<style scoped></style>

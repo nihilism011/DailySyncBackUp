@@ -1,86 +1,80 @@
 <template>
   <div class="list-container">
-    List
-    <div v-if="list.length === 0" class="list-item" @click="openAddItemModal">
+    <p class="list-tit">List</p>
+    <template v-if="list.length === 0" class="list-item" @click="openAddItemModal">
       <div class="title">
         <div style="color: blue;">+ 리스트 추가</div>
       </div>
+    </template>
+     
+    <div v-for="groupId in groupIds" :key="groupId" class="group">
+      <p class="list-stit">{{ getGroupTitle(groupId) }}</p>
+      <template v-for="item in sortedItemsByGroupAndOrder(groupId, 0)"  :key="item.id">
+        <div class="list-item active0">
+          <div class="ip-chk-txt">
+            <input
+              type="checkbox"
+              :id="item.id"
+              :checked="item.checkedTime !== null"
+              @change="fetchCheckByListID(item.id)"
+            />
+            <label :for="item.id">
+              <span>{{ item.title }}</span>
+            </label>
+          </div>
+          <div class="btn-box">
+            <button @click="openEditModal(item)" class="edit-btn" title="수정">수정</button>
+            <button @click="deleteGroup(item.id)" class="remove-btn" title="삭제">삭제</button>
+        </div>
+        </div>
+      </template>
+      <template v-for="order in [1, 2, 3]" :key="order">
+        <div
+          v-for="item in sortedItemsByGroupAndOrder(groupId, order)"
+          :key="item.id"
+          class="list-item"
+          :class="'active'+order"
+          @click="selectGroup(item.id)"
+        >
+          <div class="ip-chk-txt">
+            <input
+              type="checkbox"
+              :id="item.id"
+              :checked="item.checkedTime !== null"
+              @change="fetchCheckByListID(item.id)"
+            />
+            <label :for="item.id">{{ item.title }}</label>
+          </div>
+          <div class="btn-box">
+            <button @click="openEditModal(item)" class="edit-btn" title="수정">수정</button>
+            <button @click="deleteGroup(item.id)" class="remove-btn" title="삭제">삭제</button>
+          </div>
+        </div>
+      </template>
     </div>
-    <div>
-   
-      <div v-for="groupId in groupIds" :key="groupId" class="group">
-    
-        <h1>{{ getGroupTitle(groupId) }}</h1>
 
-        <div v-for="item in sortedItemsByGroupAndOrder(groupId, 0)"  :key="item.id" class="list-item urgent">
-          <div class="title">
-            <input
-              type="checkbox"
-              style="margin-right: 10px; width: 20px;"
-              :checked="item.checkedTime !== null"
-              @change="fetchCheckByListID(item.id)"
-            />
-            <div style="font-size: 12px; margin-right: 2px;">{{ item.groupTitle }}</div>
-            <div>{{ item.title }}</div>
-          </div>
-          <div class="actions">
-            <button @click="openEditModal(item)" class="edit-btn">수정</button>
-            <button @click="deleteGroup(item.id)" class="delete-btn">삭제</button>
-          </div>
+    <p class="list-stit">추가한 일정</p>
+    <div v-for="groupId in groupIds" :key="groupId" class="group">
+      <div v-for="item in sortedItemsByGroupAndOrder(groupId, 4)" :key="item.id" class="list-item">
+        <div class="ip-chk-txt">
+          <input
+            type="checkbox"
+            :id="item.id"
+            :checked="item.checkedTime !== null"
+            @change="fetchCheckByListID(item.id)"
+          />
+          <label :for="item.id">{{ item.title }}</label>
         </div>
-
-       
-        <div v-for="order in [1, 2, 3]" :key="order" class="order-group">
-          <div
-            v-for="item in sortedItemsByGroupAndOrder(groupId, order)"
-            :key="item.id"
-            class="list-item"
-            @click="selectGroup(item.id)"
-          >
-            <div class="title">
-              <input
-                type="checkbox"
-                style="margin-right: 10px; width: 20px;"
-                :checked="item.checkedTime !== null"
-                @change="fetchCheckByListID(item.id)"
-              />
-              <div style="font-size: 12px; margin-right: 2px;">{{ item.groupTitle }}</div>
-              <div>{{ item.title }}</div>
-              
-            </div>
-            <div class="actions">
-              <button @click="openEditModal(item)" class="edit-btn">수정</button>
-              <button @click="deleteGroup(item.id)" class="delete-btn">삭제</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <h1>추가한 일정</h1>
-      <div v-for="groupId in groupIds" :key="groupId" class="group">
-        <div v-for="item in sortedItemsByGroupAndOrder(groupId, 4)" :key="item.id" class="list-item">
-          <div class="title">
-            <input
-              type="checkbox"
-              style="margin-right: 10px; width: 20px;"
-              :checked="item.checkedTime !== null"
-              @change="fetchCheckByListID(item.id)"
-            />
-            <div style="font-size: 12px; margin-right: 2px;">{{ item.groupTitle }}</div>
-            <div>{{ item.title }} </div>
-          </div>
-          <div class="created-at">{{ formatDate(item.createdAt) }} 생성</div>
-          <div class="actions">
-            <button @click="openEditModal(item)" class="edit-btn">수정</button>
-            <button @click="deleteGroup(item.id)" class="delete-btn">삭제</button>
-          </div>
+        <div class="date">{{ formatDate(item.createdAt) }} 생성</div>
+        <div class="btn-box">
+          <button @click="openEditModal(item)" class="edit-btn" title="수정">수정</button>
+          <button @click="deleteGroup(item.id)" class="remove-btn" title="삭제">삭제</button>
         </div>
       </div>
     </div>
 
-    <div v-if="list.length > 0" class="list-item" @click="openAddItemModal">
-      <div class="title">
-        <div style="color: blue;">+ 리스트 추가</div>
-      </div>
+    <div v-if="list.length > 0" class="list-item center" @click="openAddItemModal">
+        <div class="add">리스트 추가</div>
     </div>
   </div>
 
@@ -165,7 +159,7 @@ export default {
       const userId = 5;
       const url = `todo/list/today/${userId}`;
       const { data } = await this.$axios.get(url);
-      console.log("이거가져옴" + data);
+      console.log(data);
       this.list = data;
     },
     formatDate(dateString) {
@@ -181,74 +175,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.list-container {
-  margin-top: 20px;
-}
-
-.list-item {
-  display: flex;
-  margin: 10px 0;
-  height: 40px;
-  padding: 10px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  position: relative;
-}
-
-.list-item:hover {
-  background-color: #faf7a3;
-}
-
-.urgent {
-  background-color: red; /* 긴급 항목은 빨간색 배경 */
-  color: white;
-}
-
-.title {
-  width: 600px;
-  font-size: 20px;
-  align-items: center;
-  justify-content: start;
-  display: flex;
-}
-
-.created-at {
-  margin-left: auto;
-  font-size: 14px;
-  color: gray;
-}
-
-.actions {
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  display: none;
-}
-
-.list-item:hover .actions {
-  display: block;
-}
-
-.edit-btn,
-.delete-btn {
-  margin-left: 10px;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: #f0f0f0;
-  transition: background-color 0.3s;
-}
-
-.edit-btn:hover {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.delete-btn:hover {
-  background-color: #f44336;
-  color: white;
-}
-</style>
+<style scoped></style>

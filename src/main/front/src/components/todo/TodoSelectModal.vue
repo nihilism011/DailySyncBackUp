@@ -1,31 +1,31 @@
 <template>
-    <div v-if="isVisible" class="modal-overlay">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>선택된 날짜: {{ selectedDate }}</h3>
-          <button @click="closeModal" class="close-btn">닫기</button>
+    <div v-if="isVisible" class="popup-box type-modal">
+      <div class="popup-cont">
+        <div class="popup-tit-wrap">
+          <div class="tit">선택된 날짜: {{ selectedDate }}</div>
         </div>
-  
-        <div class="modal-body">
+        <div class="todo-items">
           <div class="item" v-for="(item, index) in items" :key="index">
-            <div class="item-content">
-              <div>
-                <span class="item-group-title">{{ item.groupTitle || '직접 생성' }}</span>
-                <span class="item-title">{{ item.title }}</span>
-              </div>
-              <div v-if="item.status == 'new'">
-                <span class="item-checked-time">{{ formatTimeWithoutSeconds(item.checkedTime) }}</span>
-              </div>
-              <div v-else>
-                <span class="item-checked-time">
-                  <div> 생성일 : {{ formatDateTime(item.createdAt) }}</div>
-                  <div> 완료일 : {{ formatDateTime(item.checkedTime) }}</div>
-                </span>
-              </div>
+            <div class="item-info">
+              <span class="item-tit">{{ item.title }}</span>
+              <span class="item-group-tit">({{ item.groupTitle || '직접 생성' }})</span>
             </div>
+            <template v-if="item.status == 'new'">
+              <span class="item-date">{{ formatTimeWithoutSeconds(item.checkedTime) }}</span>
+            </template>
+            <template v-else>
+              <span class="item-date">
+                <div> 생성일 : {{ formatDateTime(item.createdAt) }}</div>
+                <div> 완료일 : {{ formatDateTime(item.checkedTime) }}</div>
+              </span>
+            </template>
           </div>
         </div>
+        <div class="pop-btn-wrap">
+          <button @click="closeModal" class="btn-default cancel">닫기</button>
+        </div>
       </div>
+      <div class="dimmed">dim</div>
     </div>
   </template>
   
@@ -91,84 +91,46 @@
   };
   </script>
   
-  <style scoped>
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .modal-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 800px;
-    height: 700px;
-    overflow-y: auto; /* 내용이 많아지면 스크롤 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  .close-btn {
-    padding: 8px 16px;
-    background-color: #f44336;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .close-btn:hover {
-    background-color: #e53935;
-  }
-  
-  .modal-body {
-    margin-bottom: 20px;
-  }
-  
+<style lang="scss" scoped>
+.todo-items {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--color-contrastyC8);
+  border-bottom: 1px solid var(--color-contrastyC8);
+  overflow-y: auto;
+  height: 402px;
   .item {
-    background-color: #fafafa;
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .item-content {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 14px;
+    width: 100%;
+    border-bottom: 1px solid var(--color-contrastyC8);
+    padding: 10px 10px;
+    position: relative;
+    min-height: 50px;
+    &-info {
+      display: flex;
+      align-items: center;
+      width: calc(100% - 180px);
+      .item-tit {
+        font-size: 14px;
+        font-weight: bold;
+      }
+      .item-group-tit {
+        font-size: 12px;
+        color: var(--color-contrastyA);
+        margin-left: 10px;
+      }
+    }
+    &-date {
+      font-size: 12px;
+      color: var(--color-contrastyA);
+      position: absolute;
+      right: 0; top: 10px;
+    }
+    &:last-child {
+      border-bottom: 0;
+    }
   }
-  
-  .item-group-title {
-    font-weight: bold;
-    color: #4caf50;
-    margin-right: 10px;
-  }
-  
-  .item-title {
-    color: #2196f3;
-  }
-  
-  .item-checked-time {
-    color: #f44336;
-    font-style: italic;
-  }
-  </style>
+}
+</style>
   
