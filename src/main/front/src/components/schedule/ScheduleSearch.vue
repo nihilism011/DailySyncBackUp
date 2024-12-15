@@ -31,11 +31,6 @@
         </div>
         <button class="search-btn" @click="fnSearch">검색</button>
       </div>
-      <div class="list-container">
-        <div v-if="list.length === 0">검색 결과가 없습니다.</div>
-        <div v-else>
-      </div>
-      </div>
     </div>
   </div>
     <ScheduleModal 

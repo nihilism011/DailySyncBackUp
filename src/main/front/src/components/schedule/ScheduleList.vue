@@ -99,6 +99,19 @@ export default {
     };
   },
   methods: {
+    selectEarliestSchedule() {
+    if (this.dailyList.length === 0) return;
+
+    const earliestSchedule = this.dailyList.reduce((earliest, current) => {
+      const currentStart = new Date(current.start);
+      const earliestStart = new Date(earliest.start);
+      return currentStart < earliestStart ? current : earliest;
+    });
+
+    // ID만 설정하지 않고, 전체 객체를 selectedSchedule에 할당
+    this.selectedSchedule = earliestSchedule; 
+  },
+
     async SelectedSchedule(id) {
       console.log('SelectedSchedule 메서드 호출', id);
       const userId = 6;
@@ -171,6 +184,9 @@ export default {
     },
   },
   mounted() {
+    if (this.fullList && this.fullList.length > 0) {
+    this.selectEarliestSchedule();
+  }
     this.day = this.$dayjs().format('YYYY-MM-DDTHH:mm:ss');
   },
 };
