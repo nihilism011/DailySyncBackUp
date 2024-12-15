@@ -104,7 +104,7 @@ public class MealController {
             description = "해당 일자 데이터 삽입할때 List에 객체를 담아와서 데이터 삽입"
         )
     @PostMapping ("add")
-    public ResponseEntity<ApiResponse<Boolean>> postMealList(@RequestBody List<Meal> meals) {
+    public ResponseEntity<ApiResponse<Boolean>> postMealList(@RequestBody List<Meal> meals) throws Exception {
         Long userId = getUserId();
         return ApiResponse.success(mealService.insertMealList(userId, meals));
     }

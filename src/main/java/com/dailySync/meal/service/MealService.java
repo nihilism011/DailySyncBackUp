@@ -5,7 +5,7 @@ import com.dailySync.meal.dto.*;
 import com.dailySync.meal.entities.Meal;
 import com.dailySync.meal.repository.MealRepository;
 import com.dailySync.user.entities.User;
-import com.dailySync.user.repository.UserRepository;
+import com.dailySync.user.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MealService {
     private final MealRepository mealRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     public MealListResDto getUserMealList(Long userId, Integer year, Integer month) {
         List<Meal> meals = mealRepository.findMealsByUserIdAndYearAndMonth(userId, year, month);
@@ -50,8 +50,8 @@ public class MealService {
                 .collect(Collectors.toList());
     }
 
-    public Boolean insertMealList(Long userId, List<Meal> meals) {
-        User id = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found with id: " + "Kim"));
+    public Boolean insertMealList(Long userId, List<Meal> meals) throws Exception {
+        User id = userService.getUser(userId);
 
         for (Meal meal : meals) {
             if(meal.getIsFavorite()) {
