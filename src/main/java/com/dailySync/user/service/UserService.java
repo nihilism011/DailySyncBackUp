@@ -1,8 +1,6 @@
 package com.dailySync.user.service;
 
-import com.dailySync.config.JwtUtil;
 import com.dailySync.constant.ResMessage;
-import com.dailySync.user.dto.LoginRequest;
 import com.dailySync.user.dto.UserInfoDto;
 import com.dailySync.user.dto.UserReqDto;
 import com.dailySync.user.entities.User;
@@ -22,19 +20,13 @@ public class UserService {
     final private UserRepository userRepository;
     private final UserSettingRepository userSettingRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    final private JwtUtil jwtUtil;
 
     /**
-     * {@code 로그인}
+     * {@code 유저 마지막 로그인 시간 업데이트}
      */
-    public String login(LoginRequest request) throws Exception {
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND_USER));
-        if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            user.setLastLogin(LocalDateTime.now());
-            userRepository.save(user);
-            return jwtUtil.generateToken(user);
-        }
-        throw new Exception(ResMessage.NOT_MATCH_PASSWORD);
+    public void updateLastLoginDate(User user){
+        user.setLastLogin(LocalDateTime.now());
+        userRepository.save(user);
     }
 
     /**
@@ -47,21 +39,6 @@ public class UserService {
         UserSetting userSetting = new UserSetting(user);
         userSettingRepository.save(userSetting);
         return true;
-    }
-
-    /**
-     * {@code 토큰 재발급}
-     */
-    public String refreshToken(String token) throws Exception {
-        if (jwtUtil.validateToken(token)) {
-            Long userId = jwtUtil.extractUserId(token);
-            User user = userRepository.findById(userId).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND_USER));
-            user.setLastLogin(LocalDateTime.now());
-            userRepository.save(user);
-            return jwtUtil.generateToken(user);
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -81,22 +58,30 @@ public class UserService {
      * {@code 유저 비밀번호 수정}
      */
     public boolean updateUserPassword(Long userId, UserReqDto userReqDto) throws Exception {
+
         User user = userRepository.findById(userId).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND_USER));
         String encodedPassword = passwordEncoder.encode(userReqDto.getPassword());
         user.setPassword(encodedPassword);
         userRepository.save(user);
         return true;
     }
-    /**{@code 유저정보 불러오기}*/
+
+    /**
+     * {@code 유저정보 불러오기}
+     */
     public UserInfoDto getUserInfo(Long userId) throws Exception {
         User user = getUser(userId);
         UserSetting setting = userSettingRepository.findById(userId).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND_USER));
-        return UserInfoDto.of(user,setting);
+        return UserInfoDto.of(user, setting);
     }
 
     public boolean deleteUser(Long id) {
         userRepository.deleteById(id);
         return true;
+    }
+
+    public User getUser(String email) throws Exception {
+        return userRepository.findByEmail(email).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND_USER));
     }
 
     public User getUser(Long userId) throws Exception {

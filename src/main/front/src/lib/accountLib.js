@@ -1,11 +1,10 @@
 import axiosInstance from '@/plugins/axios'
-
 export const numToWon = (money) => {
   let won = new Intl.NumberFormat('ko-KR', {
     style: 'currency',
     currency: 'KRW',
   })
-  return won.format(Math.abs(money))
+  return won.format(money)
 }
 
 const REST_API = 'account/items'

@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,38 @@ public class AccountService {
     private final UserService userService;
     private final AccountRepository accountRepository;
     private final FavoriteAccountRepository favoriteRepository;
+
+    public void moveFixedAccountItem(User user) {
+        LocalDate now = LocalDate.now();
+        LocalDate lastLoginDate = user.getLastLogin().toLocalDate();
+        int lastLoginYear = lastLoginDate.getYear();
+        int nowYear = now.getYear();
+        Month lastLoginMonth = lastLoginDate.getMonth();
+        Month nowMonth = now.getMonth();
+        if (lastLoginYear != nowYear || lastLoginMonth != nowMonth) {
+            LocalDate startOfMonth = LocalDate.of(lastLoginYear, lastLoginMonth, 1);
+            LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+            List<Account> list = accountRepository.findByUserIdAndAccountDateBetweenAndFixedTrue(
+                    user.getId(),
+                    startOfMonth,
+                    endOfMonth);
+            for(Account a : list){
+                int fixedDate = a.getAccountDate().getDayOfMonth();
+                int dayOfMonth = Math.min(fixedDate, now.lengthOfMonth());
+                LocalDate date = LocalDate.of(nowYear, nowMonth, dayOfMonth);
+                Account account = Account.builder()
+                        .fixed(true)
+                        .title(a.getTitle())
+                        .user(user)
+                        .accountDate(date)
+                        .category(a.getCategory())
+                        .description(a.getDescription())
+                        .amount(a.getAmount())
+                        .build();
+                accountRepository.save(account);
+            }
+        }
+    }
 
     //조회
     public List<AccountResDto> findAccountsByDate(Long userId, LocalDate date) {
