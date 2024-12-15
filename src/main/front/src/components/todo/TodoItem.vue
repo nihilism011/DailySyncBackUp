@@ -92,8 +92,7 @@ export default {
       this.selectedItem = null;
     },
     async fetchItemsByGroup(groupId) {
-      const userId = 5;
-      const url = `todo/item/${userId}/${groupId}`;
+      const url = `todo/item/${groupId}`;
       const { data } = await this.$axios.get(url);
       console.log("아이템 목록:", data);
       this.items = data;

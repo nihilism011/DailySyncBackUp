@@ -5,6 +5,8 @@ import com.dailySync.todo.dto.*;
 import com.dailySync.todo.service.TodoService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -144,20 +146,23 @@ public class TodoController {
                     summary = " userId, groupId 에 해당하는 todoItem 조회 ",
                     description =" ... "
             )
-    @GetMapping("/item/{userId}/{groupId}")
-    public ResponseEntity<?> getTodoItem(@PathVariable ("userId") Long userId, @PathVariable ("groupId") Long groupId){
+    @GetMapping("/item/{groupId}")
+    public ResponseEntity<?> getTodoItem(@PathVariable ("groupId") Long groupId){
+        Long userId = getUserId();
         return ApiResponse.success(todoService.getTodoItem(userId, groupId));
     }
 
     @Operation
             (
                     summary = " userId에 해당하는 todoGroup을 조회 ",
-                    description =" ... "
+                    description =" 아이디 적용 완료 "
             )
-    @GetMapping("/group/{userId}")
-    public ResponseEntity<?> getTodoGroup(@PathVariable ("userId") Long userId){
+    @GetMapping("/group") 
+    public ResponseEntity<?> getTodoGroup(){
+        Long userId = getUserId();
         return ApiResponse.success(todoService.getTodoGroup(userId));
     }
+
     @Operation
             (
                     summary = " 금일 날짜 해당하는 todoList를 조회 ",
@@ -216,7 +221,7 @@ public class TodoController {
     }
 
     @GetMapping("/memo/{userId}")
-    public ResponseEntity<?> getTodoItem(@PathVariable ("userId") Long userId){
+    public ResponseEntity<?> getTodoMemo(@PathVariable ("userId") Long userId){
         return ApiResponse.success(todoService.getTodoMemo(userId));
     }
     @DeleteMapping("/memo/{id}")
@@ -257,6 +262,9 @@ public class TodoController {
 
     //TodoList
     //TodoList 목록 조회(날짜기준)
+    private Long getUserId() {
+        return (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
 
 
 }

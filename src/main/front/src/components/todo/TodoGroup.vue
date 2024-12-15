@@ -66,8 +66,7 @@ export default {
       this.selectedItem = null; 
     },
     async fnMyGroup() {
-      const userId = 5;
-      const url = `todo/group/${userId}`;
+      const url = `todo/group`;
       const { data } = await this.$axios.get(url);
       this.list = data; 
     },
