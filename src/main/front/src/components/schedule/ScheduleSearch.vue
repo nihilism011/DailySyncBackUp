@@ -34,22 +34,24 @@
       <div class="list-container">
         <div v-if="list.length === 0">검색 결과가 없습니다.</div>
         <div v-else>
-          <div class="list-item" v-for="(item, index) in list" :key="index">
-            <div class="title">
-              <div>
-                {{ item.title }}
-                {{ formatDate(item.startTime) }} ~ {{ formatDate(item.endTime) }}
-              </div>
-            </div>
-          </div>
-        </div>
+      </div>
       </div>
     </div>
   </div>
+    <ScheduleModal 
+    v-if="popupState"
+    :popupState="popupState" 
+    :searchResults="searchResults"
+    @closePopup="popupState = false" 
+   />
 </template>
 
 <script>
+import ScheduleModal from './ScheduleModal.vue'
 export default {
+  components: {
+    ScheduleModal
+  },
   data() {
     return {
       form: {
@@ -65,32 +67,30 @@ export default {
       months:[
         1,2,3,4,5,6,7,8,9,10,11,12
       ],
+      popupState : false
       
     };
     
   },
   methods: {
     initYears(){
-      const currentYear = new Date().getFullYear();
-      const startYear = currentYear - 14;
-      for(let year = startYear; year <= currentYear; year++){
-        this.years.push(year);
-      }
-    },
-    async fnSearch() {
+          const currentYear = new Date().getFullYear();
+          const startYear = currentYear - 14;
+          for(let year = startYear; year <= currentYear; year++){
+            this.years.push(year);
+          }
+        },
+        async fnSearch() {
       let url = ''; 
       if (this.form.searchType === 'year' && this.form.year) {
         url = `schedule/date/${this.form.year}`;
-      }
-      else if (this.form.searchType === 'yearMonth'  && this.form.year && this.form.month) {
+      } else if (this.form.searchType === 'yearMonth' && this.form.year && this.form.month) {
         url = `schedule/date/${this.form.year}/${this.form.month}`;
-      }
-      else if (this.form.searchType === 'range' && this.form.startTime && this.form.endTime) {
+      } else if (this.form.searchType === 'range' && this.form.startTime && this.form.endTime) {
         const startTime = this.form.startTime;
         const endTime = this.form.endTime;
         url = `schedule/date/range?startTime=${startTime}&endTime=${endTime}`;
-      }
-      else if (this.form.searchType === 'title' && this.form.title) {
+      } else if (this.form.searchType === 'title' && this.form.title) {
         url = `schedule/title/${this.form.title}`;
       }
 
@@ -98,7 +98,8 @@ export default {
         try {
           const { data } = await this.$axios.get(url);
           this.list = data; 
-          this.$emit('searchResult', data);  // 검색 결과 부모로 전달
+          this.searchResults = data;  // 검색된 데이터를 모달로 전달
+          this.popupState = true; // 모달 열기
         } catch (error) {
           console.error("오류 :", error);
         }
