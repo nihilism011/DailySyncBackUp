@@ -1,5 +1,5 @@
 <template>
-    <FullCalendar :options="calendarOptions" />
+    <FullCalendar :options="calendarOptions" @SelectedSchedule="handleEventClick"/>
   </template>
   <script>
   import FullCalendar from '@fullcalendar/vue3'
@@ -13,23 +13,20 @@
 
     props: {
       dailyList: {
+        type: Array,
+    },
+    selectedSchedule: {
       type: Object,
     },
-      fnScheduleList: {
-      type: Function,
-    },
-    fnDayList: {
-      type: Function,
-    },
-
+    fnScheduleList: {
+    type: Function,
+  },
   },
 
   watch: {
-    // dailyList가 업데이트되면, 객체 형태에 맞게 events를 설정
     dailyList(newValue) {
-      if (newValue && typeof newValue === 'object') {
-        // 객체에서 필요한 데이터만 뽑아서 배열로 변환
-        this.calendarOptions.events = Object.values(newValue); // 객체의 값을 배열로 변환
+      if (newValue && Array.isArray(newValue)) {
+        this.calendarOptions.events = newValue; 
       }
     },
   },
@@ -47,27 +44,35 @@
           eventClick: this.handleEventClick,
           datesSet: this.handleMonthChange,
           dateClick: this.handleDateClick,
+          eventContent: this.renderEventContent, 
         },
       }
     },
     methods: {
-      handleEventClick: function (info) {
-        if (typeof info === 'string') {
-          this.$emit('fnScheduleList', info)
-        } else {
-          this.$emit('fnScheduleList', info.event.startStr)
-        }
-      },
+      handleEventClick(info) {
+        console.log("info입니다", info)
+        const id = info.event.id;
+        console.log("선택된 일정 ID:", id); 
+        this.$emit('SelectedSchedule', id); 
+    },
+
       handleMonthChange({ view }) {
         const start = view.currentStart
         const dateSet = `${start.getFullYear()}-${start.getMonth() + 1}`
-        this.$emit('fnDayList', dateSet)
+        this.$emit('fnScheduleList', dateSet)
       },
       handleDateClick(info) {
-        this.$emit('fnScheduleList', info.dateStr)
+        const date = info.dateStr;
+        this.$emit('fnScheduleList', date); 
       },
+    renderEventContent(eventInfo) {
+      return {
+        html: `<div style="text-align: center;">${eventInfo.event.title}</div>`
+      }
+    }
     },
-    mounted() {},
+    mounted() {
+    },
   }
   </script>
   

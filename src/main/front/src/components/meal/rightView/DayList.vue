@@ -23,7 +23,9 @@
               <div class="desc-box">{{ item.description }}</div>
             </div>
             <div class="btn-box">
-              <button @click="fnEdit(item)" class="edit-btn" title="수정">수정</button>
+              <button @click="this.$emit('openPopup', item)" class="edit-btn" title="수정">
+                수정
+              </button>
               <button @click="fnRemove(item.id)" class="remove-btn" title="삭제">삭제</button>
             </div>
           </div>
@@ -64,9 +66,6 @@ export default {
           this.$emit('fnDayList', this.day)
         }
       }
-    },
-    fnEdit(id) {
-      this.$emit('openPopup', id)
     },
     getMealName(category) {
       return this.categoryList[category]?.name || 'empty'

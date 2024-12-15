@@ -8,6 +8,7 @@ import com.dailySync.todo.entities.TodoGroup;
 import com.dailySync.todo.entities.TodoItem;
 import com.dailySync.todo.entities.TodoList;
 import com.dailySync.user.dto.UserInfoDto;
+import com.dailySync.todo.entities.TodoMemo;
 import com.dailySync.user.dto.UserReqDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -55,6 +56,10 @@ public class User extends BaseEntity {
 
     @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)
     private List<TodoItem> todoItems;
+
+    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)
+    private List<TodoMemo> todoMemos;
+
     @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)
     private List<TodoGroup> todoGroups;
     @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)

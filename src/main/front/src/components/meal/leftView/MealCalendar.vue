@@ -32,7 +32,7 @@ export default {
     return {
       calendarOptions: {
         locale: 'ko',
-        height: 550,
+        height: 560,
         showNonCurrentDates: false,
         plugins: [dayGridPlugin, interactionPlugin],
         initialView: 'dayGridMonth',
@@ -59,11 +59,7 @@ export default {
   },
   methods: {
     handleEventClick: function (info) {
-      if (typeof info === 'string') {
-        this.$emit('fnMealList', info)
-      } else {
-        this.$emit('fnMealList', info.event.startStr)
-      }
+      this.$emit('fnMealList', info.event.startStr)
     },
     handleMonthChange({ view }) {
       const start = view.currentStart

@@ -1,15 +1,41 @@
 <template>
-  <div>
-    <label>이메일<input type="text" v-model="email" @input="removeWhitespace('email')" /></label>
-    <label
-      >비번<input
-        type="password"
-        v-model="loginPassword"
-        @input="removeWhitespace('loginPassword')"
-    /></label>
-    <label>자동 로그인<input type="checkbox" v-model="loginFix" /></label>
-    <button @click="login">로그인</button>
-    <button @click="goToSignup">회원가입 페이지 이동</button>
+  <div class="user-wrap">
+    <div class="user-container">
+      <h2 class="logo">DailySync로고</h2>
+      <div class="ip-list">
+        <div class="tit-box">
+          <p class="tit"><label for="email">이메일</label></p>
+        </div>
+        <div class="bot-box">
+          <div class="ip-box">
+            <input type="text" id="email" v-model="email" @input="removeWhitespace('email')" />
+          </div>
+        </div>
+      </div>
+      <div class="ip-list">
+        <div class="tit-box">
+          <p class="tit"><label for="password">비밀번호</label></p>
+        </div>
+        <div class="bot-box">
+          <div class="ip-box">
+            <input
+                  type="password"
+                  id="password"
+                  v-model="loginPassword"
+                  @input="removeWhitespace('loginPassword')"
+              />
+          </div>
+        </div>
+      </div>
+      <button @click="login" class="btn-default">로그인</button>
+    </div>
+    <div class="user-bot-wrap">
+      <div class="ip-chk-txt">
+        <input type="checkbox" v-model="loginFix" id="auto" />
+        <label for="auto">자동 로그인</label>
+      </div>
+      <button @click="goToSignup">회원가입 페이지 이동</button>
+    </div>
   </div>
 </template>
 <script>

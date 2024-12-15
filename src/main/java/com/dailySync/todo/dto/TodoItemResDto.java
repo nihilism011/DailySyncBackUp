@@ -22,7 +22,19 @@ public class TodoItemResDto {
     private Boolean isAuto;
     private String groupTitle;
 
+    public TodoItemResDto(Long id, String title, List<String> day, String status) {
+    }
 
+
+    public static TodoItemResDto of3(TodoItem todoItem) {
+        return new TodoItemResDto(
+                todoItem.getId(),
+                todoItem.getTitle(),
+                todoItem.getDay(),
+                todoItem.getStatus()
+        );
+    }
+    
     public TodoItemResDto(Long id, String title, List<String> day, Integer itemOrder, String status, Boolean isAuto) {
     }
 

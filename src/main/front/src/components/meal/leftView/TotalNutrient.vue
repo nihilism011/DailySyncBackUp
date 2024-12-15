@@ -44,7 +44,7 @@ export default {
     margin-top: 30px;
     box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.3);
     border-radius: 5px;
-    padding: 10px 20px 20px;
+    padding: 15px 20px 20px;
   }
   &-box {
     display: flex;
@@ -64,8 +64,11 @@ export default {
   &-tit {
     font-size: 18px;
     font-weight: bold;
+    text-align: center;
     &-wrap {
-      margin-bottom: 10px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--color-contrastyC);
     }
   }
 }

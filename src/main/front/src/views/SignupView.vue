@@ -1,6 +1,6 @@
 <template>
-  <div class="form-wrap">
-    <div class="form-container">
+  <div class="user-wrap">
+    <div class="user-container">
       <div class="ip-list">
         <div class="tit-box">
           <p class="tit"><label for="email">이메일</label></p>
@@ -97,24 +97,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.form {
-  &-wrap {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    .btn-default {
-      margin-top: 30px;
-      width: 100%;
-    }
-  }
-  &-container {
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    width: 500px;
-    padding: 20px 30px 30px;
-    margin-top: 80px;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

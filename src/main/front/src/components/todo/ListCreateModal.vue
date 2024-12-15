@@ -1,36 +1,48 @@
 <template>
-  <div v-if="isVisible" class="modal-overlay">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div style="font-size: 30px;">
+  <div v-if="isVisible" class="popup-box type-modal">
+    <div class="popup-cont type2">
+      <div class="popup-tit-wrap">
+        <div class="tit">
           {{ mode === 'create' ? '리스트 추가' : '리스트 수정' }}
         </div>
-        <button @click="closeModal">X</button>
       </div>
-      <div v-if = "mode === 'update' && newItem.listOrder !=4 ">
-        <span style="margin-right: 20px;">중요도 : </span> 
-        <label style="margin-right: 20px;">긴급  
-        <input type="radio" v-model="newItem.listOrder" value='0'/>
-        </label>
-        <label style="margin-right: 20px;"> 높음  
-        <input type="radio" v-model="newItem.listOrder" value='1'/>
-        </label>
-        <label style="margin-right: 20px;"> 보통  
-        <input type="radio" v-model="newItem.listOrder" value='2'/>
-        </label>
-        <label> 낮음   
-        <input type="radio" v-model="newItem.listOrder" value='3'/>
-        </label>
+      <div class="todo-wrap" v-if = "mode === 'update' && newItem.listOrder !=4 ">
+        <div class="ip-list">
+          <div class="tit-box">
+            <p class="tit">중요도</p>
+          </div>
+          <div class="bot-box">
+            <div class="ip-ra-txt">
+              <input type="radio" id="ra1" v-model="newItem.listOrder" value='0'/>
+              <label for="ra1">긴급</label>
+              <input type="radio" id="ra2" v-model="newItem.listOrder" value='1'/>
+              <label for="ra2">높음</label>
+              <input type="radio" id="ra3" v-model="newItem.listOrder" value='2'/>
+              <label for="ra3">보통</label>
+              <input type="radio" id="ra4" v-model="newItem.listOrder" value='3'/>
+              <label for="ra4">낮음</label>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="modal-body" style="margin-top: 20px;">
-        <span style="margin-right: 20px;">제목: </span> 
-        <input v-model="newItem.title" placeholder="제목 입력" />
+      <div class="todo-wrap">
+        <div class="ip-list">
+          <div class="tit-box">
+            <p class="tit">제목</p>
+          </div>
+          <div class="bot-box">
+            <div class="ip-box">
+              <input type="text" v-model="newItem.title" placeholder="제목 입력" />
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button @click="saveItem">{{ mode === 'create' ? '추가' : '수정' }}</button>
-        <button @click="closeModal">취소</button>
+      <div class="pop-btn-wrap">
+        <button @click="saveItem" class="btn-default submit">{{ mode === 'create' ? '추가' : '수정' }}</button>
+        <button @click="closeModal" class="btn-default cancel">취소</button>
       </div>
     </div>
+    <div class="dimmed">dim</div>
   </div>
 </template>
 
