@@ -54,12 +54,12 @@ export default {
         this.dailyList = full.data.map(item => ({
           id: item.id,
           title: item.title,
-          startTime: item.startTime,
-          endTime: item.endTime,
+          start: item.startTime,
+          end: item.endTime,
           description: item.description,
         }));
 
-      this.selectEarliestSchedule(inputDay); 
+       this.selectEarliestSchedule(inputDay); 
       } else {
         console.log('해당 날짜에 일정이 없습니다.');
       }
@@ -74,7 +74,7 @@ export default {
         return;
       }
       const todaySchedules = this.dailyList.filter(item => {
-        const startDate = new Date(item.startTime);
+        const startDate = new Date(item.start);
         const today = new Date(todayDate);
         return startDate.getFullYear() === today.getFullYear() &&
               startDate.getMonth() === today.getMonth() &&
@@ -85,8 +85,8 @@ export default {
         return;
       }
       const earliestSchedule = todaySchedules.reduce((earliest, current) => {
-        const currentStart = new Date(current.startTime);  
-        const earliestStart = new Date(earliest.startTime);
+        const currentStart = new Date(current.start);  
+        const earliestStart = new Date(earliest.start);
         return currentStart < earliestStart ? current : earliest;
       });
       this.selectedSchedule = earliestSchedule;

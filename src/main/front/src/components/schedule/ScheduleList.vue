@@ -100,16 +100,16 @@ export default {
   },
   methods: {
     selectEarliestSchedule() {
-    if (this.dailyList.length === 0) return;
+    if (this.fullList.length === 0) return;
 
-    const earliestSchedule = this.dailyList.reduce((earliest, current) => {
-      const currentStart = new Date(current.start);
-      const earliestStart = new Date(earliest.start);
+    const earliestSchedule = this.fullList.reduce((earliest, current) => {
+      const currentStart = new Date(current.startTime);
+      const earliestStart = new Date(earliest.startTime);
       return currentStart < earliestStart ? current : earliest;
     });
 
-    // ID만 설정하지 않고, 전체 객체를 selectedSchedule에 할당
-    this.selectedSchedule = earliestSchedule; 
+    // 부모로 selectedSchedule을 전달
+    this.$emit('SelectedSchedule', earliestSchedule.id);
   },
 
     async SelectedSchedule(id) {
@@ -184,10 +184,8 @@ export default {
     },
   },
   mounted() {
-    if (this.fullList && this.fullList.length > 0) {
-    this.selectEarliestSchedule();
-  }
     this.day = this.$dayjs().format('YYYY-MM-DDTHH:mm:ss');
+    
   },
 };
 </script>
