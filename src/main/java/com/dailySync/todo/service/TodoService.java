@@ -1,13 +1,16 @@
 package com.dailySync.todo.service;//package com.dailySync.todo.service;
 
 
+import com.dailySync.meal.repository.MealRepository;
 import com.dailySync.todo.dto.*;
 import com.dailySync.todo.entities.TodoGroup;
 import com.dailySync.todo.entities.TodoItem;
 import com.dailySync.todo.entities.TodoList;
+import com.dailySync.todo.entities.TodoMemo;
 import com.dailySync.todo.repository.TodoGroupRepository;
 import com.dailySync.todo.repository.TodoItemRepository;
 import com.dailySync.todo.repository.TodoListRepository;
+import com.dailySync.todo.repository.TodoMemoRepository;
 import com.dailySync.user.entities.User;
 import com.dailySync.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,63 @@ public class TodoService {
     final private TodoGroupRepository todoGroupRepository;
     final private TodoItemRepository todoItemRepository;
     final private TodoListRepository todoListRepository;
+    final private TodoMemoRepository todoMemoRepository;
+
+
+    public TodoListResDto getUserTodolList(Long userId, Integer year, Integer month) {
+        // 쿼리 실행: 날짜별 총 개수와 체크된 개수 가져오기
+        List<Object[]> result = todoListRepository.findTodoCountsByDate(userId, year, month);
+
+        // 결과를 DTO로 변환
+        List<TodoCountResponseDto> todoCountList = result.stream().map(obj -> {
+            LocalDate date = (LocalDate) obj[0];  // 첫 번째 값: 날짜
+            Long totalCount = (Long) obj[1];  // 두 번째 값: 총 개수
+            Long checkedCount = (Long) obj[2];  // 세 번째 값: 체크된 개수
+
+            // 완료율 계산
+            double completionRate = totalCount == 0 ? 0 : (double) checkedCount / totalCount * 100;
+
+            return TodoCountResponseDto.builder()
+                    .date(date)
+                    .CNT(totalCount)  // 총 개수
+                    .checkedCnt(checkedCount)  // 체크된 개수
+                    .completionRate(completionRate)  // 완료율 추가
+                    .build();
+        }).collect(Collectors.toList());
+
+        // 완료율을 기반으로 title 설정
+        double totalCnt = todoCountList.stream().mapToLong(TodoCountResponseDto::getCNT).sum();
+        double checkedCnt = todoCountList.stream().mapToLong(TodoCountResponseDto::getCheckedCnt).sum();
+        double totalCompletionRate = totalCnt == 0 ? 0 : (checkedCnt / totalCnt) * 100;
+
+        // 완료율을 포함한 title
+        String titleWithCompletionRate = String.format("Todo List (%.2f%% 완료)", totalCompletionRate);
+
+        // TodoListResDto에 결과 담기
+        return TodoListResDto.builder()
+                .title(titleWithCompletionRate)  // 완료율이 포함된 title
+                .todoCounts(todoCountList)  // 날짜별 통계 포함
+                .build();
+    }
+
+    public List<TodoItemResDto> getTodoItemDay(Long userId, String day) {
+        // 해당 userId와 day를 가진 TodoItem 조회
+        List<TodoItem> todoItems = todoItemRepository.findByUserIdAndDay(userId, day);
+
+        // TodoItem들을 TodoItemResDto로 변환하여 반환
+        return todoItems.stream()
+                .map(TodoItemResDto::of3)
+                .collect(Collectors.toList());
+    }
+
+
+    // 달력 일 가져오기
+    public List<TodoListResDto> getTodoList(Long userId, LocalDate date) {
+        List<TodoList> todoLists = todoListRepository.findByUserIdAndDateOrderByListOrderAsc(userId, date);
+        return todoLists.stream()
+                .map(TodoListResDto::of)
+                .collect(Collectors.toList());
+    }
 
 
     public void TodoLoginAutoListCreate(Long userId) {
@@ -122,15 +182,7 @@ public class TodoService {
     }
 
 
-    // 날짜 받아와서 총개수 , null인개수 반환
-    public TodoCountResponseDto getTodoCount(Long userId, LocalDate date){
 
-        long nullCount = todoListRepository.countByUserIdAndDateAndCheckedTimeIsNull(userId, null);
-        long allCount = todoListRepository.countByUserIdAndDate(userId, date);
-
-        return new TodoCountResponseDto(nullCount, allCount);
-
-    }
     //userId에 해당하는 todoGroup을 조회 (5)
     public List<TodoGroupResDto> getTodoGroup(Long userId) {
         List<TodoGroup> todoGroups = todoGroupRepository.findByUserIdAndStatusOrderByCreatedAtAsc(userId, "new");
@@ -169,15 +221,6 @@ public class TodoService {
         return TodoItemResDto.of(todoitem);
     }
 
-
-    public List<TodoListResDto> getTodoList(Long userId, LocalDate date) {
-        List<TodoList> todoLists = todoListRepository.findByUserIdAndDateOrderByListOrderAsc(userId, date);
-        return todoLists.stream()
-                .map(TodoListResDto::of)
-                .collect(Collectors.toList());
-    }
-    //생성
-
     //todolist을 생성 (7)
     public Boolean createTodoList(Long userId,TodoListReqDto reqDto) {
         User user = userRepository.findById(userId)
@@ -198,7 +241,23 @@ public class TodoService {
         return true;
     }
 
+    //todoMemo을 생성
+    public Boolean createTodoMemo(Long userId,TodoMemoReqDto reqDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자 ID입니다."));
+        TodoMemo todomemo = TodoMemo.builder()
+                .user(user)
+                .contents(reqDto.getContents())
+                .build();
+       todoMemoRepository.save(todomemo);
+       return true;
+    }
+    //userId해당하는는 todoMemo 조회
+    public TodoMemoResDto getTodoMemo(Long userId) {
+        TodoMemo todoMemo = todoMemoRepository.findByUserId(userId).orElse(null);
+        return TodoMemoResDto.of(todoMemo);
 
+    }
     //todoItem을 생성 (7)
     public Boolean createTodoItem(TodoItemReqDto reqDto) {
 
@@ -251,6 +310,10 @@ public class TodoService {
 
     public void deleteTodoGroup(Long id) {
         todoGroupRepository.deleteById(id);
+    }
+
+    public void deleteTodoMemo(Long id) {
+        todoMemoRepository.deleteById(id);
     }
 
     // 업데이트
@@ -355,7 +418,19 @@ public class TodoService {
         return TodoGroupResDto.oft(todoGroup);
     }
 
+    public TodoMemoResDto getTodoUpdateMemo(Long userId, Long id, TodoMemoReqDto reqDto) {
+        TodoMemo todomemo = todoMemoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("메모을 찾을 수 없엉"));
 
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없성"));
+
+        todomemo.setContents(reqDto.getContents());
+
+        todoMemoRepository.save(todomemo);
+
+        return TodoMemoResDto.of(todomemo);
+    }
 
 
 

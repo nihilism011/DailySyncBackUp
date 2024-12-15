@@ -29,4 +29,8 @@ public class UserSetting {
     private Integer recommendCal;
     @Column
     private String darkMode;
+
+    public UserSetting(User user){
+        this.user = user;
+    }
 }

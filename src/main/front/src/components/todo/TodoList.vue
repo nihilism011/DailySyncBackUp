@@ -6,14 +6,13 @@
         <div style="color: blue;">+ 리스트 추가</div>
       </div>
     </div>
-
     <div>
    
       <div v-for="groupId in groupIds" :key="groupId" class="group">
     
         <h1>{{ getGroupTitle(groupId) }}</h1>
 
-        <div v-for="item in sortedItemsByGroupAndOrder(groupId, 0)" :key="item.id" class="list-item urgent">
+        <div v-for="item in sortedItemsByGroupAndOrder(groupId, 0)"  :key="item.id" class="list-item urgent">
           <div class="title">
             <input
               type="checkbox"
@@ -69,6 +68,7 @@
             <div style="font-size: 12px; margin-right: 2px;">{{ item.groupTitle }}</div>
             <div>{{ item.title }} </div>
           </div>
+          <div class="created-at">{{ formatDate(item.createdAt) }} 생성</div>
           <div class="actions">
             <button @click="openEditModal(item)" class="edit-btn">수정</button>
             <button @click="deleteGroup(item.id)" class="delete-btn">삭제</button>
@@ -116,22 +116,18 @@ export default {
   },
   computed: {
     groupIds() {
-      // 그룹별로 아이템을 구분하기 위한 groupId 목록 생성
       return [...new Set(this.list.map(item => item.groupId))];
     }
   },
   methods: {
-    // groupId에 해당하는 groupTitle을 찾는 메서드
     getGroupTitle(groupId) {
       const group = this.list.find(item => item.groupId === groupId);
-      return group ? group.groupTitle : '이름없음';  // groupTitle을 찾거나, 없으면 'Unknown Group' 반환
+      return group ? group.groupTitle : '이름없음';  
     },
-
-    // groupId와 orderlist를 기준으로 아이템 정렬
     sortedItemsByGroupAndOrder(groupId, order) {
       return this.list
         .filter(item => item.groupId === groupId && item.listOrder === order)
-        .sort((a, b) => a.listOrder - b.listOrder);  // order 순서대로 정렬
+        .sort((a, b) => a.listOrder - b.listOrder);  
     },
 
     openEditModal(item) {
@@ -152,7 +148,7 @@ export default {
         } catch (error) {
           alert("삭제실패" + error);
         }
-      }
+      } 
     },
     openAddItemModal() {
       this.isModalVisible = true;
@@ -172,6 +168,12 @@ export default {
       console.log("이거가져옴" + data);
       this.list = data;
     },
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      const month = date.getMonth() + 1; // 월은 0부터 시작하므로 +1
+      const day = date.getDate();
+      return `${month}월 ${day}일`;
+    }
   },
   mounted() {
     this.fetchListByUserId();
@@ -204,11 +206,17 @@ export default {
 }
 
 .title {
-  width: 300px;
+  width: 600px;
   font-size: 20px;
   align-items: center;
   justify-content: start;
   display: flex;
+}
+
+.created-at {
+  margin-left: auto;
+  font-size: 14px;
+  color: gray;
 }
 
 .actions {

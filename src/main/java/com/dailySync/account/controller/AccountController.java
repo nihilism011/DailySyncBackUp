@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -30,8 +32,8 @@ public class AccountController {
     public ResponseEntity<ApiResponse<List<AccountResDto>>> getAccountItemsByDate(
             @Parameter (description = "날짜 YYYY-MM-DD")
             @PathVariable ("date") LocalDate date) {
-        //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
-        Long userId = 3L;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = (Long) authentication.getPrincipal();
         return ApiResponse.success(accountService.findAccountsByDate(userId, date));
     }
 
@@ -46,8 +48,7 @@ public class AccountController {
             @PathVariable ("year") int year,
             @Parameter (description = "월")
             @PathVariable ("month") int month) {
-        //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
-        Long userId = 3L;
+        Long userId = getUserId();
         return ApiResponse.success(accountService.findAccountsByMonth(userId, year, month));
     }
 
@@ -60,7 +61,7 @@ public class AccountController {
     public ResponseEntity<?> getAccountItemsSummaryByDate(
             @Parameter (description = "날짜 ex.'2024-12-12'")
             @PathVariable ("date") LocalDate date) {
-        Long userId = 3L;
+        Long userId = getUserId();
         return ApiResponse.success(accountService.findSumAccountByDate(userId, date));
     }
 
@@ -75,8 +76,7 @@ public class AccountController {
             @PathVariable ("year") int year,
             @Parameter (description = "월")
             @PathVariable ("month") int month) {
-        //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
-        Long userId = 3L;
+        Long userId = getUserId();
         return ApiResponse.success(accountService.findFixedAccounts(userId, year, month));
     }
 
@@ -88,8 +88,7 @@ public class AccountController {
     @GetMapping ("items/favor/{category}")
     public ResponseEntity<ApiResponse<List<FavorAccountResDto>>> getFavorAccountItems(
             @Parameter (description = "카테고리 'ALL' = 전부") @PathVariable ("category") String category) {
-        //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
-        Long userId = 3L;
+        Long userId = getUserId();
         return ApiResponse.success(accountService.findFavorAccountItems(userId, category));
     }
 
@@ -101,8 +100,7 @@ public class AccountController {
     @PostMapping ("items")
     public ResponseEntity<ApiResponse<Boolean>> createAccountItem(
             @RequestBody AccountReqDto reqDto) throws Exception {
-        //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
-        Long userId = 3L;
+        Long userId = getUserId();
         return ApiResponse.success(accountService.createAccountItem(userId, reqDto));
     }
 
@@ -114,8 +112,7 @@ public class AccountController {
     @PostMapping ("items/favor")
     public ResponseEntity<ApiResponse<Boolean>> createFavorAccountItem(
             @RequestBody AccountReqDto reqDto) throws Exception {
-        //todo 유저 아이디 (하드코딩) 시큐리티 세션에서 꺼내 사용하는 방식으로 변경해야함.
-        Long userId = 3L;
+        Long userId = getUserId();
         return ApiResponse.success(accountService.createFavorAccountItem(userId, reqDto));
     }
 
@@ -191,5 +188,9 @@ public class AccountController {
             @Parameter (description = "즐겨찾기 항목 아이디")
             @PathVariable Long favorAccountId) {
         return ApiResponse.success(accountService.deleteFavorAccountItem(favorAccountId));
+    }
+
+    private Long getUserId(){
+        return (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

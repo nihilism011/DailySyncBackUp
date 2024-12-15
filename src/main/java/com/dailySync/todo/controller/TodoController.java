@@ -9,11 +9,32 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/todo")
 public class TodoController {
     final private TodoService todoService;
+
+
+
+
+    /**
+     * 로그인 한 유저가 연도 year 월 month 변수에 담아 넘겨주면 해당 월의 mealList 를 전달
+     */
+    @Operation
+            (
+                    summary = "로그인한 유저가 선택한 달의 리스트 불러오기(초기 오늘의 월) - 일자별로 전체 리스트",
+                    description = "year는 연도 month는 월 입력한다. week값은 주로 보여주는것을 처리하기위해 추가되었음."
+            )
+    @GetMapping ("list/{userId}/{year}/{month}")
+    public ResponseEntity<ApiResponse<TodoListResDto>> getMealList(
+            @PathVariable Long userId,
+            @PathVariable int year,
+            @PathVariable int month
+    ) {
+        return ApiResponse.success(todoService.getUserTodolList(userId, year, month));
+    }
 
     @PostMapping("/autoTest")
     public String autoGenerateTodoList() {
@@ -117,15 +138,7 @@ public class TodoController {
         TodoGroupResDto rsp = todoService.getTodoGroupInfo(id);
         return ApiResponse.success(rsp);
     }
-    @Operation(
-            summary = " userId, date에 해당하는 todolist 의 checkItem null 개수 조회 ",
-            description = " ... "
-    )
-    @GetMapping("/list/nullCount/{userId}/{date}")
-    public ResponseEntity<?> getTodoCount(@PathVariable("userId") Long userId, @PathVariable("date") LocalDate date) {
-        TodoCountResponseDto rsp = todoService.getTodoCount(userId, date);
-        return ApiResponse.success(rsp);
-    }
+
     @Operation
             (
                     summary = " userId, groupId 에 해당하는 todoItem 조회 ",
@@ -192,11 +205,30 @@ public class TodoController {
                     description =" ... "
             )
     @PostMapping("/item")
+
     public ResponseEntity<?> addTodoItem(@RequestBody TodoItemReqDto reqDto) {
         return ApiResponse.success(todoService.createTodoItem(reqDto));
     }
 
-    //DeleteMapping
+    @PostMapping("/memo/{userId}")
+    public ResponseEntity<?> addTodoMemo(@PathVariable Long userId, @RequestBody TodoMemoReqDto reqDto) {
+        return ApiResponse.success(todoService.createTodoMemo(userId,reqDto));
+    }
+
+    @GetMapping("/memo/{userId}")
+    public ResponseEntity<?> getTodoItem(@PathVariable ("userId") Long userId){
+        return ApiResponse.success(todoService.getTodoMemo(userId));
+    }
+    @DeleteMapping("/memo/{id}")
+    public ResponseEntity<?> deleteTodoItem(@PathVariable("id") Long id) {
+        todoService.deleteTodoMemo(id);
+        return ApiResponse.success(null);
+    }
+
+    @PutMapping("/memo/{userId}/{id}")
+    public ResponseEntity<?> putTodoItem(@PathVariable ("userId") Long userId,@PathVariable ("id") Long id, @RequestBody TodoMemoReqDto reqDto){
+        return ApiResponse.success(todoService.getTodoUpdateMemo(userId, id, reqDto));
+    }
 
     @Operation
             (

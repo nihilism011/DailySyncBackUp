@@ -14,6 +14,12 @@ axiosInstance.interceptors.request.use(
     //   requestURL: `${config.baseURL}/${config.url}`,
     //   requestMethod: config.method,
     // })
+    const localToken = localStorage.getItem('jwtToken')
+    const sessionToken = sessionStorage.getItem('jwtToken')
+    const token = localToken ?? sessionToken
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`
+    }
     return config
   },
   (error) => {
@@ -24,8 +30,6 @@ axiosInstance.interceptors.request.use(
 // 응답 인터셉터
 axiosInstance.interceptors.response.use(
   (response) => {
-    // 응답 데이터를 가공하거나 처리
-    // console.log("Response:", response);
     if (response.data.status === 'success') {
       return {
         status: true,

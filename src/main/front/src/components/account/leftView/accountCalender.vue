@@ -90,7 +90,7 @@ export default {
             start: item.accountDate,
             title: '+' + numToWon(item.plusSumAmount),
             color: 'red',
-            className: 'asdf',
+            classNames: ['asdf'],
           })
         }
         if (item.minusSumAmount !== 0) {
@@ -130,5 +130,8 @@ export default {
 <style lang="scss" scoped>
 .month-sum {
   display: flex;
+}
+.asdf {
+  font-size: 50px;
 }
 </style>

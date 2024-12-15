@@ -1,19 +1,17 @@
 <template>
   <div class="container">
     <div class="left left-container">
-      <Calendar />
-      
+      <Calendar :dailyList="dailyList" @fnDayList="fnDayList" />
+      <TodoMemo/>
     </div>
     <div class="right">
       <div class="right-left">
         <TodoList/>
       </div>
       <div class="right-middle">
-        
         <TodoGroup @updateSelectedGroup="selectedGroup = $event" />
       </div>
       <div class="right-right">
-       
         <TodoItem :selectedGroup="selectedGroup" />
       </div>
     </div>
@@ -24,46 +22,49 @@
 import TodoGroup from '@/components/todo/TodoGroup.vue';
 import TodoItem from '@/components/todo/TodoItem.vue';
 import TodoList from '@/components/todo/TodoList.vue';
-import Calendar from '@/components/meal/leftView/MealCalendar.vue';
+import Calendar from '@/components/todo/TodoCalender.vue';
+import TodoMemo from '@/components/todo/TodoMemo.vue';
 
 export default {
   components: {
     TodoGroup,
     TodoItem,
     TodoList,
-
+    Calendar,
+    TodoMemo,
   },
   data() {
     return {
-      selectedDate: this.$dayjs().format('YYYY-MM-DD'), 
-      selectedGroup: null, 
-      dateList: [],
-      fixedList: [],
+      selectedDate: this.$dayjs().format('YYYY-MM-DD'), // 기본적으로 오늘 날짜
+      dailyList: [], 
+      selectedGroup: null,
     };
-  },
-  watch: {
-    selectedDate(newDate) {
-      this.fnInit(newDate);
-    },
   },
   methods: {
     async test() {
       const url = `todo/autoTest`;
       await this.$axios.post(url);
     },
-    fnInit(date) {
-      this.fnGetFixedItemListByMonth(date);
-    },
-    async fnGetFixedItemListByMonth(date) {
-      const year = this.$dayjs(date).get('year');
-      const month = this.$dayjs(date).get('month') + 1;
-      const url = `account/items/fixed/${year}/${month}`;
-      const { data } = await this.$axios.get(url);
-      this.fixedList = data;
+    async fnDayList(inputDay) {
+      console.log("가져오는 날짜" + inputDay);
+      let year = inputDay.split('-')[0];
+      let month = inputDay.split('-')[1];
+      const userId = 5; 
+      console.log("year" + year + "month" + month);
+      const daily = await this.$axios.get(`todo/list/${userId}/${year}/${month}`);
+      if (daily.status) {
+        this.dailyList = daily.data.todoCounts.map((item) => ({
+          completionRate: Math.round(item.completionRate), 
+          title: `${item.cnt} (${Math.round(item.completionRate)}%)`, 
+          date: item.date, 
+        }))
+        console.log("스테이터스 " + daily.status);
+      } else {
+        console.log(daily.message);
+      }
     },
   },
   mounted() {
-    this.fnInit(this.selectedDate);
     this.test();
   },
 };
@@ -73,48 +74,31 @@ export default {
 .container {
   display: flex;
   width: 100%;
-  height: 100vh; 
+  height: 100vh;
 }
 
 .left-container {
-  width: 30%; 
+  width: 30%;
   display: flex;
   flex-direction: column;
   padding: 20px;
 }
 
-.left-top {
-  flex: 1;
- 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.left-bottom {
-  flex: 1;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .right {
   width: 70%;
   display: flex;
-  justify-content: space-between;
 }
 
 .right-left {
-  width: 55%; 
+  width: 50%;
   padding: 20px;
-  background-color: lightgray; 
+  background-color: lightgray;
 }
 
 .right-middle {
-  width: 15%;
+  width: 20%;
   padding: 20px;
-  background-color: lightgreen; 
+  background-color: lightgreen;
 }
 
 .right-right {

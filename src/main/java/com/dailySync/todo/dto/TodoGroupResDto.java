@@ -22,6 +22,7 @@ public class TodoGroupResDto {
 
 
 
+
     public static TodoGroupResDto of(TodoGroup todoGroup) {
         TodoGroupResDto dto = new TodoGroupResDto();
         dto.setId(todoGroup.getId());
