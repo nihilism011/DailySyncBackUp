@@ -89,7 +89,11 @@ export default {
         const earliestStart = new Date(earliest.start);
         return currentStart < earliestStart ? current : earliest;
       });
-      this.selectedSchedule = earliestSchedule;
+      this.selectedSchedule = {
+      ...earliestSchedule,
+      startTime: this.$dayjs(earliestSchedule.start).format('YYYY-MM-DDTHH:mm'), 
+      endTime: this.$dayjs(earliestSchedule.end).format('YYYY-MM-DDTHH:mm') 
+    };
       console.log("오늘 가장 빠른 일정: ", this.selectedSchedule);  
     },
  
