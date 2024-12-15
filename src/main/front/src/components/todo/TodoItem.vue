@@ -9,7 +9,15 @@
       <div class="list-item" v-for="(item, index) in items" :key="index">
         <div class="tit-box">
           <div class="title">{{ item.title }}</div>
-          <div class="day"><span>반복요일: </span>{{ item.day && Array.isArray(item.day) ? item.day.join(', ') : '' }}</div>
+          <div class="day">
+            <span>반복요일: </span>
+            <template v-if="item.day && Array.isArray(item.day)">
+              <span 
+                v-for="(day, i) in sortedDays(item.day)" 
+                :key="i" 
+                :class="getDayClass(day)">{{ day }}<span v-if="i < sortedDays(item.day).length - 1">, </span></span>
+            </template>
+          </div>
           <div class="auto" title="자동여부">{{ item.isAuto == 1 ? 'A' : '' }}</div>
         </div>
         <div class="btn-box">
@@ -103,9 +111,18 @@ export default {
         alert("삭제 취소");
       }
     },
+    sortedDays(dayArray) {
+      const order = ['일', '월', '화', '수', '목', '금', '토'];
+      return dayArray.sort((a, b) => order.indexOf(a) - order.indexOf(b));
+    },
+    getDayClass(day) {
+      if (day === '일') return 'sunday';
+      if (day === '토') return 'saturday';
+      return '';
+    }
   },
 };
 </script>
 
-
-<style scoped></style>
+<style scoped>
+</style>
