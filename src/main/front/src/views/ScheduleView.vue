@@ -19,25 +19,17 @@
     @SelectedSchedule="SelectedSchedule" 
     
   />
-  <!-- <ScheduleModal 
-    v-if="popupState"
-    :popupState="popupState" 
-    :searchResults="searchResults"
-    @closePopup="popupState = false" 
-  /> -->
   </div>
 </template>
 <script>
 import ScheduleCalendar from '@/components/schedule/ScheduleCalendar.vue'
 import ScheduleList from '@/components/schedule/ScheduleList.vue'
 import ScheduleSearch from '@/components/schedule/ScheduleSearch.vue'
-//import ScheduleModal from '@/components/schedule/ScheduleModel.vue'
 export default {
   components: {
     ScheduleList,
     ScheduleSearch,
     ScheduleCalendar,
-    //ScheduleModal,
   },
   data() {
     return {
