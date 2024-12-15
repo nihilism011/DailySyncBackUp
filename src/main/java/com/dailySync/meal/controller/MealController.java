@@ -7,6 +7,8 @@ import com.dailySync.meal.service.MealService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +33,9 @@ public class MealController {
             @PathVariable int year,
             @PathVariable int month
     ) {
-        return ApiResponse.success(mealService.getUserMealList(year, month));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = (Long) authentication.getPrincipal();
+        return ApiResponse.success(mealService.getUserMealList(userId, year, month));
     }
 
     /**
@@ -47,7 +51,8 @@ public class MealController {
             @PathVariable int year,
             @PathVariable int month
     ) {
-        return ApiResponse.success(mealService.getUserDayMealList(year, month));
+        Long userId = getUserId();
+        return ApiResponse.success(mealService.getUserDayMealList(userId, year, month));
     }
 
     /**
@@ -73,8 +78,8 @@ public class MealController {
         )
     @GetMapping ("favorite")
     public ResponseEntity<ApiResponse<MealRecomResDto>> getFavorite() {
-        //Long id는 추후 로그인 아이디로 변경 예정
-        return ApiResponse.success(mealService.getFavoriteList(7L));
+        Long userId = getUserId();
+        return ApiResponse.success(mealService.getFavoriteList(userId));
     }
 
     /**
@@ -87,7 +92,6 @@ public class MealController {
         )
     @GetMapping ("category")
     public ResponseEntity<ApiResponse<List<MealCategoryResDto>>> getCategory() {
-        //Long id는 추후 로그인 아이디로 변경 예정
         return ApiResponse.success(mealService.getCategoryList());
     }
 
@@ -100,8 +104,9 @@ public class MealController {
             description = "해당 일자 데이터 삽입할때 List에 객체를 담아와서 데이터 삽입"
         )
     @PostMapping ("add")
-    public ResponseEntity<ApiResponse<Boolean>> postMealList(@RequestBody List<Meal> meals) {
-        return ApiResponse.success(mealService.insertMealList(meals));
+    public ResponseEntity<ApiResponse<Boolean>> postMealList(@RequestBody List<Meal> meals) throws Exception {
+        Long userId = getUserId();
+        return ApiResponse.success(mealService.insertMealList(userId, meals));
     }
 
     /**
@@ -128,5 +133,9 @@ public class MealController {
     @DeleteMapping ("delete/{id}")
     public ResponseEntity<ApiResponse<Boolean>> delectMeals(@PathVariable Long id) {
         return ApiResponse.success(mealService.deleteMeal(id));
+    }
+
+    private Long getUserId(){
+        return (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

@@ -5,7 +5,7 @@ import com.dailySync.meal.dto.*;
 import com.dailySync.meal.entities.Meal;
 import com.dailySync.meal.repository.MealRepository;
 import com.dailySync.user.entities.User;
-import com.dailySync.user.repository.UserRepository;
+import com.dailySync.user.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,18 +18,18 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MealService {
     private final MealRepository mealRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public MealListResDto getUserMealList(Integer year, Integer month) {
-        List<Meal> meals = mealRepository.findMealsByUserIdAndYearAndMonth(7L, year, month);
+    public MealListResDto getUserMealList(Long userId, Integer year, Integer month) {
+        List<Meal> meals = mealRepository.findMealsByUserIdAndYearAndMonth(userId, year, month);
         Map<LocalDate, List<MealResDto>> mealList =  meals
                 .stream().map(Meal::toRes)
                 .collect(Collectors.groupingBy(MealResDto::getDate, TreeMap::new, Collectors.toList()));
         return new MealListResDto(mealList);
     }
 
-    public MealDayResDto getUserDayMealList(Integer year, Integer month) {
-        List<MealDayCntResDto> mealList = mealRepository.findDayByUserIdAndYearAndMonth(7L, year, month);
+    public MealDayResDto getUserDayMealList(Long userId, Integer year, Integer month) {
+        List<MealDayCntResDto> mealList = mealRepository.findDayByUserIdAndYearAndMonth(userId, year, month);
         return new MealDayResDto(mealList.stream().map(Meal::toDayCnt).toList());
     }
 
@@ -38,8 +38,8 @@ public class MealService {
         return new MealRecomResDto(recommandList.stream().map(Meal::toRecom).toList());
     }
 
-    public MealRecomResDto getFavoriteList(Long id) {
-        List<Meal> favoriteList = mealRepository.findByUserIdAndIsFavorite(id, true);
+    public MealRecomResDto getFavoriteList(Long userId) {
+        List<Meal> favoriteList = mealRepository.findByUserIdAndIsFavorite(userId, true);
         return new MealRecomResDto(favoriteList.stream().map(Meal::toRecom).toList());
     }
 
@@ -50,15 +50,15 @@ public class MealService {
                 .collect(Collectors.toList());
     }
 
-    public Boolean insertMealList(List<Meal> meals) {
-        User userId = userRepository.findById(7L).orElseThrow(() -> new EntityNotFoundException("User not found with id: " + "Kim"));
+    public Boolean insertMealList(Long userId, List<Meal> meals) throws Exception {
+        User id = userService.getUser(userId);
 
         for (Meal meal : meals) {
             if(meal.getIsFavorite()) {
-                mealRepository.save(Meal.ofSaveReq(userId, meal, true));
-                mealRepository.save(Meal.ofSaveReq(userId, meal, false));
+                mealRepository.save(Meal.ofSaveReq(id, meal, true));
+                mealRepository.save(Meal.ofSaveReq(id, meal, false));
             } else {
-                mealRepository.save(Meal.ofSaveReq(userId, meal, false));
+                mealRepository.save(Meal.ofSaveReq(id, meal, false));
             }
         }
         return true;
@@ -74,7 +74,6 @@ public class MealService {
 
     public Boolean deleteMeal(Long id) {
         Meal meal = mealRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Meal not found with id: " + id));
-        System.out.println(id);
         mealRepository.delete(meal);
         return true;
     }
