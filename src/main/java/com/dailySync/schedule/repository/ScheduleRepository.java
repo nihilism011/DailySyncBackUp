@@ -22,8 +22,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 //    List<Schedule> findByUserIdAndStartTimeYearAndStartTimeMonthOrderByStartTimeAsc(Long userId, int year, int month);
     // 특정 사용자와 날짜 범위에 맞는 일정 조회
 
-    @Query(value = "SELECT * FROM schedule s WHERE s.user_id = :userId AND s.id = :id", nativeQuery = true)
-    List<Schedule> findByUserIdAndId(@Param("userId") Long userId, @Param("id") Long Id);
+
 
     @Query(value = "SELECT s.* FROM schedule s "
             + "WHERE s.user_id = :userId "

@@ -13,7 +13,7 @@
 
     props: {
       dailyList: {
-        type: Array,
+        type: Object,
     },
     selectedSchedule: {
       type: Object,

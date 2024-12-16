@@ -7,6 +7,7 @@
         :fullList="dailyList" 
         :day="day" 
         :selectedSchedule="selectedSchedule" 
+        @fnDayList="fnScheduleList"
         />
     </div>
   </div>
@@ -17,7 +18,6 @@
     @fnScheduleList="fnScheduleList" 
     :selectedSchedule="selectedSchedule" 
     @SelectedSchedule="SelectedSchedule" 
-    
   />
   </div>
 </template>
@@ -45,72 +45,67 @@ export default {
 
   methods: {
     async fnScheduleList(inputDay) {
-    const userId = 6;
-    let year = inputDay.split('-')[0];
-    let month = inputDay.split('-')[1];
+      let year = inputDay.split('-')[0];
+      let month = inputDay.split('-')[1];
+      try {
+        const full = await this.$axios.get(`schedule/userId/${year}/${month}`);
+        console.log("API 응답:", full);
 
-    try {
-      const full = await this.$axios.get(`schedule/userId/${userId}/${year}/${month}`);
-      if (full.status && full.data.length > 0) {
-        this.dailyList = full.data.map(item => ({
-          id: item.id,
-          title: item.title,
-          start: item.startTime,
-          end: item.endTime,
-          description: item.description,
-        }));
+        if (full.status && full.data.length > 0) {
+          this.dailyList = full.data.map(item => ({
+            id: item.id,
+            title: item.title,
+            start: item.startTime,
+            end: item.endTime,
+            description: item.description,
+          }));
+          console.log("dailyList:", this.dailyList);  // dailyList의 내용을 확인
+          if (this.dailyList.length > 0) {
+            this.selectEarliestSchedule();
+          } else {
+            console.log('일정 데이터가 비어 있습니다.');
+          }
+        } else {
+          console.log('해당 날짜에 일정이 없습니다.');
+          this.dailyList = [];
+        }
+      } catch (error) {
+        console.error('일정을 불러오는 중 오류가 발생했습니다:', error);
+        this.dailyList = []; 
+      }
+    },
+    selectEarliestSchedule() {
+      if (this.dailyList && Array.isArray(this.dailyList)) {
+    // 날짜 비교를 dayjs를 이용해 처리
+    const earliestSchedule = this.dailyList.reduce((earliest, current) => {
+      const earliestStart = this.$dayjs(earliest.start);
+      const currentStart = this.$dayjs(current.start);
 
-       this.selectEarliestSchedule(inputDay); 
+      // 날짜 비교가 제대로 되는지 체크
+      if (earliestStart.isValid() && currentStart.isValid()) {
+        return currentStart.isBefore(earliestStart) ? current : earliest;
       } else {
-        console.log('해당 날짜에 일정이 없습니다.');
+        console.error('Invalid date format detected:', earliest.start, current.start);
+        return earliest;
       }
-    } catch (error) {
-      console.error('일정을 불러오는 중 오류가 발생했습니다:', error);
-    }
+    });
+
+    this.selectedSchedule = earliestSchedule;
+  } else {
+    console.log('오늘의 일정에 오류가 있다.');
+  }
     },
-   
-    selectEarliestSchedule(todayDate) {
-      if (this.dailyList.length === 0) {
-        this.selectedSchedule = null;
-        return;
-      }
-      const todaySchedules = this.dailyList.filter(item => {
-        const startDate = new Date(item.start);
-        const today = new Date(todayDate);
-        return startDate.getFullYear() === today.getFullYear() &&
-              startDate.getMonth() === today.getMonth() &&
-              startDate.getDate() === today.getDate();
-      });
-      if (todaySchedules.length === 0) {
-        console.log("오늘 일정이 없습니다.");
-        return;
-      }
-      const earliestSchedule = todaySchedules.reduce((earliest, current) => {
-        const currentStart = new Date(current.start);  
-        const earliestStart = new Date(earliest.start);
-        return currentStart < earliestStart ? current : earliest;
-      });
-      this.selectedSchedule = {
-      ...earliestSchedule,
-      startTime: this.$dayjs(earliestSchedule.start).format('YYYY-MM-DDTHH:mm'), 
-      endTime: this.$dayjs(earliestSchedule.end).format('YYYY-MM-DDTHH:mm') 
-    };
-      console.log("오늘 가장 빠른 일정: ", this.selectedSchedule);  
-    },
- 
-    async SelectedSchedule(id){
-      const userId = 6;
+    async SelectedSchedule(id) {
       console.log("SelectedSchedule에 id가 들어왔습니다:", id); 
-      const response = await this.$axios.get(`schedule/userId/id/${userId}/${id}`);
-        if (response.status) {
-          this.selectedSchedule = response.data[0];  
-      } else {
+      const response = await this.$axios.get(`schedule/userId/id/${id}`);
+      if (response.status) {
+        console.log("response.data",response.data)
+        this.selectedSchedule = response.data;  
+      }else {
         console.log("일정이 없습니다.");
       }
-  
     },
   },
-
   mounted() {
     this.day = this.$dayjs().format('YYYY-MM-DD')
     this.fnScheduleList(this.day);

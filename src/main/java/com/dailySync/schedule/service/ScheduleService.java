@@ -1,5 +1,6 @@
 package com.dailySync.schedule.service;
 
+import com.dailySync.constant.ResMessage;
 import com.dailySync.schedule.dto.ScheduleReqDto;
 import com.dailySync.schedule.dto.ScheduleResDto;
 import com.dailySync.schedule.entities.Schedule;
@@ -31,9 +32,9 @@ public class ScheduleService {
     }
 
     /**id로 일정 가져오기*/
-    public List<ScheduleResDto> getSchedule(Long userId, Long id) {
-        List<Schedule> scheduleList = scheduleRepository.findByUserIdAndId(userId, id);
-        return scheduleList.stream().map(ScheduleResDto::of).collect(Collectors.toList());
+    public ScheduleResDto getSchedule(Long userId, Long id) throws Exception{
+        Schedule scheduleList = scheduleRepository.findById(id).orElseThrow(()->new Exception(ResMessage.NOT_FOUND));
+       return ScheduleResDto.of(scheduleList);
     }
 
     /**title로 일정찾기*/

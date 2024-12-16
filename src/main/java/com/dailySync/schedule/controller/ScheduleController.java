@@ -1,6 +1,7 @@
 package com.dailySync.schedule.controller;
 
 import com.dailySync.common.ApiResponse;
+import com.dailySync.common.CommonService;
 import com.dailySync.schedule.dto.ScheduleReqDto;
 import com.dailySync.schedule.dto.ScheduleResDto;
 import com.dailySync.schedule.entities.Schedule;
@@ -21,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ScheduleController {
     private final ScheduleService scheduleService;
+    private final CommonService commonService;
 
     /** 로그인 한 유저가 연도 year 월 month 변수에 담아 넘겨주면 해당 월의 sheduleList 를 전달 */
     @Operation
@@ -28,12 +30,12 @@ public class ScheduleController {
                     summary = "로그인한 유저가 선택한 달의 리스트 불러오기(초기 오늘의 월)",
                     description = "year는 연도, month는 월을 입력한다."
             )
-    @GetMapping ("userId/{userId}/{year}/{month}")
+    @GetMapping ("userId/{year}/{month}")
     public ResponseEntity<ApiResponse<List<ScheduleResDto>>> getSchedule(
-            @PathVariable ("userId") Long userId,
             @PathVariable ("year") int year,
             @PathVariable ("month") int month)
     {
+        Long userId = commonService.getUserId();
         List<ScheduleResDto> scheduleResDtos = scheduleService.getUser(userId, year, month);
         return ApiResponse.success(scheduleResDtos);
     }
@@ -44,12 +46,12 @@ public class ScheduleController {
                     summary = "로그인한 유저가 선택한 일정의 리스트 불러오기",
                     description = "id를 입력한다."
             )
-    @GetMapping ("userId/id/{userId}/{id}")
-    public ResponseEntity<ApiResponse<List<ScheduleResDto>>> getScheduleInfo(
-            @PathVariable ("userId") Long userId,
-            @PathVariable ("id") Long id)
+    @GetMapping ("userId/id/{id}")
+    public ResponseEntity<ApiResponse<ScheduleResDto>> getScheduleInfo(
+            @PathVariable ("id") Long id) throws Exception
     {
-        List<ScheduleResDto> scheduleResDtos = scheduleService.getSchedule(userId,id);
+        Long userId = commonService.getUserId();
+        ScheduleResDto scheduleResDtos = scheduleService.getSchedule(userId,id);
         return ApiResponse.success(scheduleResDtos);
     }
 
