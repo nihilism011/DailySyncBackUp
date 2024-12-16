@@ -92,7 +92,7 @@ export default {
 
     this.selectedSchedule = earliestSchedule;
   } else {
-    console.log('오늘의 일정에 오류가 있다.');
+    console.log('오늘의 일정에 오류가 있다. view');
   }
     },
     async SelectedSchedule(id) {

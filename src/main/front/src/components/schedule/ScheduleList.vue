@@ -41,7 +41,7 @@
           />
         </div>
         <button @click="isAdd ? fnSaveNewSchedule() : fnSaveUpdate()">
-          {{ isAdd ? '저장' : '수정 저장' }}
+          저장
         </button>
         <button @click="isAdd ? fnCancelAdd() : fnCancle()">취소</button>
       </div>
@@ -109,6 +109,16 @@ export default {
       type: String,
     }
   },
+  watch: {
+  // 부모로부터 전달받은 `dailyList`의 변화 감지
+  fullList(newValue) {
+    console.log("자식 컴포넌트에서 받은 dailyList:", newValue);
+    // fullList가 제대로 전달되지 않으면 아래와 같이 확인
+    if (!newValue || newValue.length === 0) {
+      console.log("일정 데이터가 없습니다.");
+    }
+  }
+},
   emits: ['fnScheduleList', 'fnDayList'],
   data() {
     return {
@@ -140,21 +150,24 @@ export default {
           }
     },
     selectEarliestSchedule() {
-    if (this.dailyList) {
-      const earliestSchedule = this.dailyList.reduce((earliest, current) => {
-        const earliestDate = new Date(earliest.start);
-        const currentDate = new Date(current.start);
+      if (this.fullList && Array.isArray(this.fullList) && this.fullList.length > 0) {
+    // 날짜 비교를 dayjs를 이용해 처리
+    const earliestSchedule = this.fullList.reduce((earliest, current) => {
+      const earliestStart = this.$dayjs(earliest.start);
+      const currentStart = this.$dayjs(current.start);
 
-        if (isNaN(earliestDate.getTime()) || isNaN(currentDate.getTime())) {
-          console.error('Invalid date format detected:', earliest.start, current.start);
-          return earliest;  
-        }
-        return currentDate < earliestDate ? current : earliest;
-      });
-        this.selectedSchedule = earliestSchedule;
+      if (earliestStart.isValid() && currentStart.isValid()) {
+        return currentStart.isBefore(earliestStart) ? current : earliest;
       } else {
-        console.log('오늘의 일정에 오류가 있다.');
+        console.error('Invalid date format detected:', earliest.start, current.start);
+        return earliest;
       }
+    });
+
+    this.selectedSchedule = earliestSchedule;
+  } else {
+    console.log('오늘의 일정에 오류가 있다.');
+  }
     },
     fnUpdate() {
       this.isUpdate = true; 
@@ -215,7 +228,11 @@ export default {
   },
   mounted() {
     this.day = this.$dayjs().format('YYYY-MM-DDTHH:mm:ss');
+    if (this.fullList && this.fullList.length > 0) {
     this.selectEarliestSchedule();
+  } else {
+    console.log('일정 데이터가 비어 있습니다.mount');
+  }
     
   },
 };
