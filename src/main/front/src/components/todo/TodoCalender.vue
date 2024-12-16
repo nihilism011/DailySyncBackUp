@@ -42,7 +42,7 @@ export default {
       isModalVisible: false, // 모달의 표시 여부
       calendarOptions: {
         locale: 'ko', // 한국어 설정
-        height: 550,
+        height: 540,
         showNonCurrentDates: false,
         plugins: [dayGridPlugin, interactionPlugin], // 플러그인 등록
         initialView: 'dayGridMonth', // 월별 뷰 설정

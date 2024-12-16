@@ -86,9 +86,9 @@ export default {
   border-radius: 10px;
 }
 .memo-title {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: bold;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 textarea {
   height: 250px;

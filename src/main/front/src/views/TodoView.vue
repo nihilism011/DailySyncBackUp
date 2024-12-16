@@ -73,11 +73,16 @@ export default {
 <style scoped>
 .todo-wrap {
   display: flex;
-  height: 100%;
+  height: 825px;
   border-radius: 10px;
   box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.3);
   padding: 20px;
   gap: 0 20px;
+  overflow: hidden;
+  > div {
+    overflow-y: auto;
+    padding: 20px;
+  }
 }
 .right-left {
   width: 40%;
