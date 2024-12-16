@@ -3,6 +3,7 @@ package com.dailySync.common;
 import com.dailySync.account.service.AccountService;
 import com.dailySync.config.JwtUtil;
 import com.dailySync.constant.ResMessage;
+import com.dailySync.todo.service.TodoService;
 import com.dailySync.user.dto.LoginRequest;
 import com.dailySync.user.entities.User;
 import com.dailySync.user.service.UserService;
@@ -18,6 +19,7 @@ public class CommonService {
     private final AccountService accountService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final TodoService todoService;
 
     public String login(LoginRequest request) throws Exception {
         User user = userService.getUser(request.getEmail());
@@ -25,6 +27,7 @@ public class CommonService {
             throw new Exception(ResMessage.NOT_MATCH_PASSWORD);
         }
         accountService.moveFixedAccountItem(user);
+        todoService.TodoLoginAutoListCreate(user.getId());
         userService.updateLastLoginDate(user);
         return jwtUtil.generateToken(user);
     }
@@ -37,6 +40,7 @@ public class CommonService {
             Long userId = jwtUtil.extractUserId(token);
             User user = userService.getUser(userId);
             accountService.moveFixedAccountItem(user);
+            todoService.TodoLoginAutoListCreate(user.getId());
             userService.updateLastLoginDate(user);
             return jwtUtil.generateToken(user);
         } else {
