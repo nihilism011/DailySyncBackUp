@@ -23,6 +23,7 @@
               id="password"
               v-model="loginPassword"
               @input="removeWhitespace('loginPassword')"
+              @keyup.enter="login"
             />
           </div>
         </div>
