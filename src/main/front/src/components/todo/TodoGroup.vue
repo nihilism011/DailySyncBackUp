@@ -1,8 +1,11 @@
 <template>
   <div class="list-container">
     <p class="list-tit">Group</p>
-    <div class="list-item" v-for="(item, index) in list" 
-    :key="index" @click="selectGroup(item.id)">
+    <div class="list-item" 
+         v-for="(item, index) in list" 
+         :key="index" 
+         :class="{'selected': item.id === selectedGroupId}"  
+         @click="selectGroup(item.id)">
       <div class="tit-box">
         <div class="description">{{ item.description }}</div>
         <div class="title">{{ item.title }}</div>
@@ -48,6 +51,7 @@ export default {
       isModalVisible: false,
       isEditModalVisible: false,
       selectedItem: null, 
+      selectedGroupId: null,  // 선택된 그룹의 ID를 추적
     };
   },
   methods: {
@@ -71,6 +75,7 @@ export default {
       this.list = data; 
     },
     selectGroup(groupId) {
+      this.selectedGroupId = groupId;  // 선택된 그룹 ID 저장
       this.$emit('updateSelectedGroup', groupId);
     },
     async deleteGroup(id) {
@@ -95,4 +100,21 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+/* 선택된 아이템에 대한 스타일 */
+.selected {
+  background-color: #f0f8ff; 
+  border: 2px solid #007bff; 
+}
+
+.list-item {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* 기본 스타일 */
+.list-item:hover {
+  background-color: #f5f5f5;
+}
+</style>

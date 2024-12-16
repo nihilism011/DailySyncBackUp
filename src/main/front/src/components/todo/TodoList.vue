@@ -1,11 +1,11 @@
 <template>
   <div class="list-container">
     <p class="list-tit">List</p>
-    <template v-if="list.length === 0" class="list-item" @click="openAddItemModal">
-      <div class="title">
-        <div style="color: blue;">+ 리스트 추가</div>
+    <div v-if="list.length === 0" class="list-item center" @click="openAddItemModal">
+      <div class="add">
+       리스트 추가
       </div>
-    </template>
+    </div>
      
     <div v-for="groupId in groupIds" :key="groupId" class="group">
       <p class="list-stit">{{ getGroupTitle(groupId) }}</p>
@@ -156,8 +156,7 @@ export default {
       await this.fetchListByUserId();
     },
     async fetchListByUserId() {
-      const userId = 5;
-      const url = `todo/list/today/${userId}`;
+      const url = `todo/list/today`;
       const { data } = await this.$axios.get(url);
       console.log(data);
       this.list = data;

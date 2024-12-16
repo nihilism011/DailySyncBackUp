@@ -19,7 +19,9 @@
             <option v-for="(year, index) in years" :key="index" :value="year">{{ year }}</option>
           </select>
           <select v-model="form.month">
-            <option v-for="(month, index) in months" :value="month" :key="index">{{ month }}</option>
+            <option v-for="(month, index) in months" :value="month" :key="index">
+              {{ month }}
+            </option>
           </select>
         </div>
         <div v-if="form.searchType === 'range'">
@@ -33,85 +35,81 @@
       </div>
     </div>
   </div>
-    <ScheduleModal 
+  <ScheduleModal
     v-if="popupState"
-    :popupState="popupState" 
+    :popupState="popupState"
     :searchResults="searchResults"
-    @closePopup="popupState = false" 
-   />
+    @closePopup="popupState = false"
+  />
 </template>
 
 <script>
 import ScheduleModal from './ScheduleModal.vue'
 export default {
   components: {
-    ScheduleModal
+    ScheduleModal,
   },
   data() {
     return {
       form: {
-        searchType: '', 
-        title: '',      
-        year: '2024',      
-        month: '12',     
-        startTime: '', 
-        endTime: '',    
+        searchType: '',
+        title: '',
+        year: '2024',
+        month: '12',
+        startTime: '',
+        endTime: '',
       },
-      list: [], 
-      years:[],
-      months:[
-        1,2,3,4,5,6,7,8,9,10,11,12
-      ],
-      popupState : false
-      
-    };
-    
+      list: [],
+      years: [],
+      months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      popupState: false,
+    }
   },
   methods: {
-    initYears(){
-          const currentYear = new Date().getFullYear();
-          const startYear = currentYear - 14;
-          for(let year = startYear; year <= currentYear; year++){
-            this.years.push(year);
-          }
-        },
-        async fnSearch() {
-      let url = ''; 
+    initYears() {
+      const currentYear = new Date().getFullYear()
+      const startYear = currentYear - 14
+      for (let year = startYear; year <= currentYear; year++) {
+        this.years.push(year)
+      }
+    },
+    async fnSearch() {
+      let url = ''
       if (this.form.searchType === 'year' && this.form.year) {
-        url = `schedule/date/${this.form.year}`;
+        url = `schedule/date/${this.form.year}`
       } else if (this.form.searchType === 'yearMonth' && this.form.year && this.form.month) {
-        url = `schedule/date/${this.form.year}/${this.form.month}`;
+        url = `schedule/date/${this.form.year}/${this.form.month}`
       } else if (this.form.searchType === 'range' && this.form.startTime && this.form.endTime) {
-        const startTime = this.form.startTime;
-        const endTime = this.form.endTime;
-        url = `schedule/date/range?startTime=${startTime}&endTime=${endTime}`;
+        const startTime = this.form.startTime
+        const endTime = this.form.endTime
+        url = `schedule/date/range?startTime=${startTime}&endTime=${endTime}`
       } else if (this.form.searchType === 'title' && this.form.title) {
-        url = `schedule/title/${this.form.title}`;
+        url = `schedule/title/${this.form.title}`
       }
 
       if (url) {
         try {
-          const { data } = await this.$axios.get(url);
-          this.list = data; 
-          this.searchResults = data;  // 검색된 데이터를 모달로 전달
-          this.popupState = true; // 모달 열기
+          const { data } = await this.$axios.get(url)
+          this.list = data
+          this.searchResults = data // 검색된 데이터를 모달로 전달
+          this.popupState = true // 모달 열기
         } catch (error) {
-          console.error("오류 :", error);
+          console.error('오류 :', error)
         }
       } else {
-        console.log("검색할 조건을 입력하세요.");
+        console.log('검색할 조건을 입력하세요.')
       }
     },
-      formatDate(date) {
-      if (!date) return ''; 
-      const formattedDate = new Date(date);
-      return formattedDate.toLocaleDateString(); 
+    formatDate(date) {
+      if (!date) return ''
+      const formattedDate = new Date(date)
+      return formattedDate.toLocaleDateString()
     },
   },
   mounted() {
-    this.initYears();
+    this.initYears()
   },
-};
+}
 </script>
 
 <style scoped></style>

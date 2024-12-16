@@ -1,9 +1,17 @@
 <template>
-  <FullCalendar :options="calendarOptions" />
-  <div>{{ $dayjs(dateStore.selectedDate).get('month') + 1 }} 월 총합</div>
-  <div class="month-sum">
-    <div>수입 : {{ totalPlusSum }}</div>
-    <div>지출 : {{ totalMinusSum }}</div>
+  <FullCalendar :options="calendarOptions" ref="calendar" />
+  <div class="list-item">
+    <div class="tit-box">
+      <div class="title">
+        {{
+          `${$dayjs(dateStore.selectedDate).get('year')}년 ${$dayjs(dateStore.selectedDate).get('month') + 1}월`
+        }}
+      </div>
+      <div class="month-sum">
+        <div>수입 {{ totalPlusSum }}</div>
+        <div>지출 {{ totalMinusSum }}</div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -28,10 +36,11 @@ export default {
     return { dateStore, refreshStore }
   },
   watch: {
-    'refreshStore.refreshState': 'fetchData',
+    'refreshStore.refreshState': function () {
+      this.fetchData(this.dateStore.selectedDate)
+    },
     'dateStore.selectedDate': function (newDate) {
-      this.updateCalendarDate(newDate)
-      this.fetchData()
+      this.handleDate(new Date(newDate))
     },
     calendarData() {
       this.calendarOptions.events = this.calendarData
@@ -45,6 +54,7 @@ export default {
       calendarOptions: {
         plugins: [dayGridPlugin, interactionPlugin],
         showNonCurrentDates: false,
+        initialDate: this.dateStore.selectedDate || this.$dayjs().format('YYYY-MM-DD'),
         initialView: 'dayGridMonth',
         headerToolbar: {
           left: 'prev',
@@ -58,28 +68,41 @@ export default {
         datesSet: this.handleDatesChange,
         height: '100%',
         footerToolbar: {
-          right: 'today',
+          right: 'myCustomButton',
+        },
+        customButtons: {
+          myCustomButton: {
+            text: 'today',
+            click: () => {
+              this.gotoToday()
+            },
+          },
         },
       },
     }
   },
   methods: {
+    gotoToday() {
+      this.dateStore.setSelectedDate(this.$dayjs().format('YYYY-MM-DD'))
+    },
+    handleDate(date) {
+      this.fetchData()
+      const calendar = this.$refs.calendar.getApi()
+      calendar.gotoDate(date)
+    },
     numToWon,
-    async fetchData() {
-      const year = this.$dayjs(this.dateStore.selectedDate).get('year')
-      const month = this.$dayjs(this.dateStore.selectedDate).get('month') + 1
+    async fetchData(date) {
+      console.log(date)
+      const year = this.$dayjs(date).get('year')
+      const month = this.$dayjs(date).get('month') + 1
       const url = `account/items/month/${year}/${month}`
+      console.log(url)
       const { data } = await this.$axios.get(url)
       let plus = 0
       let minus = 0
       data.map((item) => {
-        if (
-          this.$dayjs(item.accountDate).get('month') ===
-          this.$dayjs(this.dateStore.selectedDate).get('month')
-        ) {
-          plus += item.plusSumAmount
-          minus += item.minusSumAmount
-        }
+        plus += item.plusSumAmount
+        minus += item.minusSumAmount
       })
       this.totalPlusSum = this.numToWon(plus)
       this.totalMinusSum = this.numToWon(minus)
@@ -105,25 +128,19 @@ export default {
       this.calendarData = transformedData
     },
     handleEventClick(info) {
-      const dateSet = info.event.startStr
-      this.handleDateClick({ dateStr: dateSet })
+      this.dateStore.setSelectedDate(info.event.startStr)
     },
     handleDateClick(info) {
       this.dateStore.setSelectedDate(info.dateStr)
     },
     handleDatesChange({ view }) {
       const start = view.currentStart
-      const dateSet = `${start.getFullYear()}-${start.getMonth() + 1}-01`
-      this.handleDateClick({ dateStr: dateSet })
-    },
-    updateCalendarDate(newDate) {
-      if (this.calendar) {
-        this.calendar.gotoDate(newDate)
-      }
+      const dateSet = this.$dayjs(start).format('YYYY-MM-DD')
+      this.fetchData(dateSet)
     },
   },
   mounted() {
-    this.fetchData()
+    this.fetchData(this.dateStore.selectedDate)
   },
 }
 </script>

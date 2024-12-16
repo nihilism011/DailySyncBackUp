@@ -5,10 +5,10 @@
   import FullCalendar from '@fullcalendar/vue3'
   import dayGridPlugin from '@fullcalendar/daygrid'
   import interactionPlugin from '@fullcalendar/interaction'
-  
+
   export default {
     components: {
-      FullCalendar, 
+      FullCalendar,
     },
 
     props: {
@@ -44,7 +44,7 @@
           eventClick: this.handleEventClick,
           datesSet: this.handleMonthChange,
           dateClick: this.handleDateClick,
-          eventContent: this.renderEventContent, 
+          eventContent: this.renderEventContent,
         },
       }
     },
@@ -52,8 +52,8 @@
       handleEventClick(info) {
         console.log("info입니다", info)
         const id = info.event.id;
-        console.log("선택된 일정 ID:", id); 
-        this.$emit('SelectedSchedule', id); 
+        console.log("선택된 일정 ID:", id);
+        this.$emit('SelectedSchedule', id);
     },
 
       handleMonthChange({ view }) {
@@ -63,7 +63,7 @@
       },
       handleDateClick(info) {
         const date = info.dateStr;
-        this.$emit('fnScheduleList', date); 
+        this.$emit('fnScheduleList', date);
       },
     renderEventContent(eventInfo) {
       return {
@@ -75,4 +75,3 @@
     },
   }
   </script>
-  

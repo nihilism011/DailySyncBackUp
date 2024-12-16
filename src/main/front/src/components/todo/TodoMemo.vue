@@ -24,8 +24,7 @@ export default {
 
   methods: {
     async getMemo() {
-      const userId = 5;
-      const url = `todo/memo/${userId}`;
+      const url = `todo/memo`;
       try {
         const { data } = await this.$axios.get(url);
         if (data && data.id) {
@@ -43,15 +42,13 @@ export default {
       if (!this.Memo.trim()) {
         this.Memo = " ";
       }
-
-      const userId = 5;
       if (this.MemoId) {
-        const url = `todo/memo/${userId}/${this.MemoId}`;
+        const url = `todo/memo/${this.MemoId}`;
         await this.$axios.put(url, {
           contents: this.Memo,
         });
       } else {
-        const url = `todo/memo/${userId}`;
+        const url = `todo/memo`;
         await this.$axios.post(url, {
           contents: this.Memo,
         });

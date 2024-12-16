@@ -24,7 +24,7 @@ public class JwtUtil {
         long expirationTime = 1000 * 60 * 60 * 24 * 7;
         return Jwts.builder()
                 .signWith(key)
-                .subject(user.getUserName())
+                .subject(user.getEmail())
                 .claim("userId",user.getId())
                 .issuedAt(new Date()) // 발급 시간
                 .expiration(new Date(System.currentTimeMillis() + expirationTime)) // 만료 시간
@@ -45,7 +45,7 @@ public class JwtUtil {
     public Long extractUserId(String token){
         return extractClaims(token).get("userId",Long.class);
     }
-    public String extractUserName(String token){
+    public String extractEmail(String token){
         return extractClaims(token).getSubject();
     }
     public boolean isTokenExpired(String token){
