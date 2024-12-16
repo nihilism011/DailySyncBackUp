@@ -127,25 +127,23 @@ export default {
         let url;
 
         if (this.mode === 'create') {
-          url = 'todo/item';  // 새 아이템 추가 URL
+          url = 'todo/item';  
           await this.$axios.post(url, {
             title: this.newItem.title,
             day: this.newItem.day,
             isAuto: this.newItem.isAuto,
             groupId: this.groupId,  
-            userId: '5',
             itemOrder: this.newItem.itemOrder,
             status: "new",
           });
 
         } else if (this.mode === 'update') {
-          url = 'todo/item';  // 새 아이템 추가 URL
+          url = 'todo/item';  
           await this.$axios.post(url, {
             title: this.newItem.title,
             day: this.newItem.day,
             isAuto: this.newItem.isAuto,
             groupId: this.groupId,  
-            userId: '5',
             itemOrder: this.newItem.itemOrder,
             status: "new",
           });

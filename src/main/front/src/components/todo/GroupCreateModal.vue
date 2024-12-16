@@ -83,8 +83,7 @@ export default {
         let method;
         const data = {
           title: this.newItem.title,
-          description: this.newItem.description,
-          userId: 5, 
+          description: this.newItem.description, 
         };
 
         if (this.mode === 'create') {
