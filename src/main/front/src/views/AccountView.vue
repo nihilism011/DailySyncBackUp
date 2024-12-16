@@ -1,12 +1,9 @@
 <template>
   <div class="left left-container">
-    <div class="left-top">
-      <Calendar />
-    </div>
-    <div class="left-bottom"><FixedItemList /></div>
+    <Calendar />
+    <FixedItemList />
   </div>
   <div class="right right-container">
-    <div>{{ dateStore.selectedDate }}</div>
     <DateScore ref="dateScoreRef" />
     <AccountItemList />
     <button @click="viewUpdatePopup = true" class="insert-btn">가계부 항목 추가</button>

@@ -28,14 +28,21 @@
       <button @click="updateUserInfo">수정</button>
       <button @click="fetchData">원래대로</button>
     </div>
+    <button @click="visiblePasswordPopup = true">비밀번호 수정</button>
+    <PasswordChangePopup v-if="visiblePasswordPopup" @close="visiblePasswordPopup = false" />
   </div>
 </template>
 <script>
+import PasswordChangePopup from './PasswordChangePopup.vue'
 export default {
+  components: {
+    PasswordChangePopup,
+  },
   data() {
     return {
       userSettingData: {},
       userInput: {},
+      visiblePasswordPopup: false,
     }
   },
   computed: {

@@ -19,11 +19,11 @@
         <div class="bot-box">
           <div class="ip-box">
             <input
-                  type="password"
-                  id="password"
-                  v-model="loginPassword"
-                  @input="removeWhitespace('loginPassword')"
-              />
+              type="password"
+              id="password"
+              v-model="loginPassword"
+              @input="removeWhitespace('loginPassword')"
+            />
           </div>
         </div>
       </div>

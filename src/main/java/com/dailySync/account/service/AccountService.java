@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -66,21 +65,7 @@ public class AccountService {
     }
 
     public List<AccountSum> findAccountsByMonth(Long userId, int year, int month) {
-        int prevMonth = month == 1 ? 12 : month - 1;
-        int prevYear = (month == 1) ? year - 1 : year;
-
-        // 다음 달 계산
-        int nextMonth = month == 12 ? 1 : month + 1;
-        int nextYear = (month == 12) ? year + 1 : year;
-
-        List<AccountSum> result = new ArrayList<>();
-        List<AccountSum> prev = accountRepository.findByUserIdAndYearAndMonth(prevYear, prevMonth, userId);
-        List<AccountSum> current = accountRepository.findByUserIdAndYearAndMonth(year, month, userId);
-        List<AccountSum> next = accountRepository.findByUserIdAndYearAndMonth(nextYear, nextMonth, userId);
-        result.addAll(prev);
-        result.addAll(current);
-        result.addAll(next);
-        return result;
+        return  accountRepository.findByUserIdAndYearAndMonth(year, month, userId);
     }
 
     public List<AccountResDto> findFixedAccounts(Long userId, int year, int month) {

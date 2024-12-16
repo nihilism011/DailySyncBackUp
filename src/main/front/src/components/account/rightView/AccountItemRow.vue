@@ -19,7 +19,7 @@
       {{ $dayjs(account.accountDate).get('date') }}일
     </div>
   </div>
-  <UpdatePopup
+  <Modal
     v-if="viewUpdatePopup"
     :account="account"
     @close="viewUpdatePopup = false"
@@ -30,7 +30,7 @@
 <script>
 import CategoryBadge from '@/components/account/CategoryBadge.vue'
 import AmountBadge from '@/components/account/AmountBadge.vue'
-import UpdatePopup from '@/components/account/UpdatePopup.vue'
+import Modal from '@/components/account/UpdatePopup.vue'
 import { useRefreshStore } from '@/stores/refreshStore'
 import { useDateStore } from '@/stores/dateStore'
 export default {
@@ -38,7 +38,7 @@ export default {
   components: {
     CategoryBadge,
     AmountBadge,
-    UpdatePopup,
+    Modal,
   },
   props: {
     account: Object,
