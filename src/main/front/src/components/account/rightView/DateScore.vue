@@ -1,9 +1,16 @@
 <template>
   <div class="date-score-container">
-    <div>수입 :</div>
-    <div>{{ moneyFormatted.plus }}</div>
-    <div>지출 :</div>
-    <div>{{ moneyFormatted.minus }}</div>
+    <div class="list-item">
+      <div class="tit-box">
+        <div class="title">
+          {{ dateStore.selectedDate }}
+        </div>
+      </div>
+      <div>수입</div>
+      <div>{{ moneyFormatted.plus }}</div>
+      <div>지출</div>
+      <div>{{ moneyFormatted.minus }}</div>
+    </div>
   </div>
 </template>
 

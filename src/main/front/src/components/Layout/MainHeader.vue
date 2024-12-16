@@ -79,7 +79,8 @@ header {
   nav {
     display: flex;
     gap: 0 20px;
-    a, button {
+    a,
+    button {
       &.router-link-active {
         font-weight: bold;
         color: var(--color-red);

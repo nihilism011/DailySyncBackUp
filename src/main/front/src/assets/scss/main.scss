@@ -348,14 +348,17 @@ body {
   }
 }
 
-input[type='text'], input[type='password'], input[type='number'] {
+input[type='text'],
+input[type='password'],
+input[type='number'] {
   border: 1px solid var(--color-contrastyC);
   height: 34px;
   border-radius: 4px;
   padding: 0 10px;
 }
 
-input[type='checkbox'], input[type='radio'] {
+input[type='checkbox'],
+input[type='radio'] {
   display: none;
 }
 
@@ -439,7 +442,7 @@ input[type='checkbox'], input[type='radio'] {
       font-size: 24px;
       font-weight: bold;
     }
-  }  
+  }
 }
 
 .btn-default {
@@ -692,7 +695,7 @@ input {
       font-size: 0;
       width: 176px;
       height: 57px;
-      background: url($img-path + "h_logo.png") center / auto no-repeat;
+      background: url($img-path + 'h_logo.png') center / auto no-repeat;
       margin: 0 auto 30px;
     }
   }
@@ -712,7 +715,7 @@ input {
       border: 0;
       font-size: 14px;
       color: var(--color-contrastyA);
-      transition: all .2s;
+      transition: all 0.2s;
       &:hover {
         color: var(--color-contrasty2);
         font-weight: bold;
@@ -733,7 +736,7 @@ input {
   &-tit {
     font-size: 24px;
     font-weight: bold;
-    &+ .list-item {
+    & + .list-item {
       margin-top: 30px;
     }
   }
@@ -777,10 +780,10 @@ input {
         height: 22px;
         background: center / 16px no-repeat var(--base-white);
         &.edit-btn {
-          background-image: url($ico-path + "ico_edit.png");
+          background-image: url($ico-path + 'ico_edit.png');
         }
         &.remove-btn {
-          background-image: url($ico-path + "ico_remove.png");
+          background-image: url($ico-path + 'ico_remove.png');
         }
       }
     }
@@ -790,18 +793,23 @@ input {
       .add {
         color: var(--color-contrastyC);
         font-weight: bold;
-        transition: all .2s;
+        transition: all 0.2s;
         padding-left: 26px;
-        background: url($ico-path + "ico_plus.png") left center / 26px no-repeat;
+        background: url($ico-path + 'ico_plus.png') left center / 26px no-repeat;
       }
       &:hover {
         .add {
           color: var(--color-contrasty2);
-          background-image: url($ico-path + "ico_plus_active.png");
+          background-image: url($ico-path + 'ico_plus_active.png');
         }
       }
     }
-    $bgColor: (0: var(--color-red), 1: var(--color-green), 2: var(--color-blue), 3: var(--btn-skyblue));
+    $bgColor: (
+      0: var(--color-red),
+      1: var(--color-green),
+      2: var(--color-blue),
+      3: var(--btn-skyblue),
+    );
     @each $i, $color in $bgColor {
       &.active#{$i} {
         border: 1px solid $color;
