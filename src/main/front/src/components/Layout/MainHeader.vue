@@ -6,6 +6,7 @@
     <nav>
       <template v-if="isLogin">
         <RouterLink to="/">메인</RouterLink>
+        <RouterLink to="/2">메인 4x1</RouterLink>
         <RouterLink to="/todo">Todo</RouterLink>
         <RouterLink to="/schedule">일정</RouterLink>
         <RouterLink to="/account">가계부</RouterLink>
