@@ -1,76 +1,100 @@
 <template>
   <div>
-    <div v-if="isUpdate">
-      <div>
-        <label for="editTitle">제목</label>
-        <input type="text" v-model="selectedSchedule.title" id="updateTitle" />
+    <div>
+      <div v-if="isAdd || isUpdate">
+        <div>
+          <label for="title">제목</label>
+          <input 
+            type="text" 
+            v-model="selectedSchedule.title" 
+            id="title" 
+            placeholder="일정 제목" 
+            :readonly="!isAdd && !isUpdate" 
+          />
+        </div>
+        <div>
+          <label for="startTime">시작 시간</label>
+          <input 
+            type="datetime-local" 
+            v-model="selectedSchedule.startTime" 
+            id="startTime" 
+            :readonly="!isAdd && !isUpdate"
+          />
+        </div>
+        <div>
+          <label for="endTime">끝 시간</label>
+          <input 
+            type="datetime-local" 
+            v-model="selectedSchedule.endTime" 
+            id="endTime" 
+            :readonly="!isAdd && !isUpdate"
+          />
+        </div>
+        <div>
+          <label for="description">설명</label>
+          <input 
+            type="text" 
+            v-model="selectedSchedule.description" 
+            id="description" 
+            placeholder="일정 설명" 
+            :readonly="!isAdd && !isUpdate"
+          />
+        </div>
+        <button @click="isAdd ? fnSaveNewSchedule() : fnSaveUpdate()">
+          저장
+        </button>
+        <button @click="isAdd ? fnCancelAdd() : fnCancle()">취소</button>
       </div>
-      <div>
-        <label for="editStartTime">시작 시간</label>
-        <input type="datetime-local" v-model="selectedSchedule.startTime" id="updateStartTime" />
-      </div>
-      <div>
-        <label for="editEndTime">끝 시간</label>
-        <input type="datetime-local" v-model="selectedSchedule.endTime" id="updateEndTime" />
-      </div>
-      <div>
-        <label for="editDescription">설명</label>
-        <textarea v-model="selectedSchedule.description" id="updateDescription"></textarea>
-      </div>
-
-      <button @click="fnSaveUpdate">저장</button>
-      <button @click="fnCancle">취소</button>
-    </div>
-
-    <div v-else>
-      <div>
+      <div v-else>
         <div class="schedule-info">
           <div class="info-item">
-            <div class="info-value">{{ selectedSchedule.title }}</div>
+            <label for="title">제목</label>
+            <input 
+              type="text" 
+              :value="selectedSchedule.title" 
+              id="title" 
+              readonly
+            />
           </div>
           <div class="info-item">
-            <div class="info-value">{{ selectedSchedule.startTime }}</div>
+            <label for="startTime">시작 시간</label>
+            <input 
+              type="text" 
+              :value="formatDate(selectedSchedule.startTime)" 
+              id="startTime" 
+              readonly
+            />
           </div>
           <div class="info-item">
-            <div class="info-value">{{ selectedSchedule.endTime }}</div>
+            <label for="endTime">끝 시간</label>
+            <input 
+              type="text" 
+              :value="formatDate(selectedSchedule.endTime)" 
+              id="endTime" 
+              readonly
+            />
           </div>
           <div class="info-item">
-            <div class="info-value">{{ selectedSchedule.description }}</div>
+            <label for="description">설명</label>
+            <input 
+              type="text" 
+              :value="selectedSchedule.description" 
+              id="description" 
+              readonly
+            />
           </div>
-          <div v-if="!isUpdate && selectedSchedule">
+          <div>
+
             <button @click="fnUpdate">수정</button>
             <button @click="fnRemove">삭제</button>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <button v-if="!isAdd && !isUpdate" @click="fnAdd" class="add-schedule-btn">일정등록</button>
-  <div v-if="isAdd" class="add-schedule-form">
-    <div>
-      <label for="newTitle">제목</label>
-      <input type="text" v-model="newSchedule.title" id="newTitle" placeholder="일정 제목" />
-    </div>
-    <div>
-      <label for="newStartTime">일정 시작</label>
-      <input type="datetime-local" v-model="newSchedule.startTime" id="newStartTime" />
-    </div>
-    <div>
-      <label for="newEndTime">일정 마침</label>
-      <input type="datetime-local" v-model="newSchedule.endTime" id="newEndTime" />
-    </div>
-    <div>
-      <label for="newDescription">설명</label>
-      <textarea
-        v-model="newSchedule.description"
-        id="newDescription"
-        placeholder="일정 설명"
-      ></textarea>
-    </div>
-    <button @click="fnSaveNewSchedule">저장</button>
-    <button @click="fnCancelAdd">취소</button>
+    <button v-if="!isAdd && !isUpdate" @click="fnAdd" class="add-schedule-btn">일정등록</button>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -86,6 +110,16 @@ export default {
       type: String,
     },
   },
+  watch: {
+  // 부모로부터 전달받은 `dailyList`의 변화 감지
+  fullList(newValue) {
+    console.log("자식 컴포넌트에서 받은 dailyList:", newValue);
+    // fullList가 제대로 전달되지 않으면 아래와 같이 확인
+    if (!newValue || newValue.length === 0) {
+      console.log("일정 데이터가 없습니다.");
+    }
+  }
+},
   emits: ['fnScheduleList', 'fnDayList'],
   data() {
     return {
@@ -103,29 +137,39 @@ export default {
     }
   },
   methods: {
-    selectEarliestSchedule() {
-      if (this.fullList.length === 0) return
-
-      const earliestSchedule = this.fullList.reduce((earliest, current) => {
-        const currentStart = new Date(current.startTime)
-        const earliestStart = new Date(earliest.startTime)
-        return currentStart < earliestStart ? current : earliest
-      })
-
-      // 부모로 selectedSchedule을 전달
-      this.$emit('SelectedSchedule', earliestSchedule.id)
-    },
-
+    formatDate(date) {
+    return this.$dayjs(date).format('YYYY-MM-DD HH:mm');
+  },
     async SelectedSchedule(id) {
-      console.log('SelectedSchedule 메서드 호출', id)
-      const userId = 6
-      const response = await this.$axios.get(`schedule/userId/id/${userId}/${id}`)
-      if (response.status) {
-        Array.isArray(response.data) && response.data.length > 0
-        this.selectedSchedule = response.data[0]
+      console.log('SelectedSchedule 메서드 호출', id);
+        const response = await this.$axios.get(`schedule/userId/id/${id}`);
+        if (response.status) {
+         (response.data) 
+            this.selectedSchedule = response.data;  
+          } else {
+            console.log("일정이 없습니다.");
+          }
+
+    },
+    selectEarliestSchedule() {
+      if (this.fullList && Array.isArray(this.fullList) && this.fullList.length > 0) {
+    // 날짜 비교를 dayjs를 이용해 처리
+    const earliestSchedule = this.fullList.reduce((earliest, current) => {
+      const earliestStart = this.$dayjs(earliest.start);
+      const currentStart = this.$dayjs(current.start);
+
+      if (earliestStart.isValid() && currentStart.isValid()) {
+        return currentStart.isBefore(earliestStart) ? current : earliest;
       } else {
-        console.log('일정이 없습니다.')
+        console.error('Invalid date format detected:', earliest.start, current.start);
+        return earliest;
       }
+    });
+
+    this.selectedSchedule = earliestSchedule;
+  } else {
+    console.log('오늘의 일정에 오류가 있다.');
+  }
     },
     fnUpdate() {
       this.isUpdate = true
@@ -151,26 +195,26 @@ export default {
       }
     },
     async fnRemove() {
-      if (confirm('일정을 삭제하시겠습니까?')) {
-        const id = this.selectedSchedule.id
-        const response = await this.$axios.delete(`schedule/delete/${id}`)
-        if (response.status) {
-          this.$emit('fnScheduleList', this.day)
-          this.$emit('fnDayList', this.day)
+
+      if(confirm('일정을 삭제하시겠습니까?')){
+        const id = this.selectedSchedule.id;
+        const response = await this.$axios.delete(`schedule/delete/${id}`);
+        if(response){
+          this.$emit('fnScheduleList', this.day);
+          this.$emit('fnDayList', this.day);
         }
       }
-      this.selectedSchedule = null
     },
+   fnAdd() {
+      this.isAdd = true;  
+      this.selectedSchedule  = { title: '', startTime: '', endTime: '', description: '' }; 
 
-    fnAdd() {
-      this.isAdd = true
     },
-
     fnCancelAdd() {
-      this.isAdd = false
-      this.newSchedule = { title: '', startTime: '', endTime: '', description: '' }
-    },
 
+      this.isAdd = false;  
+
+    },
     async fnSaveNewSchedule() {
       if (new Date(this.newSchedule.startTime) > new Date(this.newSchedule.endTime)) {
         alert('마치는 시간이 시작 시간보다 앞설 수 없습니다.')
@@ -188,7 +232,13 @@ export default {
     },
   },
   mounted() {
-    this.day = this.$dayjs().format('YYYY-MM-DDTHH:mm:ss')
+    this.day = this.$dayjs().format('YYYY-MM-DDTHH:mm:ss');
+    if (this.fullList && this.fullList.length > 0) {
+    this.selectEarliestSchedule();
+  } else {
+    console.log('일정 데이터가 비어 있습니다.mount');
+  }
+    
   },
 }
 </script>
@@ -208,7 +258,6 @@ export default {
 .info-item {
   display: flex;
   justify-content: space-between;
-  border: 1px solid black;
   padding: 10px;
 }
 
@@ -218,33 +267,39 @@ export default {
   padding-right: 10px;
 }
 
-.button-container {
-  display: flex;
-  justify-content: flex-end;
-  gap: 20px; /* 버튼 사이 간격을 20px로 설정 */
-}
-
 button {
   padding: 8px 12px;
-  background-color: white;
+  background-color: transparent;  
   color: black;
-  border: 1px solid black;
+  border: 1px solid black;  
   border-radius: 5px;
   cursor: pointer;
+  outline: none; 
 }
 
 button:hover {
-  background-color: #f0f0f0;
-  border-color: #333;
+  background-color: #f0f0f0;  
 }
 
 .add-schedule-btn {
   margin-top: 20px;
   padding: 8px 12px;
-  background-color: white;
+  background-color: transparent; 
   color: black;
-  border: 1px solid black;
+  border: 1px solid black;  
   border-radius: 5px;
   cursor: pointer;
+  outline: none; 
 }
+
+input, textarea {
+  padding: 8px 12px;
+  background-color: transparent;  
+  color: black;
+  border: 1px solid black;  
+  border-radius: 5px;
+  width: 100%;
+  outline: none; 
+}
+
 </style>
