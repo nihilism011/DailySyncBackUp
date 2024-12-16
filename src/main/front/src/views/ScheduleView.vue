@@ -1,7 +1,6 @@
 <template>
   <div class="left left-container">
-    <div class="left-top">
-    </div>
+    <div class="left-top"></div>
     <div class="left-bottom">
       <ScheduleList 
         :fullList="dailyList" 
@@ -33,14 +32,14 @@ export default {
   },
   data() {
     return {
-      day : '',
+      day: '',
       dailyList: [],
       fullList: [],
-      selectedDay: this.$dayjs().format('YYYY-MM-DD'), 
+      selectedDay: this.$dayjs().format('YYYY-MM-DD'),
       selectedSchedule: '',
       popupState: false,
       searchResults: [],
-    };
+    }
   },
 
   methods: {
@@ -108,11 +107,9 @@ export default {
   },
   mounted() {
     this.day = this.$dayjs().format('YYYY-MM-DD')
-    this.fnScheduleList(this.day);
+    this.fnScheduleList(this.day)
   },
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

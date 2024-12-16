@@ -1,62 +1,62 @@
 export const iconCategory = {
   bread: {
     name: '빵',
-    ename: 'bread'
+    ename: 'bread',
   },
   burger: {
     name: '햄버거',
-    ename: 'burger'
+    ename: 'burger',
   },
   cake: {
     name: '케이크',
-    ename: 'cake'
+    ename: 'cake',
   },
   chicken: {
     name: '치킨',
-    ename: 'chicken'
+    ename: 'chicken',
   },
   egg: {
     name: '계란',
-    ename: 'egg'
+    ename: 'egg',
   },
   fish: {
     name: '생선',
-    ename: 'fish'
+    ename: 'fish',
   },
   fruit: {
     name: '과일',
-    ename: 'fruit'
+    ename: 'fruit',
   },
   icecream: {
     name: '아이스크림',
-    ename: 'icecream'
+    ename: 'icecream',
   },
   milk: {
     name: '우유',
-    ename: 'milk'
+    ename: 'milk',
   },
   noodle: {
     name: '면',
-    ename: 'noodle'
+    ename: 'noodle',
   },
   pizza: {
     name: '피자',
-    ename: 'pizza'
+    ename: 'pizza',
   },
   rice: {
     name: '밥',
-    ename: 'rice'
+    ename: 'rice',
   },
   sausage: {
     name: '소세지',
-    ename: 'sausage'
+    ename: 'sausage',
   },
   snack: {
     name: '과자',
-    ename: 'snack'
+    ename: 'snack',
   },
   steak: {
     name: '스테이크',
-    ename: 'steak'
+    ename: 'steak',
   },
 }

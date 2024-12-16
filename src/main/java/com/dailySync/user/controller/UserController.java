@@ -61,15 +61,20 @@ public class UserController {
         Long userId = commonService.getUserId();
         return ApiResponse.success(userService.updateUser(userId, userInfo));
     }
-
+    /**{@code 비밀번호 확인}*/
+    @Tag(name ="USER", description = "유저 비밀번호 확인")
+    @PostMapping("user/password/check")
+    public ResponseEntity<ApiResponse<Boolean>> checkPassword(@RequestBody LoginRequest request)throws Exception{
+        Long userId = commonService.getUserId();
+        return ApiResponse.success(userService.checkPassword(userId,request));
+    }
     /**
      * {@code 유저 비밀번호 수정}
      */
     @Tag (name = "USER", description = "유저 비밀번호 수정")
-    @Operation (summary = "아직 웹에는 구현 안함")
     @PatchMapping ("user/password")
     public ResponseEntity<ApiResponse<Boolean>> updateUserPassword(
-            @RequestBody UserReqDto reqDto) throws Exception {
+            @RequestBody LoginRequest reqDto) throws Exception {
         Long userId = commonService.getUserId();
         return ApiResponse.success(userService.updateUserPassword(userId, reqDto));
     }

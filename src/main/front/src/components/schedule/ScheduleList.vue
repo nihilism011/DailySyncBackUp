@@ -84,6 +84,7 @@
             />
           </div>
           <div>
+
             <button @click="fnUpdate">수정</button>
             <button @click="fnRemove">삭제</button>
           </div>
@@ -107,7 +108,7 @@ export default {
     },
     day: {
       type: String,
-    }
+    },
   },
   watch: {
   // 부모로부터 전달받은 `dailyList`의 변화 감지
@@ -122,18 +123,18 @@ export default {
   emits: ['fnScheduleList', 'fnDayList'],
   data() {
     return {
-      day: '',  
-      year: new Date().getFullYear(), 
-      month: new Date().getMonth() + 1,  
-      isUpdate: false, 
+      day: '',
+      year: new Date().getFullYear(),
+      month: new Date().getMonth() + 1,
+      isUpdate: false,
       isAdd: false,
-      newSchedule: {     
+      newSchedule: {
         title: '',
         startTime: '',
         endTime: '',
-        description: ''
+        description: '',
       },
-    };
+    }
   },
   methods: {
     formatDate(date) {
@@ -148,6 +149,7 @@ export default {
           } else {
             console.log("일정이 없습니다.");
           }
+
     },
     selectEarliestSchedule() {
       if (this.fullList && Array.isArray(this.fullList) && this.fullList.length > 0) {
@@ -170,29 +172,30 @@ export default {
   }
     },
     fnUpdate() {
-      this.isUpdate = true; 
+      this.isUpdate = true
     },
     fnCancle() {
-      this.isUpdate = false; 
+      this.isUpdate = false
     },
     async fnSaveUpdate() {
       if (new Date(this.newSchedule.startTime) > new Date(this.newSchedule.endTime)) {
-        alert('마치는 시간이 시작 시간보다 앞설 수 없습니다.');
-        return;  
+        alert('마치는 시간이 시작 시간보다 앞설 수 없습니다.')
+        return
       }
-      const updatedSchedule = this.selectedSchedule;
-      const id = updatedSchedule.id;
-      const response = await this.$axios.patch(`schedule/update/${id}`, updatedSchedule);  
+      const updatedSchedule = this.selectedSchedule
+      const id = updatedSchedule.id
+      const response = await this.$axios.patch(`schedule/update/${id}`, updatedSchedule)
       if (response.status) {
-        alert('수정 되었습니다.');
-        this.isUpdate = false;   
-        this.$emit('fnScheduleList', this.day);
-        this.$emit('fnDayList', this.day);
+        alert('수정 되었습니다.')
+        this.isUpdate = false
+        this.$emit('fnScheduleList', this.day)
+        this.$emit('fnDayList', this.day)
       } else {
         alert(response.message)
       }
     },
     async fnRemove() {
+
       if(confirm('일정을 삭제하시겠습니까?')){
         const id = this.selectedSchedule.id;
         const response = await this.$axios.delete(`schedule/delete/${id}`);
@@ -205,24 +208,26 @@ export default {
    fnAdd() {
       this.isAdd = true;  
       this.selectedSchedule  = { title: '', startTime: '', endTime: '', description: '' }; 
+
     },
     fnCancelAdd() {
+
       this.isAdd = false;  
-      
+
     },
     async fnSaveNewSchedule() {
-       if (new Date(this.newSchedule.startTime) > new Date(this.newSchedule.endTime)) {
-        alert('마치는 시간이 시작 시간보다 앞설 수 없습니다.');
-        return;  
+      if (new Date(this.newSchedule.startTime) > new Date(this.newSchedule.endTime)) {
+        alert('마치는 시간이 시작 시간보다 앞설 수 없습니다.')
+        return
       }
-      const response = await this.$axios.post('schedule/add', this.newSchedule);
+      const response = await this.$axios.post('schedule/add', this.newSchedule)
       if (response.status) {
-        alert('일정이 등록되었습니다.');
-        this.isAdd = false;
-        this.$emit('fnScheduleList', this.day);
-        this.$emit('fnDayList', this.day);
+        alert('일정이 등록되었습니다.')
+        this.isAdd = false
+        this.$emit('fnScheduleList', this.day)
+        this.$emit('fnDayList', this.day)
       } else {
-        alert(response.message);
+        alert(response.message)
       }
     },
   },
@@ -235,19 +240,19 @@ export default {
   }
     
   },
-};
+}
 </script>
 
 <style scoped>
 .schedule-info {
   display: grid;
-  grid-template-columns: 1fr;  
+  grid-template-columns: 1fr;
   gap: 15px;
   max-width: 600px;
   margin: 20px auto;
   padding: 20px;
   border-radius: 5px;
-  background-color: white; 
+  background-color: white;
 }
 
 .info-item {

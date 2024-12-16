@@ -32,7 +32,7 @@ export default {
     return {
       calendarOptions: {
         locale: 'ko',
-        height: 560,
+        height: 540,
         showNonCurrentDates: false,
         plugins: [dayGridPlugin, interactionPlugin],
         initialView: 'dayGridMonth',

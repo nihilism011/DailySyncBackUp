@@ -87,7 +87,6 @@ export default {
       this.$emit('close');
     },
     async saveItem() {
-      const userId = 5; 
       if (!this.newItem.title) {
         alert('제목을 입력하세요');
         return;
@@ -96,7 +95,7 @@ export default {
       try {
         let url;
         if (this.mode === 'create') {
-          url = `todo/list/change/${userId}`;  // 새 아이템 추가 URL
+          url = `todo/list/change`;  // 새 아이템 추가 URL
           await this.$axios.post(url, {
             title : this.newItem.title,
           });

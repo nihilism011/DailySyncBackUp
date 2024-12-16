@@ -2,22 +2,16 @@
   <div>{{ $dayjs(dateStore.selectedDate).format('YYYY-MM') }} 고정 지출 목록</div>
   <hr />
   <div class="list-container">
-    <AccountItemRow
-      v-for="(account, index) in list"
-      :key="index"
-      :account="account"
-      size="small"
-      :fixed="true"
-    />
+    <AccountItem v-for="(account, index) in list" :key="index" :account="account" />
   </div>
 </template>
 <script>
 import { useDateStore } from '@/stores/dateStore'
 import { useRefreshStore } from '@/stores/refreshStore'
-import AccountItemRow from '../rightView/AccountItemRow.vue'
+import AccountItem from '../AccountItem.vue'
 export default {
   components: {
-    AccountItemRow,
+    AccountItem,
   },
   setup() {
     const dateStore = useDateStore()

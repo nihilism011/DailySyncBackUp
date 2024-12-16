@@ -1,7 +1,5 @@
 package com.dailySync.todo.service;//package com.dailySync.todo.service;
 
-
-import com.dailySync.meal.repository.MealRepository;
 import com.dailySync.todo.dto.*;
 import com.dailySync.todo.entities.TodoGroup;
 import com.dailySync.todo.entities.TodoItem;
@@ -86,103 +84,6 @@ public class TodoService {
                 .collect(Collectors.toList());
     }
 
-
-    public void TodoLoginAutoListCreate(Long userId) {
-        // 1. 해당 유저를 조회
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-
-        // 2. 유저의 마지막 로그인 날짜를 현재 로그인 날짜로 업데이트
-        LocalDate lastLogin = user.getLastLogin() != null ? user.getLastLogin().toLocalDate() : null;
-        LocalDate today = LocalDate.now();
-
-        // 3. 만약 마지막 로그인 날짜와 오늘 날짜가 다르면, TodoList 생성
-        if (lastLogin == null || !lastLogin.isEqual(today)) {
-            // 날짜가 다르면 TodoList를 자동 생성
-            createTodoListsForUser(user, today);
-
-            // 4. 마지막 로그인 날짜를 오늘 날짜로 업데이트
-            user.setLastLogin(LocalDateTime.now());
-            userRepository.save(user);
-
-            updateOldTodoLists(userId);
-        }
-    }
-
-    private void updateOldTodoLists(Long userId) {
-
-        List<TodoList> todoLists = todoListRepository.findByUserIdAndTodoItemIsNullAndCheckedTimeIsNotNull(userId);
-
-        for (TodoList todoList : todoLists) {
-            todoList.setStatus("old");
-            todoList.setDate(todoList.getCheckedTime().toLocalDate());
-
-            todoListRepository.save(todoList);
-        }
-    }
-
-
-
-    private void createTodoListsForUser(User user, LocalDate today) {
-
-        List<TodoItem> todoItems = todoItemRepository.findByUserIdAndStatusAndIsAuto(user.getId(), "new", true);
-
-        for (TodoItem todoItem : todoItems) {
-            for (String day : todoItem.getDay()) {
-                LocalDate targetDate = getNextDateForDay(today, day);
-                if (targetDate != null && targetDate.isEqual(today)) {  // 오늘 날짜와 매칭되는 경우만 생성
-                    if (!todoListRepository.existsByUserIdAndDateAndTodoItemId(user.getId(), targetDate, todoItem.getId())) {
-
-                        TodoList todoList = TodoList.builder()
-                                .user(user)
-                                .todoItem(todoItem)
-                                .date(targetDate)
-                                .title(todoItem.getTitle())  // 제목은 TodoItem에서 가져옴
-                                .listOrder(todoItem.getItemOrder())  // 우선순위(기본값)
-                                .status("new")
-                                .build();
-
-                        todoListRepository.save(todoList);
-                    }
-                }
-            }
-        }
-    }
-
-    // 주어진 요일에 맞는 날짜를 구하는 메서드
-    private LocalDate getNextDateForDay(LocalDate today, String dayOfWeek) {
-        // 요일을 숫자(0 = 일요일, 1 = 월요일, ..., 6 = 토요일)로 변환
-        int targetDay = getDayOfWeek(dayOfWeek);
-
-        if (targetDay == -1) {
-            return null;  // 잘못된 요일이면 null 반환
-        }
-
-        // 오늘의 요일
-        int todayDay = today.getDayOfWeek().getValue() % 7;  // 0 = 월요일, 6 = 일요일
-
-        // 목표 요일까지 며칠 남았는지 계산
-        int daysUntilTarget = (targetDay - todayDay + 7) % 7;
-
-        // 해당 날짜를 반환
-        return today.plusDays(daysUntilTarget);
-    }
-
-    // 요일 문자열을 숫자로 변환
-    private int getDayOfWeek(String day) {
-        switch (day) {
-            case "일": return 0;
-            case "월": return 1;
-            case "화": return 2;
-            case "수": return 3;
-            case "목": return 4;
-            case "금": return 5;
-            case "토": return 6;
-            default: return -1;
-        }
-    }
-
-
-
     //userId에 해당하는 todoGroup을 조회 (5)
     public List<TodoGroupResDto> getTodoGroup(Long userId) {
         List<TodoGroup> todoGroups = todoGroupRepository.findByUserIdAndStatusOrderByCreatedAtAsc(userId, "new");
@@ -259,18 +160,18 @@ public class TodoService {
 
     }
     //todoItem을 생성 (7)
-    public Boolean createTodoItem(TodoItemReqDto reqDto) {
+    public Boolean createTodoItem(Long userId, TodoItemReqDto reqDto) {
 
         if (reqDto.getGroupId() == null) {
             // userId 또는 groupId가 null인 경우 예외를 던짐
             throw new IllegalArgumentException("그룹아이디들 제대로 안넘어옴 ");
         }
-        if (reqDto.getUserId() == null ) {
+        if (userId == null ) {
             // userId 또는 groupId가 null인 경우 예외를 던짐
             throw new IllegalArgumentException("유ㅜ저아이디들 제대로 안넘어옴 ");
         }
 
-        User user = userRepository.findById(reqDto.getUserId()).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
         TodoGroup todoGroup = todoGroupRepository.findById(reqDto.getGroupId()).orElse(null);
 
         TodoItem todoItem = TodoItem.builder()
@@ -287,8 +188,8 @@ public class TodoService {
         return true;
     }
     //todoGroup을 생성 (6)
-    public Boolean createTodoGroup(TodoGroupReqDto reqDto) {
-        User user = userRepository.findById(reqDto.getUserId()).orElse(null);
+    public Boolean createTodoGroup(Long userId, TodoGroupReqDto reqDto) {
+        User user = userRepository.findById(userId).orElse(null);
 
         TodoGroup todoGroup = TodoGroup.builder()
                 .user(user)
@@ -378,21 +279,21 @@ public class TodoService {
     }
 
 
-    public TodoItemResDto updateItem(Long id, TodoItemReqDto reqDto) {
+    public TodoItemResDto updateItem(Long userId, Long id, TodoItemReqDto reqDto) {
         TodoItem todoItem = todoItemRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("아이템을 찾을 수 없엉"));
-        User user = userRepository.findById(reqDto.getUserId()).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
         TodoGroup todoGroup = todoGroupRepository.findById(reqDto.getGroupId()).orElse(null);
 
         todoItem.setStatus("old");
         todoItemRepository.save(todoItem);
 
         TodoItem newTodoItem = new TodoItem();
-        newTodoItem.setTitle(reqDto.getTitle());
-        newTodoItem.setDay(reqDto.getDay());
-        newTodoItem.setItemOrder(reqDto.getItemOrder());
+        newTodoItem.setTitle(reqDto.getTitle()); //
+        newTodoItem.setDay(reqDto.getDay()); //
+        newTodoItem.setItemOrder(reqDto.getItemOrder()); //
         newTodoItem.setStatus("new");
-        newTodoItem.setIsAuto(reqDto.getIsAuto());
+        newTodoItem.setIsAuto(reqDto.getIsAuto());  //
         newTodoItem.setUser(user);
         newTodoItem.setTodoGroup(todoGroup);
 
@@ -402,11 +303,11 @@ public class TodoService {
     }
 
     // 그룹 정보 변경
-    public TodoGroupResDto updateGroup(Long id, TodoGroupReqDto reqDto) {
+    public TodoGroupResDto updateGroup(Long userId, Long id, TodoGroupReqDto reqDto) {
         TodoGroup todoGroup = todoGroupRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("그룹을 찾을 수 없엉"));
 
-        User user = userRepository.findById(reqDto.getUserId())
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없성"));
 
         todoGroup.setTitle(reqDto.getTitle());
@@ -418,20 +319,111 @@ public class TodoService {
         return TodoGroupResDto.oft(todoGroup);
     }
 
-    public TodoMemoResDto getTodoUpdateMemo(Long userId, Long id, TodoMemoReqDto reqDto) {
+    public TodoMemoResDto getTodoUpdateMemo(Long id, TodoMemoReqDto reqDto) {
         TodoMemo todomemo = todoMemoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("메모을 찾을 수 없엉"));
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없성"));
-
         todomemo.setContents(reqDto.getContents());
-
         todoMemoRepository.save(todomemo);
-
         return TodoMemoResDto.of(todomemo);
     }
 
+    // 리스트 자동생성 -----------(아래)
+    public void TodoLoginAutoListCreate(Long userId) {
+        // 1. 해당 유저를 조회
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
+        // 2. 유저의 마지막 로그인 날짜를 현재 로그인 날짜로 업데이트
+        LocalDate lastLogin = user.getLastLogin() != null ? user.getLastLogin().toLocalDate() : null;
+        LocalDate today = LocalDate.now();
+
+        // 3. 만약 마지막 로그인 날짜와 오늘 날짜가 다르면, TodoList 생성
+        if (lastLogin == null || !lastLogin.isEqual(today)) {
+            // 날짜가 다르면 TodoList를 자동 생성
+            createTodoListsForUser(user, today);
+
+            // 4. 마지막 로그인 날짜를 오늘 날짜로 업데이트
+            user.setLastLogin(LocalDateTime.now());
+            userRepository.save(user);
+
+            updateOldTodoLists(userId);
+        }
+    }
+
+    private void updateOldTodoLists(Long userId) {
+
+        List<TodoList> todoLists = todoListRepository.findByUserIdAndTodoItemIsNullAndCheckedTimeIsNotNull(userId);
+
+        for (TodoList todoList : todoLists) {
+            todoList.setStatus("old");
+            todoList.setDate(todoList.getCheckedTime().toLocalDate());
+
+            todoListRepository.save(todoList);
+        }
+    }
+
+
+
+    private void createTodoListsForUser(User user, LocalDate today) {
+
+        List<TodoItem> todoItems = todoItemRepository.findByUserIdAndStatusAndIsAuto(user.getId(), "new", true);
+
+        for (TodoItem todoItem : todoItems) {
+            for (String day : todoItem.getDay()) {
+                LocalDate targetDate = getNextDateForDay(today, day);
+                if (targetDate != null && targetDate.isEqual(today)) {  // 오늘 날짜와 매칭되는 경우만 생성
+                    if (!todoListRepository.existsByUserIdAndDateAndTodoItemId(user.getId(), targetDate, todoItem.getId())) {
+
+                        TodoList todoList = TodoList.builder()
+                                .user(user)
+                                .todoItem(todoItem)
+                                .date(targetDate)
+                                .title(todoItem.getTitle())  // 제목은 TodoItem에서 가져옴
+                                .listOrder(todoItem.getItemOrder())  // 우선순위(기본값)
+                                .status("new")
+                                .build();
+
+                        todoListRepository.save(todoList);
+                    }
+                }
+            }
+        }
+    }
+    // 리스트 자동생성 -----------(위)
+
+
+
+    // 주어진 요일에 맞는 날짜를 구하는 메서드
+    private LocalDate getNextDateForDay(LocalDate today, String dayOfWeek) {
+        // 요일을 숫자(0 = 일요일, 1 = 월요일, ..., 6 = 토요일)로 변환
+        int targetDay = getDayOfWeek(dayOfWeek);
+
+        if (targetDay == -1) {
+            return null;  // 잘못된 요일이면 null 반환
+        }
+
+        // 오늘의 요일
+        int todayDay = today.getDayOfWeek().getValue() % 7;  // 0 = 월요일, 6 = 일요일
+
+        // 목표 요일까지 며칠 남았는지 계산
+        int daysUntilTarget = (targetDay - todayDay + 7) % 7;
+
+        // 해당 날짜를 반환
+        return today.plusDays(daysUntilTarget);
+    }
+
+    // 요일 문자열을 숫자로 변환
+    private int getDayOfWeek(String day) {
+        switch (day) {
+            case "일": return 0;
+            case "월": return 1;
+            case "화": return 2;
+            case "수": return 3;
+            case "목": return 4;
+            case "금": return 5;
+            case "토": return 6;
+            default: return -1;
+        }
+    }
 
 }

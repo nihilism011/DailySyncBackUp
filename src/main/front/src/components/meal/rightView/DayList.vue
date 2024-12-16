@@ -89,6 +89,7 @@ export default {
     padding: 20px;
     border-radius: 10px;
     overflow-y: scroll;
+    max-height: 462px;
     box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.3);
   }
   &-box {
@@ -120,7 +121,7 @@ export default {
       width: 100%;
       height: 100%;
       background: no-repeat center;
-      background: center / 40px no-repeat;
+      background: url('@/assets/images/ico/icon_default.png') center / 40px no-repeat;
       $iconClass: (
         bread,
         burger,

@@ -3,6 +3,20 @@
   <div class="nutrient-wrap">
     <div class="nutrient-tit-wrap">
       <p class="nutrient-tit">오늘 섭취 영양소(총합)</p>
+      <p class="nutrient-kcal" :class="aci > 0 ? 'minus' : 'plus'">
+        <template v-if="bmrState">키와 몸무게를 설정해주세요</template>
+        <template v-else>
+          <span class="info">
+            <template v-if="iPbmr == null"><b>권장</b>: {{ bmr }}kcal</template>
+            <template v-else
+              ><b>입력</b>: {{ iPbmr }}kcal<span>(<b>권장</b>: {{ bmr }}kcal)</span></template
+            >
+          </span>
+          <span class="aci"
+            >{{ aci > 0 ? '섭취 가능' : '초과 섭취' }}: {{ Math.abs(aci) }} Kcal</span
+          >
+        </template>
+      </p>
     </div>
     <div class="nutrient-box">
       <span class="nutrient-item" v-for="(val, key) in Object(todayNutrient)">
@@ -18,8 +32,17 @@ export default {
       type: Object,
     },
   },
+  watch: {
+    todayNutrient() {
+      this.fnUserInfo()
+    },
+  },
   data() {
     return {
+      bmrState: false,
+      bmr: 0,
+      iPbmr: '',
+      aci: 0,
       nutrientName: {
         kcalories: ['칼로리', 'kcal'],
         sodium: ['나트륨', 'mg'],
@@ -31,11 +54,26 @@ export default {
     }
   },
   methods: {
+    async fnUserInfo() {
+      const userInfo = await this.$axios.get('user/info')
+      this.fnBmr(userInfo.data)
+    },
+    fnBmr(data) {
+      if (data.height == null || data.weight == null) {
+        this.bmrState = true
+        return
+      }
+      this.bmr = 10 * data.weight + 6.25 * data.height + (data.gender === 'M' ? -5 : -161)
+      this.iPbmr = data.recommendCal
+      this.aci = (this.iPbmr ?? this.bmr) - this.todayNutrient.kcalories
+    },
     nameChange(name, idx) {
       return this.nutrientName[name][idx]
     },
   },
-  mounted() {},
+  mounted() {
+    this.fnUserInfo()
+  },
 }
 </script>
 <style lang="scss" scoped>
@@ -69,6 +107,34 @@ export default {
       margin-bottom: 20px;
       padding-bottom: 12px;
       border-bottom: 1px solid var(--color-contrastyC);
+    }
+  }
+  &-kcal {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 5px;
+    .info {
+      b {
+        font-weight: bold;
+      }
+      span {
+        color: var(--color-contrastyA);
+        margin-left: 6px;
+        font-size: 12px;
+      }
+    }
+    .aci {
+      font-weight: bold;
+    }
+    &.minus {
+      .aci {
+        color: var(--color-blue);
+      }
+    }
+    &.plus {
+      .aci {
+        color: var(--color-red);
+      }
     }
   }
 }

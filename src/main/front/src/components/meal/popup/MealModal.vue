@@ -24,7 +24,7 @@
                   v-if="iconSelected"
                   :icon="nutrient.icon"
                   :iconList="iconList"
-                  @iconSelected="valueChecge"
+                  @iconSelected="valueChange"
                 />
               </div>
             </div>
@@ -249,6 +249,11 @@ export default {
   },
   methods: {
     async fnSubmit() {
+      let check = this.valuCheck()
+      if (!check[1]) {
+        alert(check[0])
+        return
+      }
       const { id, ...param } = this.nutrient
       const submit = await this.$axios.post(`meal/add`, [param])
       if (submit.status) {
@@ -274,7 +279,24 @@ export default {
         alert(edit.message)
       }
     },
-    valueChecge(value) {
+    valuCheck() {
+      let message, boolType
+      const messaeIp = ['카테고리를 선택해주세요', '제목을 입력해주세요', '칼로리를 입력해주세요']
+      if (this.nutrient.category == '') {
+        message = messaeIp[0]
+        boolType = false
+      } else if (this.nutrient.foodName == '') {
+        message = messaeIp[1]
+        boolType = false
+      } else if (this.nutrient.kcalories == '') {
+        message = messaeIp[2]
+        boolType = false
+      } else {
+        boolType = true
+      }
+      return [message, boolType]
+    },
+    valueChange(value) {
       this.nutrient.icon = value
       this.iconSelected = false
     },
