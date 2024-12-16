@@ -30,7 +30,7 @@
         </div>
 
         <div class="dashboard-item diet">
-          <h3>식단</h3>
+          <MealDashboard :selectedDate="selectedDate" />
         </div>
 
         <div class="dashboard-item finance">
@@ -43,10 +43,12 @@
 </template>
 
 <script>
+import MealDashboard from '@/components/dashboard/MealDashboard.vue';
 import TodoDashboard from '@/components/todo/TodoDashboard.vue';
 export default {
   components: {
     TodoDashboard,
+    MealDashboard
   },
   data() {
     return {
