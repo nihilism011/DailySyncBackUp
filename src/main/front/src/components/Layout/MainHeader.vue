@@ -5,17 +5,24 @@
     /></RouterLink>
     <nav>
       <template v-if="isLogin">
-        <RouterLink to="/">메인</RouterLink>
-        <RouterLink to="/todo">Todo</RouterLink>
-        <RouterLink to="/schedule">일정</RouterLink>
-        <RouterLink to="/account">가계부</RouterLink>
-        <RouterLink to="/meal">식단</RouterLink>
-        <button @click="handleLogout">로그아웃</button>
-        <button><RouterLink to="/userInfo">회원정보</RouterLink></button>
+        <div class="gnb">
+          <RouterLink to="/">메인</RouterLink>
+          <RouterLink to="/todo">Todo</RouterLink>
+          <RouterLink to="/schedule">일정</RouterLink>
+          <RouterLink to="/account">가계부</RouterLink>
+          <RouterLink to="/meal">식단</RouterLink>
+        </div>
+        <div class="user">
+          <button @click="fade = !fade" title="유저정보" class="profile">유저정보</button>
+          <div class="fade" v-if="fade">
+            <button @click="handleLogout">로그아웃</button>
+            <RouterLink to="/userInfo" @click="fade = !fade">회원정보</RouterLink>
+          </div>
+        </div>
       </template>
       <template v-if="!isLogin">
         <RouterLink to="/login">User</RouterLink>
-        <RouterLink to="/signup">회원가입?</RouterLink>
+        <RouterLink to="/signup">회원가입</RouterLink>
       </template>
     </nav>
   </header>
@@ -34,10 +41,12 @@ export default {
   data() {
     return {
       isLogin: false,
+      fade: false,
     }
   },
   watch: {
     'refreshStore.refreshState': 'checkLoginStatus',
+    $route: 'fadeClose',
   },
   methods: {
     handleLogout() {
@@ -52,6 +61,9 @@ export default {
       const token = localStorage.getItem('jwtToken') || sessionStorage.getItem('jwtToken')
       this.isLogin = !!token
     },
+    fadeClose() {
+      this.fade = false
+    },
   },
   mounted() {
     this.checkLoginStatus()
@@ -62,7 +74,7 @@ export default {
 header {
   position: fixed;
   height: 90px;
-  padding: 10px 20px;
+  padding: 10px 30px;
   display: flex;
   align-items: center;
   gap: 40px;
@@ -77,11 +89,57 @@ header {
   }
   nav {
     display: flex;
-    gap: 0 20px;
-    a, button {
+    flex-grow: 1;
+    justify-content: space-between;
+    align-items: center;
+    a,
+    button {
       &.router-link-active {
         font-weight: bold;
         color: var(--color-red);
+      }
+    }
+    .gnb {
+      display: flex;
+      gap: 0 20px;
+    }
+    .user {
+      position: relative;
+      .profile {
+        width: 40px;
+        height: 40px;
+        background: url('@/assets/images/nav_profile.png');
+        font-size: 0;
+        border: 0;
+      }
+      .fade {
+        position: absolute;
+        width: max-content;
+        top: 100%;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        background-color: var(--base-white);
+        padding: 10px 15px;
+        box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        button,
+        a {
+          border: 0;
+          font-size: 14px;
+          font-weight: bold;
+          padding: 5px;
+          transition: all 0.2s;
+          color: var(--color-contrasty2) !important;
+          + button,
+          + a {
+            border-top: 1px solid var(--color-contrastyC);
+            padding-top: 5px;
+          }
+          &:hover {
+            color: var(--color-blue) !important;
+          }
+        }
       }
     }
   }
