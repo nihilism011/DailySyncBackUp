@@ -41,7 +41,7 @@ export default {
     };
   },
   methods: {
-    async test() {
+    async todoauto() {
       const url = `todo/autoTest`;
       await this.$axios.post(url);
     },
@@ -49,9 +49,8 @@ export default {
       console.log("가져오는 날짜" + inputDay);
       let year = inputDay.split('-')[0];
       let month = inputDay.split('-')[1];
-      const userId = 5; 
       console.log("year" + year + "month" + month);
-      const daily = await this.$axios.get(`todo/list/${userId}/${year}/${month}`);
+      const daily = await this.$axios.get(`todo/list/${year}/${month}`);
       if (daily.status) {
         this.dailyList = daily.data.todoCounts.map((item) => ({
           completionRate: Math.round(item.completionRate), 
@@ -65,7 +64,8 @@ export default {
     },
   },
   mounted() {
-    this.test();
+    this.todoauto();
+    this.fnDayList();
   },
 };
 </script>

@@ -60,8 +60,7 @@
       },
       async fnMySelectList() {
         if (!this.selectedDate) return; 
-        const userId = 5; 
-        const url = `todo/list/${userId}/${this.selectedDate}`;
+        const url = `todo/list/${this.selectedDate}`;
         try {
           const { data } = await this.$axios.get(url); 
           console.log(data); 
