@@ -51,7 +51,7 @@
             <label for="title">제목</label>
             <input
               type="text"
-              :value="selectedSchedule ? selectedSchedule.title : ''"
+              :value="newSchedule ? newSchedule.title : ''"
               id="title"
               readonly
             />
@@ -60,7 +60,7 @@
             <label for="startTime">시작 시간</label>
             <input
               type="text"
-              :value="selectedSchedule ? formatDate(selectedSchedule.startTime):''"
+              :value="newSchedule ? formatDate(newSchedule.startTime):''"
               id="startTime"
               readonly
             />
@@ -69,7 +69,7 @@
             <label for="endTime">끝 시간</label>
             <input
               type="text"
-              :value="selectedSchedule ? formatDate(selectedSchedule.endTime):''"
+              :value="newSchedule ? formatDate(newSchedule.endTime):''"
               id="endTime"
               readonly
             />
@@ -78,7 +78,7 @@
             <label for="description">설명</label>
             <input
               type="text"
-              :value="selectedSchedule ? selectedSchedule.description:''"
+              :value="newSchedule ? newSchedule.description:''"
               id="description"
               readonly
             />
@@ -105,29 +105,30 @@ export default {
     },
     selectedSchedule: {
       type: Object,
-      default: {
-        title: '',
-        startTime: '',
-        endTime: '',
-        description: '',
-      },
+      default: () => ({
+      title: '',
+      startTime: '',
+      endTime: '',
+      description: '',
+    }), 
     },
-    day: {
-      type: String,
-    },
+    
   },
   emits: ['fnScheduleList', 'fnDayList'],
   data() {
     return {
-      day: '',
+      newSchedule : {...this.selectedSchedule},
       year: new Date().getFullYear(),
       month: new Date().getMonth() + 1,
       isUpdate: false,
       isAdd: false,
-      newSchedule: {
-      ...this.selectedSchedule
-      },
+     
     }
+  },
+  watch : {
+    selectedSchedule(newval) {
+      this.newSchedule = {...newval};
+      },
   },
   methods: {
     formatDate(date) {
@@ -137,7 +138,7 @@ export default {
         const response = await this.$axios.get(`schedule/userId/id/${id}`);
         if (response.status) {
          (response.data)
-            this.selectedSchedule = response.data;
+            this.newSchedule = response.data;
           } else {
             console.log("일정이 없습니다.");
           }
@@ -154,11 +155,12 @@ export default {
             return earliest;
           }
         });
-        this.selectedSchedule = earliestSchedule;
+        this.newSchedule = earliestSchedule;
       } 
     },
     fnUpdate() {
       this.isUpdate = true
+      this.isAdd = false;
     },
     fnCancle() {
       this.isUpdate = false
@@ -192,6 +194,7 @@ export default {
     },
    fnAdd() {
       this.isAdd = true;
+      this.isUpdate = false;
       this.newSchedule.title = '';
       this.newSchedule.startTime = '';
       this.newSchedule.endTime = '';
