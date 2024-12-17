@@ -6,17 +6,17 @@
           <label for="title">제목</label>
           <input
             type="text"
-            v-model="selectedSchedule.title"
+            v-model="newSchedule.title"
             id="title"
             placeholder="일정 제목"
-            :readonly="!isAdd && !isUpdate"
+            :readonly="!isAdd && !isUpdate"  
           />
         </div>
         <div>
           <label for="startTime">시작 시간</label>
           <input
             type="datetime-local"
-            v-model="selectedSchedule.startTime"
+            v-model="newSchedule.startTime"
             id="startTime"
             :readonly="!isAdd && !isUpdate"
           />
@@ -25,7 +25,7 @@
           <label for="endTime">끝 시간</label>
           <input
             type="datetime-local"
-            v-model="selectedSchedule.endTime"
+            v-model="newSchedule.endTime"
             id="endTime"
             :readonly="!isAdd && !isUpdate"
           />
@@ -34,7 +34,7 @@
           <label for="description">설명</label>
           <input
             type="text"
-            v-model="selectedSchedule.description"
+            v-model="newSchedule.description"
             id="description"
             placeholder="일정 설명"
             :readonly="!isAdd && !isUpdate"
@@ -51,7 +51,7 @@
             <label for="title">제목</label>
             <input
               type="text"
-              :value="selectedSchedule.title"
+              :value="selectedSchedule ? selectedSchedule.title : ''"
               id="title"
               readonly
             />
@@ -60,7 +60,7 @@
             <label for="startTime">시작 시간</label>
             <input
               type="text"
-              :value="formatDate(selectedSchedule.startTime)"
+              :value="selectedSchedule ? formatDate(selectedSchedule.startTime):''"
               id="startTime"
               readonly
             />
@@ -69,7 +69,7 @@
             <label for="endTime">끝 시간</label>
             <input
               type="text"
-              :value="formatDate(selectedSchedule.endTime)"
+              :value="selectedSchedule ? formatDate(selectedSchedule.endTime):''"
               id="endTime"
               readonly
             />
@@ -78,7 +78,7 @@
             <label for="description">설명</label>
             <input
               type="text"
-              :value="selectedSchedule.description"
+              :value="selectedSchedule ? selectedSchedule.description:''"
               id="description"
               readonly
             />
@@ -101,10 +101,16 @@ export default {
   props: {
     fullList: {
       type: Array,
+      default: null,
     },
     selectedSchedule: {
       type: Object,
-      default: null,
+      default: {
+        title: '',
+        startTime: '',
+        endTime: '',
+        description: '',
+      },
     },
     day: {
       type: String,
@@ -119,10 +125,7 @@ export default {
       isUpdate: false,
       isAdd: false,
       newSchedule: {
-        title: '',
-        startTime: '',
-        endTime: '',
-        description: '',
+      ...this.selectedSchedule
       },
     }
   },
@@ -189,24 +192,24 @@ export default {
     },
    fnAdd() {
       this.isAdd = true;
-      this.selectedSchedule.title = '';
-      this.selectedSchedule.startTime = '';
-      this.selectedSchedule.endTime = '';
-      this.selectedSchedule.description = '';
+      this.newSchedule.title = '';
+      this.newSchedule.startTime = '';
+      this.newSchedule.endTime = '';
+      this.newSchedule.description = '';
     },
     fnCancelAdd() {
       this.isAdd = false;
     },
     async fnSaveNewSchedule() {
-      if (!this.selectedSchedule.startTime || !this.selectedSchedule.endTime) {
+      if (!this.newSchedule.startTime || !this.newSchedule.endTime) {
         alert('시작 시간과 끝 시간을 모두 입력해 주세요.');
         return;
       }
-      if (new Date(this.selectedSchedule.startTime) > new Date(this.selectedSchedule.endTime)) {
+      if (new Date(this.newSchedule.startTime) > new Date(this.newSchedule.endTime)) {
         alert('마치는 시간이 시작 시간보다 앞설 수 없습니다.');
         return;
       }
-      const {id, ...newInfo} = this.selectedSchedule;
+      const {id, ...newInfo} = this.newSchedule;
       const response = await this.$axios.post('schedule/add', newInfo);
       if (response.status) {
         alert('일정이 등록되었습니다.');

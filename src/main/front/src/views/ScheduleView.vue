@@ -36,7 +36,12 @@ export default {
       dailyList: [],
       fullList: [],
       selectedDay: this.$dayjs().format('YYYY-MM-DD'),
-      selectedSchedule: '',
+      selectedSchedule: {
+        title: '',
+        startTime: '',
+        endTime: '',
+        description: '',
+      },
       popupState: false,
       searchResults: [],
     }
@@ -78,6 +83,12 @@ export default {
         (scheduleStart.isBefore(endOfToday) && scheduleEnd.isAfter(startOfToday))
       );
     });
+
+    if (todaySchedules.length === 0) {
+    this.selectedSchedule = null;
+    return;
+  }
+
     const earliestSchedule = todaySchedules.reduce((earliest, current) => {
       const currentStart = new Date(current.start);
       const earliestStart = new Date(earliest.start);
