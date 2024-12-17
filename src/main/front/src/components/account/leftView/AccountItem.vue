@@ -21,7 +21,7 @@ import { useDateStore } from '@/stores/dateStore'
 import { categories } from '@/constants/accountCategory'
 import { numToWon } from '@/lib/accountLib'
 import { deleteAccountItem } from '@/lib/accountLib'
-import AccountPopup from './AccountPopup.vue'
+import AccountPopup from '@/components/account/AccountPopup.vue'
 export default {
   components: {
     AccountPopup,
