@@ -59,7 +59,7 @@ export default {
   methods: {
     handleEventClick(info) {
       const id = info.event.id
-      this.$emit('SelectedSchedule', id)
+      this.$emit('inputSchedule', id)
     },
     handleMonthChange({ view }) {
       const start = view.currentStart

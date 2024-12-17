@@ -6,17 +6,17 @@
           <label for="title">제목</label>
           <input
             type="text"
-            v-model="newSchedule.title"
+            v-model="selectedSchedule.title"
             id="title"
             placeholder="일정 제목"
-            :readonly="!isAdd && !isUpdate"  
+            :readonly="!isAdd && !isUpdate"
           />
         </div>
         <div>
           <label for="startTime">시작 시간</label>
           <input
             type="datetime-local"
-            v-model="newSchedule.startTime"
+            v-model="selectedSchedule.startTime"
             id="startTime"
             :readonly="!isAdd && !isUpdate"
           />
@@ -25,7 +25,7 @@
           <label for="endTime">끝 시간</label>
           <input
             type="datetime-local"
-            v-model="newSchedule.endTime"
+            v-model="selectedSchedule.endTime"
             id="endTime"
             :readonly="!isAdd && !isUpdate"
           />
@@ -34,7 +34,7 @@
           <label for="description">설명</label>
           <input
             type="text"
-            v-model="newSchedule.description"
+            v-model="selectedSchedule.description"
             id="description"
             placeholder="일정 설명"
             :readonly="!isAdd && !isUpdate"
@@ -51,7 +51,7 @@
             <label for="title">제목</label>
             <input
               type="text"
-              :value="newSchedule ? newSchedule.title : ''"
+              :value="selectedSchedule.title"
               id="title"
               readonly
             />
@@ -60,7 +60,7 @@
             <label for="startTime">시작 시간</label>
             <input
               type="text"
-              :value="newSchedule ? formatDate(newSchedule.startTime):''"
+              :value="formatDate(selectedSchedule.startTime)"
               id="startTime"
               readonly
             />
@@ -69,7 +69,7 @@
             <label for="endTime">끝 시간</label>
             <input
               type="text"
-              :value="newSchedule ? formatDate(newSchedule.endTime):''"
+              :value="formatDate(selectedSchedule.endTime)"
               id="endTime"
               readonly
             />
@@ -78,13 +78,12 @@
             <label for="description">설명</label>
             <input
               type="text"
-              :value="newSchedule ? newSchedule.description:''"
+              :value="selectedSchedule.description"
               id="description"
               readonly
             />
           </div>
           <div>
-
             <button @click="fnUpdate">수정</button>
             <button @click="fnRemove">삭제</button>
           </div>
@@ -101,66 +100,58 @@ export default {
   props: {
     fullList: {
       type: Array,
-      default: null,
     },
     selectedSchedule: {
       type: Object,
-      default: () => ({
-      title: '',
-      startTime: '',
-      endTime: '',
-      description: '',
-    }), 
+      default: null,
     },
-    
+    day: {
+      type: String,
+    },
   },
+  watch: {
+  // 부모로부터 전달받은 `dailyList`의 변화 감지
+  fullList(newValue) {
+    console.log("자식 컴포넌트에서 받은 dailyList:", newValue);
+    // fullList가 제대로 전달되지 않으면 아래와 같이 확인
+    if (!newValue || newValue.length === 0) {
+      console.log("일정 데이터가 없습니다.");
+    }
+  }
+},
   emits: ['fnScheduleList', 'fnDayList'],
   data() {
     return {
-      newSchedule : {...this.selectedSchedule},
+      day: '',
       year: new Date().getFullYear(),
       month: new Date().getMonth() + 1,
       isUpdate: false,
       isAdd: false,
-     
-    }
-  },
-  watch : {
-    selectedSchedule(newval) {
-      this.newSchedule = {...newval};
+      newSchedule: {
+        title: '',
+        startTime: '',
+        endTime: '',
+        description: '',
       },
+    }
   },
   methods: {
     formatDate(date) {
     return this.$dayjs(date).format('YYYY-MM-DD HH:mm');
   },
     async SelectedSchedule(id) {
+      console.log('SelectedSchedule 메서드 호출', id);
         const response = await this.$axios.get(`schedule/userId/id/${id}`);
         if (response.status) {
          (response.data)
-            this.newSchedule = response.data;
+            this.selectedSchedule = response.data;
           } else {
             console.log("일정이 없습니다.");
           }
-    },
-    selectEarliestSchedule() {
-      if (this.fullList && Array.isArray(this.fullList) && this.fullList.length > 0) {
-        const earliestSchedule = this.fullList.reduce((earliest, current) => {
-        const earliestStart = this.$dayjs(earliest.start);
-        const currentStart = this.$dayjs(current.start);
-          if (earliestStart.isValid() && currentStart.isValid()) {
-            return currentStart.isBefore(earliestStart) ? current : earliest;
-          } else {
-            console.error('Invalid date format detected:', earliest.start, current.start);
-            return earliest;
-          }
-        });
-        this.newSchedule = earliestSchedule;
-      } 
+
     },
     fnUpdate() {
       this.isUpdate = true
-      this.isAdd = false;
     },
     fnCancle() {
       this.isUpdate = false
@@ -183,6 +174,7 @@ export default {
       }
     },
     async fnRemove() {
+
       if(confirm('일정을 삭제하시겠습니까?')){
         const id = this.selectedSchedule.id;
         const response = await this.$axios.delete(`schedule/delete/${id}`);
@@ -194,39 +186,31 @@ export default {
     },
    fnAdd() {
       this.isAdd = true;
-      this.isUpdate = false;
-      this.newSchedule.title = '';
-      this.newSchedule.startTime = '';
-      this.newSchedule.endTime = '';
-      this.newSchedule.description = '';
+      this.selectedSchedule  = { title: '', startTime: '', endTime: '', description: '' };
+
     },
     fnCancelAdd() {
       this.isAdd = false;
     },
     async fnSaveNewSchedule() {
-      if (!this.newSchedule.startTime || !this.newSchedule.endTime) {
-        alert('시작 시간과 끝 시간을 모두 입력해 주세요.');
-        return;
-      }
       if (new Date(this.newSchedule.startTime) > new Date(this.newSchedule.endTime)) {
-        alert('마치는 시간이 시작 시간보다 앞설 수 없습니다.');
-        return;
+        alert('마치는 시간이 시작 시간보다 앞설 수 없습니다.')
+        return
       }
-      const {id, ...newInfo} = this.newSchedule;
-      const response = await this.$axios.post('schedule/add', newInfo);
+      const response = await this.$axios.post('schedule/add', this.newSchedule)
       if (response.status) {
-        alert('일정이 등록되었습니다.');
-        this.isAdd = false;  
-        this.$emit('fnScheduleList', this.day);  
-        this.$emit('fnDayList', this.day);  
+        alert('일정이 등록되었습니다.')
+        this.isAdd = false
+        this.$emit('fnScheduleList', this.day)
+        this.$emit('fnDayList', this.day)
       } else {
-        alert(response.message);
+        alert(response.message)
       }
     },
   },
   mounted() {
     this.day = this.$dayjs().format('YYYY-MM-DDTHH:mm:ss');
-    this.selectEarliestSchedule();
+
   },
 }
 </script>
