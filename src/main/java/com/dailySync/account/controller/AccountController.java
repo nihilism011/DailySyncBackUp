@@ -2,6 +2,7 @@ package com.dailySync.account.controller;
 
 import com.dailySync.account.dto.AccountReqDto;
 import com.dailySync.account.dto.AccountResDto;
+import com.dailySync.account.dto.AccountSum;
 import com.dailySync.account.dto.FavorAccountResDto;
 import com.dailySync.account.service.AccountService;
 import com.dailySync.common.ApiResponse;
@@ -65,6 +66,22 @@ public class AccountController {
     }
 
     /**
+     * {@code 해당 월 합계}
+     */
+    @Tag (name = "ACCOUNT", description = "가계부")
+    @Operation (summary = "해당 월 합계")
+    @GetMapping ("items/summary/{year}/{month}")
+    public ResponseEntity<ApiResponse<AccountSum>> getSummaryByMonth(
+            @Parameter (description = "년도 ex.2024")
+            @PathVariable ("year") Integer year,
+            @Parameter (description = "월 ex.12")
+            @PathVariable ("month") Integer month
+    ) {
+        Long userId = commonService.getUserId();
+        return ApiResponse.success(accountService.findSumByMonth(userId, year, month));
+    }
+
+    /**
      * {@code 고정 항목 조회}
      */
     @Tag (name = "ACCOUNT", description = "가계부")
@@ -77,6 +94,22 @@ public class AccountController {
             @PathVariable ("month") int month) {
         Long userId = commonService.getUserId();
         return ApiResponse.success(accountService.findFixedAccounts(userId, year, month));
+    }
+
+    /**
+     * {@code 고정 합산}
+     */
+    @Tag (name = "ACCOUNT", description = "가계부")
+    @Operation (summary = "해당 월 고정 내역 합산")
+    @GetMapping ("items/summary/fixed/{year}/{month}")
+    public ResponseEntity<ApiResponse<AccountSum>> getSummaryFixedByMonth(
+            @Parameter (description = "년도 ex.2024")
+            @PathVariable ("year") Integer year,
+            @Parameter (description = "월 ex.12")
+            @PathVariable ("month") Integer month
+    ) {
+        Long userId = commonService.getUserId();
+        return ApiResponse.success(accountService.findSumFixedByMonth(userId, year, month));
     }
 
     /**

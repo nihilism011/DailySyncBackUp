@@ -3,6 +3,8 @@ package com.dailySync.config;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 @Component
 public class StartupLogger {
 
@@ -10,6 +12,7 @@ public class StartupLogger {
     public void logStartup() {
 
         System.out.println("서버 실행 완료!");
+        System.out.println(new Date());
         System.out.println("SWAGGER API 명세 주소");
         System.out.println("http://localhost:8080/swagger-ui/index.html");
     }
