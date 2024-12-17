@@ -152,7 +152,11 @@ export default {
         }
 
         alert(`${this.mode === 'create' ? '아이템 추가' : '아이템 수정'} 성공`);
-        this.$emit('save-item'); // 아이템 리스트를 갱신
+        this.$emit('save-item'); 
+        this.newItem.title="";
+        this.newItem.day=[];
+        this.newItem.isAuto="";
+        this.newItem.itemOrder="";
         this.closeModal();
         
       } catch (error) {

@@ -109,6 +109,7 @@ export default {
 
         alert(`${this.mode === 'create' ? '리스트 추가' : '리스트 수정'} 성공`);
         this.$emit('save-item'); 
+        this.newItem.title="";
         this.closeModal();
         
       } catch (error) {

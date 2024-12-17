@@ -96,9 +96,9 @@ export default {
 
         await this.$axios[method](url, data);
         alert(`${this.mode === 'create' ? '그룹 추가' : '그룹 수정'} 성공`);
-        
-        // 추가/수정 후 fnMyGroup() 호출
-        this.$emit('save-item'); // 부모 컴포넌트에 저장된 데이터 전달
+        this.newItem.title = "";
+        this.newItem.description ="";
+        this.$emit('save-item');
         this.closeModal();
       } catch (error) {
         console.error('오류 발생:', error);

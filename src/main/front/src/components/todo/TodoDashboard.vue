@@ -1,33 +1,35 @@
 <template>
-    <div class="popup-cont">
-      <div v-if="todayCompletionRate !== null" class="today-completion-rate">
-        <h2>{{ isToday ? '오늘의 진행률' : `${selectedDate}의 진행률` }}</h2>
-        <div class="completion-rate">{{ Math.round(todayCompletionRate) }}%</div> <!-- 완료율을 정수로 변환 -->
-      </div>
-  
-      <div class="todo-items">
-        <div class="item" v-for="(item, index) in items" :key="index">
-          <div class="item-info">
-            <span class="item-tit">{{ item.title }}</span>
-          </div>
-          <template v-if="item.status === 'new'">
-            <span class="item-date">{{ formatTimeWithoutSeconds(item.checkedTime) }}</span>
-          </template>
-          <template v-else>
-            <span class="item-date">
-              <div>  {{ formatDateTime(item.createdAt) }}</div>
-              <div> {{ formatDateTime(item.checkedTime) }}</div> <!-- 완료일 글자 크기 키움 -->
-              <div v-if="!item.checkedTime" class="inactive">활동을 하지 않았습니다</div> <!-- 활동 안함 이벤트 -->
-            </span>
-          </template>
+  <div class="popup-cont">
+    <RouterLink to="/todo" style="text-align: right;">Todo 이동하기 >> </RouterLink>
+    <div v-if="todayCompletionRate !== null" class="today-completion-rate">
+      <h2>{{ isToday ? '오늘의 진행률' : `${selectedDate}의 진행률` }}</h2>
+      <div class="completion-rate">{{ Math.round(todayCompletionRate) }}%</div>
+    </div>
+
+    <div class="todo-items">
+      <div class="item" v-for="(item, index) in items" :key="index">
+        <div class="item-info">
+          <span class="item-tit">{{ item.title }}</span>
         </div>
+        <template v-if="item.status === 'new'">
+          <span class="item-date">{{ formatTimeWithoutSeconds(item.checkedTime) }}</span>
+        </template>
+        <template v-else>
+          <span class="item-date">
+            <div> 생성일 : {{ formatDateTime(item.createdAt) }}</div>
+            <div> 완료일 : {{ formatDateTime(item.checkedTime) }}</div>
+          </span>
+        </template>
+        <input type="checkbox"/>
       </div>
     </div>
-  </template>
-  
+  </div>
+</template>
 
 <script>
+import { RouterLink } from 'vue-router'
 export default {
+  components: { RouterLink },
   data() {
     return {
       items: [],
@@ -50,6 +52,11 @@ export default {
     },
   },
   methods: {
+    // Todo 페이지로 이동하는 메소드
+    navigateToTodo() {
+      this.$router.push({ name: 'TodoPage' });
+    },
+
     async fnDayList(selectedDate) {
       const today = new Date();
       const year = selectedDate.split('-')[0];
@@ -65,13 +72,11 @@ export default {
         if (todayData) {
           this.todayCompletionRate = todayData.completionRate;
         } else {
-          console.log("오늘의 데이터 없음");
           this.todayCompletionRate = 0;
         }
-      } else {
-        console.log(daily.message);
-      }
+      } 
     },
+
     async fnMySelectList() {
       if (!this.selectedDate) return;
       const url = `todo/list/${this.selectedDate}`;
@@ -82,11 +87,13 @@ export default {
         console.error("데이터 가져오기 실패:", error);
       }
     },
+
     formatTimeWithoutSeconds(time) {
       if (!time) return "활동 안함";
       const date = new Date(time);
       return `${date.getHours()}시 ${date.getMinutes()}분`;
     },
+
     formatDateTime(dateTime) {
       if (!dateTime) return "활동 안함";
       const date = new Date(dateTime);
@@ -106,6 +113,7 @@ export default {
   },
 };
 </script>
+
 
 <style lang="scss" scoped>
 .todo-items {

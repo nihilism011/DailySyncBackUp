@@ -1,17 +1,6 @@
 <template>
-  <FullCalendar :options="calendarOptions" ref="calendar" />
-  <div class="list-item">
-    <div class="tit-box">
-      <div class="title">
-        {{
-          `${$dayjs(dateStore.selectedDate).get('year')}년 ${$dayjs(dateStore.selectedDate).get('month') + 1}월`
-        }}
-      </div>
-      <div class="month-sum">
-        <div>수입 {{ totalPlusSum }}</div>
-        <div>지출 {{ totalMinusSum }}</div>
-      </div>
-    </div>
+  <div>
+    <FullCalendar :options="calendarOptions" ref="calendar" @updateYearMonth="updateYearMonth" />
   </div>
 </template>
 <script>
@@ -25,32 +14,18 @@ export default {
   components: {
     FullCalendar,
   },
-  props: {
-    fnRequest: {
-      type: Function,
-    },
-  },
   setup() {
     const dateStore = useDateStore()
     const refreshStore = useRefreshStore()
     return { dateStore, refreshStore }
   },
   watch: {
-    'refreshStore.refreshState': function () {
-      this.fetchData(this.dateStore.selectedDate)
-    },
-    'dateStore.selectedDate': function (newDate) {
-      this.handleDate(new Date(newDate))
-    },
-    calendarData() {
-      this.calendarOptions.events = this.calendarData
+    calendarEvents() {
+      this.calendarOptions.events = this.calendarEvents
     },
   },
   data() {
     return {
-      totalPlusSum: 0,
-      totalMinusSum: 0,
-      calendarData: [],
       calendarOptions: {
         plugins: [dayGridPlugin, interactionPlugin],
         showNonCurrentDates: false,
@@ -66,7 +41,6 @@ export default {
         eventClick: this.handleEventClick,
         dayCellContent: this.dayCellContent,
         datesSet: this.handleDatesChange,
-        height: '100%',
         footerToolbar: {
           right: 'myCustomButton',
         },
@@ -79,53 +53,49 @@ export default {
           },
         },
       },
+      calendarEvents: [],
+      selectDate: null,
+      selectYear: null,
+      selectMonth: null,
     }
   },
   methods: {
-    gotoToday() {
-      this.dateStore.setSelectedDate(this.$dayjs().format('YYYY-MM-DD'))
-    },
-    handleDate(date) {
-      this.fetchData()
-      const calendar = this.$refs.calendar.getApi()
-      calendar.gotoDate(date)
-    },
     numToWon,
-    async fetchData(date) {
-      console.log(date)
-      const year = this.$dayjs(date).get('year')
-      const month = this.$dayjs(date).get('month') + 1
-      const url = `account/items/month/${year}/${month}`
-      console.log(url)
+    updateYearMonth(newYear, newMonth) {
+      this.dateStore.setSelectedYear(newYear)
+      this.dateStore.setSelectedMonth(newMonth)
+    },
+    gotoToday() {
+      const calendar = this.$refs.calendar.getApi()
+      const today = new Date()
+      calendar.gotoDate(today)
+      this.dateStore.setSelectedDate(this.$dayjs(today).format('YYYY-MM-DD'))
+    },
+    updateYearAndMonth() {
+      this.$emit('updateYearMonth', this.selectYear, this.selectMonth)
+    },
+    async fetchCalendarViewData() {
+      const url = `account/items/month/${this.selectYear}/${this.selectMonth}`
       const { data } = await this.$axios.get(url)
-      let plus = 0
-      let minus = 0
-      data.map((item) => {
-        plus += item.plusSumAmount
-        minus += item.minusSumAmount
-      })
-      this.totalPlusSum = this.numToWon(plus)
-      this.totalMinusSum = this.numToWon(minus)
-      const transformedData = data.flatMap((item) => {
+      const eventData = data.flatMap((item) => {
         const result = []
         if (item.plusSumAmount !== 0) {
           result.push({
             start: item.accountDate,
-            title: '+' + numToWon(item.plusSumAmount),
+            title: numToWon(item.plusSumAmount),
             color: 'red',
-            classNames: ['asdf'],
           })
         }
         if (item.minusSumAmount !== 0) {
           result.push({
             start: item.accountDate,
-            title: '-' + numToWon(item.minusSumAmount),
+            title: numToWon(item.minusSumAmount),
             color: 'blue',
           })
         }
         return result
       })
-      this.calendarData = transformedData
+      this.calendarEvents = eventData
     },
     handleEventClick(info) {
       this.dateStore.setSelectedDate(info.event.startStr)
@@ -135,20 +105,17 @@ export default {
     },
     handleDatesChange({ view }) {
       const start = view.currentStart
-      const dateSet = this.$dayjs(start).format('YYYY-MM-DD')
-      this.fetchData(dateSet)
+      const dateSet = this.$dayjs(start)
+      this.selectDate = dateSet.format('YYYY-MM-DD')
+      this.selectYear = dateSet.get('year')
+      this.selectMonth = dateSet.get('month') + 1
+      this.updateYearMonth(dateSet.get('year'), dateSet.get('month') + 1)
+      this.fetchCalendarViewData()
     },
   },
   mounted() {
-    this.fetchData(this.dateStore.selectedDate)
+    this.fetchCalendarViewData()
   },
 }
 </script>
-<style lang="scss" scoped>
-.month-sum {
-  display: flex;
-}
-.asdf {
-  font-size: 50px;
-}
-</style>
+<style lang="scss" scoped></style>
