@@ -1,39 +1,47 @@
 <template>
-  <div>
-    <div class="form-container">
-      <div>
-        <select v-model="form.searchType">
-          <option value="">선택해주세요</option>
-          <option value="year">연도</option>
-          <option value="yearMonth">월</option>
-          <option value="title">제목</option>
-          <option value="range">기간설정</option>
-        </select>
-        <div v-if="form.searchType === 'year'">
-          <select v-model="form.year">
-            <option v-for="(year, index) in years" :key="index" :value="year">{{ year }}</option>
-          </select>
-        </div>
-        <div v-if="form.searchType === 'yearMonth'">
-          <select v-model="form.year">
-            <option v-for="(year, index) in years" :key="index" :value="year">{{ year }}</option>
-          </select>
-          <select v-model="form.month">
-            <option v-for="(month, index) in months" :value="month" :key="index">
-              {{ month }}
-            </option>
-          </select>
-        </div>
-        <div v-if="form.searchType === 'range'">
-          <input type="date" v-model="form.startTime" placeholder="시작일을 입력하세요" />
-          <input type="date" v-model="form.endTime" placeholder="종료일을 입력하세요" />
-        </div>
-        <div v-if="form.searchType === 'title'">
-          <input id="title" type="text" v-model="form.title" placeholder="제목을 입력하세요" />
-        </div>
-        <button class="search-btn" @click="fnSearch">검색</button>
-      </div>
+  <div class="search-wrap">
+    <div class="select-box">
+      <select v-model="form.searchType">
+        <option value="" hidden>검색조건선택</option>
+        <option value="year">연도</option>
+        <option value="yearMonth">월</option>
+        <option value="title">제목</option>
+        <option value="range">기간설정</option>
+      </select>
     </div>
+    <template v-if="form.searchType === 'year'">
+      <div class="select-box">
+        <select v-model="form.year">
+          <option v-for="(year, index) in years" :key="index" :value="year">{{ year }}</option>
+        </select>
+      </div>
+    </template>
+    <template v-if="form.searchType === 'yearMonth'">
+      <div class="select-box">
+        <select v-model="form.year">
+          <option v-for="(year, index) in years" :key="index" :value="year">{{ year }}</option>
+        </select>
+        <select v-model="form.month">
+          <option v-for="(month, index) in months" :value="month" :key="index">
+            {{ month }}
+          </option>
+        </select>
+      </div>
+    </template>
+    <template v-if="form.searchType === 'range'">
+      <div class="ip-box">
+        <input type="date" v-model="form.startTime" placeholder="시작일을 입력하세요" />
+      </div>
+      <div class="ip-box">
+        <input type="date" v-model="form.endTime" placeholder="종료일을 입력하세요" />
+      </div>
+    </template>
+    <template v-if="form.searchType === 'title'">
+      <div class="ip-box">
+        <input id="title" type="text" v-model="form.title" placeholder="제목을 입력하세요" />
+      </div>
+    </template>
+    <button class="search-btn" @click="fnSearch" :disabled="form.searchType == ''">검색</button>
   </div>
   <ScheduleModal
     v-if="popupState"
@@ -112,4 +120,28 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.search {
+  &-wrap {
+    display: flex;
+    gap: 0 6px;
+    margin-bottom: 20px;
+    select + select {
+      margin-left: 6px;
+    }
+  }
+  &-btn {
+    font-size: 0;
+    border-radius: 4px;
+    border: 1px solid var(--color-contrastyC);
+    width: 34px;
+    height: 34px;
+    background: url('@/assets/images/ico/ico_search.png') center / 26px no-repeat;
+    &:disabled {
+      background-image: url('@/assets/images/ico/ico_search2.png');
+      background-color: var(--color-contrastyE);
+      border-color: var(--color-contrastyE);
+    }
+  }
+}
+</style>

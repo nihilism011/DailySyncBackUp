@@ -349,7 +349,9 @@ body {
 
 input[type='text'],
 input[type='password'],
-input[type='number'] {
+input[type='number'],
+input[type='date'],
+input[type='datetime-local'] {
   border: 1px solid var(--color-contrastyC);
   height: 34px;
   border-radius: 4px;
@@ -452,6 +454,7 @@ input[type='radio'] {
   font-size: 15px;
   font-weight: bold;
   transition: all 0.2s;
+  border-radius: 4px;
   &:hover {
     background-color: var(--color-contrasty2);
     color: var(--base-white);
