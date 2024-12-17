@@ -10,7 +10,6 @@ export default {
   components: {
     FullCalendar,
   },
-
   props: {
     dailyList: {
       type: Object,
@@ -22,7 +21,6 @@ export default {
       type: Function,
     },
   },
-
   watch: {
     dailyList(newValue) {
       if (newValue && Array.isArray(newValue)) {
@@ -30,7 +28,6 @@ export default {
       }
     },
   },
-
   data() {
     return {
       calendarOptions: {
@@ -61,12 +58,9 @@ export default {
   },
   methods: {
     handleEventClick(info) {
-      console.log('info입니다', info)
       const id = info.event.id
-      console.log('선택된 일정 ID:', id)
       this.$emit('SelectedSchedule', id)
     },
-
     handleMonthChange({ view }) {
       const start = view.currentStart
       const dateSet = `${start.getFullYear()}-${start.getMonth() + 1}`
