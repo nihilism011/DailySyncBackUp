@@ -200,7 +200,8 @@ export default {
       }
 
       // 새로운 일정 저장
-      const response = await this.$axios.post('schedule/add', this.selectedSchedule)
+      const { id, ...param } = this.selectedSchedule
+      const response = await this.$axios.post('schedule/add', param)
       if (response.status) {
         alert('일정이 등록되었습니다.')
         this.isAdd = false // 일정 등록 후 입력 모드 종료

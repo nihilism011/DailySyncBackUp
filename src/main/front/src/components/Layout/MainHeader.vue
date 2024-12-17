@@ -7,7 +7,6 @@
       <template v-if="isLogin">
         <div class="gnb">
           <RouterLink to="/">메인</RouterLink>
-          <RouterLink to="/2">메인 4x1</RouterLink>
           <RouterLink to="/todo">Todo</RouterLink>
           <RouterLink to="/schedule">일정</RouterLink>
           <RouterLink to="/account">가계부</RouterLink>
@@ -20,7 +19,6 @@
             <RouterLink to="/userInfo" @click="fade = !fade">회원정보</RouterLink>
           </div>
         </div>
-
       </template>
       <template v-if="!isLogin">
         <RouterLink to="/login">User</RouterLink>
