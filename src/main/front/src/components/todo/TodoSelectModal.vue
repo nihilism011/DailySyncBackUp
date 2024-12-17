@@ -1,4 +1,5 @@
 <template>
+
     <div v-if="isVisible" class="popup-box type-modal">
       <div class="popup-cont">
         <div class="popup-tit-wrap">

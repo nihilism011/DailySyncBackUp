@@ -12,11 +12,12 @@
           <div class="title">{{ item.title }}</div>
           <div class="day">
             <span>반복요일: </span>
+            <!-- 태환씨 여기에요 / item.day에서 요일 받아오는곳!! 배열로 -->
             <template v-if="item.day && Array.isArray(item.day)">
-              <span v-for="(day, i) in sortedDays(item.day)" :key="i" :class="getDayClass(day)"
-                >{{ day }}<span v-if="i < sortedDays(item.day).length - 1">, </span></span
-              >
+              <span v-for="(day, i) in sortedDays(item.day)" :key="i" 
+                >{{ day }}<span v-if="i < sortedDays(item.day).length - 1">, </span></span>
             </template>
+             <!-- 태환씨 여기에요 / item.day에서 요일 받아오는곳!! 배열로 -->
           </div>
           <div class="auto" title="자동여부">{{ item.isAuto == 1 ? 'A' : '' }}</div>
         </div>
@@ -94,7 +95,6 @@ export default {
     async fetchItemsByGroup(groupId) {
       const url = `todo/item/${groupId}`
       const { data } = await this.$axios.get(url)
-      console.log('아이템 목록:', data)
       this.items = data
     },
     deleteTodoItem(item) {
@@ -116,11 +116,6 @@ export default {
     sortedDays(dayArray) {
       const order = ['일', '월', '화', '수', '목', '금', '토']
       return dayArray.sort((a, b) => order.indexOf(a) - order.indexOf(b))
-    },
-    getDayClass(day) {
-      if (day === '일') return 'sunday'
-      if (day === '토') return 'saturday'
-      return ''
     },
   },
 }
