@@ -569,6 +569,8 @@ input {
         width: 60px;
         height: 60px;
         font-size: 0;
+        border: 1px solid var(--color-contrastyC);
+        border-radius: 4px;
         background: url($ico-path + 'icon_default.png') center / 40px no-repeat;
         $iconClass: (
           bread,
@@ -632,6 +634,7 @@ input {
     font-size: 14px;
     font-weight: bold;
     transition: all 0.2s;
+    border: 1px solid var(--color-contrastyC);
     &.active {
       color: var(--base-white);
       background-color: var(--color-contrasty2);

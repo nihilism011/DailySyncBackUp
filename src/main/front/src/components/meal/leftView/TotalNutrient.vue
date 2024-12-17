@@ -4,7 +4,9 @@
     <div class="nutrient-tit-wrap">
       <p class="nutrient-tit">오늘 섭취 영양소(총합)</p>
       <p class="nutrient-kcal" :class="aci > 0 ? 'minus' : 'plus'">
-        <template v-if="bmrState">키와 몸무게를 설정해주세요</template>
+        <template v-if="bmrState"
+          ><RouterLink to="/userInfo">키와 몸무게를 설정해주세요</RouterLink></template
+        >
         <template v-else>
           <span class="info">
             <template v-if="iPbmr == null"><b>권장</b>: {{ bmr }}kcal</template>
@@ -56,6 +58,7 @@ export default {
   methods: {
     async fnUserInfo() {
       const userInfo = await this.$axios.get('user/info')
+      console.log(userInfo.data)
       this.fnBmr(userInfo.data)
     },
     fnBmr(data) {
