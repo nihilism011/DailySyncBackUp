@@ -110,16 +110,6 @@ export default {
       type: String,
     },
   },
-  watch: {
-  // 부모로부터 전달받은 `dailyList`의 변화 감지
-  fullList(newValue) {
-    console.log("자식 컴포넌트에서 받은 dailyList:", newValue);
-    // fullList가 제대로 전달되지 않으면 아래와 같이 확인
-    if (!newValue || newValue.length === 0) {
-      console.log("일정 데이터가 없습니다.");
-    }
-  }
-},
   emits: ['fnScheduleList', 'fnDayList'],
   data() {
     return {
@@ -149,7 +139,6 @@ export default {
           } else {
             console.log("일정이 없습니다.");
           }
-
     },
     selectEarliestSchedule() {
       if (this.fullList && Array.isArray(this.fullList) && this.fullList.length > 0) {
@@ -157,7 +146,6 @@ export default {
     const earliestSchedule = this.fullList.reduce((earliest, current) => {
       const earliestStart = this.$dayjs(earliest.start);
       const currentStart = this.$dayjs(current.start);
-
       if (earliestStart.isValid() && currentStart.isValid()) {
         return currentStart.isBefore(earliestStart) ? current : earliest;
       } else {
@@ -165,7 +153,6 @@ export default {
         return earliest;
       }
     });
-
     this.selectedSchedule = earliestSchedule;
   } else {
     console.log('오늘의 일정에 오류가 있다.');
@@ -195,7 +182,6 @@ export default {
       }
     },
     async fnRemove() {
-
       if(confirm('일정을 삭제하시겠습니까?')){
         const id = this.selectedSchedule.id;
         const response = await this.$axios.delete(`schedule/delete/${id}`);
@@ -233,12 +219,7 @@ export default {
   },
   mounted() {
     this.day = this.$dayjs().format('YYYY-MM-DDTHH:mm:ss');
-    if (this.fullList && this.fullList.length > 0) {
     this.selectEarliestSchedule();
-  } else {
-    console.log('일정 데이터가 비어 있습니다.mount');
-  }
-    
   },
 }
 </script>
