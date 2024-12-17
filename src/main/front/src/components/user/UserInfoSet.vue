@@ -2,33 +2,65 @@
   <div class="container">
     <div class="left-record">
       <div class="title">개인 설정</div>
+    </div>    
+    <div class="ip-list">
+      <div class="tit-box">
+        <p class="tit">이름</p>
+      </div>
+      <div class="bot-box">
+        <div class="ip-box">
+          <input type="text" v-model="userInput.userName" />
+        </div>
+      </div>
     </div>
-    <div class="left-record">
-      <div class="record-title">이름</div>
-      <input type="text" v-model="userInput.userName" />
+    <div class="ip-list">
+      <div class="tit-box">
+        <p class="tit">성별</p>
+      </div>
+      <div class="bot-box">
+        <div class="ip-ra-txt">
+          <input type="radio" v-model="userInput.gender" value="M" id="M" />
+          <label for="M">남자</label>
+          <input type="radio" v-model="userInput.gender" value="F" id="F" />
+          <label for="F">여자</label>
+        </div>
+      </div>
     </div>
-    <div class="left-record">라디오 박스 수정해야함.</div>
-    <div class="left-record">
-      <div class="record-title">성별</div>
-      <input type="text" v-model="userInput.gender" />
+    <div class="ip-list">
+      <div class="tit-box">
+        <p class="tit">몸무게</p>
+      </div>
+      <div class="bot-box">
+        <div class="ip-box">
+          <input type="number" v-model="userInput.weight" />
+        </div>
+      </div>
     </div>
-    <div class="left-record">
-      <div class="record-title">몸무게</div>
-      <input type="number" v-model="userInput.weight" />
+    <div class="ip-list">
+      <div class="tit-box">
+        <p class="tit">키</p>
+      </div>
+      <div class="bot-box">
+        <div class="ip-box">
+          <input type="number" v-model="userInput.height" />
+        </div>
+      </div>
     </div>
-    <div class="left-record">
-      <div class="record-title">키</div>
-      <input type="number" v-model="userInput.height" />
-    </div>
-    <div class="left-record">
-      <div class="record-title">권장 칼로리</div>
-      <input type="number" v-model="userInput.recommendCal" />
+    <div class="ip-list">
+      <div class="tit-box">
+        <p class="tit">권장 칼로리</p>
+      </div>
+      <div class="bot-box">
+        <div class="ip-box">
+          <input type="number" v-model="userInput.recommendCal" />
+        </div>
+      </div>
     </div>
     <div v-if="updateData.length != 0" class="left-record">
-      <button @click="updateUserInfo">수정</button>
-      <button @click="fetchData">원래대로</button>
+      <button @click="updateUserInfo" class="btn-default">수정</button>
+      <button @click="fetchData" class="btn-default">원래대로</button>
     </div>
-    <button @click="visiblePasswordPopup = true">비밀번호 수정</button>
+    <button @click="visiblePasswordPopup = true" class="btn-default">비밀번호 수정</button>
     <PasswordChangePopup v-if="visiblePasswordPopup" @close="visiblePasswordPopup = false" />
   </div>
 </template>
@@ -84,10 +116,6 @@ export default {
       const url = 'user/info'
       if (this.userInput.userName.length < 2) {
         alert('이름은 2자 이상')
-        return
-      }
-      if (this.userInput.gender != 'F' && this.userInput.gender != 'M') {
-        alert('성별은 F 나 M 적을것. 이 메세지도 라디오박스로 바꾸면 수정해야함.')
         return
       }
       const { data } = await this.$axios.put(url, this.userInput)
