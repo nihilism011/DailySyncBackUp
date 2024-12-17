@@ -65,7 +65,8 @@ public class ScheduleController {
     public ResponseEntity<ApiResponse<List<ScheduleResDto>>> searchSchedule(
             @PathVariable ("title") String title
     ) {
-        return ApiResponse.success(scheduleService.getScheduleTitle(6L, title));
+        Long userId = commonService.getUserId();
+        return ApiResponse.success(scheduleService.getScheduleTitle(userId, title));
     }
 
     /** 연도별로 일정리스트 찾기 */
@@ -78,7 +79,8 @@ public class ScheduleController {
     public ResponseEntity<ApiResponse<List<ScheduleResDto>>> searchSchedule(
             @PathVariable ("year") int year
     ) {
-        return ApiResponse.success(scheduleService.getScheduleYear(6L, year));
+        Long userId = commonService.getUserId();
+        return ApiResponse.success(scheduleService.getScheduleYear(userId, year));
     }
 
     /** 기간설정으로 일정리스트 찾기 */
@@ -87,7 +89,8 @@ public class ScheduleController {
             @RequestParam("startTime") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startTime,
             @RequestParam("endTime") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endTime
     ) {
-        List<ScheduleResDto> schedules = scheduleService.getScheduleInRange(6L, startTime, endTime);
+        Long userId = commonService.getUserId();
+        List<ScheduleResDto> schedules = scheduleService.getScheduleInRange(userId, startTime, endTime);
         return ApiResponse.success(schedules);
     }
 
@@ -102,7 +105,8 @@ public class ScheduleController {
             @PathVariable ("year") int year,
             @PathVariable ("month") int month
     ) {
-        return ApiResponse.success(scheduleService.getScheduleDate(6L, year, month));
+        Long userId = commonService.getUserId();
+        return ApiResponse.success(scheduleService.getScheduleDate(userId, year, month));
     }
 
     /** 일정 데이터 추가 */
@@ -113,7 +117,8 @@ public class ScheduleController {
             )
     @PostMapping ("add")
     public ResponseEntity<ApiResponse<Boolean>> addSchedule(@RequestBody ScheduleReqDto reqDto) throws Exception {
-        return ApiResponse.success(scheduleService.addSchedule(6L, reqDto));
+        Long userId = commonService.getUserId();
+        return ApiResponse.success(scheduleService.addSchedule(userId, reqDto));
     }
 
     /** 일정 데이터 수정 */
