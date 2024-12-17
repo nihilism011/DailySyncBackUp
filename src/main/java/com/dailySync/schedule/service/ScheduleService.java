@@ -65,7 +65,7 @@ public class ScheduleService {
 
     /**일정추가*/
     public boolean addSchedule(Long userId, ScheduleReqDto reqDto) throws Exception{
-        User user = userRepository.findById(6L).orElseThrow(() -> new Exception("user doesn't exist"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new Exception("user doesn't exist"));
         scheduleRepository.save(Schedule.of(user, reqDto));
         return true;
     }
