@@ -7,12 +7,10 @@
       <div class="search-list">
         <div v-if="searchResults.length === 0">검색 결과가 없습니다.</div>
         <div v-else>
-          <div v-for="(item, index) in searchResults" :key="index" class="result-item">
-            <div class="result-title">
-              <div class="title">{{ item.title }}</div>
-              <div class="date-range">
-                {{ formatDate(item.startTime) }} ~ {{ formatDate(item.endTime) }}
-              </div>
+          <div v-for="(item, index) in searchResults" :key="index" class="list-item">
+            <div class="tit">{{ item.title }}</div>
+            <div class="date-range">
+              {{ formatDate(item.startTime) }} ~ {{ formatDate(item.endTime) }}
             </div>
           </div>
         </div>
@@ -43,4 +41,13 @@ export default {
   },
 }
 </script>
-<style scoped></style>
+<style lang="scss" scoped>
+.search {
+  &-list {
+    padding: 10px;
+    margin-top: 10px;
+    overflow-y: auto;
+    height: 360px;
+  }
+}
+</style>

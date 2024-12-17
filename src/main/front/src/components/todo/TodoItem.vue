@@ -1,22 +1,23 @@
 <template>
+  <template v-if="!selectedGroup">
+    <p class="list-tit">Select Group</p>
+  </template>
+  <template v-else>
+    <p class="list-tit">Item</p>
+  </template>
   <div class="list-container">
-    <template v-if="!selectedGroup">
-      <p class="list-tit">Select Group</p>
-    </template>
-
     <template v-if="selectedGroup">
-      <p class="list-tit">Item</p>
       <div class="list-item" v-for="(item, index) in items" :key="index">
         <div class="tit-box">
           <div class="title">{{ item.title }}</div>
           <div class="day">
             <span>반복요일: </span>
+            <!-- 태환씨 여기에요 / item.day에서 요일 받아오는곳!! 배열로 -->
             <template v-if="item.day && Array.isArray(item.day)">
-              <span 
-                v-for="(day, i) in sortedDays(item.day)" 
-                :key="i" 
-                :class="getDayClass(day)">{{ day }}<span v-if="i < sortedDays(item.day).length - 1">, </span></span>
+              <span v-for="(day, i) in sortedDays(item.day)" :key="i" 
+                >{{ day }}<span v-if="i < sortedDays(item.day).length - 1">, </span></span>
             </template>
+             <!-- 태환씨 여기에요 / item.day에서 요일 받아오는곳!! 배열로 -->
           </div>
           <div class="auto" title="자동여부">{{ item.isAuto == 1 ? 'A' : '' }}</div>
         </div>
@@ -26,7 +27,7 @@
         </div>
       </div>
       <div class="list-item center" v-if="selectedGroup" @click="openAddItemModal">
-        <div class="add">아이템 추가 </div>
+        <div class="add">아이템 추가</div>
       </div>
     </template>
 
@@ -34,7 +35,7 @@
     <Modal
       :isVisible="isModalVisible"
       :mode="'create'"
-      :groupId="selectedGroup" 
+      :groupId="selectedGroup"
       @close="closeModal"
       @save-item="fetchItemsByGroup(selectedGroup)"
     />
@@ -44,7 +45,7 @@
       :isVisible="isEditModalVisible"
       :mode="'update'"
       :item="selectedItem"
-      :groupId="selectedGroup" 
+      :groupId="selectedGroup"
       @close="closeEditModal"
       @save-item="fetchItemsByGroup(selectedGroup)"
     />
@@ -52,76 +53,72 @@
 </template>
 
 <script>
-import Modal from './ItemCreateModal.vue';
+import Modal from './ItemCreateModal.vue'
 
 export default {
   components: {
-    Modal
+    Modal,
   },
   props: {
-    selectedGroup: Number
+    selectedGroup: Number,
   },
   data() {
     return {
       items: [],
       isModalVisible: false,
       isEditModalVisible: false,
-      selectedItem: null
-    };
+      selectedItem: null,
+    }
   },
   watch: {
     selectedGroup(newGroupId) {
       if (newGroupId) {
-        this.fetchItemsByGroup(newGroupId);
+        this.fetchItemsByGroup(newGroupId)
       }
     },
   },
   methods: {
     openAddItemModal() {
-      this.isModalVisible = true;
+      this.isModalVisible = true
     },
     closeModal() {
-      this.isModalVisible = false;
+      this.isModalVisible = false
     },
     openEditModal(item) {
-      this.selectedItem = item;
-      this.isEditModalVisible = true;
+      this.selectedItem = item
+      this.isEditModalVisible = true
     },
     closeEditModal() {
-      this.isEditModalVisible = false;
-      this.selectedItem = null;
+      this.isEditModalVisible = false
+      this.selectedItem = null
     },
     async fetchItemsByGroup(groupId) {
-      const url = `todo/item/${groupId}`;
-      const { data } = await this.$axios.get(url);
-      console.log("아이템 목록:", data);
-      this.items = data;
+      const url = `todo/item/${groupId}`
+      const { data } = await this.$axios.get(url)
+      this.items = data
     },
     deleteTodoItem(item) {
-      if (confirm("정말 삭제할거냐? 되돌릴 수 없다!")) {
-        const url = `todo/item/update/status/${item.id}`;
-        this.$axios.put(url).then(() => {
-          this.fetchItemsByGroup(item.groupId);
-          alert("아이템 삭제");
-        }).catch((error) => {
-          alert("삭제 실패: " + error);
-        });
+      if (confirm('정말 삭제할거냐? 되돌릴 수 없다!')) {
+        const url = `todo/item/update/status/${item.id}`
+        this.$axios
+          .put(url)
+          .then(() => {
+            this.fetchItemsByGroup(item.groupId)
+            alert('아이템 삭제')
+          })
+          .catch((error) => {
+            alert('삭제 실패: ' + error)
+          })
       } else {
-        alert("삭제 취소");
+        alert('삭제 취소')
       }
     },
     sortedDays(dayArray) {
-      const order = ['일', '월', '화', '수', '목', '금', '토'];
-      return dayArray.sort((a, b) => order.indexOf(a) - order.indexOf(b));
+      const order = ['일', '월', '화', '수', '목', '금', '토']
+      return dayArray.sort((a, b) => order.indexOf(a) - order.indexOf(b))
     },
-    getDayClass(day) {
-      if (day === '일') return 'sunday';
-      if (day === '토') return 'saturday';
-      return '';
-    }
   },
-};
+}
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

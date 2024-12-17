@@ -1,15 +1,13 @@
 <template>
+  <p class="list-tit">List</p>
   <div class="list-container">
-    <p class="list-tit">List</p>
     <div v-if="list.length === 0" class="list-item center" @click="openAddItemModal">
-      <div class="add">
-       리스트 추가
-      </div>
+      <div class="add">리스트 추가</div>
     </div>
-     
+
     <div v-for="groupId in groupIds" :key="groupId" class="group">
       <p class="list-stit">{{ getGroupTitle(groupId) }}</p>
-      <template v-for="item in sortedItemsByGroupAndOrder(groupId, 0)"  :key="item.id">
+      <template v-for="item in sortedItemsByGroupAndOrder(groupId, 0)" :key="item.id">
         <div class="list-item active0">
           <div class="ip-chk-txt">
             <input
@@ -25,7 +23,7 @@
           <div class="btn-box">
             <button @click="openEditModal(item)" class="edit-btn" title="수정">수정</button>
             <button @click="deleteGroup(item.id)" class="remove-btn" title="삭제">삭제</button>
-        </div>
+          </div>
         </div>
       </template>
       <template v-for="order in [1, 2, 3]" :key="order">
@@ -33,7 +31,7 @@
           v-for="item in sortedItemsByGroupAndOrder(groupId, order)"
           :key="item.id"
           class="list-item"
-          :class="'active'+order"
+          :class="'active' + order"
           @click="selectGroup(item.id)"
         >
           <div class="ip-chk-txt">
@@ -74,7 +72,7 @@
     </div>
 
     <div v-if="list.length > 0" class="list-item center" @click="openAddItemModal">
-        <div class="add">리스트 추가</div>
+      <div class="add">리스트 추가</div>
     </div>
   </div>
 
@@ -94,11 +92,11 @@
 </template>
 
 <script>
-import Modal from './ListCreateModal.vue';
+import Modal from './ListCreateModal.vue'
 
 export default {
   components: {
-    Modal
+    Modal,
   },
   data() {
     return {
@@ -106,72 +104,72 @@ export default {
       isModalVisible: false,
       isEditModalVisible: false,
       selectedItem: null,
-    };
+    }
   },
   computed: {
     groupIds() {
-      return [...new Set(this.list.map(item => item.groupId))];
-    }
+      return [...new Set(this.list.map((item) => item.groupId))]
+    },
   },
   methods: {
     getGroupTitle(groupId) {
-      const group = this.list.find(item => item.groupId === groupId);
-      return group ? group.groupTitle : '이름없음';  
+      const group = this.list.find((item) => item.groupId === groupId)
+      return group ? group.groupTitle : '이름없음'
     },
     sortedItemsByGroupAndOrder(groupId, order) {
       return this.list
-        .filter(item => item.groupId === groupId && item.listOrder === order)
-        .sort((a, b) => a.listOrder - b.listOrder);  
+        .filter((item) => item.groupId === groupId && item.listOrder === order)
+        .sort((a, b) => a.listOrder - b.listOrder)
     },
 
     openEditModal(item) {
-      this.selectedItem = item;
-      this.isEditModalVisible = true;
+      this.selectedItem = item
+      this.isEditModalVisible = true
     },
     closeEditModal() {
-      this.isEditModalVisible = false;
-      this.selectedItem = null;
+      this.isEditModalVisible = false
+      this.selectedItem = null
     },
     async deleteGroup(id) {
-      if(confirm("삭제할거임?")){
-        const url = `todo/list/${id}`;
+      if (confirm('삭제할거임?')) {
+        const url = `todo/list/${id}`
         try {
-          await this.$axios.delete(url);
-          this.fetchListByUserId();
-          alert("삭제됐음");
+          await this.$axios.delete(url)
+          this.fetchListByUserId()
+          alert('삭제됐음')
         } catch (error) {
-          alert("삭제실패" + error);
+          alert('삭제실패' + error)
         }
-      } 
+      }
     },
     openAddItemModal() {
-      this.isModalVisible = true;
+      this.isModalVisible = true
     },
     closeModal() {
-      this.isModalVisible = false;
+      this.isModalVisible = false
     },
     async fetchCheckByListID(id) {
-      const url = `todo/list/update/check/${id}`;
-      await this.$axios.put(url);
-      await this.fetchListByUserId();
+      const url = `todo/list/update/check/${id}`
+      await this.$axios.put(url)
+      await this.fetchListByUserId()
     },
     async fetchListByUserId() {
-      const url = `todo/list/today`;
-      const { data } = await this.$axios.get(url);
-      console.log(data);
-      this.list = data;
+      const url = `todo/list/today`
+      const { data } = await this.$axios.get(url)
+
+      this.list = data
     },
     formatDate(dateString) {
-      const date = new Date(dateString);
-      const month = date.getMonth() + 1; // 월은 0부터 시작하므로 +1
-      const day = date.getDate();
-      return `${month}월 ${day}일`;
-    }
+      const date = new Date(dateString)
+      const month = date.getMonth() + 1 // 월은 0부터 시작하므로 +1
+      const day = date.getDate()
+      return `${month}월 ${day}일`
+    },
   },
   mounted() {
-    this.fetchListByUserId();
-  }
-};
+    this.fetchListByUserId()
+  },
+}
 </script>
 
 <style scoped></style>
