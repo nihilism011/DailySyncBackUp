@@ -1,23 +1,25 @@
 <template>
-  <div>
-    <div>{{ monthString }} 고정 내역</div>
-    <div v-if="list.length === 0">고정내역없음</div>
-    <div v-else>
-      <div class="list-item" v-for="(item, index) in list" :key="index" style="display: flex">
-        <div>{{ item.accountDate.split('-')[2] }}</div>
-        <div>{{ categories[item.category].name }}</div>
-        <div>{{ item.title }}</div>
-        <div>{{ numToWon(item.amount) }}</div>
-        <div class="btn-box">
-          <button @click="viewInfoPopup(item)" class="edit-btn"></button>
-          <button @click="deleteItem(item.id)" class="remove-btn"></button>
+  <div class="account-right">
+    <div class="account-fixed">
+      <div>{{ monthString }} 고정 내역</div>
+      <div v-if="list.length === 0">고정내역없음</div>
+      <div v-else>
+        <div class="list-item" v-for="(item, index) in list" :key="index">
+          <div>{{ item.accountDate.split('-')[2] }}</div>
+          <div>{{ categories[item.category].name }}</div>
+          <div>{{ item.title }}</div>
+          <div>{{ numToWon(item.amount) }}</div>
+          <div class="btn-box">
+            <button @click="viewInfoPopup(item)" class="edit-btn"></button>
+            <button @click="deleteItem(item.id)" class="remove-btn"></button>
+          </div>
+          <AccountPopup
+            v-if="viewUpdatePopup && account"
+            :account="account"
+            mode="update"
+            @close="closeUpdatePopup"
+          />
         </div>
-        <AccountPopup
-          v-if="viewUpdatePopup && account"
-          :account="account"
-          mode="update"
-          @close="closeUpdatePopup"
-        />
       </div>
     </div>
   </div>

@@ -885,3 +885,24 @@ input {
     // }
   }
 }
+
+.account-fixed-wrap {
+  width: calc(50% - 10px);
+  display: flex;
+  .account-fixed {
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
+  }
+  .account-left {
+    display: flex;
+    width: 100%;
+    gap: 0 20px;
+    .account-fixed {
+      width: calc(50% - 10px);
+    }
+  }
+  .account-right {
+    width: 100%;
+  }
+}
