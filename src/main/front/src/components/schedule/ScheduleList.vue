@@ -142,7 +142,6 @@ export default {
     },
     selectEarliestSchedule() {
       if (this.fullList && Array.isArray(this.fullList) && this.fullList.length > 0) {
-    // 날짜 비교를 dayjs를 이용해 처리
     const earliestSchedule = this.fullList.reduce((earliest, current) => {
       const earliestStart = this.$dayjs(earliest.start);
       const currentStart = this.$dayjs(current.start);
@@ -193,8 +192,10 @@ export default {
     },
    fnAdd() {
       this.isAdd = true;  
-      this.selectedSchedule  = { title: '', startTime: '', endTime: '', description: '' }; 
-
+      this.selectedSchedule.title = '';
+      this.selectedSchedule.startTime = '';
+      this.selectedSchedule.endTime = '';
+      this.selectedSchedule.description = ''; 
     },
     fnCancelAdd() {
 
@@ -202,20 +203,29 @@ export default {
 
     },
     async fnSaveNewSchedule() {
-      if (new Date(this.newSchedule.startTime) > new Date(this.newSchedule.endTime)) {
-        alert('마치는 시간이 시작 시간보다 앞설 수 없습니다.')
-        return
-      }
-      const response = await this.$axios.post('schedule/add', this.newSchedule)
-      if (response.status) {
-        alert('일정이 등록되었습니다.')
-        this.isAdd = false
-        this.$emit('fnScheduleList', this.day)
-        this.$emit('fnDayList', this.day)
-      } else {
-        alert(response.message)
-      }
-    },
+  // selectedSchedule을 사용하여 유효성 검사
+  if (!this.selectedSchedule.startTime || !this.selectedSchedule.endTime) {
+    alert('시작 시간과 끝 시간을 모두 입력해 주세요.');
+    return;
+  }
+
+  // 시작 시간이 끝 시간보다 앞서는지 체크
+  if (new Date(this.selectedSchedule.startTime) > new Date(this.selectedSchedule.endTime)) {
+    alert('마치는 시간이 시작 시간보다 앞설 수 없습니다.');
+    return;
+  }
+
+  // 새로운 일정 저장
+  const response = await this.$axios.post('schedule/add', this.selectedSchedule);
+  if (response.status) {
+    alert('일정이 등록되었습니다.');
+    this.isAdd = false;  // 일정 등록 후 입력 모드 종료
+    this.$emit('fnScheduleList', this.day);
+    this.$emit('fnDayList', this.day);
+  } else {
+    alert(response.message);
+  }
+},
   },
   mounted() {
     this.day = this.$dayjs().format('YYYY-MM-DDTHH:mm:ss');
