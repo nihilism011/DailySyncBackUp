@@ -40,7 +40,7 @@ public class AccountService {
                     user.getId(),
                     startOfMonth,
                     endOfMonth);
-            for(Account a : list){
+            for (Account a : list) {
                 int fixedDate = a.getAccountDate().getDayOfMonth();
                 int dayOfMonth = Math.min(fixedDate, now.lengthOfMonth());
                 LocalDate date = LocalDate.of(nowYear, nowMonth, dayOfMonth);
@@ -64,8 +64,22 @@ public class AccountService {
         return oneDayList.stream().map(Account::toResDto).toList();
     }
 
+    public AccountSum findSumByMonth(Long userId, int year, int month) {
+        List<AccountSum> sumList = accountRepository.findByUserIdAndYearAndMonth(year, month, userId);
+        Long PlusSum = 0L;
+        Long minusSum = 0L;
+        for (AccountSum item : sumList) {
+            PlusSum += item.getPlusSumAmount();
+            minusSum -= item.getMinusSumAmount();
+        }
+        AccountSum sum = new AccountSum(LocalDate.of(year,month,1));
+        sum.setPlusSumAmount(PlusSum);
+        sum.setMinusSumAmount(minusSum);
+        return sum;
+    }
+
     public List<AccountSum> findAccountsByMonth(Long userId, int year, int month) {
-        return  accountRepository.findByUserIdAndYearAndMonth(year, month, userId);
+        return accountRepository.findByUserIdAndYearAndMonth(year, month, userId);
     }
 
     public List<AccountResDto> findFixedAccounts(Long userId, int year, int month) {
@@ -77,6 +91,27 @@ public class AccountService {
                 endOfMonth);
         return list.stream().map(Account::toResDto).toList();
     }
+   public AccountSum findSumFixedByMonth(Long userId,int year,int month){
+       LocalDate startOfMonth = LocalDate.of(year, month, 1);
+       LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+       List<Account> list = accountRepository.findByUserIdAndAccountDateBetweenAndFixedTrue(
+               userId,
+               startOfMonth,
+               endOfMonth);
+       long PlusSum = 0L;
+       long minusSum = 0L;
+       for (Account item : list) {
+           if(item.getAmount()>0){
+               PlusSum += item.getAmount();
+           }else{
+               minusSum -= item.getAmount();
+           }
+       }
+       AccountSum sum = new AccountSum(LocalDate.of(year,month,1));
+       sum.setPlusSumAmount(PlusSum);
+       sum.setMinusSumAmount(minusSum);
+       return sum;
+   }
 
     public List<FavorAccountResDto> findFavorAccountItems(Long userId, String category) {
         List<FavoriteAccount> accounts;

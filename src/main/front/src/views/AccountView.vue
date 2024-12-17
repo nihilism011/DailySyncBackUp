@@ -1,29 +1,26 @@
 <template>
   <div class="left left-container">
-    <Calendar />
-    <FixedItemList />
-  </div>
-  <div class="right right-container">
     <DateScore ref="dateScoreRef" />
     <AccountItemList />
-    <button @click="viewUpdatePopup = true" class="insert-btn">가계부 항목 추가</button>
     <UpdatePopup v-if="viewUpdatePopup" @close="viewUpdatePopup = false" action="create" />
+  </div>
+  <div class="right right-container">
+    <RightView />
   </div>
 </template>
 <script>
+import RightView from '@/components/account/layout/RightView.vue'
 import { useDateStore } from '@/stores/dateStore'
-import AccountItemList from '@/components/account/rightView/AccountItemList.vue'
-import DateScore from '@/components/account/rightView/DateScore.vue'
+import AccountItemList from '@/components/account/leftView/AccountItemList.vue'
+import DateScore from '@/components/account/leftView/DateScore.vue'
 import UpdatePopup from '@/components/account/UpdatePopup.vue'
-import FixedItemList from '@/components/account/leftView/FixedItemList.vue'
-import Calendar from '@/components/account/leftView/accountCalender.vue'
+
 export default {
   components: {
+    RightView,
     AccountItemList,
-    FixedItemList,
     DateScore,
     UpdatePopup,
-    Calendar,
   },
   setup() {
     const dateStore = useDateStore()
