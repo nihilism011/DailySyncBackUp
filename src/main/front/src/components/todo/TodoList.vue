@@ -156,7 +156,7 @@ export default {
     async fetchListByUserId() {
       const url = `todo/list/today`
       const { data } = await this.$axios.get(url)
-      console.log(data)
+
       this.list = data
     },
     formatDate(dateString) {
