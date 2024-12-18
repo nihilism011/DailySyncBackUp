@@ -780,6 +780,7 @@ input {
     background-color: var(--base-white);
     min-height: 65px;
     .ip-chk-txt {
+      width: calc(100% - 60px);
       label {
         font-size: 16px;
       }
