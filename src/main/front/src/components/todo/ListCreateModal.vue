@@ -60,8 +60,8 @@ export default {
     item: {
       type: Object,
       default: () => ({
-        title: '', 
-        description: '', 
+        title: '',
+        description: '',
         listOrder: ''
       }),
     },
@@ -108,10 +108,10 @@ export default {
         }
 
         alert(`${this.mode === 'create' ? '리스트 추가' : '리스트 수정'} 성공`);
-        this.$emit('save-item'); 
+        this.$emit('save-item');
         this.newItem.title="";
         this.closeModal();
-        
+
       } catch (error) {
         console.error('오류 발생:', error);
         alert(`${this.mode === 'create' ? '리스트 추가' : '리스트 수정'} 실패`);
@@ -134,7 +134,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; 
+  z-index: 9999;
 }
 
 .modal-content {

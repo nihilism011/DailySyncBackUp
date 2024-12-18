@@ -13,15 +13,17 @@
         >
           <div class="item-info">
             <span class="item-tit">{{ item.title }}</span>
-            <span class="item-group-tit">({{ item.groupTitle || '직접 생성' }})</span>
+            <div v-if="item.groupTitle">
+              <span class="item-group-tit">({{ item.groupTitle}})</span>  
+            </div>
           </div>
           <template v-if="item.status == 'new'">
             <span class="item-date">{{ formatTimeWithoutSeconds(item.checkedTime) }}</span>
           </template>
           <template v-else>
-            <span class="item-date">
-              <div>생성일 : {{ formatDateTime(item.createdAt) }}</div>
-              <div>완료일 : {{ formatDateTime(item.checkedTime) }}</div>
+            <span class="item-date" style="text-align: right;">
+              <div>작성일 : {{ formatDate(item.createdAt) }}</div>
+              <div>완료 : {{ formatTime(item.checkedTime) }}</div>
             </span>
           </template>
         </div>
@@ -39,7 +41,7 @@ export default {
   data() {
     return {
       items: [],
-    }
+    };
   },
   props: {
     isVisible: {
@@ -54,44 +56,49 @@ export default {
   watch: {
     isVisible(newVal) {
       if (newVal) {
-        this.fnMySelectList()
+        this.fnMySelectList();
       }
     },
   },
   methods: {
     closeModal() {
-      this.$emit('close')
+      this.$emit("close");
     },
     async fnMySelectList() {
-      if (!this.selectedDate) return
-      const url = `todo/list/${this.selectedDate}`
+      if (!this.selectedDate) return;
+      const url = `todo/list/${this.selectedDate}`;
       try {
-        const { data } = await this.$axios.get(url)
-        console.log(data)
-        this.items = data
+        const { data } = await this.$axios.get(url);
+        console.log(data);
+        this.items = data;
       } catch (error) {
-        console.error('데이터 가져오기 실패:', error)
+        console.error("데이터 가져오기 실패:", error);
       }
     },
-
-    formatTimeWithoutSeconds(time) {
-      if (!time) return '활동 안함'
-      const date = new Date(time)
-      return `${date.getHours()}시 ${date.getMinutes()}분`
+    // 날짜만 반환 (YYYY-MM-DD)
+    formatDate(dateTime) {
+      if (!dateTime) return "";
+      const date = new Date(dateTime);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
     },
-
-    formatDateTime(dateTime) {
-      if (!dateTime) return '활동 안함'
-      const date = new Date(dateTime)
-      const year = date.getFullYear()
-      const month = String(date.getMonth() + 1).padStart(2, '0')
-      const day = String(date.getDate()).padStart(2, '0')
-      const hours = String(date.getHours()).padStart(2, '0')
-      const minutes = String(date.getMinutes()).padStart(2, '0')
-      return `${year}-${month}-${day} ${hours}시${minutes}분`
+    // 시간만 반환 (HH시 MM분)
+    formatTime(dateTime) {
+      if (!dateTime) return "";
+      const date = new Date(dateTime);
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      return `${hours}시 ${minutes}분`;
+    },
+    formatTimeWithoutSeconds(time) {
+      if (!time) return "";
+      const date = new Date(time);
+      return `${date.getHours()}시 ${date.getMinutes()}분`;
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -111,9 +118,9 @@ export default {
     padding: 10px 10px;
     position: relative;
     min-height: 50px;
-    background-color: #ff334b;
+    // background-color: rgba(255, 180, 180, 0.2);
     &.checked {
-      background-color: #4f7eff;
+      // background-color:rgba(180, 180, 255, 0.2);
     }
     &-info {
       display: flex;
