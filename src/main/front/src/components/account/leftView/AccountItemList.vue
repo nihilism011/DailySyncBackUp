@@ -1,12 +1,21 @@
 <template>
   <div>
-    <div>지출 내역</div>
-    <AccountItem v-for="(account, index) in minusList" :key="index" :account="account" />
-    <div>소득 내역</div>
-    <template v-if="plusList.length > 0">
-      <AccountItem v-for="(account, index) in plusList" :key="index" :account="account" />
-    </template>
-    <div v-else>내역이 없습니다.</div>
+    <div>
+      <div class="title">지출 내역</div>
+      <div class="list">
+        <template v-if="minusList.length > 0">
+          <AccountItem v-for="(account, index) in minusList" :key="index" :account="account" />
+        </template>
+        <div v-else>내역이 없습니다.</div>
+      </div>
+    </div>
+    <div>
+      <div class="title">소득 내역</div>
+      <template v-if="plusList.length > 0">
+        <AccountItem v-for="(account, index) in plusList" :key="index" :account="account" />
+      </template>
+      <div v-else>내역이 없습니다.</div>
+    </div>
   </div>
 </template>
 <script>

@@ -23,6 +23,7 @@ export default {
     calendarEvents() {
       this.calendarOptions.events = this.calendarEvents
     },
+    'refreshStore.refreshState': 'fetchCalendarViewData',
   },
   data() {
     return {
@@ -34,11 +35,6 @@ export default {
         initialDate: this.dateStore.selectedDate || this.$dayjs().format('YYYY-MM-DD'),
         initialView: 'dayGridMonth',
         headerToolbar: false,
-        // headerToolbar: {
-        //   left: 'prev',
-        //   center: 'title',
-        //   right: 'next',
-        // },
         events: [],
         dateClick: this.handleDateClick,
         eventClick: this.handleEventClick,

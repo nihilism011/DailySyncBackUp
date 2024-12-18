@@ -26,7 +26,7 @@ export default {
       return numToWon(this.amount)
     },
     amountType() {
-      return this.amount > 0 ? '수입' : '지출'
+      return this.amount > 0 ? '소득' : '지출'
     },
     badgeStyle() {
       return this.getBadgeSizeStyles(this.size)

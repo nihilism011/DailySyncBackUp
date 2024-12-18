@@ -7,12 +7,12 @@
       <div class="account-wrap">
         <div class="ip-list">
           <div class="tit-box">
-            <label for="title" class="tit">수입/지출</label>
+            <label for="title" class="tit">소득/지출</label>
           </div>
           <div class="bot-box">
             <div class="ip-ra-txt">
               <input type="radio" id="plus" v-model="isPlus" :value="true" />
-              <label for="plus">수입</label>
+              <label for="plus">소득</label>
               <input type="radio" id="minus" v-model="isPlus" :value="false" />
               <label for="minus">지출</label>
             </div>
@@ -71,9 +71,8 @@
         </div>
       </div>
       <div class="pop-btn-wrap">
-        <button v-if="mode === 'create'" class="btn-default submit">저장</button>
-        <button v-if="mode === 'update'" @click="updateItem" class="btn-default submit">
-          수정
+        <button @click="updateItem" class="btn-default submit">
+          {{ mode === 'create' ? '저장' : '수정' }}
         </button>
         <button @click="closePopup" class="btn-default cancel">취소</button>
       </div>
@@ -83,11 +82,19 @@
 </template>
 <script>
 import { categoryArray } from '@/constants/accountCategory'
-import { updateAccountItem } from '@/lib/accountLib'
+import { updateAccountItem, createAccountItem } from '@/lib/accountLib'
 import { useRefreshStore } from '@/stores/refreshStore'
 export default {
   props: {
-    account: Object,
+    account: {
+      type: Object,
+      default: () => ({
+        title: '',
+        amount: 0,
+        description: '',
+        category: 'FOOD',
+      }),
+    },
     mode: String,
   },
   setup() {
@@ -112,6 +119,7 @@ export default {
   },
   methods: {
     updateAccountItem,
+    createAccountItem,
     async updateItem() {
       if (!this.reqBody.title) {
         alert('내역역을 입력해 주세요.')
@@ -129,7 +137,13 @@ export default {
         ...this.reqBody,
         amount: this.isPlus ? this.reqBody.amount : -this.reqBody.amount,
       }
-      const resStatus = await this.updateAccountItem(this.account.id, reqBody)
+      let resStatus
+      if (this.mode === 'create') {
+        resStatus = await this.createAccountItem(reqBody)
+      } else {
+        resStatus = await this.updateAccountItem(this.account.id, reqBody)
+      }
+
       if (resStatus) {
         alert('수정되었습니다.')
         this.refreshStore.setRefresh()

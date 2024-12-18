@@ -13,7 +13,12 @@
       <button @click="deleteItem" class="remove-btn"></button>
     </div>
   </div>
-  <AccountPopup v-if="viewUpdatePopup" :account="account" mode="update" @close="closeUpdatePopup" />
+  <AccountPopup
+    v-if="viewUpdatePopup"
+    :account="account"
+    mode="update"
+    @close="viewUpdatePopup = false"
+  />
 </template>
 <script>
 import { useRefreshStore } from '@/stores/refreshStore'
@@ -43,9 +48,6 @@ export default {
   methods: {
     numToWon,
     deleteAccountItem,
-    closeUpdatePopup() {
-      this.viewUpdatePopup = false
-    },
     async deleteItem() {
       if (!confirm('정말 삭제하시겠습니까?')) {
         return

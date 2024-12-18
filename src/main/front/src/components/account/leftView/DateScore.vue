@@ -1,15 +1,18 @@
 <template>
-  <div class="date-score-container">
-    <div class="list-item">
-      <div class="tit-box">
-        <div class="title">
-          {{ dateStore.selectedDate }}
+  <!-- 비슷하게 입혀놓음 -->
+  <div class="account-left">
+    <div class="account-fixed">
+      <div class="account-tit">{{ dateStore.selectedDate }}</div>
+      <div class="account-divide">
+        <div class="first">
+          <div class="tit">소득</div>
+          <div>{{ moneyFormatted.plus }}</div>
+        </div>
+        <div class="second">
+          <div class="tit">지출</div>
+          <div>{{ moneyFormatted.minus }}</div>
         </div>
       </div>
-      <div>수입</div>
-      <div>{{ moneyFormatted.plus }}</div>
-      <div>지출</div>
-      <div>{{ moneyFormatted.minus }}</div>
     </div>
   </div>
 </template>

@@ -1,9 +1,6 @@
 <template>
   <div class="left left-container">
     <LeftView />
-    <!-- <DateScore ref="dateScoreRef" /> -->
-    <!-- <AccountItemList /> -->
-    <UpdatePopup v-if="viewUpdatePopup" @close="viewUpdatePopup = false" action="create" />
   </div>
   <div class="right right-container">
     <RightView />
@@ -12,16 +9,10 @@
 <script>
 import RightView from '@/components/account/layout/RightView.vue'
 import { useDateStore } from '@/stores/dateStore'
-import AccountItemList from '@/components/account/leftView/AccountItemList.vue'
-import DateScore from '@/components/account/leftView/DateScore.vue'
-import UpdatePopup from '@/components/account/UpdatePopup.vue'
 import LeftView from '@/components/account/layout/LeftView.vue'
 export default {
   components: {
     RightView,
-    AccountItemList,
-    DateScore,
-    UpdatePopup,
     LeftView,
   },
   setup() {
@@ -42,14 +33,6 @@ export default {
 .left-container {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  .left-top {
-    height: 65%;
-  }
-  .left-bottom {
-    height: 30%;
-    padding: 20px;
-  }
 }
 .right-container {
   display: flex;
