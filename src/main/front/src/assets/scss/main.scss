@@ -431,6 +431,9 @@ input[type='radio'] {
     .todo-wrap {
       margin-top: 15px;
     }
+    .account-wrap {
+      margin-top: 15px;
+    }
   }
   &-cont {
     z-index: 1;
@@ -778,8 +781,9 @@ input {
     position: relative;
     gap: 10px 0;
     background-color: var(--base-white);
+    min-height: 65px;
     .ip-chk-txt {
-      width: 100%;
+      width: calc(100% - 60px);
       label {
         font-size: 16px;
       }
@@ -872,9 +876,17 @@ input {
         margin-top: 5px;
         font-weight: bold;
         color: var(--color-contrastyA);
-        font-size: 13px;
+        font-size: 14px;
         span {
-          color: var(--color-contrasty2);
+          &.active {
+            color: var(--color-contrasty2);
+            &:nth-of-type(1) {
+              color: var(--color-red);
+            }
+            &:nth-last-of-type(1) {
+              color: var(--color-blue);
+            }
+          }
         }
       }
     }
@@ -904,7 +916,7 @@ input {
       width: 100%;
       gap: 0 20px;
       .account-fixed {
-        width: calc(50% - 10px);      
+        width: calc(50% - 10px);
       }
     }
     &-right {
@@ -941,7 +953,7 @@ input {
       }
       .second {
         .tit {
-          color: var(--btn-blue);
+          color: var(--color-blue);
         }
       }
     }

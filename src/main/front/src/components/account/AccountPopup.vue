@@ -4,35 +4,81 @@
       <div class="popup-tit-wrap">
         <div class="tit">{{ mode === 'create' ? '가계부 추가' : '수정' }}</div>
       </div>
-      <div>
-        <input type="radio" id="plus" v-model="isPlus" :value="true" />
-        <label for="plus">수입</label>
-        <input type="radio" id="minus" v-model="isPlus" :value="false" />
-        <label for="minus">지출</label>
+      <div class="account-wrap">
+        <div class="ip-list">
+          <div class="tit-box">
+            <label for="title" class="tit">수입/지출</label>
+          </div>
+          <div class="bot-box">
+            <div class="ip-ra-txt">
+              <input type="radio" id="plus" v-model="isPlus" :value="true" />
+              <label for="plus">수입</label>
+              <input type="radio" id="minus" v-model="isPlus" :value="false" />
+              <label for="minus">지출</label>
+            </div>
+          </div>
+        </div>
+        <div class="ip-list">
+          <div class="tit-box">
+            <label for="title" class="tit">카테고리</label>
+          </div>
+          <div class="bot-box">
+            <div class="select-box">
+              <select>
+                <option v-for="(item, index) in categoryArray" :key="index" :value="item.key">
+                  {{ item.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="ip-list">
+          <div class="tit-box">
+            <label for="title" class="tit">제목</label>
+          </div>
+          <div class="bot-box">
+            <div class="ip-box"><input id="title" type="text" v-model="reqBody.title" /></div>
+          </div>
+        </div>
+        <div class="ip-list">
+          <div class="tit-box">
+            <label for="amount" class="tit">가격</label>
+          </div>
+          <div class="bot-box">
+            <div class="ip-box"><input id="amount" type="number" v-model="reqBody.amount" /></div>
+          </div>
+        </div>
+        <div class="ip-list">
+          <div class="tit-box">
+            <label for="description" class="tit">메모</label>
+          </div>
+          <div class="bot-box">
+            <div class="ip-box">
+              <input id="description" type="text" v-model="reqBody.description" />
+            </div>
+          </div>
+        </div>
+        <div class="ip-list">
+          <div class="tit-box">
+            <p class="tit">고정 여부</p>
+          </div>
+          <div class="bot-box">
+            <div class="ip-chk-txt">
+              <input id="fixed" type="checkbox" v-model="reqBody.fixed" />
+              <label for="fixed">fixed</label>
+            </div>
+          </div>
+        </div>
       </div>
-      <div>
-        <select>
-          <option v-for="(item, index) in categoryArray" :key="index" :value="item.key">
-            {{ item.name }}
-          </option>
-        </select>
-      </div>
-      <div>
-        <input id="title" type="text" v-model="reqBody.title" />
-        <label for="title">title</label>
-        <input id="amount" type="number" v-model="reqBody.amount" />
-        <label for="amount">amount</label>
-        <input id="description" type="text" v-model="reqBody.description" />
-        <label for="description">description</label>
-        <input id="fixed" type="checkbox" v-model="reqBody.fixed" />
-        <label for="fixed">fixed</label>
+      <div class="pop-btn-wrap">
+        <button v-if="mode === 'create'" class="btn-default submit">저장</button>
+        <button v-if="mode === 'update'" @click="updateItem" class="btn-default submit">
+          수정
+        </button>
+        <button @click="closePopup" class="btn-default cancel">취소</button>
       </div>
     </div>
-    <div class="btn-box">
-      <button v-if="mode === 'create'">저장</button>
-      <button v-if="mode === 'update'" @click="updateItem">수정</button>
-      <button @click="closePopup">취소</button>
-    </div>
+    <div class="dimmed">dim</div>
   </div>
 </template>
 <script>

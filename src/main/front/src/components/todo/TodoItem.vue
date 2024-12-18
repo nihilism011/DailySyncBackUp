@@ -11,13 +11,14 @@
         <div class="tit-box">
           <div class="title">{{ item.title }}</div>
           <div class="day">
-            <span>반복요일: </span>
-            <!-- 태환씨 여기에요 / item.day에서 요일 받아오는곳!! 배열로 -->
             <template v-if="item.day && Array.isArray(item.day)">
-              <span v-for="(day, i) in sortedDays(item.day)" :key="i" 
-                >{{ day }}<span v-if="i < sortedDays(item.day).length - 1">, </span></span>
+              <span
+                v-for="(day, i) in order"
+                :key="i"
+                :class="item.day.includes(day) == true ? 'active' : ''"
+                >{{ day }}<span v-if="i < order.length - 1"> &nbsp; </span>
+              </span>
             </template>
-             <!-- 태환씨 여기에요 / item.day에서 요일 받아오는곳!! 배열로 -->
           </div>
           <div class="auto" title="자동여부">{{ item.isAuto == 1 ? 'A' : '' }}</div>
         </div>
@@ -68,6 +69,7 @@ export default {
       isModalVisible: false,
       isEditModalVisible: false,
       selectedItem: null,
+      order: ['일', '월', '화', '수', '목', '금', '토'],
     }
   },
   watch: {
@@ -112,10 +114,6 @@ export default {
       } else {
         alert('삭제 취소')
       }
-    },
-    sortedDays(dayArray) {
-      const order = ['일', '월', '화', '수', '목', '금', '토']
-      return dayArray.sort((a, b) => order.indexOf(a) - order.indexOf(b))
     },
   },
 }

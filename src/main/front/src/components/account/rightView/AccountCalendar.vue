@@ -100,14 +100,14 @@ export default {
           result.push({
             start: item.accountDate,
             title: numToWon(item.plusSumAmount),
-            color: 'red',
+            color: '#ff334b',
           })
         }
         if (item.minusSumAmount !== 0) {
           result.push({
             start: item.accountDate,
             title: numToWon(item.minusSumAmount),
-            color: 'blue',
+            color: '#4f7eff',
           })
         }
         return result
