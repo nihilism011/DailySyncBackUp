@@ -20,7 +20,6 @@
             <div> 완료일 : {{ formatDateTime(item.checkedTime) }}</div>
           </span>
         </template>
-        <input type="checkbox"/>
       </div>
     </div>
   </div>

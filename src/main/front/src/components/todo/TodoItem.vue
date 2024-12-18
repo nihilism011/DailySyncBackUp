@@ -16,7 +16,7 @@
                 v-for="(day, i) in order"
                 :key="i"
                 :class="item.day.includes(day) == true ? 'active' : ''"
-                >{{ day }}<i v-if="i < order.length - 1">, </i>
+                >{{ day }}<span v-if="i < order.length - 1"> &nbsp; </span>
               </span>
             </template>
           </div>
