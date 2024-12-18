@@ -63,7 +63,7 @@
           />
           <label :for="item.id">{{ item.title }}</label>
         </div>
-        <div class="date">{{ formatDate(item.createdAt) }} 생성</div>
+        <div class="date" style="margin-top :-6px;">{{ formatDate(item.createdAt) }} 생성</div>
         <div class="btn-box">
           <button @click="openEditModal(item)" class="edit-btn" title="수정">수정</button>
           <button @click="deleteGroup(item.id)" class="remove-btn" title="삭제">삭제</button>
