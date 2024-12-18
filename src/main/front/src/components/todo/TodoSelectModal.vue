@@ -14,14 +14,14 @@
           <div class="item-info">
             <span class="item-tit">{{ item.title }}</span>
             <div v-if="item.groupTitle">
-              <span class="item-group-tit">({{ item.groupTitle}})</span>  
+              <span class="item-group-tit">({{ item.groupTitle }})</span>
             </div>
           </div>
           <template v-if="item.status == 'new'">
             <span class="item-date">{{ formatTimeWithoutSeconds(item.checkedTime) }}</span>
           </template>
           <template v-else>
-            <span class="item-date" style="text-align: right;">
+            <span class="item-date" style="text-align: right">
               <div>작성일 : {{ formatDate(item.createdAt) }}</div>
               <div>완료 : {{ formatTime(item.checkedTime) }}</div>
             </span>
@@ -41,7 +41,7 @@ export default {
   data() {
     return {
       items: [],
-    };
+    }
   },
   props: {
     isVisible: {
@@ -56,49 +56,49 @@ export default {
   watch: {
     isVisible(newVal) {
       if (newVal) {
-        this.fnMySelectList();
+        this.fnMySelectList()
       }
     },
   },
   methods: {
     closeModal() {
-      this.$emit("close");
+      this.$emit('close')
     },
     async fnMySelectList() {
-      if (!this.selectedDate) return;
-      const url = `todo/list/${this.selectedDate}`;
+      if (!this.selectedDate) return
+      const url = `todo/list/${this.selectedDate}`
       try {
-        const { data } = await this.$axios.get(url);
-        console.log(data);
-        this.items = data;
+        const { data } = await this.$axios.get(url)
+        console.log(data)
+        this.items = data
       } catch (error) {
-        console.error("데이터 가져오기 실패:", error);
+        console.error('데이터 가져오기 실패:', error)
       }
     },
     // 날짜만 반환 (YYYY-MM-DD)
     formatDate(dateTime) {
-      if (!dateTime) return "";
-      const date = new Date(dateTime);
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const day = String(date.getDate()).padStart(2, "0");
-      return `${year}-${month}-${day}`;
+      if (!dateTime) return ''
+      const date = new Date(dateTime)
+      const year = date.getFullYear()
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const day = String(date.getDate()).padStart(2, '0')
+      return `${year}-${month}-${day}`
     },
     // 시간만 반환 (HH시 MM분)
     formatTime(dateTime) {
-      if (!dateTime) return "";
-      const date = new Date(dateTime);
-      const hours = String(date.getHours()).padStart(2, "0");
-      const minutes = String(date.getMinutes()).padStart(2, "0");
-      return `${hours}시 ${minutes}분`;
+      if (!dateTime) return ''
+      const date = new Date(dateTime)
+      const hours = String(date.getHours()).padStart(2, '0')
+      const minutes = String(date.getMinutes()).padStart(2, '0')
+      return `${hours}시 ${minutes}분`
     },
     formatTimeWithoutSeconds(time) {
-      if (!time) return "";
-      const date = new Date(time);
-      return `${date.getHours()}시 ${date.getMinutes()}분`;
+      if (!time) return ''
+      const date = new Date(time)
+      return `${date.getHours()}시 ${date.getMinutes()}분`
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -115,12 +115,12 @@ export default {
     display: flex;
     width: 100%;
     border-bottom: 1px dashed var(--color-contrastyC8);
-    padding: 10px 10px;
+    padding: 10px 10px 10px 24px;
     position: relative;
     min-height: 50px;
-    // background-color: rgba(255, 180, 180, 0.2);
+    background: url('@/assets/images/ico/ico_done1_2.png') left center / 18px no-repeat;
     &.checked {
-      // background-color:rgba(180, 180, 255, 0.2);
+      background-image: url('@/assets/images/ico/ico_done.png');
     }
     &-info {
       display: flex;
