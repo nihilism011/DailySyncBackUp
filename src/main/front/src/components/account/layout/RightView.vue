@@ -1,8 +1,30 @@
 <template>
   <div class="account-right-container">
-    <button @click="changeViewCalendar('before')">{{ '<' }}</button>
-    {{ `${dateStore.selectedYear}년 ${dateStore.selectedMonth}월` }}
-    <button @click="changeViewCalendar('next')">{{ '>' }}</button>
+    <div class="fc none">
+      <div class="fc-toolbar">
+        <div class="fc-toolbar-chunk">
+          <div class="fc-button">
+            <button
+              @click="changeViewCalendar('before')"
+              class="fc-icon fc-icon-chevron-left"
+            ></button>
+          </div>
+        </div>
+        <div class="fc-toolbar-chunk">
+          <h2 class="fc-toolbar-title">
+            {{ `${dateStore.selectedYear}년 ${dateStore.selectedMonth}월` }}
+          </h2>
+        </div>
+        <div class="fc-toolbar-chunk">
+          <div class="fc-button">
+            <button
+              @click="changeViewCalendar('next')"
+              class="fc-icon fc-icon-chevron-right"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="right-top-container">
       <div class="account-fixed-wrap">
         <MonthScore />

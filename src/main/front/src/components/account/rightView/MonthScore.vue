@@ -1,7 +1,6 @@
 <template>
   <div class="account-left">
     <div class="account-fixed">
-      <div class="account-tit">{{ monthString }}</div>
       <div class="account-divide">
         <div class="first">
           <div class="tit">수입</div>
