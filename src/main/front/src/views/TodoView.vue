@@ -5,14 +5,16 @@
   </div>
   <div class="right todo-type">
     <div class="todo-wrap">
-      <div class="right-left">
+      <div class="todo-box">
         <TodoList />
       </div>
-      <div class="right-middle">
-        <TodoGroup @updateSelectedGroup="selectedGroup = $event" />
-      </div>
-      <div class="right-right">
-        <TodoItem :selectedGroup="selectedGroup" />
+      <div class="todo-box">
+        <div class="first">
+          <TodoGroup @updateSelectedGroup="selectedGroup = $event" />
+        </div>
+        <div class="second">
+          <TodoItem :selectedGroup="selectedGroup" />
+        </div>
       </div>
     </div>
   </div>
@@ -70,24 +72,32 @@ export default {
 }
 </script>
 
-<style scoped>
-.todo-wrap {
-  display: flex;
-  height: 825px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.3);
-  padding: 20px;
-  overflow: hidden;
-}
-.right-left {
-  width: 40%;
-}
-
-.right-middle {
-  width: 25%;
-}
-
-.right-right {
-  width: 35%;
+<style lang="scss" scoped>
+.todo {
+  &-wrap {
+    display: flex;
+    height: 825px;
+    gap: 0 40px;
+  }
+  &-box {
+    overflow: hidden;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
+    &:nth-child(1) {
+      width: calc(40% - 20px);
+    }
+    &:nth-child(2) {
+      width: calc(60% - 20px);
+      display: flex;
+      gap: 0 20px;
+    }
+    .first {
+      width: calc(40% - 10px);
+    }
+    .second {
+      width: calc(60% - 10px);
+    }
+  }
 }
 </style>
