@@ -15,14 +15,12 @@ import java.util.List;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    @Query(value = "SELECT * FROM schedule s WHERE s.user_id = :userId AND YEAR(s.start_time) = :year AND MONTH(s.start_time) = :month ORDER BY s.start_time ASC", nativeQuery = true)
+    @Query(value = "SELECT * FROM schedule s WHERE s.user_id = :userId AND YEAR(s.start_time) = :year AND MONTH(s.start_time)  = :month ORDER BY s.start_time ASC", nativeQuery = true)
     List<Schedule> findByUserIdAndStartTimeYearAndStartTimeMonthOrderByStartTimeAsc(@Param("userId") Long userId, @Param("year") int year, @Param("month") int month);
 
     List<Schedule> findByUserIdAndTitleContainingOrderByStartTimeAsc(Long userId, String title);
 //    List<Schedule> findByUserIdAndStartTimeYearAndStartTimeMonthOrderByStartTimeAsc(Long userId, int year, int month);
     // 특정 사용자와 날짜 범위에 맞는 일정 조회
-
-
 
     @Query(value = "SELECT s.* FROM schedule s "
             + "WHERE s.user_id = :userId "

@@ -92,13 +92,14 @@
 <script>
 export default {
   props: {
-    fullList: Array,
+    dailyList: Array,
     schedule: Object,
     day: String,
     inputSchedule: Object 
   },
   watch: {
-    fullList(newSchedule) {
+    dailyList(newSchedule) {
+      console.log(newSchedule)
       this.newSchedule = [ ...newSchedule ];
     },
   },
@@ -129,7 +130,7 @@ export default {
       console.log('inputedSchedule 호출', id);
         const response = await this.$axios.get(`schedule/userId/id/${id}`);
         if (response) {
-          console.log("일정 데이터", response.data);
+          //console.log("일정 데이터", response.data);
           this.newSchedule = {
           ...response.data, 
         };
@@ -162,7 +163,7 @@ export default {
         return;
       }
       const schedule = this.isAdd ? this.newSchedule : this.newSchedule; 
-      console.log("저장할 일정:", schedule);
+      //console.log("저장할 일정:", schedule);
       const formattedSchedule = {
         ...schedule,
         startTime: this.$dayjs(schedule.startTime).format('YYYY-MM-DDTHH:mm:ss'),
@@ -181,13 +182,14 @@ export default {
 
       try {
         const response = await this.$axios[method](url, formattedSchedule);
+        console.log()
         if (response.status) {
           alert('일정이 저장되었습니다.');
           this.isAdd = false;
           this.isUpdate = false;
           this.$emit('fnScheduleList', this.day);
           this.$emit('fnDayList', this.day);
-          await this.inputedSchedule(this.inputSchedule.id);
+          this.$emit('inputedSchedule', formattedSchedule.id)
         } else {
           alert(response.message);
         }

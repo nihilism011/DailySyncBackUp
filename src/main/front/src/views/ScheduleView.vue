@@ -3,12 +3,11 @@
     <div class="left-top"></div>
     <div class="left-bottom">
       <NewInput 
-        :fullList="dailyList" 
+        :dailyList="dailyList" 
         :day="day" 
         :inputSchedule="inputSchedule" 
-        @fnDayList="fnScheduleList"
-        @updateSchedule="updateInputSchedule"
-        @deleteSchedule="removeSchedule" 
+        @fnDayList="fnScheduleList" 
+        @inputedSchedule="inputedSchedule"
         />
     </div>
   </div>
@@ -16,8 +15,8 @@
     <ScheduleSearch @searchResult="openModal"/>
     <ScheduleCalendar 
     :dailyList="dailyList" 
-    @fnScheduleList="fnScheduleList" 
     :inputSchedule="inputSchedule" 
+    @fnScheduleList="fnScheduleList" 
     @inputSchedule="inputedSchedule" 
   />
   </div>
@@ -47,14 +46,13 @@ export default {
       searchResults: [],
     }
   },
-
   methods: {
     async fnScheduleList(inputDay) {
       let year = inputDay.split('-')[0];
       let month = inputDay.split('-')[1];
       try {
         const full = await this.$axios.get(`schedule/userId/${year}/${month}`);
-        console.log("API 응답:", full);
+        //console.log("API 응답:", full);
 
         if (full.status && full.data.length > 0) {
           this.dailyList = full.data.map(item => ({
@@ -74,7 +72,7 @@ export default {
       }
     },
     async inputedSchedule(id) {
-      console.log("inputedSchedule에 id가 들어왔습니다:", id); 
+      //console.log("inputedSchedule에 id가 들어왔습니다:", id); 
       const response = await this.$axios.get(`schedule/userId/id/${id}`);
       if (response.status) {
         console.log("response.data",response.data)
