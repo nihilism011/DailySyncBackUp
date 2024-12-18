@@ -84,7 +84,6 @@
             />
           </div>
           <div>
-
             <button @click="fnUpdate">수정</button>
             <button @click="fnRemove">삭제</button>
           </div>
@@ -110,6 +109,16 @@ export default {
       type: String,
     },
   },
+  watch: {
+  // 부모로부터 전달받은 `dailyList`의 변화 감지
+  fullList(newValue) {
+    console.log("자식 컴포넌트에서 받은 dailyList:", newValue);
+    // fullList가 제대로 전달되지 않으면 아래와 같이 확인
+    if (!newValue || newValue.length === 0) {
+      console.log("일정 데이터가 없습니다.");
+    }
+  }
+},
   emits: ['fnScheduleList', 'fnDayList'],
   data() {
     return {
@@ -131,6 +140,7 @@ export default {
     return this.$dayjs(date).format('YYYY-MM-DD HH:mm');
   },
     async SelectedSchedule(id) {
+      console.log('SelectedSchedule 메서드 호출', id);
         const response = await this.$axios.get(`schedule/userId/id/${id}`);
         if (response.status) {
          (response.data)
@@ -138,21 +148,7 @@ export default {
           } else {
             console.log("일정이 없습니다.");
           }
-    },
-    selectEarliestSchedule() {
-      if (this.fullList && Array.isArray(this.fullList) && this.fullList.length > 0) {
-        const earliestSchedule = this.fullList.reduce((earliest, current) => {
-        const earliestStart = this.$dayjs(earliest.start);
-        const currentStart = this.$dayjs(current.start);
-          if (earliestStart.isValid() && currentStart.isValid()) {
-            return currentStart.isBefore(earliestStart) ? current : earliest;
-          } else {
-            console.error('Invalid date format detected:', earliest.start, current.start);
-            return earliest;
-          }
-        });
-        this.selectedSchedule = earliestSchedule;
-      } 
+
     },
     fnUpdate() {
       this.isUpdate = true
@@ -178,6 +174,7 @@ export default {
       }
     },
     async fnRemove() {
+
       if(confirm('일정을 삭제하시겠습니까?')){
         const id = this.selectedSchedule.id;
         const response = await this.$axios.delete(`schedule/delete/${id}`);
@@ -189,38 +186,31 @@ export default {
     },
    fnAdd() {
       this.isAdd = true;
-      this.selectedSchedule.title = '';
-      this.selectedSchedule.startTime = '';
-      this.selectedSchedule.endTime = '';
-      this.selectedSchedule.description = '';
+      this.selectedSchedule  = { title: '', startTime: '', endTime: '', description: '' };
+
     },
     fnCancelAdd() {
       this.isAdd = false;
     },
     async fnSaveNewSchedule() {
-      if (!this.selectedSchedule.startTime || !this.selectedSchedule.endTime) {
-        alert('시작 시간과 끝 시간을 모두 입력해 주세요.');
-        return;
+      if (new Date(this.newSchedule.startTime) > new Date(this.newSchedule.endTime)) {
+        alert('마치는 시간이 시작 시간보다 앞설 수 없습니다.')
+        return
       }
-      if (new Date(this.selectedSchedule.startTime) > new Date(this.selectedSchedule.endTime)) {
-        alert('마치는 시간이 시작 시간보다 앞설 수 없습니다.');
-        return;
-      }
-      const {id, ...newInfo} = this.selectedSchedule;
-      const response = await this.$axios.post('schedule/add', newInfo);
+      const response = await this.$axios.post('schedule/add', this.newSchedule)
       if (response.status) {
-        alert('일정이 등록되었습니다.');
-        this.isAdd = false;  
-        this.$emit('fnScheduleList', this.day);  
-        this.$emit('fnDayList', this.day);  
+        alert('일정이 등록되었습니다.')
+        this.isAdd = false
+        this.$emit('fnScheduleList', this.day)
+        this.$emit('fnDayList', this.day)
       } else {
-        alert(response.message);
+        alert(response.message)
       }
     },
   },
   mounted() {
     this.day = this.$dayjs().format('YYYY-MM-DDTHH:mm:ss');
-    this.selectEarliestSchedule();
+
   },
 }
 </script>
