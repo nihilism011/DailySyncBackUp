@@ -1,18 +1,30 @@
 <template>
-  <div>
-    <div>{{ monthString }}</div>
-    <div>
-      <div>수입</div>
-      <div>{{ numToWon(info.plusSumAmount) }}</div>
-      <div>지출</div>
-      <div>{{ numToWon(info.minusSumAmount) }}</div>
+  <div class="account-left">
+    <div class="account-fixed">
+      <div class="account-tit">{{ monthString }}</div>
+      <div class="account-divide">
+        <div class="first">
+          <div class="tit">수입</div>
+          <div>{{ numToWon(info.plusSumAmount) }}</div>
+        </div>
+        <div class="second">
+          <div class="tit">지출</div>
+          <div>{{ numToWon(info.minusSumAmount) }}</div>
+        </div>
+      </div>
     </div>
-  </div>
-  <div>
-    <div>고정 수입</div>
-    <div>{{ numToWon(fixedInfo.plusSumAmount) }}</div>
-    <div>고정 지출</div>
-    <div>{{ numToWon(fixedInfo.minusSumAmount) }}</div>
+    <div class="account-fixed">
+      <div class="account-divide">
+        <div class="first">
+          <div class="tit">고정 수입</div>
+          <div>{{ numToWon(fixedInfo.plusSumAmount) }}</div>
+        </div>
+        <div class="second">
+          <div class="tit">고정 지출</div>
+          <div>{{ numToWon(fixedInfo.minusSumAmount) }}</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>

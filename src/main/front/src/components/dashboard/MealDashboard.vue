@@ -5,7 +5,7 @@
         <div class="dash-item" v-for="item in mealList">
           {{ item.icon }}
           {{ item.foodName }}
-          {{ getMealName(item.category) }}
+          {{ this.mealCategory[item.category].name }}
           {{ item.kcalories }}
           {{ item.description }}
         </div>
@@ -39,10 +39,6 @@ export default {
       const { data } = await this.$axios.get(`meal/mealList/${day[0]}/${day[1]}`)
       this.mealList = data.mealList[this.selectedDate]
       console.log(this.mealList)
-    },
-    getMealName(data) {
-      console.log(data)
-      return this.mealCategory[data].name || 'empty'
     },
   },
   mounted() {
