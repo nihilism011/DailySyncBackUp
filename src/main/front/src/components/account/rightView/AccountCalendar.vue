@@ -27,6 +27,8 @@ export default {
   data() {
     return {
       calendarOptions: {
+        locale: 'ko',
+        height: 600,
         plugins: [dayGridPlugin, interactionPlugin],
         showNonCurrentDates: false,
         initialDate: this.dateStore.selectedDate || this.$dayjs().format('YYYY-MM-DD'),
@@ -46,11 +48,14 @@ export default {
         },
         customButtons: {
           myCustomButton: {
-            text: 'today',
+            text: '오늘',
             click: () => {
               this.gotoToday()
             },
           },
+        },
+        dayCellContent: function (info) {
+          return parseInt(info.dayNumberText)
         },
       },
       calendarEvents: [],

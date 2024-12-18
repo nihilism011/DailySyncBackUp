@@ -1,10 +1,14 @@
 <template>
   <div class="account-right-container">
-    <Calendar />
-    <div class="right-bottom-container">
-      <MonthScore />
-      <MonthFixedList />
+    <div class="right-top-container">
+      <div class="account-fixed-wrap">
+        <MonthScore />
+      </div>
+      <div class="account-fixed-wrap">
+        <MonthFixedList />
+      </div>
     </div>
+    <Calendar />
   </div>
 </template>
 <script>
@@ -30,9 +34,10 @@ export default {
 .account-right-container {
   display: flex;
   flex-direction: column;
+  gap: 20px 0;
 }
-.right-bottom-container {
+.right-top-container {
   display: flex;
-  flex-direction: row;
+  gap: 0 20px;
 }
 </style>
