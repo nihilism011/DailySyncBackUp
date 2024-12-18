@@ -1,7 +1,8 @@
 <template>
   <div class="left left-container">
-    <DateScore ref="dateScoreRef" />
-    <AccountItemList />
+    <LeftView />
+    <!-- <DateScore ref="dateScoreRef" /> -->
+    <!-- <AccountItemList /> -->
     <UpdatePopup v-if="viewUpdatePopup" @close="viewUpdatePopup = false" action="create" />
   </div>
   <div class="right right-container">
@@ -14,13 +15,14 @@ import { useDateStore } from '@/stores/dateStore'
 import AccountItemList from '@/components/account/leftView/AccountItemList.vue'
 import DateScore from '@/components/account/leftView/DateScore.vue'
 import UpdatePopup from '@/components/account/UpdatePopup.vue'
-
+import LeftView from '@/components/account/layout/LeftView.vue'
 export default {
   components: {
     RightView,
     AccountItemList,
     DateScore,
     UpdatePopup,
+    LeftView,
   },
   setup() {
     const dateStore = useDateStore()
