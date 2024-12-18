@@ -431,6 +431,9 @@ input[type='radio'] {
     .todo-wrap {
       margin-top: 15px;
     }
+    .account-wrap {
+      margin-top: 15px;
+    }
   }
   &-cont {
     z-index: 1;
@@ -950,7 +953,7 @@ input {
       }
       .second {
         .tit {
-          color: var(--btn-blue);
+          color: var(--color-blue);
         }
       }
     }
