@@ -7,7 +7,8 @@
         :day="day" 
         :inputSchedule="inputSchedule" 
         @fnDayList="fnScheduleList"
-        @updateInputSchedule="updateInputSchedule"
+        @updateSchedule="updateInputSchedule"
+        @deleteSchedule="removeSchedule" 
         />
     </div>
   </div>
@@ -37,11 +38,11 @@ export default {
       dailyList: [],
       fullList: [],
       inputSchedule: {
-      title: '',
-      description: '',
-      startTime: '',  // 빈 값으로 초기화
-      endTime: '',    // 빈 값으로 초기화
-    },
+        title: '',
+        description: '',
+        startTime: '',  
+        endTime: '',    
+      },
       popupState: false,
       searchResults: [],
     }
@@ -82,10 +83,6 @@ export default {
         console.log("일정이 없습니다.");
       }
     },
-    // 부모에서 자식의 'inputSchedule' 변경을 처리하는 메서드
-    updateInputSchedule(newSchedule) {
-      this.inputSchedule = newSchedule;
-    }
   },
   mounted() {
     this.day = this.$dayjs().format('YYYY-MM-DD')

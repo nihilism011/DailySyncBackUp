@@ -110,7 +110,6 @@ export default {
     },
   },
   watch: {
-  // 부모로부터 전달받은 `dailyList`의 변화 감지
   fullList(newValue) {
     console.log("자식 컴포넌트에서 받은 dailyList:", newValue);
     // fullList가 제대로 전달되지 않으면 아래와 같이 확인
