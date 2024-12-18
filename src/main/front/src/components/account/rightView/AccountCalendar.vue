@@ -28,7 +28,7 @@ export default {
     return {
       calendarOptions: {
         locale: 'ko',
-        height: 600,
+        height: 550,
         plugins: [dayGridPlugin, interactionPlugin],
         showNonCurrentDates: false,
         initialDate: this.dateStore.selectedDate || this.$dayjs().format('YYYY-MM-DD'),
