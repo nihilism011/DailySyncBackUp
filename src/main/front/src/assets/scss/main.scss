@@ -650,11 +650,13 @@ input {
 }
 
 .fc {
-  box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.3);
-  padding: 20px;
-  border-radius: 10px;
-  .fc-scroller {
-    margin-top: 1px;
+  &:not(.none) {
+    box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 10px;
+  }
+  .fc-scroller-harness-liquid {
+    height: calc(100% + 1px);
   }
   .fc-header-toolbar {
     .fc-toolbar-chunk {
@@ -669,7 +671,6 @@ input {
   }
   .fc-daygrid-body {
     tbody {
-      margin-bottom: -1px;
       tr:nth-of-type(1) td.fc-day-disabled {
         background-color: var(--base-white);
         border: 0;
@@ -681,7 +682,6 @@ input {
       }
     }
   }
-
   .fc-event-main,
   .fc-day:not(.fc-day-disabled) {
     cursor: pointer;
