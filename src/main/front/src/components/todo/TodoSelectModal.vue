@@ -5,7 +5,12 @@
         <div class="tit">선택된 날짜: {{ selectedDate }}</div>
       </div>
       <div class="todo-items">
-        <div class="item" v-for="(item, index) in items" :key="index">
+        <div
+          class="item"
+          v-for="(item, index) in items"
+          :key="index"
+          :class="item.checkedTime != null ? 'checked' : ''"
+        >
           <div class="item-info">
             <span class="item-tit">{{ item.title }}</span>
             <span class="item-group-tit">({{ item.groupTitle || '직접 생성' }})</span>
@@ -106,6 +111,10 @@ export default {
     padding: 10px 10px;
     position: relative;
     min-height: 50px;
+    background-color: #ff334b;
+    &.checked {
+      background-color: #4f7eff;
+    }
     &-info {
       display: flex;
       align-items: center;
