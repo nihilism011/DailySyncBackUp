@@ -19,12 +19,12 @@
     @fnScheduleList="fnScheduleList" 
     @inputSchedule="inputedSchedule" 
   />
-   <!-- 모달을 표시 -->
    <ScheduleModal
     v-if="popupState"
     :popupState="popupState"
     :searchResults="searchResults"
     @closePopup="closeModal"
+    @selectSchedule="selectSchedule" 
   />
   </div>
 </template>
@@ -56,27 +56,27 @@ export default {
     }
   },
   methods: {
-    // 모달을 여는 함수
     openModal(results) {
-      this.searchResults = results;  // 검색 결과를 설정
-      this.popupState = true;        // 모달을 열기
+      this.searchResults = results;  
+      this.popupState = true;       
     },
-    // 모달을 닫는 함수
     closeModal() {
-      this.popupState = false; // 모달 닫기
+      this.popupState = false; 
+    },
+    selectSchedule(schedule) {
+      this.inputSchedule = { ...schedule }; 
+      this.popupState = false; 
     },
     async fnScheduleList(inputDay) {
       let year = inputDay.split('-')[0];
       let month = inputDay.split('-')[1];
 
-      const startOfMonth = `${year}-${month}-01T00:00:00`; // 해당 월의 첫 날 (00:00:00)
-      const endOfMonth = `${year}-${month}-01T23:59:59`;   // 해당 월의 마지막 날 (23:59:59)
+      const startOfMonth = `${year}-${month}-01T00:00:00`; 
+      const endOfMonth = `${year}-${month}-01T23:59:59`;   
       try {
-      // 서버로 GET 요청 보내기
       const full = await this.$axios.get(`schedule/userId/scheduleList/${year}/${month}`, {
-        params: { startOfMonth, endOfMonth } // startOfMonth와 endOfMonth를 쿼리 파라미터로 전달
+        params: { startOfMonth, endOfMonth } 
       });
-
         if (full.status && full.data.length > 0) {
           this.dailyList = full.data.map(item => ({
             id: item.id,
@@ -96,14 +96,18 @@ export default {
       }
     },
     async inputedSchedule(id) {
-      const response = await this.$axios.get(`schedule/userId/id/${id}`);
-      if (response.status) {
-        console.log("response.data",response.data)
-        this.inputSchedule = response.data;  
-      }else {
-        console.log("일정이 없습니다.");
+      if (id) {
+        const response = await this.$axios.get(`schedule/userId/id/${id}`);
+        if (response.status) {
+          console.log("response.data", response.data);
+          this.inputSchedule = response.data;  
+        } else {
+          console.log("일정이 없습니다.");
+        }
+      } else {
+        this.inputSchedule = { title: '', startTime: '', endTime: '', description: '' };
       }
-    },
+    }
   },
   mounted() {
     this.day = this.$dayjs().format('YYYY-MM-DD')

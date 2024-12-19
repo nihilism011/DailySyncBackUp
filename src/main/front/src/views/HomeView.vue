@@ -38,7 +38,7 @@
 
       <div class="dashboard-sections">
         <div v-if="isScheduleView" class="dashboard-item schedule">
-          <h3>스케줄</h3>
+          <ScheduleDashboard :selectedDate="selectedDate" />
         </div>
 
         <div v-if="isTodoView" class="dashboard-item todo">
@@ -61,8 +61,10 @@
 import MealDashboard from '@/components/dashboard/MealDashboard.vue'
 import TodoDashboard from '@/components/todo/TodoDashboard.vue'
 import AccountDashboard from '@/components/account/layout/AccountDashboard.vue'
+import ScheduleDashboard from '@/components/schedule/ScheduleDashboard.vue';
 export default {
   components: {
+    ScheduleDashboard,
     TodoDashboard,
     MealDashboard,
     AccountDashboard,

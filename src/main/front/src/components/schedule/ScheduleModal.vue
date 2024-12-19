@@ -7,7 +7,7 @@
       <div class="search-list">
         <div v-if="searchResults.length === 0">검색 결과가 없습니다.</div>
         <div v-else>
-          <div v-for="(item, index) in searchResults" :key="index" class="list-item">
+          <div v-for="(item, index) in searchResults" :key="index" class="list-item" @click="selectSchedule(item)">
             <div class="tit">{{ item.title }}</div>
             <div class="date-range">
               {{ getDateRange(item.startTime, item.endTime) }}
@@ -32,6 +32,10 @@ export default {
   methods: {
     closeModal() {
       this.$emit('closePopup')
+    },
+    selectSchedule(item) {
+      this.$emit('selectSchedule', item); 
+      this.closeModal(); 
     },
     formatDate(date) {
       if (!date) return ''
