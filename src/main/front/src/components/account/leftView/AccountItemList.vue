@@ -23,7 +23,9 @@ import { useDateStore } from '@/stores/dateStore'
 import { useRefreshStore } from '@/stores/refreshStore'
 import AccountItem from '@/components/account/leftView/AccountItem.vue'
 export default {
-  emits: ['refresh'],
+  props: {
+    propDate: String,
+  },
   components: {
     AccountItem,
   },
@@ -39,18 +41,20 @@ export default {
     }
   },
   watch: {
+    propDate() {
+      this.fetchDataList()
+    },
     'dateStore.selectedDate': 'fetchDataList',
     'refreshStore.refreshState': 'fetchDataList',
   },
   methods: {
     async fetchDataList() {
-      const date = this.dateStore.selectedDate || this.$dayjs().format('YYYY-MM-DD')
+      const date = this.propDate ?? this.dateStore.selectedDate
       const url = `account/items/date/${date}`
       const { data } = await this.$axios.get(url)
       const plusList = []
       const minusList = []
       for (let account of data) {
-        console.log(account)
         if (account.amount > 0) {
           plusList.push(account)
         } else {

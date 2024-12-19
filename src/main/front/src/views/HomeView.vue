@@ -1,6 +1,5 @@
 <template>
   <div class="dashboard-container">
-
     <!-- 왼쪽 사이드바 (유저 프로필 및 네비게이션) -->
     <div class="user-sidebar">
       <div class="user-profile">
@@ -18,42 +17,72 @@
     <div class="dashboard-content">
       <div class="dashboard-header">
         <h1><input type="date" class="date-picker" v-model="selectedDate" /></h1>
+        <div class="ip-list">
+          <div class="tit-box">
+            <p class="tit">대시보드 선택</p>
+          </div>
+          <div class="bot-box">
+            <div class="ip-chk-txt">
+              <input id="schedule" type="checkbox" v-model="isScheduleView" @change="fetchView" />
+              <label for="schedule">schedule</label>
+              <input id="todo" type="checkbox" v-model="isTodoView" @change="fetchView" />
+              <label for="todo">todo</label>
+              <input id="meal" type="checkbox" v-model="isMealView" @change="fetchView" />
+              <label for="meal">meal</label>
+              <input id="account" type="checkbox" v-model="isAccountView" @change="fetchView" />
+              <label for="account">account</label>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="dashboard-sections">
-        <div class="dashboard-item schedule">
+        <div v-if="isScheduleView" class="dashboard-item schedule">
           <h3>스케줄</h3>
         </div>
 
-        <div class="dashboard-item todo">
+        <div v-if="isTodoView" class="dashboard-item todo">
           <TodoDashboard :selectedDate="selectedDate" />
         </div>
 
-        <div class="dashboard-item diet">
+        <div v-if="isMealView" class="dashboard-item diet">
           <MealDashboard :selectedDate="selectedDate" />
         </div>
 
-        <div class="dashboard-item finance">
-          <h3>가계부</h3>
+        <div v-if="isAccountView" class="dashboard-item finance">
+          <AccountDashboard :selectedDate="selectedDate" />
         </div>
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
-import MealDashboard from '@/components/dashboard/MealDashboard.vue';
-import TodoDashboard from '@/components/todo/TodoDashboard.vue';
+import MealDashboard from '@/components/dashboard/MealDashboard.vue'
+import TodoDashboard from '@/components/todo/TodoDashboard.vue'
+import AccountDashboard from '@/components/account/layout/AccountDashboard.vue'
 export default {
   components: {
     TodoDashboard,
-    MealDashboard
+    MealDashboard,
+    AccountDashboard,
   },
   data() {
     return {
       selectedDate: new Date().toISOString().split('T')[0],
-    };
+      isScheduleView: JSON.parse(localStorage.getItem('scheduleView')) ?? true,
+      isTodoView: JSON.parse(localStorage.getItem('todoView')) ?? true,
+      isMealView: JSON.parse(localStorage.getItem('mealView')) ?? true,
+      isAccountView: JSON.parse(localStorage.getItem('accountView')) ?? true,
+    }
+  },
+  methods: {
+    fetchView() {
+      localStorage.setItem('scheduleView', JSON.stringify(this.isScheduleView))
+      localStorage.setItem('todoView', JSON.stringify(this.isTodoView))
+      localStorage.setItem('mealView', JSON.stringify(this.isMealView))
+      localStorage.setItem('accountView', JSON.stringify(this.isAccountView))
+    },
   },
 }
 </script>
@@ -102,7 +131,7 @@ export default {
   padding: 40px;
   background-color: #fff;
   overflow-y: auto;
-  margin-top:-20px;
+  margin-top: -20px;
 }
 
 .dashboard-header h1 {

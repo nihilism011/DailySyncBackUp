@@ -20,7 +20,7 @@
         </div>
         <div class="second">
           <div class="tit">고정 지출</div>
-          <div>{{ numToWon(fixedInfo.minusSumAmount) }}</div>
+          <div>{{ numToWon(-fixedInfo.minusSumAmount) }}</div>
         </div>
       </div>
     </div>

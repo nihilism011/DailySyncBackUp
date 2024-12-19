@@ -1,16 +1,14 @@
 <template>
-  <!-- 비슷하게 입혀놓음 -->
   <div class="account-left">
     <div class="account-fixed">
-      <div class="account-tit">{{ dateStore.selectedDate }}</div>
       <div class="account-divide">
         <div class="first">
           <div class="tit">소득</div>
-          <div>{{ moneyFormatted.plus }}</div>
+          <div>{{ numToWon(money.plus) }}</div>
         </div>
         <div class="second">
           <div class="tit">지출</div>
-          <div>{{ moneyFormatted.minus }}</div>
+          <div>{{ numToWon(money.minus) }}</div>
         </div>
       </div>
     </div>
@@ -23,6 +21,9 @@ import { useDateStore } from '@/stores/dateStore'
 import { useRefreshStore } from '@/stores/refreshStore'
 
 export default {
+  props: {
+    propDate: String,
+  },
   data() {
     const dateStore = useDateStore()
     const refreshStore = useRefreshStore()
@@ -33,27 +34,20 @@ export default {
     }
   },
   watch: {
+    propDate() {
+      this.fetchData()
+    },
     'dateStore.selectedDate': 'fetchData',
     'refreshStore.refreshState': 'fetchData',
   },
-  computed: {
-    selectedDate() {
-      return this.dateStore.selectedDate
-    },
-    moneyFormatted() {
-      return {
-        plus: numToWon(this.money.plus),
-        minus: numToWon(this.money.minus),
-      }
-    },
-  },
   methods: {
+    numToWon,
     async fetchData() {
-      const date = this.selectedDate || this.$dayjs().format('YYYY-MM-DD')
+      const date = this.propDate ?? this.dateStore.selectedDate
       const url = `account/items/sum/${date}`
       const { data } = await this.$axios.get(url)
       this.money.plus = data.plusSumAmount
-      this.money.minus = data.minusSumAmount
+      this.money.minus = -data.minusSumAmount
     },
   },
   mounted() {

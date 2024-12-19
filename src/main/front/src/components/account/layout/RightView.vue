@@ -1,3 +1,20 @@
+<script setup>
+import { ref } from 'vue'
+import Calendar from '../rightView/AccountCalendar.vue'
+import MonthScore from '../rightView/MonthScore.vue'
+import MonthFixedList from '../rightView/MonthFixedList.vue'
+import { useDateStore } from '@/stores/dateStore'
+
+const dateStore = useDateStore()
+const calendarRef = ref(null)
+
+const changeViewCalendar = (np) => {
+  const calendar = calendarRef.value
+  if (calendar) {
+    calendar.changeCalendarView(np)
+  }
+}
+</script>
 <template>
   <div class="account-right-container">
     <div class="fc none">
@@ -36,36 +53,6 @@
     <Calendar ref="calendarRef" />
   </div>
 </template>
-<script>
-import Calendar from '../rightView/AccountCalendar.vue'
-import MonthScore from '../rightView/MonthScore.vue'
-import MonthFixedList from '../rightView/MonthFixedList.vue'
-import { useDateStore } from '@/stores/dateStore'
-export default {
-  components: {
-    Calendar,
-    MonthScore,
-    MonthFixedList,
-  },
-  setup() {
-    const dateStore = useDateStore()
-    return { dateStore }
-  },
-  data() {
-    return {
-      year: null,
-      month: null,
-    }
-  },
-  methods: {
-    changeViewCalendar(np) {
-      const calendar = this.$refs.calendarRef
-      calendar.changeCalendarView(np)
-    },
-  },
-  mounted() {},
-}
-</script>
 <style lang="scss" scoped>
 .account-right-container {
   display: flex;
