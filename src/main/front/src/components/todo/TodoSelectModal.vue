@@ -5,18 +5,25 @@
         <div class="tit">선택된 날짜: {{ selectedDate }}</div>
       </div>
       <div class="todo-items">
-        <div class="item" v-for="(item, index) in items" :key="index">
+        <div
+          class="item"
+          v-for="(item, index) in items"
+          :key="index"
+          :class="item.checkedTime != null ? 'checked' : ''"
+        >
           <div class="item-info">
             <span class="item-tit">{{ item.title }}</span>
-            <span class="item-group-tit">({{ item.groupTitle || '직접 생성' }})</span>
+            <div v-if="item.groupTitle">
+              <span class="item-group-tit">({{ item.groupTitle }})</span>
+            </div>
           </div>
           <template v-if="item.status == 'new'">
             <span class="item-date">{{ formatTimeWithoutSeconds(item.checkedTime) }}</span>
           </template>
           <template v-else>
-            <span class="item-date">
-              <div>생성일 : {{ formatDateTime(item.createdAt) }}</div>
-              <div>완료일 : {{ formatDateTime(item.checkedTime) }}</div>
+            <span class="item-date" style="text-align: right">
+              <div>작성일 : {{ formatDate(item.createdAt) }}</div>
+              <div>완료 : {{ formatTime(item.checkedTime) }}</div>
             </span>
           </template>
         </div>
@@ -68,22 +75,27 @@ export default {
         console.error('데이터 가져오기 실패:', error)
       }
     },
-
-    formatTimeWithoutSeconds(time) {
-      if (!time) return '활동 안함'
-      const date = new Date(time)
-      return `${date.getHours()}시 ${date.getMinutes()}분`
-    },
-
-    formatDateTime(dateTime) {
-      if (!dateTime) return '활동 안함'
+    // 날짜만 반환 (YYYY-MM-DD)
+    formatDate(dateTime) {
+      if (!dateTime) return ''
       const date = new Date(dateTime)
       const year = date.getFullYear()
       const month = String(date.getMonth() + 1).padStart(2, '0')
       const day = String(date.getDate()).padStart(2, '0')
+      return `${year}-${month}-${day}`
+    },
+    // 시간만 반환 (HH시 MM분)
+    formatTime(dateTime) {
+      if (!dateTime) return ''
+      const date = new Date(dateTime)
       const hours = String(date.getHours()).padStart(2, '0')
       const minutes = String(date.getMinutes()).padStart(2, '0')
-      return `${year}-${month}-${day} ${hours}시${minutes}분`
+      return `${hours}시 ${minutes}분`
+    },
+    formatTimeWithoutSeconds(time) {
+      if (!time) return ''
+      const date = new Date(time)
+      return `${date.getHours()}시 ${date.getMinutes()}분`
     },
   },
 }
@@ -103,9 +115,13 @@ export default {
     display: flex;
     width: 100%;
     border-bottom: 1px dashed var(--color-contrastyC8);
-    padding: 10px 10px;
+    padding: 10px 10px 10px 24px;
     position: relative;
     min-height: 50px;
+    background: url('@/assets/images/ico/ico_done1_2.png') left center / 18px no-repeat;
+    &.checked {
+      background-image: url('@/assets/images/ico/ico_done.png');
+    }
     &-info {
       display: flex;
       align-items: center;

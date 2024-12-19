@@ -28,20 +28,23 @@ export default {
     return {
       calendarOptions: {
         locale: 'ko',
-        height: 600,
+        height: 550,
         plugins: [dayGridPlugin, interactionPlugin],
         showNonCurrentDates: false,
         initialDate: this.dateStore.selectedDate || this.$dayjs().format('YYYY-MM-DD'),
         initialView: 'dayGridMonth',
-        headerToolbar: {
-          left: 'prev',
-          center: 'title',
-          right: 'next',
-        },
+        headerToolbar: false,
+        // headerToolbar: {
+        //   left: 'prev',
+        //   center: 'title',
+        //   right: 'next',
+        // },
         events: [],
         dateClick: this.handleDateClick,
         eventClick: this.handleEventClick,
-        dayCellContent: this.dayCellContent,
+        dayCellContent: (info) => {
+          return parseInt(info.dayNumberText)
+        },
         datesSet: this.handleDatesChange,
         footerToolbar: {
           right: 'myCustomButton',
@@ -53,9 +56,6 @@ export default {
               this.gotoToday()
             },
           },
-        },
-        dayCellContent: function (info) {
-          return parseInt(info.dayNumberText)
         },
       },
       calendarEvents: [],
@@ -76,6 +76,18 @@ export default {
       calendar.gotoDate(today)
       this.dateStore.setSelectedDate(this.$dayjs(today).format('YYYY-MM-DD'))
     },
+    changeCalendarView(np) {
+      const calendar = this.$refs.calendar.getApi()
+      if (np === 'next') {
+        this.dateStore.moveNextMonth()
+      } else {
+        this.dateStore.moveBeforeMonth()
+      }
+      const year = this.dateStore.selectedYear
+      const month = this.dateStore.selectedMonth
+      const date = `${year}-${month}-01`
+      calendar.gotoDate(new Date(date))
+    },
     updateYearAndMonth() {
       this.$emit('updateYearMonth', this.selectYear, this.selectMonth)
     },
@@ -88,14 +100,14 @@ export default {
           result.push({
             start: item.accountDate,
             title: numToWon(item.plusSumAmount),
-            color: 'red',
+            color: '#ff334b',
           })
         }
         if (item.minusSumAmount !== 0) {
           result.push({
             start: item.accountDate,
             title: numToWon(item.minusSumAmount),
-            color: 'blue',
+            color: '#4f7eff',
           })
         }
         return result

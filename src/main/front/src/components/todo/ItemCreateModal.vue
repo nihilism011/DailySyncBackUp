@@ -12,7 +12,7 @@
             <p class="tit">제목</p>
           </div>
           <div class="bot-box">
-            <div class="ip-box">              
+            <div class="ip-box">
               <input type="text" v-model="newItem.title" placeholder="제목 입력" />
             </div>
           </div>
@@ -23,6 +23,8 @@
           </div>
           <div class="bot-box">
             <div class="ip-chk-txt">
+              <input type="checkbox" id="day7" v-model="newItem.day" value="일" />
+              <label for="day7">일</label>
               <input type="checkbox" id="day1" v-model="newItem.day" value="월" />
               <label for="day1">월</label>
               <input type="checkbox" id="day2" v-model="newItem.day" value="화" />
@@ -35,8 +37,6 @@
               <label for="day5">금</label>
               <input type="checkbox" id="day6" v-model="newItem.day" value="토" />
               <label for="day6">토</label>
-              <input type="checkbox" id="day7" v-model="newItem.day" value="일" />
-              <label for="day7">일</label>
             </div>
           </div>
         </div>
@@ -46,11 +46,11 @@
           </div>
           <div class="bot-box">
             <div class="ip-ra-txt">
-              <input type="radio" id="order1" v-model="newItem.itemOrder" value='1' />
+              <input type="radio" id="order1" v-model="newItem.itemOrder" value="1" />
               <label for="order1">높음</label>
-              <input type="radio" id="order2" v-model="newItem.itemOrder" value='2' />
+              <input type="radio" id="order2" v-model="newItem.itemOrder" value="2" />
               <label for="order2">보통</label>
-              <input type="radio" id="order3" v-model="newItem.itemOrder" value='3' />
+              <input type="radio" id="order3" v-model="newItem.itemOrder" value="3" />
               <label for="order3">낮음</label>
             </div>
           </div>
@@ -61,13 +61,15 @@
           </div>
           <div class="bot-box">
             <div class="ip-chk-txt">
-              <input type="checkbox" id="auto" v-model="newItem.isAuto" value='1' />
+              <input type="checkbox" id="auto" v-model="newItem.isAuto" value="1" />
               <label for="auto">Auto</label>
             </div>
           </div>
         </div>
         <div class="pop-btn-wrap">
-          <button @click="saveItem" class="btn-default submit">{{ mode === 'create' ? '추가' : '수정' }}</button>
+          <button @click="saveItem" class="btn-default submit">
+            {{ mode === 'create' ? '추가' : '수정' }}
+          </button>
           <button @click="closeModal" class="btn-default cancel">취소</button>
         </div>
       </div>
@@ -99,76 +101,72 @@ export default {
         title: '',
         isAuto: '',
         status: '',
-        day: [], 
+        day: [],
       }),
     },
   },
   data() {
     return {
       newItem: { ...this.item },
-    };
+    }
   },
   watch: {
     item(newVal) {
-      this.newItem = { ...newVal };
+      this.newItem = { ...newVal }
     },
   },
   methods: {
     closeModal() {
-      this.$emit('close');
+      this.$emit('close')
     },
     async saveItem() {
       if (!this.newItem.title || !this.newItem.day.length || !this.newItem.itemOrder) {
-        alert('빈칸을 채워주세요');
-        return;
+        alert('빈칸을 채워주세요')
+        return
       }
 
       try {
-        let url;
+        let url
 
         if (this.mode === 'create') {
-          url = 'todo/item';  
+          url = 'todo/item'
           await this.$axios.post(url, {
             title: this.newItem.title,
             day: this.newItem.day,
             isAuto: this.newItem.isAuto,
-            groupId: this.groupId,  
+            groupId: this.groupId,
             itemOrder: this.newItem.itemOrder,
-            status: "new",
-          });
-
+            status: 'new',
+          })
         } else if (this.mode === 'update') {
-          url = 'todo/item';  
+          url = 'todo/item'
           await this.$axios.post(url, {
             title: this.newItem.title,
             day: this.newItem.day,
             isAuto: this.newItem.isAuto,
-            groupId: this.groupId,  
+            groupId: this.groupId,
             itemOrder: this.newItem.itemOrder,
-            status: "new",
-          });
-          const statusUrl = `todo/item/update/status/${this.item.id}`;
-          await this.$axios.put(statusUrl);
+            status: 'new',
+          })
+          const statusUrl = `todo/item/update/status/${this.item.id}`
+          await this.$axios.put(statusUrl)
         }
 
-        alert(`${this.mode === 'create' ? '아이템 추가' : '아이템 수정'} 성공`);
-        this.$emit('save-item'); 
-        this.newItem.title="";
-        this.newItem.day=[];
-        this.newItem.isAuto="";
-        this.newItem.itemOrder="";
-        this.closeModal();
-        
+        alert(`${this.mode === 'create' ? '아이템 추가' : '아이템 수정'} 성공`)
+        this.$emit('save-item')
+        this.newItem.title = ''
+        this.newItem.day = []
+        this.newItem.isAuto = ''
+        this.newItem.itemOrder = ''
+        this.closeModal()
       } catch (error) {
-        console.error('오류 발생:', error);
-        alert(`${this.mode === 'create' ? '아이템 추가' : '아이템 수정'} 실패`);
+        console.error('오류 발생:', error)
+        alert(`${this.mode === 'create' ? '아이템 추가' : '아이템 수정'} 실패`)
       }
     },
   },
-};
+}
 </script>
-
-
 
 <style scoped>
 .modal-overlay {
