@@ -1,17 +1,18 @@
 <template>
   <div class="dash-wrap">
-    <template v-if="mealList != null || mealList != undefined">
-      <div class="dash-item-wrap">
+    <div class="dash-item-wrap">
+      <template v-if="mealList != null || mealList != undefined">
         <div class="dash-item" v-for="item in mealList">
-          {{ item.icon }}
-          {{ item.foodName }}
-          {{ this.mealCategory[item.category].name }}
-          {{ item.kcalories }}
-          {{ item.description }}
+          <p class="dash-icon" :class="item.icon">{{ item.icon }}</p>
+          <p class="tit">{{ item.foodName }}</p>
+          <p class="category">{{ this.mealCategory[item.category].name }}</p>
+          <p class="kcal">{{ item.kcalories }}</p>
         </div>
-      </div>
-    </template>
-    <template v-else>일정이없어요</template>
+      </template>
+      <template v-else>
+        <div class="dash-item none">일정이없어요</div>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -47,4 +48,16 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.dash {
+  &-item {
+    display: flex;
+    align-items: center;
+    min-height: 60px;
+    padding: 10px 5px;
+    &-wrap {
+      overflow: hidden;
+    }
+  }
+}
+</style>
