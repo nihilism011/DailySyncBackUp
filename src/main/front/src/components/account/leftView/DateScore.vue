@@ -1,15 +1,16 @@
 <template>
-  <div class="date-score-container">
-    <div class="list-item">
-      <div class="tit-box">
-        <div class="title">
-          {{ dateStore.selectedDate }}
+  <div class="account-left">
+    <div class="account-fixed">
+      <div class="account-divide">
+        <div class="first">
+          <div class="tit">소득</div>
+          <div>{{ numToWon(money.plus) }}</div>
+        </div>
+        <div class="second">
+          <div class="tit">지출</div>
+          <div>{{ numToWon(money.minus) }}</div>
         </div>
       </div>
-      <div>수입</div>
-      <div>{{ moneyFormatted.plus }}</div>
-      <div>지출</div>
-      <div>{{ moneyFormatted.minus }}</div>
     </div>
   </div>
 </template>
@@ -20,6 +21,9 @@ import { useDateStore } from '@/stores/dateStore'
 import { useRefreshStore } from '@/stores/refreshStore'
 
 export default {
+  props: {
+    propDate: String,
+  },
   data() {
     const dateStore = useDateStore()
     const refreshStore = useRefreshStore()
@@ -30,27 +34,20 @@ export default {
     }
   },
   watch: {
+    propDate() {
+      this.fetchData()
+    },
     'dateStore.selectedDate': 'fetchData',
     'refreshStore.refreshState': 'fetchData',
   },
-  computed: {
-    selectedDate() {
-      return this.dateStore.selectedDate
-    },
-    moneyFormatted() {
-      return {
-        plus: numToWon(this.money.plus),
-        minus: numToWon(this.money.minus),
-      }
-    },
-  },
   methods: {
+    numToWon,
     async fetchData() {
-      const date = this.selectedDate || this.$dayjs().format('YYYY-MM-DD')
+      const date = this.propDate ?? this.dateStore.selectedDate
       const url = `account/items/sum/${date}`
       const { data } = await this.$axios.get(url)
       this.money.plus = data.plusSumAmount
-      this.money.minus = data.minusSumAmount
+      this.money.minus = -data.minusSumAmount
     },
   },
   mounted() {

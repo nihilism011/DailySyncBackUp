@@ -11,7 +11,7 @@
       <div class="form-group">
         <select v-model="amountType" class="input-field">
           <option value="minus">지출</option>
-          <option value="plus">수입</option>
+          <option value="plus">소득</option>
         </select>
       </div>
 

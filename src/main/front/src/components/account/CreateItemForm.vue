@@ -7,9 +7,9 @@
           {{ category.name }}
         </option>
       </select>
-      <label for="amountType">수입/지출</label>
+      <label for="amountType">소득/지출</label>
       <select id="amountType" v-model="amountType">
-        <option value="plus">수입</option>
+        <option value="plus">소득</option>
         <option value="minus">지출</option>
       </select>
     </div>

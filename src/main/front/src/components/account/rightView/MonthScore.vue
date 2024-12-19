@@ -3,7 +3,7 @@
     <div class="account-fixed">
       <div class="account-divide">
         <div class="first">
-          <div class="tit">수입</div>
+          <div class="tit">소득</div>
           <div>{{ numToWon(info.plusSumAmount) }}</div>
         </div>
         <div class="second">
@@ -15,12 +15,12 @@
     <div class="account-fixed">
       <div class="account-divide">
         <div class="first">
-          <div class="tit">고정 수입</div>
+          <div class="tit">고정 소득</div>
           <div>{{ numToWon(fixedInfo.plusSumAmount) }}</div>
         </div>
         <div class="second">
           <div class="tit">고정 지출</div>
-          <div>{{ numToWon(fixedInfo.minusSumAmount) }}</div>
+          <div>{{ numToWon(-fixedInfo.minusSumAmount) }}</div>
         </div>
       </div>
     </div>
@@ -46,11 +46,6 @@ export default {
       this.fetchData()
     },
     'refreshStore.refreshState': 'fetchData',
-  },
-  computed: {
-    monthString() {
-      return `${this.year}년 ${this.month}월`
-    },
   },
   data() {
     return {
