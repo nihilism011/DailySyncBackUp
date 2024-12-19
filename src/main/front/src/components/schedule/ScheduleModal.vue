@@ -36,7 +36,7 @@ export default {
     formatDate(date) {
       if (!date) return ''
       const formattedDate = new Date(date)
-
+       // UTC 시간대 기준으로 날짜 출력 (시간대 차이 고려)
       const year = formattedDate.getUTCFullYear()
       const month = String(formattedDate.getUTCMonth() + 1).padStart(2, '0')  
       const day = String(formattedDate.getUTCDate()).padStart(2, '0')
