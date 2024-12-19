@@ -116,6 +116,10 @@ export default {
       }
     },
   },
+  async autoCreate() {
+      const url = `todo/autoCreate`
+      await this.$axios.post(url)
+    },
 }
 </script>
 

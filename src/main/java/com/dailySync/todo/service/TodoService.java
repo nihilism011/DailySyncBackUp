@@ -389,10 +389,6 @@ public class TodoService {
             }
         }
     }
-    // 리스트 자동생성 -----------(위)
-
-
-
     // 주어진 요일에 맞는 날짜를 구하는 메서드
     private LocalDate getNextDateForDay(LocalDate today, String dayOfWeek) {
         // 요일을 숫자(0 = 일요일, 1 = 월요일, ..., 6 = 토요일)로 변환

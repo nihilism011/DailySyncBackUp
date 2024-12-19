@@ -6,7 +6,7 @@
   <div class="right todo-type">
     <div class="todo-wrap">
       <div class="todo-box">
-        <TodoList />
+        <TodoList @update-day-list="handleDayListUpdate" />
       </div>
       <div class="todo-box">
         <div class="first">
@@ -64,6 +64,9 @@ export default {
         console.log(daily.message)
       }
     },
+    handleDayListUpdate() {
+    this.fnDayList(this.selectedDate); 
+  },
   },
   mounted() {
     this.todoauto()
