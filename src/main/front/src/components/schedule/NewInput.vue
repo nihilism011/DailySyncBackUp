@@ -149,6 +149,7 @@ export default {
         if(response){
           this.$emit('fnScheduleList', this.day);
           this.$emit('fnDayList', this.day);
+          this.$emit('inputedSchedule', null); // 화면에서 해당 일정 정보 지움
         }
       }
     },
@@ -157,8 +158,21 @@ export default {
       this.newSchedule = { title: '', startTime: '', endTime: '', description: '' }; 
     },
     async fnSave() {
-      if (new Date(this.newSchedule.startTime) > new Date(this.newSchedule.endTime)) {
-        alert('끝나는 날이 시작 날 확인.');
+      if (!this.newSchedule.title.trim()) {
+        alert('제목을 입력해주세요.');
+        return; 
+      }
+
+      const startTime = new Date(this.newSchedule.startTime);
+      const endTime = new Date(this.newSchedule.endTime);
+
+      if (isNaN(startTime.getTime()) || isNaN(endTime.getTime())) {
+        alert('시작 날짜 또는 끝 날짜가 올바르지 않습니다. 유효한 날짜 형식을 입력해 주세요.');
+        return;
+      }
+      
+      if (startTime > endTime) {
+        alert('끝나는 시간이 시작 시간보다 이전입니다. 날짜를 확인해 주세요.');
         return;
       }
       const schedule = this.isAdd ? this.newSchedule : this.newSchedule; 

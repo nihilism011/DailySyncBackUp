@@ -96,14 +96,18 @@ export default {
       }
     },
     async inputedSchedule(id) {
-      const response = await this.$axios.get(`schedule/userId/id/${id}`);
-      if (response.status) {
-        console.log("response.data",response.data)
-        this.inputSchedule = response.data;  
-      }else {
-        console.log("일정이 없습니다.");
+      if (id) {
+        const response = await this.$axios.get(`schedule/userId/id/${id}`);
+        if (response.status) {
+          console.log("response.data", response.data);
+          this.inputSchedule = response.data;  
+        } else {
+          console.log("일정이 없습니다.");
+        }
+      } else {
+        this.inputSchedule = { title: '', startTime: '', endTime: '', description: '' };
       }
-    },
+    }
   },
   mounted() {
     this.day = this.$dayjs().format('YYYY-MM-DD')
