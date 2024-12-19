@@ -76,10 +76,11 @@ export default {
   },
   methods: {
     initYears() {
-      const currentYear = new Date().getFullYear()
-      const startYear = currentYear - 14
-      for (let year = startYear; year <= currentYear; year++) {
-        this.years.push(year)
+      const currentYear = new Date().getFullYear(); 
+      const endYear = currentYear + 10;  
+  
+  for (let year = currentYear; year <= endYear; year++) {
+    this.years.push(year);
       }
     },
     async fnSearch() {
@@ -95,7 +96,7 @@ export default {
       } else if (this.form.searchType === 'title' && this.form.title) {
         url = `schedule/title/${this.form.title}`
       }
-
+      
       if (url) {
         try {
           const { data } = await this.$axios.get(url)

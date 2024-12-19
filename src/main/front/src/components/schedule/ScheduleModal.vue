@@ -10,7 +10,7 @@
           <div v-for="(item, index) in searchResults" :key="index" class="list-item">
             <div class="tit">{{ item.title }}</div>
             <div class="date-range">
-              {{ formatDate(item.startTime) }} ~ {{ formatDate(item.endTime) }}
+              {{ getDateRange(item.startTime, item.endTime) }}
             </div>
           </div>
         </div>
@@ -36,7 +36,22 @@ export default {
     formatDate(date) {
       if (!date) return ''
       const formattedDate = new Date(date)
-      return formattedDate.toLocaleDateString()
+
+      const year = formattedDate.getUTCFullYear()
+      const month = String(formattedDate.getUTCMonth() + 1).padStart(2, '0')  
+      const day = String(formattedDate.getUTCDate()).padStart(2, '0')
+
+      return `${year}-${month}-${day}`
+      },
+      getDateRange(startTime, endTime) {
+      const startFormatted = this.formatDate(startTime);
+      const endFormatted = this.formatDate(endTime);
+
+      if (startTime > endTime) {
+        return `${endFormatted} ~ ${startFormatted}`;
+      }
+      return `${startFormatted} ~ ${endFormatted}`;
+    
     },
   },
 }
