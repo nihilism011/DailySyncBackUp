@@ -163,21 +163,20 @@ public class TodoService {
     public Boolean createTodoItem(Long userId, TodoItemReqDto reqDto) {
 
         if (reqDto.getGroupId() == null) {
-            // userId 또는 groupId가 null인 경우 예외를 던짐
-            throw new IllegalArgumentException("그룹아이디들 제대로 안넘어옴 ");
+            throw new IllegalArgumentException("그룹아이디가 제대로 넘어오지 않았어.");
         }
-        if (userId == null ) {
-            // userId 또는 groupId가 null인 경우 예외를 던짐
-            throw new IllegalArgumentException("유ㅜ저아이디들 제대로 안넘어옴 ");
+        if (userId == null) {
+            throw new IllegalArgumentException("유저아이디가 제대로 넘어오지 안항ㅆ어.");
         }
 
         User user = userRepository.findById(userId).orElse(null);
         TodoGroup todoGroup = todoGroupRepository.findById(reqDto.getGroupId()).orElse(null);
 
+        // TodoItem 생성
         TodoItem todoItem = TodoItem.builder()
                 .user(user)
                 .todoGroup(todoGroup)
-                .day(reqDto.getDay())  // List<String> 형태로 받아서 저장
+                .day(reqDto.getDay())
                 .itemOrder(reqDto.getItemOrder())
                 .title(reqDto.getTitle())
                 .isAuto(reqDto.getIsAuto())
@@ -185,8 +184,32 @@ public class TodoService {
                 .build();
 
         todoItemRepository.save(todoItem);
+
+        // 오늘 날짜와 매칭되는 경우 TodoList 생성 (isAuto가 true일 때만)
+        if (todoItem.getIsAuto() != null && todoItem.getIsAuto()) {
+            LocalDate today = LocalDate.now();
+            String todayDayOfWeek = getDayOfWeekItem(today);
+
+            if (reqDto.getDay().contains(todayDayOfWeek)) {
+                boolean exists = todoListRepository.existsByUserIdAndDateAndTodoItemId(userId, today, todoItem.getId());
+                if (!exists) {
+                    TodoList todoList = TodoList.builder()
+                            .user(user)
+                            .todoItem(todoItem)
+                            .date(today)
+                            .title(reqDto.getTitle())
+                            .listOrder(reqDto.getItemOrder())
+                            .status("new")
+                            .build();
+
+                    todoListRepository.save(todoList);
+                }
+            }
+        }
+
         return true;
     }
+
     //todoGroup을 생성 (6)
     public Boolean createTodoGroup(Long userId, TodoGroupReqDto reqDto) {
         User user = userRepository.findById(userId).orElse(null);
@@ -389,10 +412,6 @@ public class TodoService {
             }
         }
     }
-    // 리스트 자동생성 -----------(위)
-
-
-
     // 주어진 요일에 맞는 날짜를 구하는 메서드
     private LocalDate getNextDateForDay(LocalDate today, String dayOfWeek) {
         // 요일을 숫자(0 = 일요일, 1 = 월요일, ..., 6 = 토요일)로 변환
@@ -423,6 +442,26 @@ public class TodoService {
             case "금": return 5;
             case "토": return 6;
             default: return -1;
+        }
+    }
+    private String getDayOfWeekItem(LocalDate date) {
+        switch (date.getDayOfWeek()) {
+            case SUNDAY:
+                return "일";
+            case MONDAY:
+                return "월";
+            case TUESDAY:
+                return "화";
+            case WEDNESDAY:
+                return "수";
+            case THURSDAY:
+                return "목";
+            case FRIDAY:
+                return "금";
+            case SATURDAY:
+                return "토";
+            default:
+                throw new IllegalArgumentException("Invalid day of week");
         }
     }
 

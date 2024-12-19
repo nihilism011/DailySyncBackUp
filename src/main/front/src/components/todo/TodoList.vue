@@ -136,6 +136,7 @@ export default {
         try {
           await this.$axios.delete(url)
           this.fetchListByUserId()
+          this.$emit('updateDayList')
           alert('삭제됐음')
         } catch (error) {
           alert('삭제실패' + error)
@@ -156,8 +157,8 @@ export default {
     async fetchListByUserId() {
       const url = `todo/list/today`
       const { data } = await this.$axios.get(url)
-
       this.list = data
+      this.$emit('updateDayList')
     },
     formatDate(dateString) {
       const date = new Date(dateString)

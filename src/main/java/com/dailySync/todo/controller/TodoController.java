@@ -44,7 +44,7 @@ public class TodoController {
         return "유저아이디" + userId;
     }
 
-    //putMapping
+
     @Operation
             (
                     summary = " todoList 체크 ( checktiem null 일시 now() 반대도 마찬가지 )",

@@ -72,7 +72,7 @@ export default {
       this.list = data
     },
     selectGroup(groupId) {
-      this.selectedGroupId = groupId // 선택된 그룹 ID 저장
+      this.selectedGroupId = groupId
       this.$emit('updateSelectedGroup', groupId)
     },
     async deleteGroup(id) {
