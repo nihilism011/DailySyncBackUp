@@ -6,14 +6,14 @@
   <div class="right todo-type">
     <div class="todo-wrap">
       <div class="todo-box">
-        <TodoList @update-day-list="handleDayListUpdate" />
+        <TodoList @updateDayList="handleDayListUpdate" ref="todoList" />
       </div>
       <div class="todo-box">
         <div class="first">
           <TodoGroup @updateSelectedGroup="selectedGroup = $event" />
         </div>
         <div class="second">
-          <TodoItem :selectedGroup="selectedGroup" />
+          <TodoItem :selectedGroup="selectedGroup" @updateList = "updateList" />
         </div>
       </div>
     </div>
@@ -65,8 +65,13 @@ export default {
       }
     },
     handleDayListUpdate() {
-    this.fnDayList(this.selectedDate); 
-  },
+      this.fnDayList(this.selectedDate); 
+    },
+    updateList(){
+      this.fnDayList(this.selectedDate); 
+      this.$emit('updateCreateList')
+      this.$refs.todoList.fetchListByUserId();
+    }
   },
   mounted() {
     this.todoauto()

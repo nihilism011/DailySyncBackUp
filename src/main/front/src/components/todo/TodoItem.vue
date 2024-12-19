@@ -98,6 +98,8 @@ export default {
       const url = `todo/item/${groupId}`
       const { data } = await this.$axios.get(url)
       this.items = data
+      this.$emit('updateList')
+      
     },
     deleteTodoItem(item) {
       if (confirm('정말 삭제할거냐? 되돌릴 수 없다!')) {
@@ -116,10 +118,6 @@ export default {
       }
     },
   },
-  async autoCreate() {
-      const url = `todo/autoCreate`
-      await this.$axios.post(url)
-    },
 }
 </script>
 
