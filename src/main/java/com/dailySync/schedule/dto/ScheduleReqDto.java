@@ -12,9 +12,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScheduleReqDto {
-
-    private Long id;
-    private Long userId;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private String title;

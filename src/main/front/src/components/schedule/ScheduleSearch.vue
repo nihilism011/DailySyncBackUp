@@ -3,20 +3,20 @@
     <div class="select-box">
       <select v-model="form.searchType">
         <option value="" hidden>검색조건선택</option>
-        <option value="year">연도</option>
-        <option value="yearMonth">월</option>
+        <!-- <option value="year">연도</option> -->
+        <!-- <option value="yearMonth">월</option> -->
         <option value="title">제목</option>
         <option value="range">기간설정</option>
       </select>
     </div>
-    <template v-if="form.searchType === 'year'">
+    <!-- <template v-if="form.searchType === 'year'">
       <div class="select-box">
         <select v-model="form.year">
           <option v-for="(year, index) in years" :key="index" :value="year">{{ year }}</option>
         </select>
       </div>
-    </template>
-    <template v-if="form.searchType === 'yearMonth'">
+    </template> -->
+    <!-- <template v-if="form.searchType === 'yearMonth'">
       <div class="select-box">
         <select v-model="form.year">
           <option v-for="(year, index) in years" :key="index" :value="year">{{ year }}</option>
@@ -27,7 +27,7 @@
           </option>
         </select>
       </div>
-    </template>
+    </template> -->
     <template v-if="form.searchType === 'range'">
       <div class="ip-box">
         <input type="date" v-model="form.startTime" placeholder="시작일을 입력하세요" />
@@ -57,6 +57,7 @@ export default {
   components: {
     ScheduleModal,
   },
+  emits: ['searchResult'],
   data() {
     return {
       form: {
@@ -75,10 +76,11 @@ export default {
   },
   methods: {
     initYears() {
-      const currentYear = new Date().getFullYear()
-      const startYear = currentYear - 14
-      for (let year = startYear; year <= currentYear; year++) {
-        this.years.push(year)
+      const currentYear = new Date().getFullYear(); 
+      const endYear = currentYear + 10;  
+  
+  for (let year = currentYear; year <= endYear; year++) {
+    this.years.push(year);
       }
     },
     async fnSearch() {
@@ -94,13 +96,11 @@ export default {
       } else if (this.form.searchType === 'title' && this.form.title) {
         url = `schedule/title/${this.form.title}`
       }
-
+      
       if (url) {
         try {
           const { data } = await this.$axios.get(url)
-          this.list = data
-          this.searchResults = data // 검색된 데이터를 모달로 전달
-          this.popupState = true // 모달 열기
+          this.$emit('searchResult', data); 
         } catch (error) {
           console.error('오류 :', error)
         }
