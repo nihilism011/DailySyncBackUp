@@ -120,7 +120,7 @@ export default {
   },
   methods: {
     formatDate(date) {
-      return date ? this.$dayjs(date).format('YYYY-MM-DDTHH:mm') : '';  
+      return date ? this.$dayjs(date).format('YYYY-MM-DD A hh:mm') : ''; 
     },
     fnUpdate() {
       this.isUpdate = true;

@@ -19,17 +19,26 @@
     @fnScheduleList="fnScheduleList" 
     @inputSchedule="inputedSchedule" 
   />
+   <!-- 모달을 표시 -->
+   <ScheduleModal
+    v-if="popupState"
+    :popupState="popupState"
+    :searchResults="searchResults"
+    @closePopup="closeModal"
+  />
   </div>
 </template>
 <script>
 import NewInput from '@/components/schedule/NewInput.vue';
 import ScheduleCalendar from '@/components/schedule/ScheduleCalendar.vue'
 import ScheduleSearch from '@/components/schedule/ScheduleSearch.vue'
+import ScheduleModal from '@/components/schedule/ScheduleModal.vue';
 export default {
   components: {
     NewInput,
     ScheduleSearch,
     ScheduleCalendar,
+    ScheduleModal
   },
   data() {
     return {
@@ -47,7 +56,15 @@ export default {
     }
   },
   methods: {
-    openModal(){},
+    // 모달을 여는 함수
+    openModal(results) {
+      this.searchResults = results;  // 검색 결과를 설정
+      this.popupState = true;        // 모달을 열기
+    },
+    // 모달을 닫는 함수
+    closeModal() {
+      this.popupState = false; // 모달 닫기
+    },
     async fnScheduleList(inputDay) {
       let year = inputDay.split('-')[0];
       let month = inputDay.split('-')[1];

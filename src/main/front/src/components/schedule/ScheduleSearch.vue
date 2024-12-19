@@ -57,6 +57,7 @@ export default {
   components: {
     ScheduleModal,
   },
+  emits: ['searchResult'],
   data() {
     return {
       form: {
@@ -98,9 +99,7 @@ export default {
       if (url) {
         try {
           const { data } = await this.$axios.get(url)
-          this.list = data
-          this.searchResults = data // 검색된 데이터를 모달로 전달
-          this.popupState = true // 모달 열기
+          this.$emit('searchResult', data); 
         } catch (error) {
           console.error('오류 :', error)
         }
