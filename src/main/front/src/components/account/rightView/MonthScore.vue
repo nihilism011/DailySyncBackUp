@@ -4,11 +4,11 @@
       <div class="account-divide">
         <div class="first">
           <div class="tit">소득</div>
-          <div>{{ numToWon(info.plusSumAmount) }}</div>
+          <div>{{ numToWon(accountStore.aaa.plusSumAmount) }}</div>
         </div>
         <div class="second">
           <div class="tit">지출</div>
-          <div>{{ numToWon(info.minusSumAmount) }}</div>
+          <div>{{ numToWon(accountStore.aaa.minusSumAmount) }}</div>
         </div>
       </div>
     </div>
@@ -30,11 +30,13 @@
 import { useDateStore } from '@/stores/dateStore'
 import { useRefreshStore } from '@/stores/refreshStore'
 import { numToWon } from '@/lib/accountLib'
+import { useAccountEventStore } from '@/stores/accountEventStore'
 export default {
   setup() {
     const dateStore = useDateStore()
     const refreshStore = useRefreshStore()
-    return { dateStore, refreshStore }
+    const accountStore = useAccountEventStore()
+    return { dateStore, refreshStore, accountStore }
   },
   watch: {
     'dateStore.selectedMonth': function () {
@@ -58,9 +60,9 @@ export default {
   methods: {
     numToWon,
     async fetchData() {
-      const url = `account/items/summary/${this.year}/${this.month}`
-      const { data } = await this.$axios.get(url)
-      this.info = data
+      // const url = `account/items/summary/${this.year}/${this.month}`
+      // const { data } = await this.$axios.get(url)
+      // this.info = data
       const fixedUrl = `account/items/summary/fixed/${this.year}/${this.month}`
       const { data: fixedData } = await this.$axios.get(fixedUrl)
       this.fixedInfo = fixedData

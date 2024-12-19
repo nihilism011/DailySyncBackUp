@@ -9,7 +9,9 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { useDateStore } from '@/stores/dateStore'
 import { useRefreshStore } from '@/stores/refreshStore'
-import { numToWon } from '@/lib/accountLib'
+import { numToWon, getAccountList } from '@/lib/accountLib'
+import { useAccountEventStore } from '@/stores/accountEventStore'
+import { useAccountStore } from '@/stores/accountStore'
 export default {
   components: {
     FullCalendar,
@@ -17,7 +19,9 @@ export default {
   setup() {
     const dateStore = useDateStore()
     const refreshStore = useRefreshStore()
-    return { dateStore, refreshStore }
+    const accountEventStore = useAccountEventStore()
+    const accountStore = useAccountStore()
+    return { dateStore, refreshStore, accountEventStore, accountStore }
   },
   watch: {
     calendarEvents() {
@@ -62,6 +66,7 @@ export default {
   },
   methods: {
     numToWon,
+    getAccountList,
     updateYearMonth(newYear, newMonth) {
       this.dateStore.setSelectedYear(newYear)
       this.dateStore.setSelectedMonth(newMonth)
@@ -87,9 +92,15 @@ export default {
     updateYearAndMonth() {
       this.$emit('updateYearMonth', this.selectYear, this.selectMonth)
     },
+    async fetchAccountList() {
+      console.log(this.selectYear, '==========', this.selectMonth)
+      const data = await this.getAccountList(this.selectYear, this.selectMonth)
+      console.log(data)
+    },
     async fetchCalendarViewData() {
       const url = `account/items/month/${this.selectYear}/${this.selectMonth}`
       const { data } = await this.$axios.get(url)
+      this.accountEventStore.setData(data)
       const eventData = data.flatMap((item) => {
         const result = []
         if (item.plusSumAmount !== 0) {
@@ -128,6 +139,7 @@ export default {
   },
   mounted() {
     this.fetchCalendarViewData()
+    this.fetchAccountList()
   },
 }
 </script>

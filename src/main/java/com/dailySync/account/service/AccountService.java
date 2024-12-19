@@ -64,6 +64,12 @@ public class AccountService {
         return oneDayList.stream().map(Account::toResDto).toList();
     }
 
+    public List<AccountResDto> findAccountByMonth(Long userId,int year,int month){
+        LocalDate startOfMonth = LocalDate.of(year, month, 1);
+        LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+        return accountRepository.findByUserIdAndAccountDateBetween(userId,startOfMonth,endOfMonth).stream().map(Account::toResDto).toList();
+    }
+
     public AccountSum findSumByMonth(Long userId, int year, int month) {
         List<AccountSum> sumList = accountRepository.findByUserIdAndYearAndMonth(year, month, userId);
         Long PlusSum = 0L;

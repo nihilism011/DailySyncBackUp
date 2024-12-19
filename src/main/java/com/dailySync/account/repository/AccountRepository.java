@@ -25,7 +25,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     List<AccountSum> findByUserIdAndYearAndMonth(@Param ("year") int year,
                                                  @Param ("month") int month,
                                                  @Param ("userId") Long userId);
-
+    List<Account> findByUserIdAndAccountDateBetween(Long userId,LocalDate startDate,LocalDate endDate);
     @Query ("SELECT new com.dailySync.account.dto.AccountSum(" +
             "a.accountDate, " +
             "SUM(CASE WHEN a.amount > 0 THEN a.amount ELSE 0 END), " +  // plusSumAmount
