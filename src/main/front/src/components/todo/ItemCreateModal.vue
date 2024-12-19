@@ -158,16 +158,11 @@ export default {
         this.newItem.day = []
         this.newItem.isAuto = ''
         this.newItem.itemOrder = ''
-        await this.todoauto()
         this.closeModal()
       } catch (error) {
         console.error('오류 발생:', error)
         alert(`${this.mode === 'create' ? '아이템 추가' : '아이템 수정'} 실패`)
       }
-    },
-    async todoauto() {
-      const url = `todo/autoTest`
-      await this.$axios.post(url)
     },
   },
   
