@@ -32,9 +32,7 @@ public class ScheduleService {
                 .withMinute(59)
                 .withSecond(59);
         List<Schedule> schedules = scheduleRepository.findByMonth(userId, startOfMonth, endOfMonth);
-        List<ScheduleResDto> temp =schedules.stream().map(Schedule::toResDto).toList();
-        System.out.println(temp);
-        return temp;
+        return  schedules.stream().map(Schedule::toResDto).toList();
     }
 
     /**

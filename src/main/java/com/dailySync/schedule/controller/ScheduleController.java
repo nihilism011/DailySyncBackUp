@@ -31,15 +31,11 @@ public class ScheduleController {
                     description = "year는 연도, month는 월을 입력한다."
             )
     @GetMapping("userId/scheduleList/{year}/{month}")
-    public ResponseEntity<List<ScheduleResDto>> getScheduleList(
+    public ResponseEntity<ApiResponse<List<ScheduleResDto>>> getScheduleList(
             @PathVariable("year") int year,
             @PathVariable("month") int month) {
-
         Long userId = commonService.getUserId();
-
-        List<ScheduleResDto> schedules = scheduleService.getSchedule(userId, year, month);
-
-        return ResponseEntity.ok(schedules);
+        return ApiResponse.success(scheduleService.getSchedule(userId, year, month));
     }
 
     private int getLastDayOfMonth(int year, int month) {

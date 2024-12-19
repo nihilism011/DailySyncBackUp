@@ -3,20 +3,20 @@
     <div class="select-box">
       <select v-model="form.searchType">
         <option value="" hidden>검색조건선택</option>
-        <option value="year">연도</option>
-        <option value="yearMonth">월</option>
+        <!-- <option value="year">연도</option> -->
+        <!-- <option value="yearMonth">월</option> -->
         <option value="title">제목</option>
         <option value="range">기간설정</option>
       </select>
     </div>
-    <template v-if="form.searchType === 'year'">
+    <!-- <template v-if="form.searchType === 'year'">
       <div class="select-box">
         <select v-model="form.year">
           <option v-for="(year, index) in years" :key="index" :value="year">{{ year }}</option>
         </select>
       </div>
-    </template>
-    <template v-if="form.searchType === 'yearMonth'">
+    </template> -->
+    <!-- <template v-if="form.searchType === 'yearMonth'">
       <div class="select-box">
         <select v-model="form.year">
           <option v-for="(year, index) in years" :key="index" :value="year">{{ year }}</option>
@@ -27,7 +27,7 @@
           </option>
         </select>
       </div>
-    </template>
+    </template> -->
     <template v-if="form.searchType === 'range'">
       <div class="ip-box">
         <input type="date" v-model="form.startTime" placeholder="시작일을 입력하세요" />

@@ -12,8 +12,8 @@ import java.util.List;
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
-    @Query("SELECT s FROM Schedule s WHERE s.userId = :userId AND s.startTime <= :endOfMonth AND s.endTime >= :startOfMonth")
-    List<Schedule> findByMonth(@Param("userId") Long userId, @Param("startOfMonth") LocalDateTime startOfMonth, @Param("endOfMonth") LocalDateTime endOfMonth);
+    @Query("SELECT s FROM Schedule s WHERE s.user.id = :userId AND s.startTime <= :endOfMonth AND s.endTime >= :startOfMonth")
+    List<Schedule> findByMonth(Long userId, LocalDateTime startOfMonth, LocalDateTime endOfMonth);
 
     List<Schedule> findByUserIdAndTitleContainingOrderByStartTimeAsc(Long userId, String title);
 //    List<Schedule> findByUserIdAndStartTimeYearAndStartTimeMonthOrderByStartTimeAsc(Long userId, int year, int month);
