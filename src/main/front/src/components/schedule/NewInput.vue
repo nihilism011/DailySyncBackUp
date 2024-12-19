@@ -99,7 +99,7 @@ export default {
   },
   watch: {
     dailyList(newSchedule) {
-      console.log(newSchedule)
+      console.log("일정 리스트:", newSchedule);
       this.newSchedule = [ ...newSchedule ];
     },
   },
@@ -130,7 +130,6 @@ export default {
       console.log('inputedSchedule 호출', id);
         const response = await this.$axios.get(`schedule/userId/id/${id}`);
         if (response) {
-          //console.log("일정 데이터", response.data);
           this.newSchedule = {
           ...response.data, 
         };
@@ -163,7 +162,6 @@ export default {
         return;
       }
       const schedule = this.isAdd ? this.newSchedule : this.newSchedule; 
-      //console.log("저장할 일정:", schedule);
       const formattedSchedule = {
         ...schedule,
         startTime: this.$dayjs(schedule.startTime).format('YYYY-MM-DDTHH:mm:ss'),

@@ -3,12 +3,8 @@ package com.dailySync.schedule.entities;
 import com.dailySync.common.BaseEntity;
 import com.dailySync.schedule.dto.ScheduleReqDto;
 import com.dailySync.schedule.dto.ScheduleResDto;
-import com.dailySync.user.dto.UserReqDto;
 import com.dailySync.user.entities.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,23 +18,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class Schedule extends BaseEntity {
-
     @ManyToOne
     @JoinColumn (name = "user_id", nullable = false)
     private User user;
 
     @Column (nullable = false)
-    private Long id;
-
-    @Column (nullable = false)
     private LocalDateTime startTime;
-
     @Column (nullable = false)
     private LocalDateTime endTime;
-
     @Column (nullable = false)
     private String title;
-
     @Column (nullable = false)
     private String description;
 
@@ -53,20 +42,16 @@ public class Schedule extends BaseEntity {
     }
 
     public static Schedule of(User user, ScheduleReqDto reqDto) {
-        return Schedule.builder().
-                user(user).
-                id(reqDto.getId()).
-                title(reqDto.getTitle()).
-                startTime(reqDto.getStartTime()).
-                endTime(reqDto.getEndTime()).
-                description(reqDto.getDescription()).
-                build();
+        return Schedule.builder()
+                .user(user)
+                .title(reqDto.getTitle())
+                .startTime(reqDto.getStartTime())
+                .endTime(reqDto.getEndTime())
+                .description(reqDto.getDescription())
+                .build();
     }
 
     public void update(ScheduleReqDto reqDto) {
-        if (reqDto.getId() != null){
-            this.id = reqDto.getId();
-        }
         if (reqDto.getTitle() != null) {
             this.title = reqDto.getTitle();
         }

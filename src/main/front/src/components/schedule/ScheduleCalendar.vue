@@ -22,8 +22,8 @@ export default {
     },
   },
   watch: {
-    dailyList(newValue) {
-      if (newValue && Array.isArray(newValue)) {
+    dailyList(newSchedule) {
+      if (newSchedule && Array.isArray(newSchedule)) {
         this.calendarOptions.events = this.dailyList
       }
     },
@@ -34,7 +34,6 @@ export default {
         locale: 'kr',
         height: 700,
         showNonCurrentDates: false,
-        // handleWindowResize: false,
         plugins: [dayGridPlugin, interactionPlugin],
         initialView: 'dayGridMonth',
         events: [],
@@ -66,10 +65,10 @@ export default {
       const dateSet = `${start.getFullYear()}-${start.getMonth() + 1}`
       this.$emit('fnScheduleList', dateSet)
     },
-    handleDateClick(info) {
-      const date = info.dateStr
-      this.$emit('fnScheduleList', date)
-    },
+    // handleDateClick(info) {
+    //   const date = info.dateStr
+    //   this.$emit('fnScheduleList', date)
+    // },
     renderEventContent(eventInfo) {
       return {
         html: `<div style="text-align: center;">${eventInfo.event.title}</div>`,

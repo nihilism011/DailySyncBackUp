@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 
 @Builder
 @Data
-@NoArgsConstructor //기본 생성자 생성
-@AllArgsConstructor //모든 필드값을 매개변수로 받는 생성자를 생성
+@NoArgsConstructor
+@AllArgsConstructor
 public class ScheduleResDto {
 
     private Long id;

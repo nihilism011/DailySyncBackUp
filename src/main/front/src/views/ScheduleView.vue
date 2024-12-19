@@ -47,12 +47,18 @@ export default {
     }
   },
   methods: {
+    openModal(){},
     async fnScheduleList(inputDay) {
       let year = inputDay.split('-')[0];
       let month = inputDay.split('-')[1];
+
+      const startOfMonth = `${year}-${month}-01T00:00:00`; // 해당 월의 첫 날 (00:00:00)
+      const endOfMonth = `${year}-${month}-01T23:59:59`;   // 해당 월의 마지막 날 (23:59:59)
       try {
-        const full = await this.$axios.get(`schedule/userId/${year}/${month}`);
-        //console.log("API 응답:", full);
+      // 서버로 GET 요청 보내기
+      const full = await this.$axios.get(`schedule/userId/scheduleList/${year}/${month}`, {
+        params: { startOfMonth, endOfMonth } // startOfMonth와 endOfMonth를 쿼리 파라미터로 전달
+      });
 
         if (full.status && full.data.length > 0) {
           this.dailyList = full.data.map(item => ({
@@ -62,6 +68,7 @@ export default {
             end: item.endTime,
             description: item.description,
           }));
+          console.log("Server response: ", full.data);
         } else {
           console.log('해당 날짜에 일정이 없습니다.');
           this.dailyList = [];
@@ -72,7 +79,6 @@ export default {
       }
     },
     async inputedSchedule(id) {
-      //console.log("inputedSchedule에 id가 들어왔습니다:", id); 
       const response = await this.$axios.get(`schedule/userId/id/${id}`);
       if (response.status) {
         console.log("response.data",response.data)
