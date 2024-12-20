@@ -18,4 +18,5 @@ public class TodoItemReqDto {
     private String title;
     private Boolean isAuto;
     private String status;
+    private Boolean todayCreate;
 }

@@ -185,30 +185,33 @@ public class TodoService {
 
         todoItemRepository.save(todoItem);
 
-        // 오늘 날짜와 매칭되는 경우 TodoList 생성 (isAuto가 true일 때만)
-        if (todoItem.getIsAuto() != null && todoItem.getIsAuto()) {
-            LocalDate today = LocalDate.now();
-            String todayDayOfWeek = getDayOfWeekItem(today);
+        // 오늘 날짜와 매칭되는 경우 TodoList 생성 (todayCreate가 true일 때)
+        if (reqDto.getTodayCreate() != null && reqDto.getTodayCreate()) {
+            if (todoItem.getIsAuto() != null && todoItem.getIsAuto()) {
+                LocalDate today = LocalDate.now();
+                String todayDayOfWeek = getDayOfWeekItem(today);
 
-            if (reqDto.getDay().contains(todayDayOfWeek)) {
-                boolean exists = todoListRepository.existsByUserIdAndDateAndTodoItemId(userId, today, todoItem.getId());
-                if (!exists) {
-                    TodoList todoList = TodoList.builder()
-                            .user(user)
-                            .todoItem(todoItem)
-                            .date(today)
-                            .title(reqDto.getTitle())
-                            .listOrder(reqDto.getItemOrder())
-                            .status("new")
-                            .build();
+                if (reqDto.getDay().contains(todayDayOfWeek)) {
+                    boolean exists = todoListRepository.existsByUserIdAndDateAndTodoItemId(userId, today, todoItem.getId());
+                    if (!exists) {
+                        TodoList todoList = TodoList.builder()
+                                .user(user)
+                                .todoItem(todoItem)
+                                .date(today)
+                                .title(reqDto.getTitle())
+                                .listOrder(reqDto.getItemOrder())
+                                .status("new")
+                                .build();
 
-                    todoListRepository.save(todoList);
+                        todoListRepository.save(todoList);
+                    }
                 }
             }
         }
 
         return true;
     }
+
 
     //todoGroup을 생성 (6)
     public Boolean createTodoGroup(Long userId, TodoGroupReqDto reqDto) {
