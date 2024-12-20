@@ -37,6 +37,13 @@
               <label for="day5">금</label>
               <input type="checkbox" id="day6" v-model="newItem.day" value="토" />
               <label for="day6">토</label>
+              <input
+                type="checkbox"
+                id="selectAllDays"
+                :checked="areAllDaysSelected"
+                @change="toggleSelectAllDays"
+              />
+              <label for="selectAllDays">전체 선택</label>
             </div>
           </div>
         </div>
@@ -119,30 +126,43 @@ export default {
   data() {
     return {
       newItem: { ...this.item },
-      todayCreate : 0
-    }
+      todayCreate: 0,
+      days: ['일', '월', '화', '수', '목', '금', '토'], 
+    };
+  },
+  computed: {
+    areAllDaysSelected() {
+      return this.days.every((day) => this.newItem.day.includes(day));
+    },
   },
   watch: {
     item(newVal) {
-      this.newItem = { ...newVal }
+      this.newItem = { ...newVal };
     },
   },
   methods: {
+    toggleSelectAllDays() {
+      if (this.areAllDaysSelected) {
+        this.newItem.day = [];
+      } else {
+        this.newItem.day = [...this.days];
+      }
+    },
     closeModal() {
-      this.todayCreate = 0
-      this.$emit('close')
+      this.todayCreate = 0;
+      this.$emit('close');
     },
     async saveItem() {
       if (!this.newItem.title || !this.newItem.day.length || !this.newItem.itemOrder) {
-        alert('빈칸을 채워주세요')
-        return
+        alert('빈칸을 채워주세요');
+        return;
       }
 
       try {
-        let url
+        let url;
 
         if (this.mode === 'create') {
-          url = 'todo/item'
+          url = 'todo/item';
           await this.$axios.post(url, {
             title: this.newItem.title,
             day: this.newItem.day,
@@ -150,10 +170,10 @@ export default {
             groupId: this.groupId,
             itemOrder: this.newItem.itemOrder,
             status: 'new',
-            todayCreate : this.todayCreate
-          })
+            todayCreate: this.todayCreate,
+          });
         } else if (this.mode === 'update') {
-          url = 'todo/item'
+          url = 'todo/item';
           await this.$axios.post(url, {
             title: this.newItem.title,
             day: this.newItem.day,
@@ -161,27 +181,26 @@ export default {
             groupId: this.groupId,
             itemOrder: this.newItem.itemOrder,
             status: 'new',
-            todayCreate : this.todayCreate
-          })
-          const statusUrl = `todo/item/update/status/${this.item.id}`
-          await this.$axios.put(statusUrl)
+            todayCreate: this.todayCreate,
+          });
+          const statusUrl = `todo/item/update/status/${this.item.id}`;
+          await this.$axios.put(statusUrl);
         }
 
-        alert(`${this.mode === 'create' ? '아이템 추가' : '아이템 수정'} 성공`)
-        this.$emit('save-item')
-        this.newItem.title = ''
-        this.newItem.day = []
-        this.newItem.isAuto = ''
-        this.newItem.itemOrder = ''
-        this.todayCreate = 0
-        this.closeModal()
+        alert(`${this.mode === 'create' ? '아이템 추가' : '아이템 수정'} 성공`);
+        this.$emit('save-item');
+        this.newItem.title = '';
+        this.newItem.day = [];
+        this.newItem.isAuto = '';
+        this.newItem.itemOrder = '';
+        this.todayCreate = 0;
+        this.closeModal();
       } catch (error) {
-        console.error('오류 발생:', error)
-        alert(`${this.mode === 'create' ? '아이템 추가' : '아이템 수정'} 실패`)
+        console.error('오류 발생:', error);
+        alert(`${this.mode === 'create' ? '아이템 추가' : '아이템 수정'} 실패`);
       }
     },
   },
-  
 }
 </script>
 
