@@ -27,7 +27,9 @@ export default {
     calendarEvents() {
       this.calendarOptions.events = this.calendarEvents
     },
-    'refreshStore.refreshState': 'fetchCalendarViewData',
+    'accountStore.calendarList': function () {
+      this.calendarOptions.events = this.accountStore.calendarList
+    },
   },
   data() {
     return {
@@ -84,42 +86,17 @@ export default {
       } else {
         this.dateStore.moveBeforeMonth()
       }
-      const year = this.dateStore.selectedYear
-      const month = this.dateStore.selectedMonth
-      const date = `${year}-${month}-01`
+      const date = `${this.dateStore.selectedYear}-${this.dateStore.selectedMonth}-01`
       calendar.gotoDate(new Date(date))
     },
-    updateYearAndMonth() {
-      this.$emit('updateYearMonth', this.selectYear, this.selectMonth)
-    },
     async fetchAccountList() {
-      console.log(this.selectYear, '==========', this.selectMonth)
-      const data = await this.getAccountList(this.selectYear, this.selectMonth)
-      console.log(data)
-    },
-    async fetchCalendarViewData() {
-      const url = `account/items/month/${this.selectYear}/${this.selectMonth}`
-      const { data } = await this.$axios.get(url)
-      this.accountEventStore.setData(data)
-      const eventData = data.flatMap((item) => {
-        const result = []
-        if (item.plusSumAmount !== 0) {
-          result.push({
-            start: item.accountDate,
-            title: numToWon(item.plusSumAmount),
-            color: '#ff334b',
-          })
-        }
-        if (item.minusSumAmount !== 0) {
-          result.push({
-            start: item.accountDate,
-            title: numToWon(item.minusSumAmount),
-            color: '#4f7eff',
-          })
-        }
-        return result
-      })
-      this.calendarEvents = eventData
+      const data = await this.getAccountList(
+        this.dateStore.selectedYear,
+        this.dateStore.selectedMonth,
+      )
+      this.accountStore.setAccountList(data)
+      console.log(this.accountStore.accountList)
+      console.log(this.accountStore.calendarList)
     },
     handleEventClick(info) {
       this.dateStore.setSelectedDate(info.event.startStr)
@@ -130,15 +107,13 @@ export default {
     handleDatesChange({ view }) {
       const start = view.currentStart
       const dateSet = this.$dayjs(start)
-      this.selectDate = dateSet.format('YYYY-MM-DD')
-      this.selectYear = dateSet.get('year')
-      this.selectMonth = dateSet.get('month') + 1
       this.updateYearMonth(dateSet.get('year'), dateSet.get('month') + 1)
-      this.fetchCalendarViewData()
+      this.dateStore.setSelectedYear(dateSet.get('year'))
+      this.dateStore.setSelectedMonth(dateSet.get('month') + 1)
+      this.fetchAccountList()
     },
   },
   mounted() {
-    this.fetchCalendarViewData()
     this.fetchAccountList()
   },
 }
