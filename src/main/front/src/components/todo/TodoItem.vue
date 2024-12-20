@@ -1,36 +1,44 @@
-<template>
-  <template v-if="!selectedGroup">
-    <p class="list-tit">Select Group</p>
-  </template>
-  <template v-else>
-    <p class="list-tit">Item</p>
-  </template>
-  <div class="list-container">
-    <template v-if="selectedGroup">
-      <div class="list-item" v-for="(item, index) in items" :key="index">
-        <div class="tit-box">
-          <div class="title">{{ item.title }}</div>
-          <div class="day">
-            <template v-if="item.day && Array.isArray(item.day)">
-              <span
-                v-for="(day, i) in order"
-                :key="i"
-                :class="item.day.includes(day) == true ? 'active' : ''"
-                >{{ day }}<span v-if="i < order.length - 1"> &nbsp; </span>
-              </span>
-            </template>
-          </div>
-          <div class="auto" title="자동여부">{{ item.isAuto == 1 ? 'A' : '' }}</div>
-        </div>
-        <div class="btn-box">
-          <button @click="openEditModal(item)" class="edit-btn">수정</button>
-          <button @click="deleteTodoItem(item)" class="remove-btn">삭제</button>
-        </div>
+<div class="list-container">
+  <template v-if="selectedGroup">
+    <div class="list-item">
+      <!-- 전체 선택 체크박스 -->
+      <div class="tit-box">
+        <input
+          type="checkbox"
+          id="selectAllDays"
+          :checked="areAllDaysSelected"
+          @change="toggleSelectAllDays"
+        />
+        <label for="selectAllDays">전체 선택</label>
       </div>
-      <div class="list-item center" v-if="selectedGroup" @click="openAddItemModal">
-        <div class="add">아이템 추가</div>
+    </div>
+
+    <div class="list-item" v-for="(item, index) in items" :key="index">
+      <div class="tit-box">
+        <div class="title">{{ item.title }}</div>
+        <div class="day">
+          <template v-if="item.day && Array.isArray(item.day)">
+            <span
+              v-for="(day, i) in order"
+              :key="i"
+              :class="item.day.includes(day) ? 'active' : ''"
+              >{{ day }}<span v-if="i < order.length - 1"> &nbsp; </span>
+            </span>
+          </template>
+        </div>
+        <div class="auto" title="자동여부">{{ item.isAuto == 1 ? 'A' : '' }}</div>
       </div>
-    </template>
+      <div class="btn-box">
+        <button @click="openEditModal(item)" class="edit-btn">수정</button>
+        <button @click="deleteTodoItem(item)" class="remove-btn">삭제</button>
+      </div>
+    </div>
+    <div class="list-item center" v-if="selectedGroup" @click="openAddItemModal">
+      <div class="add">아이템 추가</div>
+    </div>
+  </template>
+</div>
+
 
     <!-- 아이템 추가 모달 -->
     <Modal
