@@ -58,7 +58,6 @@ export default {
   methods: {
     async fnUserInfo() {
       const userInfo = await this.$axios.get('user/info')
-      console.log(userInfo.data)
       this.fnBmr(userInfo.data)
     },
     fnBmr(data) {
