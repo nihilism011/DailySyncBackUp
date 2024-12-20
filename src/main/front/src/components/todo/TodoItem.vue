@@ -7,7 +7,7 @@
   </template>
   <div class="list-container">
     <template v-if="selectedGroup">
-      <div class="list-item" v-for="(item, index) in items" :key="index">
+      <div class="list-item" v-for="(item, index) in items" :key="index" @click="openEditModal(item)">
         <div class="tit-box">
           <div class="title">{{ item.title }}</div>
           <div class="day">

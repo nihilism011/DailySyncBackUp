@@ -826,7 +826,10 @@ input {
         transition: all 0.2s;
         padding-left: 26px;
         background: url($ico-path + 'ico_plus.png') left center / 26px no-repeat;
-      }
+        display: flex; 
+        align-items: center; 
+        line-height: 1; 
+      }   
       &:hover {
         .add {
           color: var(--color-contrasty2);
@@ -868,7 +871,7 @@ input {
         position: absolute;
         right: 10px;
         top: 5px;
-        font-size: 12px;
+        font-size: 18px;
         font-weight: bold;
         color: var(--color-contrastyA);
       }

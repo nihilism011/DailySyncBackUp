@@ -5,28 +5,33 @@
         <div class="tit">선택된 날짜: {{ selectedDate }}</div>
       </div>
       <div class="todo-items">
-        <div
-          class="item"
-          v-for="(item, index) in items"
-          :key="index"
-          :class="item.checkedTime != null ? 'checked' : ''"
-        >
-          <div class="item-info">
-            <span class="item-tit">{{ item.title }}</span>
-            <div v-if="item.groupTitle">
-              <span class="item-group-tit">({{ item.groupTitle }})</span>
+        <div v-if="items.length">
+          <div
+            class="item"
+            v-for="(item, index) in items"
+            :key="index"
+            :class="item.checkedTime != null ? 'checked' : ''"
+          >
+            <div class="item-info">
+              <span class="item-tit">{{ item.title }}</span>
+              <div v-if="item.groupTitle">
+                <span class="item-group-tit">({{ item.groupTitle }})</span>
+              </div>
             </div>
+            <template v-if="item.status == 'new'">
+              <span class="item-date">{{ formatTimeWithoutSeconds(item.checkedTime) }}</span>
+            </template>
+            <template v-else>
+              <span class="item-date" style="text-align: right">
+                <div>작성일 : {{ formatDate(item.createdAt) }}</div>
+                <div>완료 : {{ formatTime(item.checkedTime) }}</div>
+              </span>
+            </template>
           </div>
-          <template v-if="item.status == 'new'">
-            <span class="item-date">{{ formatTimeWithoutSeconds(item.checkedTime) }}</span>
-          </template>
-          <template v-else>
-            <span class="item-date" style="text-align: right">
-              <div>작성일 : {{ formatDate(item.createdAt) }}</div>
-              <div>완료 : {{ formatTime(item.checkedTime) }}</div>
-            </span>
-          </template>
-        </div>
+        </div> 
+        <div v-else>
+        태환씨 여기 부탁드립니다!!
+        </div> 
       </div>
       <div class="pop-btn-wrap">
         <button @click="closeModal" class="btn-default cancel">닫기</button>
