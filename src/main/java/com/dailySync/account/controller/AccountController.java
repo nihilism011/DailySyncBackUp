@@ -36,6 +36,13 @@ public class AccountController {
         Long userId = commonService.getUserId();
         return ApiResponse.success(accountService.findAccountsByDate(userId, date));
     }
+    @Tag (name = "ACCOUNT", description = "가계부")
+    @GetMapping ("items/month/asdf/{year}/{month}")
+    public ResponseEntity<ApiResponse<List<AccountResDto>>> getAccountByMonth(
+        @PathVariable("year") int year,@PathVariable("month") int month) {
+        Long userId = commonService.getUserId();
+        return ApiResponse.success(accountService.findAccountByMonth(userId,year,month));
+    }
 
     /**
      * {@code 월 단위 날짜별 가계부 항목 합산 조회}
