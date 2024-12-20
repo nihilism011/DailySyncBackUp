@@ -66,6 +66,17 @@
             </div>
           </div>
         </div>
+        <div class="ip-list">
+          <div class="tit-box">
+            <p class="tit">오늘부터 적용</p>
+          </div>
+          <div class="bot-box">
+            <div class="ip-chk-txt">
+              <input type="checkbox" id="todayCreate" v-model="todayCreate" value="1" />
+              <label for="todayCreate">적용</label>
+            </div>
+          </div>
+        </div>
         <div class="pop-btn-wrap">
           <button @click="saveItem" class="btn-default submit">
             {{ mode === 'create' ? '추가' : '수정' }}
@@ -108,6 +119,7 @@ export default {
   data() {
     return {
       newItem: { ...this.item },
+      todayCreate : 0
     }
   },
   watch: {
@@ -117,6 +129,7 @@ export default {
   },
   methods: {
     closeModal() {
+      this.todayCreate = 0
       this.$emit('close')
     },
     async saveItem() {
@@ -137,6 +150,7 @@ export default {
             groupId: this.groupId,
             itemOrder: this.newItem.itemOrder,
             status: 'new',
+            todayCreate : this.todayCreate
           })
         } else if (this.mode === 'update') {
           url = 'todo/item'
@@ -147,6 +161,7 @@ export default {
             groupId: this.groupId,
             itemOrder: this.newItem.itemOrder,
             status: 'new',
+            todayCreate : this.todayCreate
           })
           const statusUrl = `todo/item/update/status/${this.item.id}`
           await this.$axios.put(statusUrl)
@@ -158,6 +173,7 @@ export default {
         this.newItem.day = []
         this.newItem.isAuto = ''
         this.newItem.itemOrder = ''
+        this.todayCreate = 0
         this.closeModal()
       } catch (error) {
         console.error('오류 발생:', error)
