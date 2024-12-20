@@ -88,13 +88,13 @@ export default {
     },
 
     formatTimeWithoutSeconds(time) {
-      if (!time) return "활동 안함";
+      if (!time) return "";
       const date = new Date(time);
       return `${date.getHours()}시 ${date.getMinutes()}분`;
     },
 
     formatDateTime(dateTime) {
-      if (!dateTime) return "활동 안함";
+      if (!dateTime) return "";
       const date = new Date(dateTime);
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, "0");
