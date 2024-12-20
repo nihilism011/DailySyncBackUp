@@ -68,7 +68,7 @@
         </div>
         <div class="ip-list">
           <div class="tit-box">
-            <p class="tit">오늘부터 적용</p>
+            <p class="tit">오늘부터 바로 적용</p>
           </div>
           <div class="bot-box">
             <div class="ip-chk-txt">
