@@ -40,23 +40,18 @@ export default {
     formatDate(date) {
       if (!date) return ''
       const formattedDate = new Date(date)
-       // UTC 시간대 기준으로 날짜 출력 (시간대 차이 고려)
-      const year = formattedDate.getUTCFullYear()
-      const month = String(formattedDate.getUTCMonth() + 1).padStart(2, '0')  
-      const day = String(formattedDate.getUTCDate()).padStart(2, '0')
-
-      return `${year}-${month}-${day}`
+      return formattedDate.toLocaleDateString('ko-KR');
       },
       getDateRange(startTime, endTime) {
-      const startFormatted = this.formatDate(startTime);
-      const endFormatted = this.formatDate(endTime);
+        const startFormatted = this.formatDate(startTime);
+        const endFormatted = this.formatDate(endTime);
 
-      if (startTime > endTime) {
-        return `${endFormatted} ~ ${startFormatted}`;
-      }
-      return `${startFormatted} ~ ${endFormatted}`;
-    
-    },
+        // startTime이 endTime보다 클 경우 순서를 바꿔서 출력
+        if (new Date(startTime) > new Date(endTime)) {
+          return `${endFormatted} ~ ${startFormatted}`;
+        }
+        return `${startFormatted} ~ ${endFormatted}`;
+      },
   },
 }
 </script>

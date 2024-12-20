@@ -32,14 +32,9 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             + "ORDER BY s.start_time ASC", nativeQuery = true)
     List<Schedule> findByUserId_YearAndMonth(@Param("userId") Long userId, @Param("year") int year, @Param("month") int month);
 
-    @Query(value = "SELECT s.* FROM schedule s "
-            + "WHERE s.user_id = :userId "
-            + "AND s.start_time >= :startTime "
-            + "AND s.end_time <= :endTime "
-            + "ORDER BY s.start_time ASC", nativeQuery = true)
-    List<Schedule> findByUserIdAndDateRange(
-            @Param("userId") Long userId,
-            @Param("startTime") LocalDateTime startTime,
-            @Param("endTime") LocalDateTime endTime);
+    @Query("SELECT s FROM Schedule s WHERE s.user.id = :userId "
+            + "AND s.startTime <= :endOfMonth "
+            + "AND s.endTime >= :startOfMonth")
+    List<Schedule> findByRange(Long userId, LocalDateTime startOfMonth, LocalDateTime endOfMonth);
 }
 

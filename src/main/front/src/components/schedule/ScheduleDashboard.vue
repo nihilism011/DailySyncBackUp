@@ -1,7 +1,7 @@
 <template>
     <div class="popup-cont">
       <RouterLink to="/schedule" style="text-align: right;">Schedule 이동하기 >> </RouterLink>
-      <div v-if="todaySchduleCnt !== null" class="today-schedule-cnt">
+      <div v-if="todayScheduleCnt !== null" class="today-schedule-cnt">
       <h2>{{ isToday ? '오늘의 일정' : `${selectedDate} 일정` }}</h2>
       <div class="schedule-cnt">{{ filteredItemsCount }}개</div>
     </div>
@@ -9,8 +9,8 @@
         <div class="item" v-for="(item, index) in filteredItems" :key="index">
             <div class="item-info">
               <div class="item-tit">{{ item.title }}</div>
-              <div class="item-start">{{ formatDate(item.startTime) }}</div>
-              <div class="item-end">{{ formatDate(item.endTime) }}</div>
+              <div class="item-start">{{ formatDate(item.startTime) }} </div>
+              <div class="item-end">~{{ formatDate(item.endTime) }}</div>
               <div class="item-des">{{ item.description }}</div>
             </div>
         </div>
@@ -24,7 +24,8 @@ export default {
         data() {
         return {
             items: [],
-            isToday: false
+            isToday: false,
+            todayScheduleCnt: '', 
         };
         },
     props: {
@@ -79,14 +80,16 @@ export default {
                 endTime: item.endTime,
                 description: item.description,
               }));
-              this.todaySchduleCnt = this.todayScheduleCount; 
+              this.todaySchduleCnt = this.filteredItemsCount; 
             } else {
               console.log('해당 월에 일정이 없습니다.');
               this.items = [];
+              this.todayScheduleCnt = 0; 
             }
           } catch (error) {
             console.error('Error fetching items:', error);
             this.items = [];
+            this.todayScheduleCnt = 0; 
           }
       },
     },
@@ -104,45 +107,42 @@ export default {
   gap: 10px; 
   overflow-y: auto;
   max-height: 500px; 
-  
+
   .item {
     display: flex;
     flex-direction: column; 
     padding: 15px;
     background-color: #f9f9f9; 
-   
+
     &:not(:last-child) {
       margin-bottom: 10px; 
-
+    }
     .item-info {
       display: flex;
       flex-direction: column; 
       gap: 5px; 
-      
+
       .item-tit {
         font-size: 18px;
         font-weight: bold;
         color: #333; 
       }
-      
       .item-start,
       .item-end {
         font-size: 14px;
         color: #555; 
       }
-
       .item-des {
         font-size: 14px;
         color: #555; 
       }
     }
   }
- }
 }
 .today-schedule-cnt {
   margin-top: 30px;
   text-align: center;
-  
+
   h2 {
     font-size: 24px;
     margin-bottom: 10px;

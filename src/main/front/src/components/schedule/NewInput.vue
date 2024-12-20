@@ -103,7 +103,7 @@ export default {
       this.newSchedule = [ ...newSchedule ];
     },
   },
-  emits: ['fnScheduleList', 'fnDayList'],
+  emits: ['fnScheduleList', 'fnDayList', 'inputedSchedule'],
   data() {
     return {
       year: new Date().getFullYear(),

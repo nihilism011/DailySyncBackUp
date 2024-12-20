@@ -85,11 +85,12 @@ export default {
     },
     async fnSearch() {
       let url = ''
-      if (this.form.searchType === 'year' && this.form.year) {
-        url = `schedule/date/${this.form.year}`
-      } else if (this.form.searchType === 'yearMonth' && this.form.year && this.form.month) {
-        url = `schedule/date/${this.form.year}/${this.form.month}`
-      } else if (this.form.searchType === 'range' && this.form.startTime && this.form.endTime) {
+      // if (this.form.searchType === 'year' && this.form.year) {
+      //   url = `schedule/date/${this.form.year}`
+      // } else if (this.form.searchType === 'yearMonth' && this.form.year && this.form.month) {
+      //   url = `schedule/date/${this.form.year}/${this.form.month}`
+      // } else 
+      if (this.form.searchType === 'range' && this.form.startTime && this.form.endTime) {
         const startTime = this.form.startTime
         const endTime = this.form.endTime
         url = `schedule/date/range?startTime=${startTime}&endTime=${endTime}`
