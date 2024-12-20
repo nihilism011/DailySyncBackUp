@@ -1,6 +1,10 @@
 <template>
     <div class="popup-cont">
       <RouterLink to="/schedule" style="text-align: right;">Schedule 이동하기 >> </RouterLink>
+      <div v-if="todaySchduleCnt !== null" class="today-schedule-cnt">
+      <h2>{{ isToday ? '오늘의 일정' : `${selectedDate} 일정` }}</h2>
+      <div class="schedule-cnt">{{ filteredItemsCount }}개</div>
+    </div>
       <div class="schedule-items">
         <div class="item" v-for="(item, index) in filteredItems" :key="index">
             <div class="item-info">
@@ -20,6 +24,7 @@ export default {
         data() {
         return {
             items: [],
+            isToday: false
         };
         },
     props: {
@@ -39,8 +44,11 @@ export default {
 
           return (itemStart.isBefore(endOfDay) && itemEnd.isAfter(selectedDate));
         });
+      },
+      filteredItemsCount() {
+        return this.filteredItems.length;
+      },
     },
-            },
     methods: {
         navigateToSchedule() {
             this.$router.push({ name: 'SchedulePage' });
@@ -52,6 +60,8 @@ export default {
           const today = this.$dayjs();
           const year = today.year();
           const month = today.month() + 1;
+
+          this.isToday = today.toISOString().split('T')[0]; 
 
           const startOfMonth = today.startOf('month').format('YYYY-MM-DD[T]HH:mm:ss');
           const endOfMonth = today.endOf('month').format('YYYY-MM-DD[T]HH:mm:ss');
@@ -69,6 +79,7 @@ export default {
                 endTime: item.endTime,
                 description: item.description,
               }));
+              this.todaySchduleCnt = this.todayScheduleCount; 
             } else {
               console.log('해당 월에 일정이 없습니다.');
               this.items = [];
@@ -127,6 +138,21 @@ export default {
     }
   }
  }
+}
+.today-schedule-cnt {
+  margin-top: 30px;
+  text-align: center;
+  
+  h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .schedule-cnt {
+    font-size: 48px;
+    font-weight: bold;
+    color: #4CAF50 !important; 
+  }
 }
 </style>
   
