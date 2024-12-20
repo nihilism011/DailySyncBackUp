@@ -7,11 +7,13 @@
       <div class="search-list">
         <div v-if="searchResults.length === 0">검색 결과가 없습니다.</div>
         <div v-else>
-          <div v-for="(item, index) in searchResults" :key="index" class="list-item" @click="selectSchedule(item)">
+          <div v-for="(item, index) in searchResults" :key="index" class="list-item">
             <div class="tit">{{ item.title }}</div>
             <div class="date-range">
               {{ getDateRange(item.startTime, item.endTime) }}
             </div>
+            <button  @click="selectSchedule(item)">수정</button>
+            <button @click="fnDelete">삭제</button>
           </div>
         </div>
       </div>
@@ -21,10 +23,17 @@
     </div>
     <div class="dimmed">dim</div>
   </div>
+  <InfoModal 
+  
+  />
 </template>
 
 <script>
+import InfoModal from './InfoModal.vue'
 export default {
+  components: {
+    InfoModal,
+  },
   props: {
     popupState: Boolean,
     searchResults: Array,
