@@ -58,7 +58,7 @@
     },
     data() {
         return {
-            editedSchedule: { ...this.schedule  }, 
+            editedSchedule: { ...this.schedule  },
         };
     },
     methods: {
@@ -68,7 +68,7 @@
       async saveSchedule() {
         if (!this.editedSchedule.title.trim()) {
         alert('제목을 입력해주세요.');
-        return; 
+        return;
         }
         const startTime = new Date(this.editedSchedule.startTime);
         const endTime = new Date(this.editedSchedule.endTime);
@@ -92,7 +92,7 @@
           alert('일정이 저장되었습니다.');
           this.$emit('saveSchedule', formattedSchedule.id)
           this.closeModal(); // 수정 후 모달 닫기
-        } 
+        }
     },
       formatDate(date) {
         if (!date) return ''
@@ -102,7 +102,7 @@
         getDateRange(startTime, endTime) {
           const startFormatted = this.formatDate(startTime);
           const endFormatted = this.formatDate(endTime);
-  
+
           // startTime이 endTime보다 클 경우 순서를 바꿔서 출력
           if (new Date(startTime) > new Date(endTime)) {
             return `${endFormatted} ~ ${startFormatted}`;
