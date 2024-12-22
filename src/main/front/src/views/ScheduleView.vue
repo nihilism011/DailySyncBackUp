@@ -12,7 +12,10 @@
     </div>
   </div>
   <div class="right right-container">
-    <ScheduleSearch @searchResult="openModal"/>
+    <ScheduleSearch 
+      @searchResult="openModal"
+      :searchResults="searchResults"
+    />
     <ScheduleCalendar 
       :dailyList="dailyList" 
       :inputSchedule="inputSchedule" 
@@ -66,6 +69,7 @@ export default {
       popupState: false, 
       selectedSchedule: '',
       editModalState: false,  
+      searchResults: [],
 
     }
   },
