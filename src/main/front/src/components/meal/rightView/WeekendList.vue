@@ -66,8 +66,8 @@ export default {
   }
   .date {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 2px;
+    left: 4px;
     cursor: pointer;
   }
   button {
@@ -79,9 +79,13 @@ export default {
     flex-direction: column;
     gap: 5px 0;
     align-items: center;
+    overflow-y: auto;
     span {
       font-size: 12px;
       transition: all 0.2s;
+      &:hover {
+        color: var(--color-blue);
+      }
     }
   }
 }

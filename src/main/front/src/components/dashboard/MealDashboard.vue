@@ -16,6 +16,7 @@
         <div class="dash-item none"><span>등록한 식단이 없어요</span></div>
       </template>
     </div>
+    <RouterLink to="/meal" class="dash-link" title="식단으로 이동">식단</RouterLink>
   </div>
 </template>
 
@@ -148,6 +149,16 @@ export default {
     flex-direction: column;
     height: 100%;
     gap: 14px 0;
+    position: relative;
+  }
+  &-link {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 0;
+    background: url('@/assets/images/ico/ico_double_right.png') center / 24px no-repeat;
   }
 }
 </style>
