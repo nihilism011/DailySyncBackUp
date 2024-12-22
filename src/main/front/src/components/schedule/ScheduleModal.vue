@@ -23,27 +23,28 @@
     </div>
     <div class="dimmed">dim</div>
   </div>
-  <InfoModal 
-  
-  />
+  <!-- <ScheduleInfoModal 
+   
+  /> -->
 </template>
 
 <script>
-import InfoModal from './InfoModal.vue'
+//import ScheduleInfoModal from './ScheduleInfoModal.vue'
 export default {
-  components: {
-    InfoModal,
-  },
+  // components: {
+  //   ScheduleInfoModal,
+  // },
   props: {
     popupState: Boolean,
     searchResults: Array,
   },
   methods: {
+   
     closeModal() {
-      this.$emit('closePopup')
+      this.$emit('closePopup'); // 부모로 모달 닫기 이벤트 전송
     },
     selectSchedule(item) {
-      this.$emit('selectSchedule', item); 
+      this.$emit('selectSchedule', item); // 수정할 일정 선택
       this.closeModal(); 
     },
     formatDate(date) {

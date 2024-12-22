@@ -19,13 +19,12 @@
     @fnScheduleList="fnScheduleList" 
     @inputSchedule="inputedSchedule" 
   />
-   <ScheduleModal
-    v-if="popupState"
-    :popupState="popupState"
-    :searchResults="searchResults"
-    @closePopup="closeModal"
-    @selectSchedule="selectSchedule" 
-  />
+  <ScheduleModal
+      v-if="popupState"
+      :popupState="popupState"
+      :searchResults="searchResults"
+      @closePopup="closeModal"
+    />
   </div>
 </template>
 <script>
@@ -61,10 +60,6 @@ export default {
       this.popupState = true;       
     },
     closeModal() {
-      this.popupState = false; 
-    },
-    selectSchedule(schedule) {
-      this.inputSchedule = { ...schedule }; 
       this.popupState = false; 
     },
     async fnScheduleList(inputDay) {
