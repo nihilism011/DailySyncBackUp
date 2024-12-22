@@ -46,6 +46,8 @@
     </div>
   </template>
   <script>
+  import 'dayjs/locale/ko';  // 한국어 로케일 불러오기
+  import dayjs from 'dayjs';  // dayjs 불러오기
   export default {
     props: {
         popupState: Boolean,
@@ -54,6 +56,8 @@
     watch: {
         schedule(newSchedule) {
             this.editedSchedule = { ...newSchedule };
+            this.formatStartTime(); // 모달이 열릴 때, 시작 시간을 포맷
+            this.formatEndTime();   // 모달이 열릴 때, 끝 시간을 포맷
         },
     },
     data() {
@@ -65,6 +69,22 @@
       closeModal() {
         this.$emit('closePopup')
       },
+      formatStartTime() {
+      // 시작 시간을 한국어 AM/PM 형식으로 포맷
+      if (this.editedSchedule.startTime) {
+        this.editedSchedule.startTime = dayjs(this.editedSchedule.startTime)
+          .locale('ko')  // 한국어 로케일
+          .format('YYYY-MM-DD hh:mm A'); // 오전/오후 12시간 형식
+      }
+    },
+    formatEndTime() {
+      // 끝 시간을 한국어 AM/PM 형식으로 포맷
+      if (this.editedSchedule.endTime) {
+        this.editedSchedule.endTime = dayjs(this.editedSchedule.endTime)
+          .locale('ko')
+          .format('YYYY-MM-DD hh:mm A');
+      }
+    },
       async saveSchedule() {
         if (!this.editedSchedule.title.trim()) {
         alert('제목을 입력해주세요.');
@@ -82,8 +102,8 @@
         }
         const formattedSchedule = {
             ...this.editedSchedule,
-            startTime: this.$dayjs(this.editedSchedule.startTime).format('YYYY-MM-DDTHH:mm:ss'),
-            endTime: this.$dayjs(this.editedSchedule.endTime).format('YYYY-MM-DDTHH:mm:ss'),
+            startTime: this.$dayjs(this.editedSchedule.startTime).locale('ko').format('YYYY-MM-DD hh:mm A'),
+            endTime: this.$dayjs(this.editedSchedule.endTime).locale('ko').format('YYYY-MM-DD hh:mm A'),
         };
 
         const url = `schedule/update/${this.editedSchedule.id}`;
@@ -96,8 +116,7 @@
     },
       formatDate(date) {
         if (!date) return ''
-        const formattedDate = new Date(date)
-        return formattedDate.toLocaleDateString('ko-KR');
+        return this.$dayjs(date).locale('ko').format('YYYY-MM-DD hh:mm A'); 
         },
         getDateRange(startTime, endTime) {
           const startFormatted = this.formatDate(startTime);

@@ -29,6 +29,7 @@ export default {
     popupState: Boolean,
     searchResults: Array,
   },
+ 
   methods: {
     closeModal() {
       this.$emit('closePopup'); 
