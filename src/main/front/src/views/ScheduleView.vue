@@ -14,30 +14,42 @@
   <div class="right right-container">
     <ScheduleSearch @searchResult="openModal"/>
     <ScheduleCalendar 
-    :dailyList="dailyList" 
-    :inputSchedule="inputSchedule" 
-    @fnScheduleList="fnScheduleList" 
-    @inputSchedule="inputedSchedule" 
-  />
-  <ScheduleModal
-      v-if="popupState"
+      :dailyList="dailyList" 
+      :inputSchedule="inputSchedule" 
+      @fnScheduleList="fnScheduleList" 
+      @inputSchedule="inputedSchedule" 
+    />
+    <ScheduleModal
+      v-if="popupState"       
       :popupState="popupState"
       :searchResults="searchResults"
-      @closePopup="closeModal"
+      @closePopup="popupState = false"
+      @deleteSchedule="handleDeleteSchedule" 
+      @editSchedule="openEditModal" 
+    />
+  <ScheduleInfoModal
+      v-if="editModalState"
+      :popupState="editModalState"
+      :schedule="selectedSchedule"
+      @closePopup="editModalState = false"
+      @saveSchedule="handleSaveSchedule"
     />
   </div>
+  
 </template>
 <script>
 import NewInput from '@/components/schedule/NewInput.vue';
 import ScheduleCalendar from '@/components/schedule/ScheduleCalendar.vue'
 import ScheduleSearch from '@/components/schedule/ScheduleSearch.vue'
 import ScheduleModal from '@/components/schedule/ScheduleModal.vue';
+import ScheduleInfoModal from '@/components/schedule/ScheduleInfoModal.vue';
 export default {
   components: {
     NewInput,
     ScheduleSearch,
     ScheduleCalendar,
-    ScheduleModal
+    ScheduleModal,
+    ScheduleInfoModal
   },
   data() {
     return {
@@ -48,20 +60,16 @@ export default {
         title: '',
         description: '',
         startTime: '',  
-        endTime: '',    
+        endTime: '', 
+        searchResults: [],  
       },
-      popupState: false,
-      searchResults: [],
+      popupState: false, 
+      selectedSchedule: '',
+      editModalState: false,  
+
     }
   },
   methods: {
-    openModal(results) {
-      this.searchResults = results;  
-      this.popupState = true;       
-    },
-    closeModal() {
-      this.popupState = false; 
-    },
     async fnScheduleList(inputDay) {
       let year = inputDay.split('-')[0];
       let month = inputDay.split('-')[1];
@@ -102,13 +110,35 @@ export default {
       } else {
         this.inputSchedule = { title: '', startTime: '', endTime: '', description: '' };
       }
-    }
+    },
+    openModal(searchResults) {
+      this.searchResults = searchResults;  
+      this.popupState = true;  
+      console.log("Search Results:", searchResults);
+    },
+    handleDeleteSchedule(item) {
+      const index = this.searchResults.findIndex(schedule => schedule.id === item.id);
+      if (index !== -1) {
+        this.searchResults.splice(index, 1);  
+      }
+    },
+    openEditModal(schedule) {
+      this.selectedSchedule = { ...schedule };  
+      this.editModalState = true;  
+    },
+    handleSaveSchedule(updatedSchedule) {
+      const index = this.searchResults.findIndex(schedule => schedule.id === updatedSchedule.id);
+      if (index !== -1) {
+        this.searchResults[index] = updatedSchedule;  
+      }
+      this.editModalState = false;  
+    },
   },
   mounted() {
     this.day = this.$dayjs().format('YYYY-MM-DD')
     this.fnScheduleList(this.day)
   },
-}
+};
 </script>
 
 <style></style>
