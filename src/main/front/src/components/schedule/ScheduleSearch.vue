@@ -43,20 +43,9 @@
     </template>
     <button class="search-btn" @click="fnSearch" :disabled="form.searchType == ''">검색</button>
   </div>
-  <ScheduleModal
-    v-if="popupState"
-    :popupState="popupState"
-    :searchResults="searchResults"
-    @closePopup="popupState = false"
-  />
 </template>
-
 <script>
-import ScheduleModal from './ScheduleModal.vue'
 export default {
-  components: {
-    ScheduleModal,
-  },
   emits: ['searchResult'],
   data() {
     return {
@@ -71,7 +60,6 @@ export default {
       list: [],
       years: [],
       months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-      popupState: false,
     }
   },
   methods: {
