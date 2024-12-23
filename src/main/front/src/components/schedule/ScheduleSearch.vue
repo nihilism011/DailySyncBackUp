@@ -65,37 +65,45 @@ export default {
   },
   methods: {
     initYears() {
-      const currentYear = new Date().getFullYear(); 
-      const endYear = currentYear + 10;  
-  
+      const currentYear = new Date().getFullYear();
+      const endYear = currentYear + 10;
+
   for (let year = currentYear; year <= endYear; year++) {
     this.years.push(year);
       }
     },
     async fnSearch() {
-      let url = ''
-      // if (this.form.searchType === 'year' && this.form.year) {
-      //   url = `schedule/date/${this.form.year}`
-      // } else if (this.form.searchType === 'yearMonth' && this.form.year && this.form.month) {
-      //   url = `schedule/date/${this.form.year}/${this.form.month}`
-      // } else 
+      let url = '';
+
       if (this.form.searchType === 'range' && this.form.startTime && this.form.endTime) {
-        const startTime = this.form.startTime
-        const endTime = this.form.endTime
-        url = `schedule/date/range?startTime=${startTime}&endTime=${endTime}`
+        const startTime = new Date(this.form.startTime);
+        const endTime = new Date(this.form.endTime);
+
+
+        if (isNaN(startTime.getTime()) || isNaN(endTime.getTime())) {
+          alert('시작 날짜 또는 끝 날짜가 올바르지 않습니다. 유효한 날짜 형식을 입력해 주세요.');
+          return; // Stop the function execution if dates are invalid
+        }
+
+        if (startTime > endTime) {
+          alert('끝나는 시간이 시작 시간보다 이전입니다. 날짜를 확인해 주세요.');
+          return; // Stop the function execution if start date is greater than end date
+        }
+
+        url = `schedule/date/range?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`;
       } else if (this.form.searchType === 'title' && this.form.title) {
-        url = `schedule/title/${this.form.title}`
+        url = `schedule/title/${this.form.title}`;
       }
-      
+
       if (url) {
         try {
-          const { data } = await this.$axios.get(url)
-          this.$emit('searchResult', data); 
+          const { data } = await this.$axios.get(url);
+          this.$emit('searchResult', data);
         } catch (error) {
-          console.error('오류 :', error)
+          console.error('오류 :', error);
         }
       } else {
-        console.log('검색할 조건을 입력하세요.')
+        console.log('검색할 조건을 입력하세요.');
       }
     },
     formatDate(date) {

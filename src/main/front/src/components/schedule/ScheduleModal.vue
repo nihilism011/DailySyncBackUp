@@ -21,6 +21,7 @@
         <button class="btn-default cancel" @click="closeModal">닫기</button>
       </div>
     </div>
+    <div class="dimmed">dim</div>
   </div>
 </template>
 <script>
@@ -29,10 +30,10 @@ export default {
     popupState: Boolean,
     searchResults: Array,
   },
- 
+  emits: ['fnScheduleList', 'fnDayList', 'editSchedule', 'deleteSchedule', 'closePopup'],
   methods: {
     closeModal() {
-      this.$emit('closePopup'); 
+      this.$emit('closePopup');
     },
     selectSchedule(item) {
       this.$emit('editSchedule', item);  // 수정할 일정 아이템을 부모에게 전달
@@ -45,7 +46,6 @@ export default {
       getDateRange(startTime, endTime) {
         const startFormatted = this.formatDate(startTime);
         const endFormatted = this.formatDate(endTime);
-
         // startTime이 endTime보다 클 경우 순서를 바꿔서 출력
         if (new Date(startTime) > new Date(endTime)) {
           return `${endFormatted} ~ ${startFormatted}`;

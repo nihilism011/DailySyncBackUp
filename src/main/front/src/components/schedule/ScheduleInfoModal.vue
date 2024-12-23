@@ -1,42 +1,69 @@
 <template>
   <div class="popup-box type-modal" v-if="popupState">
     <div class="popup-cont type2">
+      <div class="popup-tit-wrap">
+        <div class="tit">수정</div>
+      </div>
       <div class="schedule-info">
-          <div class="info-item">
-        <label for="title">제목</label>
-        <input
-          type="text"
-          v-model="editedSchedule.title"
-          id="title"
-        />
-      </div>
-      <div class="info-item">
-        <label for="startTime">시작 시간</label>
-        <input
-          type="text"
-          v-model="editedSchedule.startTime"
-          id="startTime"
-        />
-      </div>
-      <div class="info-item">
-        <label for="endTime">끝 시간</label>
-        <input
-          type="text"
-          v-model="editedSchedule.endTime"
-          id="endTime"
-        />
-      </div>
-      <div class="info-item">
-        <label for="description">설명</label>
-        <input
-          type="text"
+        <div class="ip-list">
+          <div class="tit-box">
+            <label for="" class="tit">제목</label>
+          </div>
+          <div class="bot-box">
+            <div class="ip-box">
+              <textarea
+                type="text"
+                v-model="editedSchedule.title"
+                id="title"
+            ></textarea>
+              </div>
+          </div>
+        </div>
+        <div class="ip-list">
+          <div class="tit-box">
+            <label for="" class="tit">시작 시간</label>
+          </div>
+          <div class="bot-box">
+            <div class="ip-box">
+              <textarea
+                type="text"
+                v-model="formattedStartTime"
+                id="startTime"
+            ></textarea>
+             </div>
+          </div>
+        </div>
+        <div class="ip-list">
+          <div class="tit-box">
+            <label for="" class="tit">끝 시간</label>
+          </div>
+          <div class="bot-box">
+            <div class="ip-box">
+              <textarea
+                type="text"
+                v-model="formattedEndTime"
+                id="endTime"
+            ></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="ip-list">
+          <div class="tit-box">
+            <label for="" class="tit">설명</label>
+          </div>
+          <div class="bot-box">
+            <div class="ip-box">
+              <textarea
+              type="text"
           v-model="editedSchedule.description"
           id="description"
-        />
+            ></textarea>
+              </div>
+          </div>
         </div>
         <div>
           <div class="pop-btn-wrap">
-            <button @click="saveSchedule" class="add-schedule-btn">저장</button>
+            <button @click="saveSchedule" class="btn-default submit">저장</button>
             <button class="btn-default cancel" @click="closeModal">닫기</button>
           </div>
         </div>
@@ -46,8 +73,7 @@
   </div>
 </template>
 <script>
-import 'dayjs/locale/ko';  // 한국어 로케일 불러오기
-import dayjs from 'dayjs';  // dayjs 불러오기
+import 'dayjs/locale/ko';
 export default {
   props: {
       popupState: Boolean,
@@ -56,35 +82,48 @@ export default {
   watch: {
       schedule(newSchedule) {
           this.editedSchedule = { ...newSchedule };
-          this.formatStartTime(); // 모달이 열릴 때, 시작 시간을 포맷
-          this.formatEndTime();   // 모달이 열릴 때, 끝 시간을 포맷
       },
   },
+  emits: ['fnScheduleList', 'fnDayList', 'saveSchedule', 'closePopup'],
   data() {
       return {
           editedSchedule: { ...this.schedule  },
       };
   },
+  computed: {
+    // 시작 시간을 포맷된 형태로 반환
+    formattedStartTime: {
+      get() {
+        return this.editedSchedule.startTime
+          ? this.formatDate(this.editedSchedule.startTime)
+          : '';
+      },
+      set(value) {
+        // 사용자가 입력한 값을 dayjs로 변환하여 저장
+        const parsedDate = this.$dayjs(value, 'YYYY-MM-DD A HH:mm');
+        if (parsedDate.isValid()) {
+          this.editedSchedule.startTime = parsedDate.toISOString();
+        }
+      }
+    },
+    formattedEndTime: {
+      get() {
+        return this.editedSchedule.endTime
+          ? this.formatDate(this.editedSchedule.endTime)
+          : '';
+      },
+      set(value) {
+        const parsedDate = this.$dayjs(value, 'YYYY-MM-DD A HH:mm');
+        if (parsedDate.isValid()) {
+          this.editedSchedule.endTime = parsedDate.toISOString();
+        }
+      }
+    }
+  },
   methods: {
     closeModal() {
       this.$emit('closePopup')
     },
-    formatStartTime() {
-    // 시작 시간을 한국어 AM/PM 형식으로 포맷
-    if (this.editedSchedule.startTime) {
-      this.editedSchedule.startTime = dayjs(this.editedSchedule.startTime)
-        .locale('ko')  // 한국어 로케일
-        .format('YYYY-MM-DD hh:mm A'); // 오전/오후 12시간 형식
-    }
-  },
-  formatEndTime() {
-    // 끝 시간을 한국어 AM/PM 형식으로 포맷
-    if (this.editedSchedule.endTime) {
-      this.editedSchedule.endTime = dayjs(this.editedSchedule.endTime)
-        .locale('ko')
-        .format('YYYY-MM-DD hh:mm A');
-    }
-  },
     async saveSchedule() {
       if (!this.editedSchedule.title.trim()) {
       alert('제목을 입력해주세요.');
@@ -110,12 +149,13 @@ export default {
         if (response.status) {
           alert('일정이 저장되었습니다.');
           this.$emit('saveSchedule', formattedSchedule.id)
+          this.$emit('fnScheduleList', this.day);
+          this.$emit('fnDayList', this.day);
           this.closeModal(); // 수정 후 모달 닫기
       }
   },
     formatDate(date) {
-      if (!date) return ''
-      return this.$dayjs(date).locale('ko').format('YYYY-MM-DD hh:mm A'); 
+      return date ? this.$dayjs(date).locale('ko').format('YYYY-MM-DD A HH:mm') : '';
       },
       getDateRange(startTime, endTime) {
         const startFormatted = this.formatDate(startTime);
@@ -131,12 +171,35 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.search {
-  &-list {
-    padding: 10px;
-    margin-top: 10px;
-    overflow-y: auto;
-    height: 360px;
+ .btn-default {
+  margin-bottom: 16px;
+}
+.schedule {
+  &-wrap {
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.3);
+    height: 700px;
+    .btn-box {
+      display: flex;
+      align-items: center;
+      gap: 0 10px;
+      color: var(--base-white);
+      margin-top: 20px;
+      button {
+        border: 0;
+        width: 100%;
+        height: 36px;
+        border-radius: 4px;
+        &.submit {
+          background-color: var(--btn-blue);
+        }
+        &.cancel,
+        &.remove {
+          background-color: var(--btn-gray3);
+        }
+      }
+    }
   }
 }
 </style>
