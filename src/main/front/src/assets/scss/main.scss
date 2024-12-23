@@ -316,6 +316,7 @@ body {
 #container {
   display: flex;
   min-height: 100%;
+  height: 100%;
   .left {
     width: 30%;
     padding: 40px 0 40px 30px;
@@ -445,6 +446,16 @@ input[type='radio'] {
     .tit {
       font-size: 24px;
       font-weight: bold;
+    }
+    .favorite {
+      font-size: 0;
+      width: 24px;
+      height: 24px;
+      transition: all 0.2s;
+      background: url('@/assets/images/ico/ico_heart.png') no-repeat center;
+      &.active {
+        background-image: url('@/assets/images/ico/ico_heart1_2.png');
+      }
     }
   }
 }
@@ -894,6 +905,17 @@ input {
         }
       }
     }
+    .tit {
+      font-weight: bold;
+    }
+    .amount {
+      &.plus {
+        color: var(--color-red);
+      }
+      &.minus {
+        color: var(--color-blue);
+      }
+    }
     // @for $i from 1 through 4 {
     //   &.active#{$i} {
     //     background-color: map-get($bgColor, $i);
@@ -902,128 +924,242 @@ input {
   }
 }
 
-.account-fixed-wrap {
-  width: calc(50% - 10px);
-  height: 150px;
-  display: flex;
-  .account {
-    &-fixed {
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
-      height: 100%;
+.account {
+  &-fixed {
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    &-wrap {
+      width: calc(50% - 10px);
+      height: 150px;
+      display: flex;
+    }
+  }
+  &-left {
+    display: flex;
+    width: 100%;
+    gap: 0 20px;
+    .account-fixed {
+      width: calc(50% - 10px);
+    }
+  }
+  &-right {
+    width: 100%;
+  }
+  &-divide {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    & > div {
+      width: 50%;
       display: flex;
       flex-direction: column;
-    }
-    &-left {
-      display: flex;
-      width: 100%;
-      gap: 0 20px;
-      .account-fixed {
-        width: calc(50% - 10px);
+      align-items: center;
+      padding: 15px 5px;
+      &:first-child {
+        border-right: 1px solid var(--color-contrastyC);
       }
     }
-    &-right {
-      width: 100%;
-    }
-    &-tit {
-      font-size: 18px;
+    .tit {
       font-weight: bold;
-      text-align: center;
+      font-size: 18px;
+      margin-bottom: 10px;
     }
-    &-divide {
+    .first {
+      .tit {
+        color: var(--color-red);
+      }
+    }
+    .second {
+      .tit {
+        color: var(--color-blue);
+      }
+    }
+  }
+  &-tit {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+  }
+  &-list {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding: 2px 0;
+    margin-top: 10px;
+    border-top: 1px solid var(--color-contrastyC);
+    border-bottom: 1px solid var(--color-contrastyC);
+  }
+  &-item {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    min-height: 39px;
+    border-bottom: 1px solid var(--color-contrastyE);
+    & > * {
+      padding: 5px;
+    }
+    .date {
+      min-width: 30px;
+    }
+    .category {
+      min-width: 76px;
+      text-align: center;
+      border-radius: 4px;
+    }
+    .tit {
+      width: calc(50% - 50px);
+    }
+    .amount {
+      width: calc(50% - 70px);
+    }
+    .btn-box {
+      width: 60px;
       display: flex;
       align-items: center;
-      flex-grow: 1;
-      & > div {
-        width: 50%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 15px 5px;
-        &:first-child {
-          border-right: 1px solid var(--color-contrastyC);
+      justify-content: space-evenly;
+      button {
+        width: 26px;
+        height: 26px;
+        background: center / 18px no-repeat;
+        &.edit-btn {
+          background-image: url('@/assets/images/ico/ico_edit.png');
         }
-      }
-      .tit {
-        font-weight: bold;
-        font-size: 18px;
-        margin-bottom: 10px;
-      }
-      .first {
-        .tit {
-          color: var(--color-red);
-        }
-      }
-      .second {
-        .tit {
-          color: var(--color-blue);
+        &.remove-btn {
+          background-image: url('@/assets/images/ico/ico_remove.png');
         }
       }
     }
-    &-list {
+    &:last-of-type {
+      border-bottom: 0;
+    }
+  }
+  &-none {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    span {
+      font-weight: bold;
+      color: var(--color-contrastyA);
+      padding-top: 48px;
+      background: url('@/assets/images/no_list_icon.png') top center / 40px no-repeat;
+    }
+  }
+}
+
+.dash {
+  &-item {
+    display: flex;
+    align-items: center;
+    min-height: 60px;
+    padding: 10px 5px;
+    gap: 0 8px;
+    font-size: 14px;
+    border-bottom: 1px dashed var(--color-contrastyC);
+    &-wrap {
       overflow-y: auto;
       flex-grow: 1;
-      padding: 2px 0;
-      margin-top: 10px;
+      max-height: 590px;
       border-top: 1px solid var(--color-contrastyC);
       border-bottom: 1px solid var(--color-contrastyC);
     }
-    &-item {
-      display: flex;
+    &:last-of-type {
+      border-bottom: 0;
+    }
+    .tit {
+      flex-grow: 1;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+    .category {
+      min-width: 40px;
+    }
+    .kcal {
+      min-width: 70px;
+    }
+    .full-date {
       width: 100%;
-      align-items: center;
-      min-height: 39px;
-      border-bottom: 1px solid var(--color-contrastyE);
-      & > * {
-        padding: 5px;
-      }
-      .date {
-        min-width: 30px;
-      }
-      .category {
-        min-width: 50px;
-        text-align: center;
-        border-radius: 4px;
-      }
-      .tit {
-        width: calc(50% - 50px);
-      }
-      .amount {
-        width: calc(50% - 70px);
-      }
-      .btn-box {
-        width: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-        button {
-          width: 26px;
-          height: 26px;
-          background: center / 18px no-repeat;
-          &.edit-btn {
-            background-image: url('@/assets/images/ico/ico_edit.png');
-          }
-          &.remove-btn {
-            background-image: url('@/assets/images/ico/ico_remove.png');
-          }
-        }
-      }
-      &:last-of-type {
-        border-bottom: 0;
-      }
-    }
-    &-none {
       display: flex;
-      align-items: center;
-      justify-content: center;
+      flex-direction: column;
+      font-size: 12px;
+      color: var(--color-contrasty9E);
+      text-align: right;
+    }
+    &.none {
       height: 100%;
+      justify-content: center;
+      color: var(--color-contrastyA);
+      font-weight: bold;
+      font-size: 16px;
       span {
-        font-weight: bold;
-        color: var(--color-contrastyA);
-        padding-top: 48px;
-        background: url('@/assets/images/no_list_icon.png') top center / 40px no-repeat;
+        padding-top: 62px;
+        background: url('@/assets/images/no_list_icon.png') top center / 60px no-repeat;
       }
     }
+    &.wrap {
+      flex-wrap: wrap;
+    }
+  }
+  &-icon {
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    font-size: 0;
+    border-radius: 4px;
+    background: url('@/assets/images/ico/icon_default.png') center / 30px no-repeat;
+    $iconClass: (
+      bread,
+      burger,
+      cake,
+      chicken,
+      egg,
+      fish,
+      fruit,
+      icecream,
+      milk,
+      noodle,
+      pizza,
+      rice,
+      sausage,
+      snack,
+      steak
+    );
+    @each $icon in $iconClass {
+      &.#{$icon} {
+        background-image: url('@/assets/images/ico/icon_#{$icon}.png');
+        font-size: 0;
+      }
+    }
+  }
+  &-tit-box {
+    .tit {
+      font-size: 32px;
+      text-align: center;
+      font-weight: bold;
+      span {
+        font-size: 16px;
+      }
+    }
+  }
+  &-wrap {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 14px 0;
+    position: relative;
+  }
+  &-link {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 0;
+    background: url('@/assets/images/ico/ico_double_right.png') center / 24px no-repeat;
   }
 }

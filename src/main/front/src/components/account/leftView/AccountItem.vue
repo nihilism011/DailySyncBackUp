@@ -5,9 +5,11 @@
         {{ categories[account.category].name }}
       </div>
     </div>
-    <div>{{ account.title }}</div>
-    <div>{{ account.description }}</div>
-    <div>{{ numToWon(account.amount) }}</div>
+    <div class="tit">{{ account.title }}</div>
+    <div class="desc">{{ account.description }}</div>
+    <div class="amount" :class="account.amount < 0 ? 'minus' : 'plus'">
+      {{ numToWon(account.amount) }}
+    </div>
     <div class="btn-box">
       <button @click="viewUpdatePopup = true" class="edit-btn"></button>
       <button @click="deleteItem" class="remove-btn"></button>
