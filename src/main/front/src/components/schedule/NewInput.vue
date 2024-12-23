@@ -115,6 +115,7 @@
   </div>
 </template>
 <script>
+import 'dayjs/locale/ko';  // 한국어 로케일 불러오기
 export default {
   props: {
     dailyList: Array,
@@ -145,7 +146,7 @@ export default {
   },
   methods: {
     formatDate(date) {
-      return date ? this.$dayjs(date).format('YYYY-MM-DD A hh:mm') : ''
+      return date ? this.$dayjs(date).locale('ko').format('YYYY-MM-DD a hh:mm') : ''; 
     },
     fnUpdate() {
       this.isUpdate = true
