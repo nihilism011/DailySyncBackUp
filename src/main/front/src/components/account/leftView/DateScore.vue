@@ -1,15 +1,13 @@
 <template>
   <div class="account-left">
-    <div class="account-fixed">
-      <div class="account-divide">
-        <div class="first">
-          <div class="tit">소득</div>
-          <div>{{ numToWon(money.plus) }}</div>
-        </div>
-        <div class="second">
-          <div class="tit">지출</div>
-          <div>{{ numToWon(money.minus) }}</div>
-        </div>
+    <div class="account-divide">
+      <div class="first">
+        <div class="tit">소득</div>
+        <div>{{ numToWon(money.plus) }}</div>
+      </div>
+      <div class="second">
+        <div class="tit">지출</div>
+        <div>{{ numToWon(money.minus) }}</div>
       </div>
     </div>
   </div>
