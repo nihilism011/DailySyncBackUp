@@ -3,7 +3,15 @@
     <div class="popup-cont type2">
       <div class="popup-tit-wrap">
         <div class="tit">{{ mode === 'create' ? '가계부 추가' : '수정' }}</div>
-        <button v-if="mode === 'create'">즐겨찾기</button>
+        <button
+          v-if="mode === 'create'"
+          class="favorite"
+          :class="favorite ? 'active' : ''"
+          title="즐겨찾기 추가"
+          @click="favorite = !favorite"
+        >
+          즐겨찾기
+        </button>
       </div>
       <div class="account-wrap">
         <div class="ip-list">
@@ -19,8 +27,15 @@
             </div>
           </div>
         </div>
-        <div>
-          <input type="date" class="date-picker" v-model="reqBody.accountDate" />
+        <div class="ip-list">
+          <div class="tit-box">
+            <label for="title" class="tit">등록일자</label>
+          </div>
+          <div class="bot-box">
+            <div class="ip-box">
+              <input type="date" class="date-picker" v-model="reqBody.accountDate" />
+            </div>
+          </div>
         </div>
         <div class="ip-list">
           <div class="tit-box">
@@ -122,6 +137,7 @@ export default {
           this.dateStore.selectedDate ??
           this.$dayjs().format('YYYY-MM-DD'),
       },
+      favorite: false,
     }
   },
   watch: {

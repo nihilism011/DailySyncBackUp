@@ -1,92 +1,117 @@
 <template>
-  <div>
-    <div v-if="isAdd || isUpdate">
-      <div>
-        <label for="title">제목</label>
-        <input
-          type="text"
-          v-model="newSchedule.title"
-          id="title"
-          placeholder="일정 제목"
-          :readonly="!isAdd && !isUpdate"
-        />
-      </div>
-      <div>
-        <label for="startTime">시작 시간</label>
-        <input
-          type="datetime-local"
-          v-model="newSchedule.startTime"
-          id="startTime"
-          :readonly="!isAdd && !isUpdate"
-        />
-      </div>
-      <div>
-        <label for="endTime">끝 시간</label>
-        <input
-          type="datetime-local"
-          v-model="newSchedule.endTime"
-          id="endTime"
-          :readonly="!isAdd && !isUpdate"
-        />
-      </div>
-      <div>
-        <label for="description">설명</label>
-        <input
-          type="text"
-          v-model="newSchedule.description"
-          id="description"
-          placeholder="일정 설명"
-          :readonly="!isAdd && !isUpdate"
-        />
-      </div>
-      <button @click="fnSave()">저장</button>
-      <button @click="fnCancle()">취소</button>
-    </div>
-    <div v-else>
-      <div class="schedule-info">
-        <div class="info-item">
-          <label for="title">제목</label>
-          <input
-            type="text"
-            :value="inputSchedule.title"
-            id="title"
-            readonly
-          />
+  <button :disabled="isUpdate" @click="fnAdd" class="btn-default">일정등록</button>
+  <div class="schedule-wrap">
+    <template v-if="isAdd || isUpdate">
+      <div class="ip-list">
+        <div class="tit-box">
+          <label class="tit" for="title">제목</label>
         </div>
-        <div class="info-item">
-          <label for="startTime">시작 시간</label>
-          <input
-            type="text"
-            :value="formatDate(inputSchedule.startTime)"
-            id="startTime"
-            readonly
-          />
-        </div>
-        <div class="info-item">
-          <label for="endTime">끝 시간</label>
-          <input
-            type="text"
-            :value="formatDate(inputSchedule.endTime)"
-            id="endTime"
-            readonly
-          />
-        </div>
-        <div class="info-item">
-          <label for="description">설명</label>
-          <input
-            type="text"
-            :value="inputSchedule.description"
-            id="description"
-            readonly
-          />
-        </div>
-        <div>
-          <button v-if="inputSchedule.id" @click="fnUpdate">수정</button>
-          <button v-if="inputSchedule.id" @click="fnRemove">삭제</button>
+        <div class="bot-box">
+          <div class="ip-box">
+            <input
+              type="text"
+              v-model="newSchedule.title"
+              id="title"
+              placeholder="제목을 입력해주세요"
+            />
+          </div>
         </div>
       </div>
-    </div>
-    <button v-if="!isAdd && !isUpdate" @click="fnAdd" class="add-schedule-btn">일정등록</button>
+      <div class="ip-list">
+        <div class="tit-box">
+          <label class="tit" for="startTime">시작 일정</label>
+        </div>
+        <div class="bot-box">
+          <div class="ip-box">
+            <input type="datetime-local" v-model="newSchedule.startTime" id="startTime" />
+          </div>
+        </div>
+      </div>
+      <div class="ip-list">
+        <div class="tit-box">
+          <label class="tit" for="endTime">종료 일정</label>
+        </div>
+        <div class="bot-box">
+          <div class="ip-box">
+            <input type="datetime-local" v-model="newSchedule.endTime" id="endTime" />
+          </div>
+        </div>
+      </div>
+      <div class="ip-list">
+        <div class="tit-box">
+          <label class="tit" for="description">일정 설명</label>
+        </div>
+        <div class="bot-box">
+          <div class="text-box">
+            <textarea
+              v-model="newSchedule.description"
+              id="description"
+              placeholder="일정 설명"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="btn-box">
+        <button @click="fnSave()" class="submit">저장</button>
+        <button @click="fnCancle()" class="cancel">취소</button>
+      </div>
+    </template>
+    <template v-else>
+      <div class="ip-list">
+        <div class="tit-box">
+          <label class="tit" for="title">제목</label>
+        </div>
+        <div class="bot-box">
+          <div class="ip-box">
+            <input type="text" :value="inputSchedule.title" id="title" readonly />
+          </div>
+        </div>
+      </div>
+      <div class="ip-list">
+        <div class="tit-box">
+          <label class="tit" for="startTime">시작 일정</label>
+        </div>
+        <div class="bot-box">
+          <div class="ip-box">
+            <input
+              type="text"
+              :value="formatDate(inputSchedule.startTime)"
+              id="startTime"
+              readonly
+            />
+          </div>
+        </div>
+      </div>
+      <div class="ip-list">
+        <div class="tit-box">
+          <label class="tit" for="endTime">종료 일정</label>
+        </div>
+        <div class="bot-box">
+          <div class="ip-box">
+            <input type="text" :value="formatDate(inputSchedule.endTime)" id="endTime" readonly />
+          </div>
+        </div>
+      </div>
+      <div class="ip-list">
+        <div class="tit-box">
+          <label class="tit" for="description">일정 설명</label>
+        </div>
+        <div class="bot-box">
+          <div class="text-box">
+            <textarea
+              id="description"
+              placeholder="일정 설명"
+              :value="inputSchedule.description"
+              readonly
+            ></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="btn-box">
+        <button v-if="inputSchedule.id" @click="fnUpdate" class="submit">수정</button>
+        <button v-if="inputSchedule.id" @click="fnRemove" class="remove">삭제</button>
+      </div>
+    </template>
   </div>
 </template>
 <script>
@@ -95,12 +120,12 @@ export default {
     dailyList: Array,
     schedule: Object,
     day: String,
-    inputSchedule: Object
+    inputSchedule: Object,
   },
   watch: {
     dailyList(newSchedule) {
-      console.log("일정 리스트:", newSchedule);
-      this.newSchedule = [ ...newSchedule ];
+      console.log('일정 리스트:', newSchedule)
+      this.newSchedule = [...newSchedule]
     },
   },
   emits: ['fnScheduleList', 'fnDayList', 'inputedSchedule'],
@@ -120,94 +145,94 @@ export default {
   },
   methods: {
     formatDate(date) {
-      return date ? this.$dayjs(date).format('YYYY-MM-DD A hh:mm') : '';
+      return date ? this.$dayjs(date).format('YYYY-MM-DD A hh:mm') : ''
     },
     fnUpdate() {
-      this.isUpdate = true;
-      this.newSchedule = { ...this.inputSchedule };
+      this.isUpdate = true
+      this.newSchedule = { ...this.inputSchedule }
     },
     async inputedSchedule(id) {
-      console.log('inputedSchedule 호출', id);
-        const response = await this.$axios.get(`schedule/userId/id/${id}`);
-        if (response) {
-          this.newSchedule = {
+      console.log('inputedSchedule 호출', id)
+      const response = await this.$axios.get(`schedule/userId/id/${id}`)
+      if (response) {
+        this.newSchedule = {
           ...response.data,
-        };
-            } else {
-              console.log("일정이 없습니다.");
-            }
+        }
+      } else {
+        console.log('일정이 없습니다.')
+      }
     },
     fnCancle() {
-      this.isAdd = false;
-      this.isUpdate = false;
-      this.newSchedule = { title: '', startTime: '', endTime: '', description: '' };
+      this.isAdd = false
+      this.isUpdate = false
+      this.newSchedule = { title: '', startTime: '', endTime: '', description: '' }
     },
     async fnRemove() {
-      if(confirm('일정을 삭제하시겠습니까?')){
-        const id = this.inputSchedule.id;
-        const response = await this.$axios.delete(`schedule/delete/${id}`);
-        if(response){
-          this.$emit('fnScheduleList', this.day);
-          this.$emit('fnDayList', this.day);
-          this.$emit('inputedSchedule', null); // 화면에서 해당 일정 정보 지움
+      if (confirm('일정을 삭제하시겠습니까?')) {
+        const id = this.inputSchedule.id
+        const response = await this.$axios.delete(`schedule/delete/${id}`)
+        if (response) {
+          this.$emit('fnScheduleList', this.day)
+          this.$emit('fnDayList', this.day)
+          this.$emit('inputedSchedule', null) // 화면에서 해당 일정 정보 지움
         }
       }
     },
     fnAdd() {
-      this.isAdd = true;
-      this.newSchedule = { title: '', startTime: '', endTime: '', description: '' };
+      this.isAdd = true
+      this.newSchedule = { title: '', startTime: '', endTime: '', description: '' }
     },
     async fnSave() {
       if (!this.newSchedule.title.trim()) {
-        alert('제목을 입력해주세요.');
-        return;
+        alert('제목을 입력해주세요.')
+        return
       }
 
-      const startTime = new Date(this.newSchedule.startTime);
-      const endTime = new Date(this.newSchedule.endTime);
+      const startTime = new Date(this.newSchedule.startTime)
+      const endTime = new Date(this.newSchedule.endTime)
 
       if (isNaN(startTime.getTime()) || isNaN(endTime.getTime())) {
-        alert('시작 날짜 또는 끝 날짜가 올바르지 않습니다. 유효한 날짜 형식을 입력해 주세요.');
-        return;
+        alert('시작 날짜 또는 끝 날짜가 올바르지 않습니다. 유효한 날짜 형식을 입력해 주세요.')
+        return
       }
 
       if (startTime > endTime) {
-        alert('끝나는 시간이 시작 시간보다 이전입니다. 날짜를 확인해 주세요.');
-        return;
+        alert('끝나는 시간이 시작 시간보다 이전입니다. 날짜를 확인해 주세요.')
+        return
       }
-      const schedule = this.isAdd ? this.newSchedule : this.newSchedule;
+      const schedule = this.isAdd ? this.newSchedule : this.newSchedule
       const formattedSchedule = {
         ...schedule,
         startTime: this.$dayjs(schedule.startTime).format('YYYY-MM-DDTHH:mm:ss'),
         endTime: this.$dayjs(schedule.endTime).format('YYYY-MM-DDTHH:mm:ss'),
-      };
+      }
 
-      let url;
-      let method;
+      let url
+      let method
       if (this.isAdd) {
-        url = 'schedule/add';
-        method = 'post';
+        url = 'schedule/add'
+        method = 'post'
       } else if (this.isUpdate) {
-        url = `schedule/update/${schedule.id}`;
-        method = 'patch';
+        url = `schedule/update/${schedule.id}`
+        method = 'patch'
       }
 
       try {
-        const response = await this.$axios[method](url, formattedSchedule);
+        const response = await this.$axios[method](url, formattedSchedule)
         console.log()
         if (response.status) {
-          alert('일정이 저장되었습니다.');
-          this.isAdd = false;
-          this.isUpdate = false;
-          this.$emit('fnScheduleList', this.day);
-          this.$emit('fnDayList', this.day);
+          alert('일정이 저장되었습니다.')
+          this.isAdd = false
+          this.isUpdate = false
+          this.$emit('fnScheduleList', this.day)
+          this.$emit('fnDayList', this.day)
           this.$emit('inputedSchedule', formattedSchedule.id)
         } else {
-          alert(response.message);
+          alert(response.message)
         }
       } catch (error) {
-        console.error(error);
-        alert('오류가 발생했습니다.');
+        console.error(error)
+        alert('오류가 발생했습니다.')
       }
     },
   },
@@ -215,56 +240,36 @@ export default {
 }
 </script>
 
-<style scoped>
-.schedule-info {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 15px;
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 20px;
-  border-radius: 5px;
-  background-color: white;
+<style lang="scss" scoped>
+.btn-default {
+  margin-bottom: 16px;
 }
-.info-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-}
-.info-value {
-  flex-grow: 1;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-button {
-  padding: 8px 12px;
-  background-color: transparent;
-  color: black;
-  border: 1px solid black;
-  border-radius: 5px;
-  cursor: pointer;
-  outline: none;
-}
-button:hover {
-  background-color: #f0f0f0;
-}
-.add-schedule-btn {
-  margin-top: 20px;
-  padding: 8px 12px;
-  background-color: transparent;
-  color: black;
-  border: 1px solid black;
-  border-radius: 5px;
-  cursor: pointer;
-  outline: none;
-}
-input, textarea {
-  padding: 8px 12px;
-  background-color: transparent;
-  color: black;
-  border: 1px solid black;
-  border-radius: 5px;
-  width: 100%;
-  outline: none;
+.schedule {
+  &-wrap {
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.3);
+    height: 700px;
+    .btn-box {
+      display: flex;
+      align-items: center;
+      gap: 0 10px;
+      color: var(--base-white);
+      margin-top: 20px;
+      button {
+        border: 0;
+        width: 100%;
+        height: 36px;
+        border-radius: 4px;
+        &.submit {
+          background-color: var(--btn-blue);
+        }
+        &.cancel,
+        &.remove {
+          background-color: var(--btn-gray3);
+        }
+      }
+    }
+  }
 }
 </style>

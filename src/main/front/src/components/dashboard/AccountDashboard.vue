@@ -10,16 +10,16 @@ defineProps({
 const viewUpdatePopup = ref(false)
 </script>
 <template>
-  <div>
-    <RouterLink to="account">Account Page 이동 >></RouterLink>
+  <div class="dash-wrap">
     <DateScore :prop-date="selectedDate" />
-    <button @click="viewUpdatePopup = true">+</button>
+    <!-- <button @click="viewUpdatePopup = true">+</button> -->
     <AccountItemList :prop-date="selectedDate" />
+    <RouterLink to="/account" class="dash-link" title="가계부 이동">Account</RouterLink>
   </div>
-  <AccountPopup
+  <!-- <AccountPopup
     v-if="viewUpdatePopup"
     mode="create"
     :account="{ accountDate: selectedDate }"
     @close="viewUpdatePopup = false"
-  />
+  /> -->
 </template>

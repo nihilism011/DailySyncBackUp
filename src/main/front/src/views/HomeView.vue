@@ -50,9 +50,9 @@
 
 <script>
 import MealDashboard from '@/components/dashboard/MealDashboard.vue'
-import TodoDashboard from '@/components/todo/TodoDashboard.vue'
-import AccountDashboard from '@/components/account/layout/AccountDashboard.vue'
-import ScheduleDashboard from '@/components/schedule/ScheduleDashboard.vue'
+import TodoDashboard from '@/components/dashboard/TodoDashboard.vue'
+import AccountDashboard from '@/components/dashboard/AccountDashboard.vue'
+import ScheduleDashboard from '@/components/dashboard/ScheduleDashboard.vue'
 export default {
   components: {
     ScheduleDashboard,
@@ -90,6 +90,7 @@ export default {
     display: flex;
     flex-direction: column;
     width: 100%;
+    height: 100%;
     gap: 20px 0;
   }
   &-header {
