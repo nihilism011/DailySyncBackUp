@@ -3,9 +3,9 @@
     <div v-if="isAdd || isUpdate">
       <div>
         <label for="title">제목</label>
-        <input 
-          type="text" 
-          v-model="newSchedule.title" 
+        <input
+          type="text"
+          v-model="newSchedule.title"
           id="title"
           placeholder="일정 제목"
           :readonly="!isAdd && !isUpdate"
@@ -13,27 +13,27 @@
       </div>
       <div>
         <label for="startTime">시작 시간</label>
-        <input 
-          type="datetime-local" 
-          v-model="newSchedule.startTime" 
+        <input
+          type="datetime-local"
+          v-model="newSchedule.startTime"
           id="startTime"
           :readonly="!isAdd && !isUpdate"
         />
       </div>
       <div>
         <label for="endTime">끝 시간</label>
-        <input 
-          type="datetime-local" 
-          v-model="newSchedule.endTime" 
+        <input
+          type="datetime-local"
+          v-model="newSchedule.endTime"
           id="endTime"
           :readonly="!isAdd && !isUpdate"
         />
       </div>
       <div>
         <label for="description">설명</label>
-        <input 
-          type="text" 
-          v-model="newSchedule.description" 
+        <input
+          type="text"
+          v-model="newSchedule.description"
           id="description"
           placeholder="일정 설명"
           :readonly="!isAdd && !isUpdate"
@@ -46,17 +46,17 @@
       <div class="schedule-info">
         <div class="info-item">
           <label for="title">제목</label>
-          <input 
-            type="text" 
-            :value="inputSchedule.title" 
+          <input
+            type="text"
+            :value="inputSchedule.title"
             id="title"
             readonly
           />
         </div>
         <div class="info-item">
           <label for="startTime">시작 시간</label>
-          <input 
-            type="text" 
+          <input
+            type="text"
             :value="formatDate(inputSchedule.startTime)"
             id="startTime"
             readonly
@@ -64,8 +64,8 @@
         </div>
         <div class="info-item">
           <label for="endTime">끝 시간</label>
-          <input 
-            type="text" 
+          <input
+            type="text"
             :value="formatDate(inputSchedule.endTime)"
             id="endTime"
             readonly
@@ -73,8 +73,8 @@
         </div>
         <div class="info-item">
           <label for="description">설명</label>
-          <input 
-            type="text" 
+          <input
+            type="text"
             :value="inputSchedule.description"
             id="description"
             readonly
@@ -90,13 +90,12 @@
   </div>
 </template>
 <script>
-import 'dayjs/locale/ko';  // 한국어 로케일 불러오기
 export default {
   props: {
     dailyList: Array,
     schedule: Object,
     day: String,
-    inputSchedule: Object 
+    inputSchedule: Object
   },
   watch: {
     dailyList(newSchedule) {
@@ -121,7 +120,7 @@ export default {
   },
   methods: {
     formatDate(date) {
-      return date ? this.$dayjs(date).locale('ko').format('YYYY-MM-DD a hh:mm') : ''; 
+      return date ? this.$dayjs(date).format('YYYY-MM-DD A hh:mm') : '';
     },
     fnUpdate() {
       this.isUpdate = true;
@@ -132,7 +131,7 @@ export default {
         const response = await this.$axios.get(`schedule/userId/id/${id}`);
         if (response) {
           this.newSchedule = {
-          ...response.data, 
+          ...response.data,
         };
             } else {
               console.log("일정이 없습니다.");
@@ -155,13 +154,13 @@ export default {
       }
     },
     fnAdd() {
-      this.isAdd = true; 
-      this.newSchedule = { title: '', startTime: '', endTime: '', description: '' }; 
+      this.isAdd = true;
+      this.newSchedule = { title: '', startTime: '', endTime: '', description: '' };
     },
     async fnSave() {
       if (!this.newSchedule.title.trim()) {
         alert('제목을 입력해주세요.');
-        return; 
+        return;
       }
 
       const startTime = new Date(this.newSchedule.startTime);
@@ -171,12 +170,12 @@ export default {
         alert('시작 날짜 또는 끝 날짜가 올바르지 않습니다. 유효한 날짜 형식을 입력해 주세요.');
         return;
       }
-      
+
       if (startTime > endTime) {
         alert('끝나는 시간이 시작 시간보다 이전입니다. 날짜를 확인해 주세요.');
         return;
       }
-      const schedule = this.isAdd ? this.newSchedule : this.newSchedule; 
+      const schedule = this.isAdd ? this.newSchedule : this.newSchedule;
       const formattedSchedule = {
         ...schedule,
         startTime: this.$dayjs(schedule.startTime).format('YYYY-MM-DDTHH:mm:ss'),

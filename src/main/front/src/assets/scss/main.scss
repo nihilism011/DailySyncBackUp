@@ -558,6 +558,7 @@ input {
     height: 150px;
     font-size: 14px;
     font-family: inherit;
+    display: block;
   }
 }
 
@@ -826,10 +827,10 @@ input {
         transition: all 0.2s;
         padding-left: 26px;
         background: url($ico-path + 'ico_plus.png') left center / 26px no-repeat;
-        display: flex; 
-        align-items: center; 
-        line-height: 1; 
-      }   
+        display: flex;
+        align-items: center;
+        line-height: 1;
+      }
       &:hover {
         .add {
           color: var(--color-contrasty2);
