@@ -13,11 +13,13 @@
       @searchResult="openModal"
       :searchResults="searchResults"
     />
-    <ScheduleCalendar 
-      :dailyList="dailyList" 
-      :inputSchedule="inputSchedule" 
-      @fnScheduleList="fnScheduleList" 
-      @inputSchedule="inputedSchedule" 
+    <ScheduleCalendar
+      :dailyList="dailyList"
+      :inputSchedule="inputSchedule"
+      @fnScheduleList="fnScheduleList"
+      @inputSchedule="inputedSchedule"
+      :isAdd="isAdd"
+      :isUpdate="isUpdate"
     />
     <ScheduleModal
       v-if="popupState"       
@@ -27,7 +29,7 @@
       @deleteSchedule="handleDeleteSchedule" 
       @editSchedule="openEditModal" 
     />
-  <ScheduleInfoModal
+    <ScheduleInfoModal
       v-if="editModalState"
       :popupState="editModalState"
       :schedule="selectedSchedule"
@@ -35,10 +37,10 @@
       @saveSchedule="handleSaveSchedule"
     />
   </div>
-  
+
 </template>
 <script>
-import NewInput from '@/components/schedule/NewInput.vue'
+import NewInput from '@/components/schedule/NewInput.vue';
 import ScheduleCalendar from '@/components/schedule/ScheduleCalendar.vue'
 import ScheduleSearch from '@/components/schedule/ScheduleSearch.vue'
 import ScheduleModal from '@/components/schedule/ScheduleModal.vue';
@@ -56,6 +58,8 @@ export default {
       day: '',
       dailyList: [],
       fullList: [],
+      isAdd: false, 
+      isUpdate: false, 
       inputSchedule: {
         title: '',
         description: '',
@@ -67,49 +71,47 @@ export default {
       selectedSchedule: '',
       editModalState: false,  
       searchResults: [],
-
     }
   },
   methods: {
     async fnScheduleList(inputDay) {
-      let year = inputDay.split('-')[0]
-      let month = inputDay.split('-')[1]
-
-      const startOfMonth = `${year}-${month}-01T00:00:00`
-      const endOfMonth = `${year}-${month}-01T23:59:59`
+      let year = inputDay.split('-')[0];
+      let month = inputDay.split('-')[1];
+      const startOfMonth = `${year}-${month}-01T00:00:00`; 
+      const endOfMonth = `${year}-${month}-01T23:59:59`;   
       try {
-        const full = await this.$axios.get(`schedule/userId/scheduleList/${year}/${month}`, {
-          params: { startOfMonth, endOfMonth },
-        })
+      const full = await this.$axios.get(`schedule/userId/scheduleList/${year}/${month}`, {
+        params: { startOfMonth, endOfMonth } 
+      });
         if (full.status && full.data.length > 0) {
-          this.dailyList = full.data.map((item) => ({
+          this.dailyList = full.data.map(item => ({
             id: item.id,
             title: item.title,
             start: item.startTime,
             end: item.endTime,
             description: item.description,
-          }))
-          console.log('Server response: ', full.data)
+          }));
+          console.log("Server response: ", full.data);
         } else {
-          console.log('해당 날짜에 일정이 없습니다.')
-          this.dailyList = []
+          console.log('해당 날짜에 일정이 없습니다.');
+          this.dailyList = [];
         }
       } catch (error) {
-        console.error('일정을 불러오는 중 오류가 발생했습니다:', error)
-        this.dailyList = []
+        console.error('일정을 불러오는 중 오류가 발생했습니다:', error);
+        this.dailyList = []; 
       }
     },
     async inputedSchedule(id) {
       if (id) {
-        const response = await this.$axios.get(`schedule/userId/id/${id}`)
+        const response = await this.$axios.get(`schedule/userId/id/${id}`);
         if (response.status) {
-          console.log('response.data', response.data)
-          this.inputSchedule = response.data
+          console.log("response.data", response.data);
+          this.inputSchedule = response.data;  
         } else {
-          console.log('일정이 없습니다.')
+          console.log("일정이 없습니다.");
         }
       } else {
-        this.inputSchedule = { title: '', startTime: '', endTime: '', description: '' }
+        this.inputSchedule = { title: '', startTime: '', endTime: '', description: '' };
       }
     },
     openModal(searchResults) {
@@ -118,20 +120,20 @@ export default {
       console.log("Search Results:", searchResults);
     },
     handleDeleteSchedule(item) {
-      const index = this.searchResults.findIndex(schedule => schedule.id === item.id);
-      if (index !== -1) {
-        this.searchResults.splice(index, 1);  
-      }
+      this.searchResults = this.searchResults.filter(schedule => schedule.id !== item.id);
+      this.dailyList = this.dailyList.filter(schedule => schedule.id !== item.id);
     },
     openEditModal(schedule) {
       this.selectedSchedule = { ...schedule };  
       this.editModalState = true;  
     },
     handleSaveSchedule(updatedSchedule) {
-      const index = this.searchResults.findIndex(schedule => schedule.id === updatedSchedule.id);
-      if (index !== -1) {
-        this.searchResults[index] = updatedSchedule;  
-      }
+      this.searchResults = this.searchResults.map(schedule =>
+        schedule.id === updatedSchedule.id ? updatedSchedule : schedule
+      );
+      this.dailyList = this.dailyList.map(schedule =>
+        schedule.id === updatedSchedule.id ? updatedSchedule : schedule
+      );
       this.editModalState = false;  
     },
   },
@@ -140,6 +142,4 @@ export default {
     this.fnScheduleList(this.day)
   },
 };
-</script>
-
-<style></style>
+</script> 

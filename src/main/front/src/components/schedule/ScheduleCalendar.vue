@@ -57,6 +57,10 @@ export default {
   },
   methods: {
     handleEventClick(info) {
+      if (this.isAdd || this.isUpdate) {
+        // 일정 등록 중일 때는 일정 클릭을 막습니다.
+        return;
+      }
       const id = info.event.id
       this.$emit('inputSchedule', id)
     },
