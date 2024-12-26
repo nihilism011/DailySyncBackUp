@@ -8,7 +8,7 @@
 </template>
 <script>
 import RightView from '@/components/account/layout/RightView.vue'
-import { useDateStore } from '@/stores/dateStore'
+import { useDateStore } from '@/stores/account/dateStore'
 import LeftView from '@/components/account/layout/LeftView.vue'
 export default {
   components: {

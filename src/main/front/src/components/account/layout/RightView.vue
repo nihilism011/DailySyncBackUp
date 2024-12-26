@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import Calendar from '../rightView/AccountCalendar.vue'
 import MonthScore from '../rightView/MonthScore.vue'
 import MonthFixedList from '../rightView/MonthFixedList.vue'
-import { useDateStore } from '@/stores/dateStore'
+import { useDateStore } from '@/stores/account/dateStore'
 
 const dateStore = useDateStore()
 const calendarRef = ref(null)
@@ -29,7 +29,7 @@ const changeViewCalendar = (np) => {
         </div>
         <div class="fc-toolbar-chunk">
           <h2 class="fc-toolbar-title">
-            {{ `${dateStore.selectedYear}년 ${dateStore.selectedMonth}월` }}
+            {{ `${dateStore.calendarYear}년 ${dateStore.calendarMonth}월` }}
           </h2>
         </div>
         <div class="fc-toolbar-chunk">

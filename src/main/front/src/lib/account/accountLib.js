@@ -1,31 +1,9 @@
-import axiosInstance from '@/plugins/axios'
-export const numToWon = (money) => {
+export const formatCurrencyKRW = (money) => {
   let won = new Intl.NumberFormat('ko-KR', {
     style: 'currency',
     currency: 'KRW',
   })
   return won.format(money)
-}
-
-// const BASE = 'accounts'
-const REST_API = 'account/items'
-
-export const getAccountList = async (year, month) =>
-  (await axiosInstance.get(`${REST_API}/month/asdf/${year}/${month}`)).data
-
-export const deleteAccountItem = async (id) =>
-  (await axiosInstance.delete(`${REST_API}/${id}`)).data
-
-export const updateAccountItem = async (id, requestBody) => {
-  const url = `${REST_API}/${id}`
-  const { data } = await axiosInstance.patch(url, requestBody)
-  return data
-}
-
-export const createAccountItem = async (requestBody) => {
-  const url = REST_API
-  const { data } = await axiosInstance.post(url, requestBody)
-  return data
 }
 
 export const isValid = (value, fieldName) => {

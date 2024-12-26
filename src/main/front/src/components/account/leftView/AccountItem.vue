@@ -1,3 +1,23 @@
+<script setup lang="ts">
+import { ref, defineProps } from 'vue'
+import { categories } from '@/constants/accountCategory'
+import { formatCurrencyKRW } from '@/lib/account/accountLib'
+import { useAccountStore } from '@/stores/account/accountStore'
+import { Account } from '@/types'
+import AccountPopup from '@/components/account/AccountPopup.vue'
+
+const props = defineProps<{
+  account?: Account
+}>()
+const viewUpdatePopup = ref<boolean>(false)
+const accountStore = useAccountStore()
+
+const deleteItem = async () => {
+  if (props.account && confirm('삭제하시겠습니까?')) {
+    await accountStore.deleteItem(props.account.id)
+  }
+}
+</script>
 <template>
   <div class="list-item">
     <div class="tit-box">
@@ -8,7 +28,7 @@
     <div class="tit">{{ account.title }}</div>
     <div class="desc">{{ account.description }}</div>
     <div class="amount" :class="account.amount < 0 ? 'minus' : 'plus'">
-      {{ numToWon(account.amount) }}
+      {{ formatCurrencyKRW(account.amount) }}
     </div>
     <div class="btn-box">
       <button @click="viewUpdatePopup = true" class="edit-btn"></button>
@@ -17,49 +37,8 @@
   </div>
   <AccountPopup
     v-if="viewUpdatePopup"
-    :account="account"
+    :account="props.account"
     mode="update"
     @close="viewUpdatePopup = false"
   />
 </template>
-<script>
-import { useRefreshStore } from '@/stores/refreshStore'
-import { useDateStore } from '@/stores/dateStore'
-import { categories } from '@/constants/accountCategory'
-import { numToWon } from '@/lib/accountLib'
-import { deleteAccountItem } from '@/lib/accountLib'
-import AccountPopup from '@/components/account/AccountPopup.vue'
-export default {
-  components: {
-    AccountPopup,
-  },
-  setup() {
-    const refreshStore = useRefreshStore()
-    const dateStore = useDateStore()
-    return { refreshStore, dateStore }
-  },
-  props: {
-    account: Object,
-  },
-  data() {
-    return {
-      categories,
-      viewUpdatePopup: false,
-    }
-  },
-  methods: {
-    numToWon,
-    deleteAccountItem,
-    async deleteItem() {
-      if (!confirm('정말 삭제하시겠습니까?')) {
-        return
-      }
-      const reqStatus = await this.deleteAccountItem(this.account.id)
-      if (reqStatus) {
-        this.refreshStore.setRefresh()
-      }
-    },
-  },
-}
-</script>
-<style lang="scss" scoped></style>
