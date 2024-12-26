@@ -24,7 +24,7 @@ export default {
   watch: {
     dailyList(newSchedule) {
       if (newSchedule && Array.isArray(newSchedule)) {
-        this.calendarOptions.events = this.dailyList
+        this.calendarOptions.events = newSchedule;
       }
     },
   },
@@ -78,6 +78,9 @@ export default {
         html: `<div style="text-align: center;">${eventInfo.event.title}</div>`,
       }
     },
+    
+    
+    
   },
   mounted() {},
 }

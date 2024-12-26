@@ -11,11 +11,11 @@
           </div>
           <div class="bot-box">
             <div class="ip-box">
-              <textarea
+              <input
                 type="text"
                 v-model="editedSchedule.title"
                 id="title"
-            ></textarea>
+              />
               </div>
           </div>
         </div>
@@ -25,11 +25,11 @@
           </div>
           <div class="bot-box">
             <div class="ip-box">
-              <textarea
+              <input
                 type="text"
                 v-model="formattedStartTime"
                 id="startTime"
-            ></textarea>
+              />
              </div>
           </div>
         </div>
@@ -39,11 +39,11 @@
           </div>
           <div class="bot-box">
             <div class="ip-box">
-              <textarea
+              <input
                 type="text"
                 v-model="formattedEndTime"
                 id="endTime"
-            ></textarea>
+              />
             </div>
           </div>
         </div>
@@ -53,12 +53,12 @@
           </div>
           <div class="bot-box">
             <div class="ip-box">
-              <textarea
+              <input
               type="text"
-          v-model="editedSchedule.description"
-          id="description"
-            ></textarea>
-              </div>
+              v-model="editedSchedule.description"
+              id="description"
+              />
+            </div>
           </div>
         </div>
         <div>
@@ -80,9 +80,11 @@ export default {
       schedule: Object,
   },
   watch: {
-      schedule(newSchedule) {
-          this.editedSchedule = { ...newSchedule };
-      },
+    dailyList(newSchedule) {
+      if (newSchedule && Array.isArray(newSchedule)) {
+        this.$set(this.calendarOptions, 'events', newSchedule);  // 배열을 새로 갱신
+      }
+    },
   },
   emits: ['fnScheduleList', 'fnDayList', 'saveSchedule', 'closePopup'],
   data() {
@@ -141,17 +143,17 @@ export default {
       }
       const formattedSchedule = {
             ...this.editedSchedule,
-            startTime: this.$dayjs(this.editedSchedule.startTime).format('YYYY-MM-DDTHH:mm:ss'),
-            endTime: this.$dayjs(this.editedSchedule.endTime).format('YYYY-MM-DDTHH:mm:ss'),
+            start: this.$dayjs(this.editedSchedule.startTime).format('YYYY-MM-DDTHH:mm:ss'),
+            end: this.$dayjs(this.editedSchedule.endTime).format('YYYY-MM-DDTHH:mm:ss'),
         };
         const url = `schedule/update/${this.editedSchedule.id}`;
         const response = await this.$axios.patch(url, formattedSchedule);
         if (response.status) {
           alert('일정이 저장되었습니다.');
-          this.$emit('saveSchedule', formattedSchedule.id)
+          this.$emit('saveSchedule', formattedSchedule)
           this.$emit('fnScheduleList', this.day);
           this.$emit('fnDayList', this.day);
-          this.closeModal(); // 수정 후 모달 닫기
+          this.closeModal(); 
       }
   },
     formatDate(date) {
