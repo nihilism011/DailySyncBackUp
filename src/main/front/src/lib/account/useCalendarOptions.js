@@ -1,6 +1,7 @@
-import { ref, reactive } from 'vue'
+import { reactive } from 'vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import dayjs from 'dayjs'
 
 export const useCalendarOptions = (dateStore, accountStore, calendar) => {
   const handleEventClick = (info) => {
@@ -28,7 +29,7 @@ export const useCalendarOptions = (dateStore, accountStore, calendar) => {
   const gotoToday = () => {
     const today = new Date()
     calendar.value?.getApi().gotoDate(today)
-    dateStore.setSelectedDate(today.toISOString().split('T')[0])
+    dateStore.setSelectedDate(dayjs().format('YYYY-MM-DD'))
   }
 
   return reactive({
@@ -36,10 +37,10 @@ export const useCalendarOptions = (dateStore, accountStore, calendar) => {
     height: 550,
     plugins: [dayGridPlugin, interactionPlugin],
     showNonCurrentDates: false,
-    initialDate: dateStore.selectedDate || new Date().toISOString().split('T')[0], // Default to today's date if no selectedDate
+    initialDate: dateStore.selectedDate || dayjs().format('YYYY-MM-DD'),
     initialView: 'dayGridMonth',
     headerToolbar: null,
-    events: [],
+    events: accountStore.calendarList,
     dateClick: handleDateClick,
     eventClick: handleEventClick,
     dayCellContent: (info) => parseInt(info.dayNumberText),
@@ -49,7 +50,7 @@ export const useCalendarOptions = (dateStore, accountStore, calendar) => {
     },
     customButtons: {
       myCustomButton: {
-        text: '오늘',
+        text: 'today',
         click: gotoToday,
       },
     },

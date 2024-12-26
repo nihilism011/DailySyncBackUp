@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineProps } from 'vue'
+import { ref } from 'vue'
 import { categories } from '@/constants/accountCategory'
 import { formatCurrencyKRW } from '@/lib/account/accountLib'
 import { useAccountStore } from '@/stores/account/accountStore'

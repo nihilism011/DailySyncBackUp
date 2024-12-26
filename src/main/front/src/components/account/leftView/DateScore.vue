@@ -4,7 +4,6 @@ import { useDateStore } from '@/stores/account/dateStore'
 import { useAccountStore } from '@/stores/account/accountStore'
 import { formatCurrencyKRW } from '@/lib/account/accountLib'
 
-// Store 가져오기
 const dateStore = useDateStore()
 const accountStore = useAccountStore()
 

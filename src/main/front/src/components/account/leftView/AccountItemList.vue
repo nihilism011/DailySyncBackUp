@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, defineProps } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useDateStore } from '@/stores/account/dateStore'
 import { useAccountStore } from '@/stores/account/accountStore'
 import AccountItem from '@/components/account/leftView/AccountItem.vue'
@@ -18,8 +18,23 @@ const accountStore = useAccountStore()
 const plusList = ref<Account[]>([])
 const minusList = ref<Account[]>([])
 
+const dateToUse = computed(() => props.propDate || dateStore.selectedDate)
+const init = async () => {
+  if (
+    props.propDate &&
+    (accountStore.initMonth === null ||
+      parseInt(props.propDate.split('-')[0]) != accountStore.initYear ||
+      parseInt(props.propDate.split('-')[1]) != accountStore.initMonth)
+  ) {
+    console.log('dd')
+    await accountStore.initAccountList(
+      parseInt(props.propDate.split('-')[0]),
+      parseInt(props.propDate.split('-')[1]),
+    )
+  }
+}
 const fetchDataList = () => {
-  const date = props.propDate || dateStore.selectedDate
+  const date = dateToUse.value
   const list = accountStore.dateList(date)
   const plusListData: Account[] = []
   const minusListData: Account[] = []
@@ -33,8 +48,14 @@ const fetchDataList = () => {
   plusList.value = plusListData
   minusList.value = minusListData
 }
-watch(() => props.propDate, fetchDataList)
-watch(() => dateStore.selectedDate, fetchDataList)
+watch(
+  dateToUse,
+  () => {
+    init()
+    fetchDataList()
+  },
+  { immediate: true },
+)
 watch(() => accountStore.accountList, fetchDataList)
 </script>
 <template>

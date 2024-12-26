@@ -20,6 +20,8 @@ interface GroupedItem {
 }
 interface AccountState {
   accountList: Account[]
+  initYear: number
+  initMonth: number
 }
 
 const groupByDate = (accountList: Account[]): GroupedData => {
@@ -62,6 +64,8 @@ const formatSumData = (list: Account[]): { plus: number; minus: number } => {
 export const useAccountStore = defineStore('accountStore', {
   state: (): AccountState => ({
     accountList: [],
+    initYear: null,
+    initMonth: null,
   }),
 
   getters: {
@@ -88,8 +92,13 @@ export const useAccountStore = defineStore('accountStore', {
       this.accountList = [...list]
     },
     async initAccountList(year: number, month: number) {
+      if (this.initYear === year && this.initMonth === month) {
+        return
+      }
       const list = await getAccountList(year, month)
       this.setAccountList(list)
+      this.initYear = year
+      this.initMonth = month
     },
     async saveItem(account: Account) {
       const savedAccount: Account = await saveAccountItem(account)

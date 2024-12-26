@@ -14,6 +14,7 @@ axiosInstance.interceptors.request.use(
     //   requestURL: `${config.baseURL}/${config.url}`,
     //   requestMethod: config.method,
     // })
+    console.log('axios 요청 얼마나 자주 하나 확인')
     const localToken = localStorage.getItem('jwtToken')
     const sessionToken = sessionStorage.getItem('jwtToken')
     const token = localToken ?? sessionToken
