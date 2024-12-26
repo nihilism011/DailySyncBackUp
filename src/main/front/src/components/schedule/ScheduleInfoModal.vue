@@ -11,11 +11,11 @@
           </div>
           <div class="bot-box">
             <div class="ip-box">
-              <textarea
+              <input
                 type="text"
                 v-model="editedSchedule.title"
                 id="title"
-            ></textarea>
+              />
               </div>
           </div>
         </div>
@@ -25,11 +25,11 @@
           </div>
           <div class="bot-box">
             <div class="ip-box">
-              <textarea
+              <input
                 type="text"
                 v-model="formattedStartTime"
                 id="startTime"
-            ></textarea>
+              />
              </div>
           </div>
         </div>
@@ -39,11 +39,11 @@
           </div>
           <div class="bot-box">
             <div class="ip-box">
-              <textarea
+              <input
                 type="text"
                 v-model="formattedEndTime"
                 id="endTime"
-            ></textarea>
+              />
             </div>
           </div>
         </div>
@@ -53,12 +53,12 @@
           </div>
           <div class="bot-box">
             <div class="ip-box">
-              <textarea
+              <input
               type="text"
-          v-model="editedSchedule.description"
-          id="description"
-            ></textarea>
-              </div>
+              v-model="editedSchedule.description"
+              id="description"
+              />
+            </div>
           </div>
         </div>
         <div>
