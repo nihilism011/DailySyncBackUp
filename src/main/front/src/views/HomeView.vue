@@ -62,7 +62,7 @@ export default {
   },
   data() {
     return {
-      selectedDate: new Date().toISOString().split('T')[0],
+      selectedDate: this.$dayjs().format('YYYY-MM-DD'),
       isScheduleView: JSON.parse(localStorage.getItem('scheduleView')) ?? true,
       isTodoView: JSON.parse(localStorage.getItem('todoView')) ?? true,
       isMealView: JSON.parse(localStorage.getItem('mealView')) ?? true,

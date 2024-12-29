@@ -135,11 +135,10 @@ public class AccountService {
     }
 
     //생성
-    public boolean createAccountItem(Long userId, AccountReqDto reqDto) throws Exception {
+    public AccountResDto createAccountItem(Long userId, AccountReqDto reqDto) throws Exception {
 
         User user = userService.getUser(userId);
-        accountRepository.save(Account.of(user, reqDto));
-        return true;
+        return Account.toResDto(accountRepository.save(Account.of(user, reqDto)));
     }
 
     public boolean createFavorAccountItem(Long userId, AccountReqDto reqDto) throws Exception {
@@ -150,11 +149,10 @@ public class AccountService {
     }
 
     //수정
-    public boolean updateAccountItem(Long accountId, AccountReqDto reqDto) throws Exception {
+    public AccountResDto updateAccountItem(Long accountId, AccountReqDto reqDto) throws Exception {
         Account account = accountRepository.findById(accountId).orElseThrow(() -> new Exception(ResMessage.NOT_FOUND));
         account.update(reqDto);
-        accountRepository.save(account);
-        return true;
+        return Account.toResDto(accountRepository.save(account));
     }
 
     public boolean updateFavorAccountItem(Long favorAccountId, AccountReqDto reqDto) throws Exception {

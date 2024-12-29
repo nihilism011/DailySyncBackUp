@@ -1,58 +1,56 @@
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue'
+import { useDateStore } from '@/stores/account/dateStore'
+import { useAccountStore } from '@/stores/account/accountStore'
+import { formatCurrencyKRW } from '@/lib/account/accountLib'
+
+const dateStore = useDateStore()
+const accountStore = useAccountStore()
+
+const money = ref({ plus: 0, minus: 0 })
+
+const props = defineProps({
+  propDate: {
+    type: String,
+    default: '',
+  },
+})
+const dateToUse = computed(() => props.propDate || dateStore.selectedDate)
+
+const fetchData = () => {
+  const date = dateToUse.value
+  const list = accountStore.dateList(date)
+  if (Array.isArray(list)) {
+    money.value = list.reduce(
+      (acc, item) => {
+        if (item.amount > 0) {
+          acc.plus += item.amount
+        } else {
+          acc.minus += item.amount
+        }
+        return acc
+      },
+      { plus: 0, minus: 0 },
+    )
+  }
+}
+watch(dateToUse, fetchData, { immediate: true })
+watch(() => accountStore.accountList, fetchData)
+</script>
 <template>
   <div class="account-left">
     <div class="account-divide">
       <div class="first">
         <div class="tit">소득</div>
-        <div>{{ numToWon(money.plus) }}</div>
+        <div>{{ formatCurrencyKRW(money.plus) }}</div>
       </div>
       <div class="second">
         <div class="tit">지출</div>
-        <div>{{ numToWon(money.minus) }}</div>
+        <div>{{ formatCurrencyKRW(money.minus) }}</div>
       </div>
     </div>
   </div>
 </template>
-
-<script>
-import { numToWon } from '@/lib/accountLib'
-import { useDateStore } from '@/stores/dateStore'
-import { useRefreshStore } from '@/stores/refreshStore'
-
-export default {
-  props: {
-    propDate: String,
-  },
-  data() {
-    const dateStore = useDateStore()
-    const refreshStore = useRefreshStore()
-    return {
-      dateStore,
-      refreshStore,
-      money: { plus: 0, minus: 0 },
-    }
-  },
-  watch: {
-    propDate() {
-      this.fetchData()
-    },
-    'dateStore.selectedDate': 'fetchData',
-    'refreshStore.refreshState': 'fetchData',
-  },
-  methods: {
-    numToWon,
-    async fetchData() {
-      const date = this.propDate ?? this.dateStore.selectedDate
-      const url = `account/items/sum/${date}`
-      const { data } = await this.$axios.get(url)
-      this.money.plus = data.plusSumAmount
-      this.money.minus = -data.minusSumAmount
-    },
-  },
-  mounted() {
-    this.fetchData()
-  },
-}
-</script>
 
 <style lang="scss">
 .date-score-container {

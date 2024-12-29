@@ -1,3 +1,63 @@
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue'
+import { useDateStore } from '@/stores/account/dateStore'
+import { useAccountStore } from '@/stores/account/accountStore'
+import AccountItem from '@/components/account/leftView/AccountItem.vue'
+import { Account } from '@/types'
+
+const props = defineProps({
+  propDate: {
+    type: String,
+    default: '',
+  },
+})
+
+const dateStore = useDateStore()
+const accountStore = useAccountStore()
+
+const plusList = ref<Account[]>([])
+const minusList = ref<Account[]>([])
+
+const dateToUse = computed(() => props.propDate || dateStore.selectedDate)
+const init = async () => {
+  if (
+    props.propDate &&
+    (accountStore.initMonth === null ||
+      parseInt(props.propDate.split('-')[0]) != accountStore.initYear ||
+      parseInt(props.propDate.split('-')[1]) != accountStore.initMonth)
+  ) {
+    console.log('dd')
+    await accountStore.initAccountList(
+      parseInt(props.propDate.split('-')[0]),
+      parseInt(props.propDate.split('-')[1]),
+    )
+  }
+}
+const fetchDataList = () => {
+  const date = dateToUse.value
+  const list = accountStore.dateList(date)
+  const plusListData: Account[] = []
+  const minusListData: Account[] = []
+  for (let account of list) {
+    if (account.amount > 0) {
+      plusListData.push(account)
+    } else {
+      minusListData.push(account)
+    }
+  }
+  plusList.value = plusListData
+  minusList.value = minusListData
+}
+watch(
+  dateToUse,
+  () => {
+    init()
+    fetchDataList()
+  },
+  { immediate: true },
+)
+watch(() => accountStore.accountList, fetchDataList)
+</script>
 <template>
   <div class="account-list-wrap">
     <div class="item top">
@@ -18,58 +78,6 @@
     </div>
   </div>
 </template>
-<script>
-import { useDateStore } from '@/stores/dateStore'
-import { useRefreshStore } from '@/stores/refreshStore'
-import AccountItem from '@/components/account/leftView/AccountItem.vue'
-export default {
-  props: {
-    propDate: String,
-  },
-  components: {
-    AccountItem,
-  },
-  data() {
-    const dateStore = useDateStore()
-    const refreshStore = useRefreshStore()
-    return {
-      refreshStore,
-      dateStore,
-      plusList: [],
-      minusList: [],
-      list: [],
-    }
-  },
-  watch: {
-    propDate() {
-      this.fetchDataList()
-    },
-    'dateStore.selectedDate': 'fetchDataList',
-    'refreshStore.refreshState': 'fetchDataList',
-  },
-  methods: {
-    async fetchDataList() {
-      const date = this.propDate ?? this.dateStore.selectedDate
-      const url = `account/items/date/${date}`
-      const { data } = await this.$axios.get(url)
-      const plusList = []
-      const minusList = []
-      for (let account of data) {
-        if (account.amount > 0) {
-          plusList.push(account)
-        } else {
-          minusList.push(account)
-        }
-      }
-      this.plusList = plusList
-      this.minusList = minusList
-    },
-  },
-  mounted() {
-    this.fetchDataList()
-  },
-}
-</script>
 <style lang="scss" scoped>
 .account {
   &-list-wrap {

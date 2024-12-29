@@ -105,9 +105,8 @@
 </template>
 <script>
 import { categoryArray } from '@/constants/accountCategory'
-import { updateAccountItem, createAccountItem } from '@/lib/accountLib'
-import { useRefreshStore } from '@/stores/refreshStore'
-import { useDateStore } from '@/stores/dateStore'
+import { useDateStore } from '@/stores/account/dateStore'
+import { useAccountStore } from '@/stores/account/accountStore'
 export default {
   props: {
     account: {
@@ -117,9 +116,9 @@ export default {
     mode: String,
   },
   setup() {
-    const refreshStore = useRefreshStore()
+    const accountStore = useAccountStore()
     const dateStore = useDateStore()
-    return { refreshStore, dateStore }
+    return { accountStore, dateStore }
   },
   data() {
     return {
@@ -146,8 +145,6 @@ export default {
     },
   },
   methods: {
-    updateAccountItem,
-    createAccountItem,
     async updateItem() {
       if (!this.reqBody.title) {
         alert('내역을 입력해 주세요.')
@@ -178,18 +175,13 @@ export default {
         ...this.reqBody,
         amount: this.isPlus ? this.reqBody.amount : -this.reqBody.amount,
       }
-      let resStatus
       if (this.mode === 'create') {
-        resStatus = await this.createAccountItem(reqBody)
+        await this.accountStore.saveItem(reqBody)
       } else {
-        resStatus = await this.updateAccountItem(this.account.id, reqBody)
+        await this.accountStore.updateItem(this.account.id, reqBody)
       }
-
-      if (resStatus) {
-        alert('저장되었습니다.')
-        this.refreshStore.setRefresh()
-        this.$emit('close')
-      }
+      alert('저장되었습니다.')
+      this.$emit('close')
     },
     closePopup() {
       this.$emit('close')

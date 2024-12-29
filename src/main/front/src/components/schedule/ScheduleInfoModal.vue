@@ -11,12 +11,8 @@
           </div>
           <div class="bot-box">
             <div class="ip-box">
-              <input
-                type="text"
-                v-model="editedSchedule.title"
-                id="title"
-              />
-              </div>
+              <textarea type="text" v-model="editedSchedule.title" id="title"></textarea>
+            </div>
           </div>
         </div>
         <div class="ip-list">
@@ -25,12 +21,8 @@
           </div>
           <div class="bot-box">
             <div class="ip-box">
-              <input
-                type="text"
-                v-model="formattedStartTime"
-                id="startTime"
-              />
-             </div>
+              <textarea type="text" v-model="formattedStartTime" id="startTime"></textarea>
+            </div>
           </div>
         </div>
         <div class="ip-list">
@@ -39,11 +31,7 @@
           </div>
           <div class="bot-box">
             <div class="ip-box">
-              <input
-                type="text"
-                v-model="formattedEndTime"
-                id="endTime"
-              />
+              <textarea type="text" v-model="formattedEndTime" id="endTime"></textarea>
             </div>
           </div>
         </div>
@@ -53,11 +41,11 @@
           </div>
           <div class="bot-box">
             <div class="ip-box">
-              <input
-              type="text"
-              v-model="editedSchedule.description"
-              id="description"
-              />
+              <textarea
+                type="text"
+                v-model="editedSchedule.description"
+                id="description"
+              ></textarea>
             </div>
           </div>
         </div>
@@ -73,54 +61,48 @@
   </div>
 </template>
 <script>
-import 'dayjs/locale/ko';
+import 'dayjs/locale/ko'
 export default {
   props: {
-      popupState: Boolean,
-      schedule: Object,
+    popupState: Boolean,
+    schedule: Object,
   },
   watch: {
-    dailyList(newSchedule) {
-      if (newSchedule && Array.isArray(newSchedule)) {
-        this.$set(this.calendarOptions, 'events', newSchedule);  // 배열을 새로 갱신
-      }
+    schedule(newSchedule) {
+      this.editedSchedule = { ...newSchedule }
     },
   },
   emits: ['fnScheduleList', 'fnDayList', 'saveSchedule', 'closePopup'],
   data() {
-      return {
-          editedSchedule: { ...this.schedule  },
-      };
+    return {
+      editedSchedule: { ...this.schedule },
+    }
   },
   computed: {
     // 시작 시간을 포맷된 형태로 반환
     formattedStartTime: {
       get() {
-        return this.editedSchedule.startTime
-          ? this.formatDate(this.editedSchedule.startTime)
-          : '';
+        return this.editedSchedule.startTime ? this.formatDate(this.editedSchedule.startTime) : ''
       },
       set(value) {
         // 사용자가 입력한 값을 dayjs로 변환하여 저장
-        const parsedDate = this.$dayjs(value, 'YYYY-MM-DD A HH:mm');
+        const parsedDate = this.$dayjs(value, 'YYYY-MM-DD A HH:mm')
         if (parsedDate.isValid()) {
-          this.editedSchedule.startTime = parsedDate.toISOString();
+          this.editedSchedule.startTime = parsedDate.toISOString()
         }
-      }
+      },
     },
     formattedEndTime: {
       get() {
-        return this.editedSchedule.endTime
-          ? this.formatDate(this.editedSchedule.endTime)
-          : '';
+        return this.editedSchedule.endTime ? this.formatDate(this.editedSchedule.endTime) : ''
       },
       set(value) {
-        const parsedDate = this.$dayjs(value, 'YYYY-MM-DD A HH:mm');
+        const parsedDate = this.$dayjs(value, 'YYYY-MM-DD A HH:mm')
         if (parsedDate.isValid()) {
-          this.editedSchedule.endTime = parsedDate.toISOString();
+          this.editedSchedule.endTime = parsedDate.toISOString()
         }
-      }
-    }
+      },
+    },
   },
   methods: {
     closeModal() {
@@ -128,52 +110,52 @@ export default {
     },
     async saveSchedule() {
       if (!this.editedSchedule.title.trim()) {
-      alert('제목을 입력해주세요.');
-      return;
+        alert('제목을 입력해주세요.')
+        return
       }
-      const startTime = new Date(this.editedSchedule.startTime);
-      const endTime = new Date(this.editedSchedule.endTime);
+      const startTime = new Date(this.editedSchedule.startTime)
+      const endTime = new Date(this.editedSchedule.endTime)
       if (isNaN(startTime.getTime()) || isNaN(endTime.getTime())) {
-          alert('시작 날짜 또는 끝 날짜가 올바르지 않습니다. 유효한 날짜 형식을 입력해 주세요.');
-          return;
+        alert('시작 날짜 또는 끝 날짜가 올바르지 않습니다. 유효한 날짜 형식을 입력해 주세요.')
+        return
       }
       if (startTime > endTime) {
-          alert('끝나는 시간이 시작 시간보다 이전입니다. 날짜를 확인해 주세요.');
-          return;
+        alert('끝나는 시간이 시작 시간보다 이전입니다. 날짜를 확인해 주세요.')
+        return
       }
       const formattedSchedule = {
-            ...this.editedSchedule,
-            start: this.$dayjs(this.editedSchedule.startTime).format('YYYY-MM-DDTHH:mm:ss'),
-            end: this.$dayjs(this.editedSchedule.endTime).format('YYYY-MM-DDTHH:mm:ss'),
-        };
-        const url = `schedule/update/${this.editedSchedule.id}`;
-        const response = await this.$axios.patch(url, formattedSchedule);
-        if (response.status) {
-          alert('일정이 저장되었습니다.');
-          this.$emit('saveSchedule', formattedSchedule)
-          this.$emit('fnScheduleList', this.day);
-          this.$emit('fnDayList', this.day);
-          this.closeModal(); 
+        ...this.editedSchedule,
+        startTime: this.$dayjs(this.editedSchedule.startTime).format('YYYY-MM-DDTHH:mm:ss'),
+        endTime: this.$dayjs(this.editedSchedule.endTime).format('YYYY-MM-DDTHH:mm:ss'),
       }
-  },
+      const url = `schedule/update/${this.editedSchedule.id}`
+      const response = await this.$axios.patch(url, formattedSchedule)
+      if (response.status) {
+        alert('일정이 저장되었습니다.')
+        this.$emit('saveSchedule', formattedSchedule.id)
+        this.$emit('fnScheduleList', this.day)
+        this.$emit('fnDayList', this.day)
+        this.closeModal() // 수정 후 모달 닫기
+      }
+    },
     formatDate(date) {
-      return date ? this.$dayjs(date).locale('ko').format('YYYY-MM-DD A HH:mm') : '';
-      },
-      getDateRange(startTime, endTime) {
-        const startFormatted = this.formatDate(startTime);
-        const endFormatted = this.formatDate(endTime);
+      return date ? this.$dayjs(date).locale('ko').format('YYYY-MM-DD A HH:mm') : ''
+    },
+    getDateRange(startTime, endTime) {
+      const startFormatted = this.formatDate(startTime)
+      const endFormatted = this.formatDate(endTime)
 
-        // startTime이 endTime보다 클 경우 순서를 바꿔서 출력
-        if (new Date(startTime) > new Date(endTime)) {
-          return `${endFormatted} ~ ${startFormatted}`;
-        }
-        return `${startFormatted} ~ ${endFormatted}`;
-      },
+      // startTime이 endTime보다 클 경우 순서를 바꿔서 출력
+      if (new Date(startTime) > new Date(endTime)) {
+        return `${endFormatted} ~ ${startFormatted}`
+      }
+      return `${startFormatted} ~ ${endFormatted}`
+    },
   },
 }
 </script>
 <style lang="scss" scoped>
- .btn-default {
+.btn-default {
   margin-bottom: 16px;
 }
 .schedule {
