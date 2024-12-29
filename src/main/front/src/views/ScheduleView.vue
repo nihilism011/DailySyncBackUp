@@ -134,7 +134,10 @@ export default {
       this.dailyList = this.dailyList.map(schedule =>
         schedule.id === updatedSchedule.id ? updatedSchedule : schedule
       );
-      this.editModalState = false;  
+      this.editModalState = false; 
+      this.$emit('fnScheduleList', this.day);  
+      this.$emit('fnDayList', this.day); 
+   
     },
   },
   mounted() {
