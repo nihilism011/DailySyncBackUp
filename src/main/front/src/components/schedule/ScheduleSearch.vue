@@ -75,7 +75,11 @@ export default {
     async fnSearch() {
       let url = '';
 
-      if (this.form.searchType === 'range' && this.form.startTime && this.form.endTime) {
+      if (this.form.searchType === 'range') {
+        if (!this.form.startTime || !this.form.endTime) {
+          alert('기간을 입력하세요.');
+          return;
+        }
         const startTime = new Date(this.form.startTime);
         const endTime = new Date(this.form.endTime);
 
@@ -95,7 +99,11 @@ export default {
         }
 
         url = `schedule/date/range?startTime=${startDate}&endTime=${endDate}`;
-      } else if (this.form.searchType === 'title' && this.form.title) {
+      } else if (this.form.searchType === 'title') {
+          if (!this.form.title.trim()) {
+            alert('제목을 입력하세요.');
+            return; 
+          }
         url = `schedule/title/${this.form.title}`;
       }
 
