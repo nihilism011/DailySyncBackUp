@@ -4,8 +4,11 @@ import DateScore from '@/components/account/leftView/DateScore.vue'
 import AccountItemList from '@/components/account/leftView/AccountItemList.vue'
 import AccountPopup from '@/components/account/AccountPopup.vue'
 
-defineProps({
-  selectedDate: String,
+const props = defineProps({
+  selectedDate: {
+    type: String,
+    default: '',
+  },
 })
 const viewUpdatePopup = ref(false)
 </script>

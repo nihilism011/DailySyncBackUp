@@ -65,16 +65,15 @@ export default {
   },
   methods: {
     initYears() {
-      const currentYear = new Date().getFullYear();
-      const endYear = currentYear + 10;
+      const currentYear = new Date().getFullYear()
+      const endYear = currentYear + 10
 
-  for (let year = currentYear; year <= endYear; year++) {
-    this.years.push(year);
+      for (let year = currentYear; year <= endYear; year++) {
+        this.years.push(year)
       }
     },
     async fnSearch() {
-      let url = '';
-
+      let url = ''
       if (this.form.searchType === 'range') {
         if (!this.form.startTime || !this.form.endTime) {
           alert('기간을 입력하세요.');
@@ -106,16 +105,15 @@ export default {
           }
         url = `schedule/title/${this.form.title}`;
       }
-
       if (url) {
         try {
-          const { data } = await this.$axios.get(url);
-          this.$emit('searchResult', data);
+          const { data } = await this.$axios.get(url)
+          this.$emit('searchResult', data)
         } catch (error) {
-          console.error('오류 :', error);
+          console.error('오류 :', error)
         }
       } else {
-        console.log('검색할 조건을 입력하세요.');
+        console.log('검색할 조건을 입력하세요.')
       }
     },
     formatDate(date) {
@@ -129,7 +127,6 @@ export default {
   },
 }
 </script>
-
 <style lang="scss" scoped>
 .search {
   &-wrap {

@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es2016", // ES2016 표준을 사용하여 변환
+    "module": "commonjs", // CommonJS 모듈 시스템 사용
+    "moduleResolution": "node",
+    "esModuleInterop": true, // ES6 모듈과 CommonJS 호환성 제공
+    "forceConsistentCasingInFileNames": true, // 파일명 대소문자 일관성 강제
+    "strict": true, // 모든 strict 타입 검사 활성화
+    "skipLibCheck": true, // 라이브러리 타입 검사 생략 (성능 향상)
+    "lib": ["es2016", "dom"] // ES2016, DOM 타입 선언 포함
+  },
+  "include": [
+    "src/**/*.ts", // TypeScript 파일을 포함
+    "src/**/*.tsx", // TSX 파일 포함 (Vue와 JSX 타입 파일들)
+    "src/**/*.vue"
+  ],
+  "exclude": [
+    "node_modules" // node_modules 제외
+  ]
+}

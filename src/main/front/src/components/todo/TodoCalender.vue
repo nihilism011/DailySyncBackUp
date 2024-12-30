@@ -2,11 +2,7 @@
   <!-- FullCalendar 컴포넌트 -->
   <FullCalendar :options="calendarOptions" />
 
-  <Modal
-      :isVisible="isModalVisible"
-      :selectedDate="selectedDate" 
-      @close="closeModal"
-  />
+  <Modal :isVisible="isModalVisible" :selectedDate="selectedDate" @close="closeModal" />
 </template>
 
 <script>
@@ -16,15 +12,14 @@ import interactionPlugin from '@fullcalendar/interaction'
 import Modal from './TodoSelectModal.vue'
 
 export default {
-  props : {
-
+  props: {
     dailyList: {
-    type: Object,
-     },
+      type: Object,
+    },
   },
   components: {
     FullCalendar,
-    Modal
+    Modal,
   },
   fnDayList: {
     type: Function,
@@ -65,25 +60,25 @@ export default {
           return parseInt(info.dayNumberText)
         },
       },
-    };
+    }
   },
   methods: {
     openAddItemModal() {
-      this.isModalVisible = true;
+      this.isModalVisible = true
     },
     closeModal() {
-      this.isModalVisible = false;
+      this.isModalVisible = false
     },
     handleDateClick(info) {
-      this.selectedDate = info.dateStr; // 선택된 날짜 저장
-      this.openAddItemModal(); // 모달 열기
+      this.selectedDate = info.dateStr // 선택된 날짜 저장
+      this.openAddItemModal() // 모달 열기
     },
     handleEventClick(info) {
-      const eventStartDate = info.event.start;
-      eventStartDate.setDate(eventStartDate.getDate() + 1);
-      const eventDateStr = eventStartDate.toISOString().split('T')[0];
-      this.selectedDate = eventDateStr;
-      this.openAddItemModal(); // 모달 열기
+      const eventStartDate = info.event.start
+      eventStartDate.setDate(eventStartDate.getDate() + 1)
+      const eventDateStr = eventStartDate.toISOString().split('T')[0]
+      this.selectedDate = eventDateStr
+      this.openAddItemModal() // 모달 열기
     },
     handleMonthChange({ view }) {
       const start = view.currentStart
