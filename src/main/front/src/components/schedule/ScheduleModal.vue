@@ -5,9 +5,9 @@
         <h2 class="tit">검색결과</h2>
       </div>
       <div class="search-list">
-        <div v-if="searchResults.length === 0">검색 결과가 없습니다.</div>
+        <div v-if="sortedSearchResults.length === 0">검색 결과가 없습니다.</div>
         <div v-else>
-          <div v-for="(item, index) in searchResults" :key="index" class="list-item">
+          <div v-for="(item, index) in sortedSearchResults" :key="index" class="list-item">
             <div class="tit">{{ item.title }}</div>
             <div class="date-range">
               {{ getDateRange(item.startTime, item.endTime) }}
@@ -31,6 +31,15 @@ export default {
     searchResults: Array,
   },
   emits: ['fnScheduleList', 'fnDayList', 'editSchedule', 'deleteSchedule', 'closePopup'],
+  computed: {
+    sortedSearchResults() {
+      return [...this.searchResults].sort((a, b) => {
+        const dateA = new Date(a.startTime);
+        const dateB = new Date(b.startTime);
+        return dateA - dateB;  
+      });
+    }
+  },
   methods: {
     closeModal() {
       this.$emit('closePopup');

@@ -145,7 +145,7 @@ export default {
   },
   methods: {
     formatDate(date) {
-      return date ? this.$dayjs(date).format('YYYY-MM-DD A hh:mm') : ''
+       return date ? this.$dayjs(date).locale('ko').format('YYYY-MM-DD A hh:mm') : ''
     },
     fnUpdate() {
       this.isUpdate = true
@@ -188,8 +188,8 @@ export default {
         return
       }
 
-      const startTime = new Date(this.newSchedule.startTime)
-      const endTime = new Date(this.newSchedule.endTime)
+      const startTime = new Date(this.newSchedule.startTime);
+      const endTime = new Date(this.newSchedule.endTime);
 
       if (isNaN(startTime.getTime()) || isNaN(endTime.getTime())) {
         alert('시작 날짜 또는 끝 날짜가 올바르지 않습니다. 유효한 날짜 형식을 입력해 주세요.')

@@ -21,8 +21,12 @@
           </div>
           <div class="bot-box">
             <div class="ip-box">
-              <textarea type="text" v-model="formattedStartTime" id="startTime"></textarea>
-            </div>
+              <input
+                type="datetime-local"
+                v-model="formattedStartTime"
+                id="startTime"
+              />
+             </div>
           </div>
         </div>
         <div class="ip-list">
@@ -31,7 +35,11 @@
           </div>
           <div class="bot-box">
             <div class="ip-box">
-              <textarea type="text" v-model="formattedEndTime" id="endTime"></textarea>
+              <input
+                type="datetime-local"
+                v-model="formattedEndTime"
+                id="endTime"
+              />
             </div>
           </div>
         </div>
@@ -68,8 +76,10 @@ export default {
     schedule: Object,
   },
   watch: {
-    schedule(newSchedule) {
-      this.editedSchedule = { ...newSchedule }
+    dailyList(newSchedule) {
+      if (newSchedule && Array.isArray(newSchedule)) {
+        this.$set(this.calendarOptions, 'events', newSchedule); 
+      }
     },
   },
   emits: ['fnScheduleList', 'fnDayList', 'saveSchedule', 'closePopup'],
@@ -79,10 +89,11 @@ export default {
     }
   },
   computed: {
-    // 시작 시간을 포맷된 형태로 반환
     formattedStartTime: {
       get() {
-        return this.editedSchedule.startTime ? this.formatDate(this.editedSchedule.startTime) : ''
+        return this.editedSchedule.startTime
+        ? this.$dayjs(this.editedSchedule.startTime).format('YYYY-MM-DDTHH:mm')
+          : '';
       },
       set(value) {
         // 사용자가 입력한 값을 dayjs로 변환하여 저장
@@ -94,7 +105,9 @@ export default {
     },
     formattedEndTime: {
       get() {
-        return this.editedSchedule.endTime ? this.formatDate(this.editedSchedule.endTime) : ''
+        return this.editedSchedule.endTime
+        ? this.$dayjs(this.editedSchedule.endTime).format('YYYY-MM-DDTHH:mm')
+          : '';
       },
       set(value) {
         const parsedDate = this.$dayjs(value, 'YYYY-MM-DD A HH:mm')

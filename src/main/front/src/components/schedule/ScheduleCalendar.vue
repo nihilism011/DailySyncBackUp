@@ -69,10 +69,6 @@ export default {
       const dateSet = `${start.getFullYear()}-${start.getMonth() + 1}`
       this.$emit('fnScheduleList', dateSet)
     },
-    // handleDateClick(info) {
-    //   const date = info.dateStr
-    //   this.$emit('fnScheduleList', date)
-    // },
     renderEventContent(eventInfo) {
       return {
         html: `<div style="text-align: center;">${eventInfo.event.title}</div>`,
