@@ -82,15 +82,19 @@ export default {
 
         if (isNaN(startTime.getTime()) || isNaN(endTime.getTime())) {
           alert('시작 날짜 또는 끝 날짜가 올바르지 않습니다. 유효한 날짜 형식을 입력해 주세요.');
-          return; // Stop the function execution if dates are invalid
+          return; 
         }
+
+        // 날짜를 yyyy-MM-dd 형식으로 변환
+        const startDate = startTime.toISOString().split('T')[0]; 
+        const endDate = endTime.toISOString().split('T')[0];     
 
         if (startTime > endTime) {
           alert('끝나는 시간이 시작 시간보다 이전입니다. 날짜를 확인해 주세요.');
-          return; // Stop the function execution if start date is greater than end date
+          return; 
         }
 
-        url = `schedule/date/range?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`;
+        url = `schedule/date/range?startTime=${startDate}&endTime=${endDate}`;
       } else if (this.form.searchType === 'title' && this.form.title) {
         url = `schedule/title/${this.form.title}`;
       }

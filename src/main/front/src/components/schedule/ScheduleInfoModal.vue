@@ -26,7 +26,7 @@
           <div class="bot-box">
             <div class="ip-box">
               <input
-                type="text"
+                type="datetime-local"
                 v-model="formattedStartTime"
                 id="startTime"
               />
@@ -40,7 +40,7 @@
           <div class="bot-box">
             <div class="ip-box">
               <input
-                type="text"
+                type="datetime-local"
                 v-model="formattedEndTime"
                 id="endTime"
               />
@@ -82,7 +82,7 @@ export default {
   watch: {
     dailyList(newSchedule) {
       if (newSchedule && Array.isArray(newSchedule)) {
-        this.$set(this.calendarOptions, 'events', newSchedule);  // 배열을 새로 갱신
+        this.$set(this.calendarOptions, 'events', newSchedule); 
       }
     },
   },
@@ -93,11 +93,10 @@ export default {
       };
   },
   computed: {
-    // 시작 시간을 포맷된 형태로 반환
     formattedStartTime: {
       get() {
         return this.editedSchedule.startTime
-          ? this.formatDate(this.editedSchedule.startTime)
+        ? this.$dayjs(this.editedSchedule.startTime).format('YYYY-MM-DDTHH:mm')
           : '';
       },
       set(value) {
@@ -111,7 +110,7 @@ export default {
     formattedEndTime: {
       get() {
         return this.editedSchedule.endTime
-          ? this.formatDate(this.editedSchedule.endTime)
+        ? this.$dayjs(this.editedSchedule.endTime).format('YYYY-MM-DDTHH:mm')
           : '';
       },
       set(value) {
